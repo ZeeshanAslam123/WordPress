@@ -1,96 +1,89 @@
 /**
  * LearnDash Course Sections Toggle Functionality
  * Handles collapsible sections on course pages
+ * Uses unique selectors to avoid conflicts with LearnDash's existing functionality
  */
 
 jQuery(document).ready(function($) {
     'use strict';
     
     // Initialize collapsible sections
-    initCollapsibleSections();
+    initCustomSectionToggles();
     
-    function initCollapsibleSections() {
-        // Find all section headers
-        $('.ld-collapsible-section-header').each(function() {
-            var $header = $(this);
-            var sectionId = $header.data('section-toggle');
-            var $sectionLessons = $('[data-section-lessons="' + sectionId + '"]');
+    function initCustomSectionToggles() {
+        // Find all custom section toggle buttons (using unique class)
+        $('.ld-custom-section-toggle').each(function() {
+            var $toggle = $(this);
+            var sectionId = $toggle.data('section-toggle');
+            var $sectionContent = $('#ld-section-content-' + sectionId);
             
-            // Ensure lessons are hidden by default
-            $sectionLessons.hide();
+            // Ensure section content is hidden by default
+            $sectionContent.hide();
             
-            // Add click handler to section header
-            $header.on('click', function(e) {
+            // Add click handler to toggle button
+            $toggle.on('click', function(e) {
                 e.preventDefault();
-                toggleSection($header, $sectionLessons);
+                e.stopPropagation(); // Prevent event bubbling to avoid conflicts
+                toggleCustomSection($toggle, $sectionContent);
             });
             
             // Add keyboard support (Enter and Space)
-            $header.on('keydown', function(e) {
+            $toggle.on('keydown', function(e) {
                 if (e.which === 13 || e.which === 32) { // Enter or Space
                     e.preventDefault();
-                    toggleSection($header, $sectionLessons);
+                    e.stopPropagation();
+                    toggleCustomSection($toggle, $sectionContent);
                 }
             });
-            
-            // Make header focusable for accessibility
-            $header.attr('tabindex', '0');
-            $header.attr('role', 'button');
-            $header.attr('aria-expanded', 'false');
-            $header.attr('aria-controls', 'section-lessons-' + sectionId);
-            
-            // Add ID to lessons container for accessibility
-            $sectionLessons.attr('id', 'section-lessons-' + sectionId);
         });
     }
     
-    function toggleSection($header, $sectionLessons) {
-        var isExpanded = $header.hasClass('expanded');
+    function toggleCustomSection($toggle, $sectionContent) {
+        var isExpanded = $toggle.hasClass('ld-expanded');
         
         if (isExpanded) {
             // Collapse section
-            $header.removeClass('expanded');
-            $header.attr('aria-expanded', 'false');
-            $sectionLessons.slideUp(300, function() {
-                // Callback after animation completes
-                $sectionLessons.hide();
-            });
+            $toggle.removeClass('ld-expanded');
+            $toggle.attr('aria-expanded', 'false');
+            $sectionContent.slideUp(300);
         } else {
             // Expand section
-            $header.addClass('expanded');
-            $header.attr('aria-expanded', 'true');
-            $sectionLessons.slideDown(300, function() {
-                // Callback after animation completes
-                $sectionLessons.show();
-            });
+            $toggle.addClass('ld-expanded');
+            $toggle.attr('aria-expanded', 'true');
+            $sectionContent.slideDown(300);
         }
     }
     
-    // Optional: Add "Expand All" / "Collapse All" functionality
-    // This can be integrated with existing LearnDash expand/collapse buttons
-    $(document).on('click', '.ld-expand-button', function() {
-        var $button = $(this);
-        var isExpanding = !$button.hasClass('ld-expanded');
-        
-        // Toggle all sections based on the main expand/collapse button
-        $('.ld-collapsible-section-header').each(function() {
-            var $header = $(this);
-            var sectionId = $header.data('section-toggle');
-            var $sectionLessons = $('[data-section-lessons="' + sectionId + '"]');
-            var isCurrentlyExpanded = $header.hasClass('expanded');
-            
-            if (isExpanding && !isCurrentlyExpanded) {
-                // Expand this section
-                $header.addClass('expanded');
-                $header.attr('aria-expanded', 'true');
-                $sectionLessons.slideDown(300);
-            } else if (!isExpanding && isCurrentlyExpanded) {
-                // Collapse this section
-                $header.removeClass('expanded');
-                $header.attr('aria-expanded', 'false');
-                $sectionLessons.slideUp(300);
+    // Optional: Integration with LearnDash's main expand/collapse functionality
+    // This listens for LearnDash's expand/collapse events without interfering
+    $(document).on('click', '.ld-expand-button:not(.ld-custom-section-toggle)', function() {
+        // Small delay to let LearnDash handle its own functionality first
+        setTimeout(function() {
+            var $mainButton = $('.ld-expand-button:not(.ld-custom-section-toggle)').first();
+            if ($mainButton.length) {
+                var isMainExpanded = $mainButton.hasClass('ld-expanded');
+                
+                // Sync our custom section toggles with the main expand/collapse state
+                $('.ld-custom-section-toggle').each(function() {
+                    var $customToggle = $(this);
+                    var sectionId = $customToggle.data('section-toggle');
+                    var $sectionContent = $('#ld-section-content-' + sectionId);
+                    var isCustomExpanded = $customToggle.hasClass('ld-expanded');
+                    
+                    if (isMainExpanded && !isCustomExpanded) {
+                        // Expand this custom section
+                        $customToggle.addClass('ld-expanded');
+                        $customToggle.attr('aria-expanded', 'true');
+                        $sectionContent.slideDown(300);
+                    } else if (!isMainExpanded && isCustomExpanded) {
+                        // Collapse this custom section
+                        $customToggle.removeClass('ld-expanded');
+                        $customToggle.attr('aria-expanded', 'false');
+                        $sectionContent.slideUp(300);
+                    }
+                });
             }
-        });
+        }, 100);
     });
     
     // Handle window resize to ensure proper layout
@@ -100,22 +93,26 @@ jQuery(document).ready(function($) {
     });
     
     // Optional: Save section state in localStorage
-    function saveSectionState(sectionId, isExpanded) {
+    function saveCustomSectionState(sectionId, isExpanded) {
         if (typeof(Storage) !== "undefined") {
             var courseId = $('[data-ld-expand-id]').attr('data-ld-expand-id');
-            var storageKey = 'ld_section_state_' + courseId;
-            var sectionStates = JSON.parse(localStorage.getItem(storageKey) || '{}');
-            sectionStates[sectionId] = isExpanded;
-            localStorage.setItem(storageKey, JSON.stringify(sectionStates));
+            if (courseId) {
+                var storageKey = 'ld_custom_section_state_' + courseId;
+                var sectionStates = JSON.parse(localStorage.getItem(storageKey) || '{}');
+                sectionStates[sectionId] = isExpanded;
+                localStorage.setItem(storageKey, JSON.stringify(sectionStates));
+            }
         }
     }
     
-    function loadSectionState(sectionId) {
+    function loadCustomSectionState(sectionId) {
         if (typeof(Storage) !== "undefined") {
             var courseId = $('[data-ld-expand-id]').attr('data-ld-expand-id');
-            var storageKey = 'ld_section_state_' + courseId;
-            var sectionStates = JSON.parse(localStorage.getItem(storageKey) || '{}');
-            return sectionStates[sectionId] || false;
+            if (courseId) {
+                var storageKey = 'ld_custom_section_state_' + courseId;
+                var sectionStates = JSON.parse(localStorage.getItem(storageKey) || '{}');
+                return sectionStates[sectionId] || false;
+            }
         }
         return false;
     }
@@ -123,26 +120,25 @@ jQuery(document).ready(function($) {
     // Uncomment the following lines if you want to persist section states
     /*
     // Load saved states on page load
-    $('.ld-collapsible-section-header').each(function() {
-        var $header = $(this);
-        var sectionId = $header.data('section-toggle');
-        var $sectionLessons = $('[data-section-lessons="' + sectionId + '"]');
-        var savedState = loadSectionState(sectionId);
+    $('.ld-custom-section-toggle').each(function() {
+        var $toggle = $(this);
+        var sectionId = $toggle.data('section-toggle');
+        var $sectionContent = $('#ld-section-content-' + sectionId);
+        var savedState = loadCustomSectionState(sectionId);
         
         if (savedState) {
-            $header.addClass('expanded');
-            $header.attr('aria-expanded', 'true');
-            $sectionLessons.show();
+            $toggle.addClass('ld-expanded');
+            $toggle.attr('aria-expanded', 'true');
+            $sectionContent.show();
         }
     });
     
     // Save state when sections are toggled
-    $(document).on('click', '.ld-collapsible-section-header', function() {
-        var $header = $(this);
-        var sectionId = $header.data('section-toggle');
-        var isExpanded = $header.hasClass('expanded');
-        saveSectionState(sectionId, isExpanded);
+    $(document).on('click', '.ld-custom-section-toggle', function() {
+        var $toggle = $(this);
+        var sectionId = $toggle.data('section-toggle');
+        var isExpanded = $toggle.hasClass('ld-expanded');
+        saveCustomSectionState(sectionId, isExpanded);
     });
     */
 });
-

@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param int     $user_id   User ID.
  */
 do_action( 'learndash-before-section-heading', $section, $course_id, $user_id ); ?>
-<div class="ld-item-list-section-heading ld-item-section-heading-<?php echo esc_attr( $section->ID ); ?> ld-collapsible-section-header" data-section-toggle="<?php echo esc_attr( $section->ID ); ?>">
+<div class="ld-item-list-section-heading ld-item-section-heading-<?php echo esc_attr( $section->ID ); ?>">
 	<?php
 	/**
 	 * Fires before the section title (inside wrapper).
@@ -39,12 +39,10 @@ do_action( 'learndash-before-section-heading', $section, $course_id, $user_id );
 	do_action( 'learndash-before-inner-section-heading', $section, $course_id, $user_id );
 	?>
 	
-	<div class="ld-section-toggle-wrapper">
-		<div class="ld-section-toggle-icon">
-			<span class="ld-icon ld-icon-arrow-right" aria-hidden="true"></span>
-		</div>
-		<div class="ld-lesson-section-heading" aria-role="heading" aria-level="3">
-			<?php echo esc_html( $section->post_title ); ?>
+	<div class="ld-section-heading-wrapper">
+		<div class="ld-custom-section-toggle ld-button-alternate" data-section-toggle="<?php echo esc_attr( $section->ID ); ?>" role="button" tabindex="0" aria-expanded="false" aria-controls="ld-section-content-<?php echo esc_attr( $section->ID ); ?>">
+			<span class="ld-icon ld-icon-arrow-down" aria-hidden="true"></span>
+			<span class="ld-text"><?php echo esc_html( $section->post_title ); ?></span>
 		</div>
 	</div>
 	
@@ -72,4 +70,3 @@ do_action( 'learndash-before-section-heading', $section, $course_id, $user_id );
  * @param int     $user_id   User ID.
  */
 do_action( 'learndash-after-section-heading', $section, $course_id, $user_id );
-
