@@ -105,3 +105,93 @@ function lcf_display_section_toggler() {
 
 	<?php
 }
+/**
+ * Enqueue custom scripts and styles for LearnDash collapsible sections
+ */
+add_action( 'wp_enqueue_scripts', 'learndash_collapsible_sections_assets' );
+function learndash_collapsible_sections_assets() {
+	// Only load on course pages
+	if ( function_exists('learndash_is_course_post') && learndash_is_course_post(get_the_ID()) ) {
+		wp_enqueue_script( 
+			'course-sections-toggle', 
+			get_stylesheet_directory_uri() . '/assets/js/course-sections-toggle.js', 
+			array('jquery'), 
+			'1.0.0', 
+			true 
+		);
+		
+		// Add inline CSS for collapsible sections
+		wp_add_inline_style( 'child-style', '
+			/* Collapsible Section Styles */
+			.ld-collapsible-section-header {
+				cursor: pointer;
+				transition: all 0.3s ease;
+				border-radius: 4px;
+				padding: 15px;
+				margin-bottom: 10px;
+				background: #f8f9fa;
+				border: 1px solid #e9ecef;
+			}
+			
+			.ld-collapsible-section-header:hover {
+				background: #e9ecef;
+			}
+			
+			.ld-section-toggle-wrapper {
+				display: flex;
+				align-items: center;
+				width: 100%;
+			}
+			
+			.ld-section-toggle-icon {
+				margin-right: 12px;
+				transition: transform 0.3s ease;
+			}
+			
+			.ld-section-toggle-icon .ld-icon {
+				font-size: 14px;
+				color: #6c757d;
+			}
+			
+			.ld-collapsible-section-header.expanded .ld-section-toggle-icon {
+				transform: rotate(90deg);
+			}
+			
+			.ld-lesson-section-heading {
+				font-weight: 600;
+				font-size: 16px;
+				color: #495057;
+				margin: 0;
+			}
+			
+			.ld-section-lessons {
+				margin-left: 20px;
+				border-left: 2px solid #e9ecef;
+				padding-left: 20px;
+				margin-bottom: 20px;
+			}
+			
+			.ld-section-wrapper {
+				margin-bottom: 20px;
+			}
+			
+			/* Animation for section content */
+			.ld-section-lessons {
+				overflow: hidden;
+				transition: all 0.3s ease;
+			}
+			
+			/* Ensure proper spacing for lessons within sections */
+			.ld-section-lessons .ld-item-list-item {
+				margin-bottom: 10px;
+			}
+			
+			/* Style adjustments for better visual hierarchy */
+			.ld-collapsible-sections .ld-item-list-item {
+				border-radius: 4px;
+				border: 1px solid #e9ecef;
+				margin-bottom: 8px;
+			}
+		');
+	}
+}
