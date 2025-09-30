@@ -1,103 +1,76 @@
 /**
- * LearnDash Course Sections Toggle Functionality
- * Handles collapsible sections on course pages
- * Uses unique selectors to avoid conflicts with LearnDash's existing functionality
+ * Custom Course Sections Toggle Functionality
+ * Completely independent from LearnDash's existing functionality
+ * Uses unique selectors and classes to avoid any conflicts
  */
 
 jQuery(document).ready(function($) {
     'use strict';
     
-    // Initialize collapsible sections
+    // Initialize custom section toggles
     initCustomSectionToggles();
     
     function initCustomSectionToggles() {
-        // Find all custom section toggle buttons (using unique class)
-        $('.ld-custom-section-toggle').each(function() {
-            var $toggle = $(this);
-            var sectionId = $toggle.data('section-toggle');
-            var $sectionContent = $('#ld-section-content-' + sectionId);
+        // Find all custom section toggle buttons (completely unique selectors)
+        $('.custom-section-toggle-btn').each(function() {
+            var $toggleBtn = $(this);
+            var sectionId = $toggleBtn.data('custom-section-id');
+            var $sectionContent = $('#custom-section-content-' + sectionId);
             
             // Ensure section content is hidden by default
             $sectionContent.hide();
             
             // Add click handler to toggle button
-            $toggle.on('click', function(e) {
+            $toggleBtn.on('click.customSectionToggle', function(e) {
                 e.preventDefault();
-                e.stopPropagation(); // Prevent event bubbling to avoid conflicts
-                toggleCustomSection($toggle, $sectionContent);
+                e.stopImmediatePropagation(); // Completely stop event propagation
+                toggleCustomSection($toggleBtn, $sectionContent);
+                return false;
             });
             
             // Add keyboard support (Enter and Space)
-            $toggle.on('keydown', function(e) {
+            $toggleBtn.on('keydown.customSectionToggle', function(e) {
                 if (e.which === 13 || e.which === 32) { // Enter or Space
                     e.preventDefault();
-                    e.stopPropagation();
-                    toggleCustomSection($toggle, $sectionContent);
+                    e.stopImmediatePropagation();
+                    toggleCustomSection($toggleBtn, $sectionContent);
+                    return false;
                 }
             });
         });
     }
     
-    function toggleCustomSection($toggle, $sectionContent) {
-        var isExpanded = $toggle.hasClass('ld-expanded');
+    function toggleCustomSection($toggleBtn, $sectionContent) {
+        var isExpanded = $toggleBtn.hasClass('expanded');
         
         if (isExpanded) {
             // Collapse section
-            $toggle.removeClass('ld-expanded');
-            $toggle.attr('aria-expanded', 'false');
+            $toggleBtn.removeClass('expanded');
+            $toggleBtn.attr('aria-expanded', 'false');
             $sectionContent.slideUp(300);
         } else {
             // Expand section
-            $toggle.addClass('ld-expanded');
-            $toggle.attr('aria-expanded', 'true');
+            $toggleBtn.addClass('expanded');
+            $toggleBtn.attr('aria-expanded', 'true');
             $sectionContent.slideDown(300);
         }
     }
     
-    // Optional: Integration with LearnDash's main expand/collapse functionality
-    // This listens for LearnDash's expand/collapse events without interfering
-    $(document).on('click', '.ld-expand-button:not(.ld-custom-section-toggle)', function() {
-        // Small delay to let LearnDash handle its own functionality first
-        setTimeout(function() {
-            var $mainButton = $('.ld-expand-button:not(.ld-custom-section-toggle)').first();
-            if ($mainButton.length) {
-                var isMainExpanded = $mainButton.hasClass('ld-expanded');
-                
-                // Sync our custom section toggles with the main expand/collapse state
-                $('.ld-custom-section-toggle').each(function() {
-                    var $customToggle = $(this);
-                    var sectionId = $customToggle.data('section-toggle');
-                    var $sectionContent = $('#ld-section-content-' + sectionId);
-                    var isCustomExpanded = $customToggle.hasClass('ld-expanded');
-                    
-                    if (isMainExpanded && !isCustomExpanded) {
-                        // Expand this custom section
-                        $customToggle.addClass('ld-expanded');
-                        $customToggle.attr('aria-expanded', 'true');
-                        $sectionContent.slideDown(300);
-                    } else if (!isMainExpanded && isCustomExpanded) {
-                        // Collapse this custom section
-                        $customToggle.removeClass('ld-expanded');
-                        $customToggle.attr('aria-expanded', 'false');
-                        $sectionContent.slideUp(300);
-                    }
-                });
-            }
-        }, 100);
-    });
+    // Completely isolated - no integration with LearnDash functionality
+    // This ensures zero interference with existing togglers
     
     // Handle window resize to ensure proper layout
-    $(window).on('resize', function() {
+    $(window).on('resize.customSectionToggle', function() {
         // Recalculate any necessary dimensions if needed
         // This is a placeholder for any responsive adjustments
     });
     
-    // Optional: Save section state in localStorage
+    // Optional: Save section state in localStorage (completely separate from LearnDash)
     function saveCustomSectionState(sectionId, isExpanded) {
         if (typeof(Storage) !== "undefined") {
-            var courseId = $('[data-ld-expand-id]').attr('data-ld-expand-id');
+            var courseId = $('.ld-item-list-items').attr('id');
             if (courseId) {
-                var storageKey = 'ld_custom_section_state_' + courseId;
+                var storageKey = 'custom_section_state_' + courseId;
                 var sectionStates = JSON.parse(localStorage.getItem(storageKey) || '{}');
                 sectionStates[sectionId] = isExpanded;
                 localStorage.setItem(storageKey, JSON.stringify(sectionStates));
@@ -107,9 +80,9 @@ jQuery(document).ready(function($) {
     
     function loadCustomSectionState(sectionId) {
         if (typeof(Storage) !== "undefined") {
-            var courseId = $('[data-ld-expand-id]').attr('data-ld-expand-id');
+            var courseId = $('.ld-item-list-items').attr('id');
             if (courseId) {
-                var storageKey = 'ld_custom_section_state_' + courseId;
+                var storageKey = 'custom_section_state_' + courseId;
                 var sectionStates = JSON.parse(localStorage.getItem(storageKey) || '{}');
                 return sectionStates[sectionId] || false;
             }
@@ -120,24 +93,24 @@ jQuery(document).ready(function($) {
     // Uncomment the following lines if you want to persist section states
     /*
     // Load saved states on page load
-    $('.ld-custom-section-toggle').each(function() {
-        var $toggle = $(this);
-        var sectionId = $toggle.data('section-toggle');
-        var $sectionContent = $('#ld-section-content-' + sectionId);
+    $('.custom-section-toggle-btn').each(function() {
+        var $toggleBtn = $(this);
+        var sectionId = $toggleBtn.data('custom-section-id');
+        var $sectionContent = $('#custom-section-content-' + sectionId);
         var savedState = loadCustomSectionState(sectionId);
         
         if (savedState) {
-            $toggle.addClass('ld-expanded');
-            $toggle.attr('aria-expanded', 'true');
+            $toggleBtn.addClass('expanded');
+            $toggleBtn.attr('aria-expanded', 'true');
             $sectionContent.show();
         }
     });
     
     // Save state when sections are toggled
-    $(document).on('click', '.ld-custom-section-toggle', function() {
-        var $toggle = $(this);
-        var sectionId = $toggle.data('section-toggle');
-        var isExpanded = $toggle.hasClass('ld-expanded');
+    $(document).on('click.customSectionToggle', '.custom-section-toggle-btn', function() {
+        var $toggleBtn = $(this);
+        var sectionId = $toggleBtn.data('custom-section-id');
+        var isExpanded = $toggleBtn.hasClass('expanded');
         saveCustomSectionState(sectionId, isExpanded);
     });
     */

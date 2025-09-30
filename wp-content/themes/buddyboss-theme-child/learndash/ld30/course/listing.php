@@ -113,7 +113,7 @@ if ( ! empty( $lessons ) || ! empty( $quizzes ) ) :
 							true
 						);
 						?>
-						<div class="ld-section-lessons" id="ld-section-content-<?php echo esc_attr( $current_section->ID ); ?>" data-section-lessons="<?php echo esc_attr( $current_section->ID ); ?>" style="display: none;">
+						<div class="custom-section-content" id="custom-section-content-<?php echo esc_attr( $current_section->ID ); ?>" data-custom-section-content="<?php echo esc_attr( $current_section->ID ); ?>" style="display: none;">
 					<?php
 				}
 				

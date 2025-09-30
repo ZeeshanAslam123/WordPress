@@ -122,8 +122,8 @@ function learndash_collapsible_sections_assets() {
 		
 		// Add inline CSS for collapsible sections
 		wp_add_inline_style( 'child-style', '
-			/* Custom Section Toggle - Matches LearnDash expand button styles */
-			.learndash-wrapper .ld-custom-section-toggle {
+			/* Custom Section Toggle - Completely Independent Styling */
+			.custom-section-toggle-btn {
 				background: transparent;
 				color: #00a2e8;
 				padding: 0;
@@ -141,7 +141,7 @@ function learndash_collapsible_sections_assets() {
 				border-radius: 20px;
 			}
 			
-			.learndash-wrapper .ld-custom-section-toggle .ld-icon {
+			.custom-toggle-icon {
 				background: #00a2e8;
 				color: white;
 				border-radius: 100%;
@@ -149,14 +149,18 @@ function learndash_collapsible_sections_assets() {
 				height: 18px;
 				flex: 0 0 18px;
 				padding: 2px;
-				line-height: 16px;
+				line-height: 14px;
 				text-align: center;
 				font-weight: bold;
 				transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
 				margin-right: 0.5em;
+				font-size: 10px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
 			
-			.learndash-wrapper .ld-custom-section-toggle .ld-text {
+			.custom-toggle-text {
 				padding-left: 0.5em;
 				flex: 1;
 				text-align: left;
@@ -164,23 +168,23 @@ function learndash_collapsible_sections_assets() {
 				font-size: 1.1em;
 			}
 			
-			.learndash-wrapper .ld-custom-section-toggle:hover {
+			.custom-section-toggle-btn:hover {
 				background: transparent;
 				opacity: 0.85;
 			}
 			
-			.learndash-wrapper .ld-custom-section-toggle:focus {
+			.custom-section-toggle-btn:focus {
 				outline: none;
 				opacity: 0.75;
 			}
 			
 			/* Expanded state */
-			.learndash-wrapper .ld-custom-section-toggle.ld-expanded .ld-icon {
-				transform: rotate(180deg);
+			.custom-section-toggle-btn.expanded .custom-toggle-icon {
+				transform: rotate(90deg);
 			}
 			
 			/* Section content styling */
-			.ld-section-lessons {
+			.custom-section-content {
 				margin-left: 26px;
 				border-left: 2px solid #e9ecef;
 				padding-left: 20px;
@@ -193,17 +197,17 @@ function learndash_collapsible_sections_assets() {
 				margin-bottom: 20px;
 			}
 			
-			.ld-section-heading-wrapper {
+			.custom-section-heading-wrapper {
 				margin-bottom: 10px;
 			}
 			
 			/* Ensure proper spacing for lessons within sections */
-			.ld-section-lessons .ld-item-list-item {
+			.custom-section-content .ld-item-list-item {
 				margin-bottom: 10px;
 			}
 			
 			/* Style adjustments for better visual hierarchy */
-			.ld-collapsible-sections .ld-section-lessons .ld-item-list-item {
+			.ld-collapsible-sections .custom-section-content .ld-item-list-item {
 				border-radius: 4px;
 				border: 1px solid #e9ecef;
 				margin-bottom: 8px;
@@ -211,7 +215,7 @@ function learndash_collapsible_sections_assets() {
 			
 			/* Responsive adjustments */
 			@media (max-width: 640px) {
-				.learndash-wrapper .ld-custom-section-toggle {
+				.custom-section-toggle-btn {
 					text-align: left;
 					margin-left: 10px;
 				}
