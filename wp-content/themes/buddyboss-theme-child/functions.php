@@ -122,15 +122,23 @@ function learndash_collapsible_sections_assets() {
 		
 		// Add inline CSS for collapsible sections
 		wp_add_inline_style( 'child-style', '
-			/* Custom Section Toggle - Completely Independent Styling */
+			/* Custom Section Header - Matches LearnDash lesson item styling exactly */
+			.custom-section-item {
+				border: 2px solid #e2e7ed;
+				border-radius: 6px;
+				margin: 1em 0;
+				background: #fff;
+			}
+			
 			.custom-section-toggle-btn {
 				background: transparent;
 				color: #00a2e8;
-				padding: 0;
+				padding: 20px;
 				border: none;
 				cursor: pointer;
 				display: flex;
 				align-items: center;
+				justify-content: space-between;
 				width: 100%;
 				text-decoration: none;
 				font-family: inherit;
@@ -138,7 +146,23 @@ function learndash_collapsible_sections_assets() {
 				font-weight: 800;
 				transition: opacity 0.3s ease;
 				margin: 0;
-				border-radius: 20px;
+				border-radius: 6px;
+			}
+			
+			.custom-section-toggle-btn:hover {
+				color: #00a2e8;
+				opacity: 0.85;
+			}
+			
+			.custom-section-toggle-btn:focus {
+				outline: none;
+				opacity: 0.75;
+			}
+			
+			.custom-section-left {
+				display: flex;
+				align-items: center;
+				flex: 1;
 			}
 			
 			.custom-toggle-icon {
@@ -166,16 +190,7 @@ function learndash_collapsible_sections_assets() {
 				text-align: left;
 				font-weight: 600;
 				font-size: 1.1em;
-			}
-			
-			.custom-section-toggle-btn:hover {
-				background: transparent;
-				opacity: 0.85;
-			}
-			
-			.custom-section-toggle-btn:focus {
-				outline: none;
-				opacity: 0.75;
+				color: #495255;
 			}
 			
 			/* Expanded state */
@@ -186,7 +201,7 @@ function learndash_collapsible_sections_assets() {
 			/* Section content styling */
 			.custom-section-content {
 				margin-left: 26px;
-				border-left: 2px solid #e9ecef;
+				border-left: 2px solid #e2e7ed;
 				padding-left: 20px;
 				margin-bottom: 20px;
 				overflow: hidden;
@@ -198,26 +213,29 @@ function learndash_collapsible_sections_assets() {
 			}
 			
 			.custom-section-heading-wrapper {
-				margin-bottom: 10px;
+				margin-bottom: 0;
 			}
 			
 			/* Ensure proper spacing for lessons within sections */
 			.custom-section-content .ld-item-list-item {
-				margin-bottom: 10px;
+				margin: 1em 0;
 			}
 			
-			/* Style adjustments for better visual hierarchy */
-			.ld-collapsible-sections .custom-section-content .ld-item-list-item {
-				border-radius: 4px;
-				border: 1px solid #e9ecef;
-				margin-bottom: 8px;
+			/* Remove extra borders from nested lessons */
+			.custom-section-content .ld-item-list-item {
+				border-left: none;
+				margin-left: 0;
 			}
 			
 			/* Responsive adjustments */
 			@media (max-width: 640px) {
 				.custom-section-toggle-btn {
 					text-align: left;
-					margin-left: 10px;
+					padding: 15px;
+				}
+				
+				.custom-toggle-text {
+					font-size: 1em;
 				}
 			}
 		');

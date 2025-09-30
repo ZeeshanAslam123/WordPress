@@ -40,9 +40,13 @@ do_action( 'learndash-before-section-heading', $section, $course_id, $user_id );
 	?>
 	
 	<div class="custom-section-heading-wrapper">
-		<div class="custom-section-toggle-btn" data-custom-section-id="<?php echo esc_attr( $section->ID ); ?>" role="button" tabindex="0" aria-expanded="false" aria-controls="custom-section-content-<?php echo esc_attr( $section->ID ); ?>">
-			<span class="custom-toggle-icon" aria-hidden="true">▶</span>
-			<span class="custom-toggle-text"><?php echo esc_html( $section->post_title ); ?></span>
+		<div class="custom-section-item">
+			<div class="custom-section-toggle-btn" data-custom-section-id="<?php echo esc_attr( $section->ID ); ?>" role="button" tabindex="0" aria-expanded="false" aria-controls="custom-section-content-<?php echo esc_attr( $section->ID ); ?>">
+				<div class="custom-section-left">
+					<span class="custom-toggle-icon" aria-hidden="true">▶</span>
+					<span class="custom-toggle-text"><?php echo esc_html( $section->post_title ); ?></span>
+				</div>
+			</div>
 		</div>
 	</div>
 	
