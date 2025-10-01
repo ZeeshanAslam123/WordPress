@@ -47,12 +47,12 @@ jQuery(document).ready(function($) {
             // Collapse section
             $toggleBtn.removeClass('expanded');
             $toggleBtn.attr('aria-expanded', 'false');
-            $sectionContent.slideUp(300);
+            $sectionContent.hide();
         } else {
             // Expand section
             $toggleBtn.addClass('expanded');
             $toggleBtn.attr('aria-expanded', 'true');
-            $sectionContent.slideDown(300);
+            $sectionContent.show();
         }
     }
     
