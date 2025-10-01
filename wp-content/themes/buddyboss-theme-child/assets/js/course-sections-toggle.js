@@ -86,6 +86,13 @@ jQuery(document).ready(function($) {
                                     $sectionToggle.addClass('expanded');
                                     $sectionToggle.attr('aria-expanded', 'true');
                                     $sectionContent.show(); // Use show() instead of slideDown() for instant sync
+                                    
+                                    // After showing section, trigger a refresh of any expanded lessons
+                                    // to ensure their topics/quizzes display properly
+                                    setTimeout(function() {
+                                        refreshExpandedLessonsInSection($sectionContent);
+                                    }, 100);
+                                    
                                 } else if (!isExpanded && isSectionExpanded) {
                                     // Collapse section to match main collapse state
                                     $sectionToggle.removeClass('expanded');
@@ -104,6 +111,27 @@ jQuery(document).ready(function($) {
                 attributeFilter: ['class']
             });
         }
+    }
+    
+    function refreshExpandedLessonsInSection($sectionContent) {
+        // Find lessons that are marked as expanded but may not be showing content
+        $sectionContent.find('.ld-item-list-item').each(function() {
+            var $lesson = $(this);
+            var $lessonToggle = $lesson.find('.ld-expand-button');
+            
+            // Only process lessons that are marked as expanded
+            if ($lessonToggle.length && $lessonToggle.hasClass('ld-expanded')) {
+                var $lessonContent = $lesson.find('.ld-item-list-item-expanded');
+                
+                if ($lessonContent.length) {
+                    // Force a layout recalculation to ensure content is visible
+                    $lessonContent.hide().show();
+                    
+                    // Also trigger a resize event to help LearnDash recalculate layouts
+                    $(window).trigger('resize');
+                }
+            }
+        });
     }
     
     // Handle window resize to ensure proper layout
