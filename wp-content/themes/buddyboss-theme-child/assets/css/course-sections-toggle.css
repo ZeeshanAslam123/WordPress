@@ -73,22 +73,13 @@
     transform: rotate(90deg);
 }
 
-/* Section content styling - EXACTLY like LearnDash lessons */
+/* Section content styling - Simple and reliable */
 .custom-section-content {
     margin-left: 26px;
     border-left: 2px solid #e2e7ed;
     padding-left: 20px;
     margin-bottom: 20px;
-    position: relative;
-    height: auto;
-    max-height: none; /* Start visible, JavaScript will control */
-    overflow: hidden;
-    transition: max-height 0.5s ease; /* EXACT LearnDash animation */
-}
-
-/* Hidden state - applied by JavaScript */
-.custom-section-content.collapsed {
-    max-height: 0px;
+    /* No CSS transitions - jQuery handles everything */
 }
 
 .ld-section-wrapper {

@@ -17,9 +17,8 @@ jQuery(document).ready(function($) {
             var sectionId = $toggleBtn.data('custom-section-id');
             var $sectionContent = $('#custom-section-content-' + sectionId);
             
-            // Initialize section as collapsed using LearnDash method
-            $sectionContent.addClass('collapsed');
-            $sectionContent.css({'max-height': 0});
+            // Initialize section as collapsed - simple and reliable
+            $sectionContent.hide();
             
             // Add click handler to toggle button
             $toggleBtn.on('click.customSectionToggle', function(e) {
@@ -45,28 +44,15 @@ jQuery(document).ready(function($) {
         var isExpanded = $toggleBtn.hasClass('expanded');
         
         if (isExpanded) {
-            // Collapse section - EXACTLY like LearnDash lessons
+            // Collapse section - simple and reliable
             $toggleBtn.removeClass('expanded');
             $toggleBtn.attr('aria-expanded', 'false');
-            $sectionContent.addClass('collapsed');
-            $sectionContent.css({'max-height': 0});
+            $sectionContent.slideUp(500); // Smooth animation like LearnDash
         } else {
-            // Expand section - EXACTLY like LearnDash lessons
+            // Expand section - simple and reliable
             $toggleBtn.addClass('expanded');
             $toggleBtn.attr('aria-expanded', 'true');
-            $sectionContent.removeClass('collapsed');
-            
-            // Calculate total height exactly like LearnDash does
-            var totalHeight = 0;
-            $sectionContent.find('> *').each(function() {
-                totalHeight += $(this).outerHeight();
-            });
-            
-            // Set data-height attribute like LearnDash
-            $sectionContent.attr('data-height', '' + (totalHeight + 50) + '');
-            
-            // Set max-height to calculated height like LearnDash
-            $sectionContent.css({'max-height': $sectionContent.data('height')});
+            $sectionContent.slideDown(500); // Smooth animation like LearnDash
         }
     }
     
@@ -96,15 +82,7 @@ jQuery(document).ready(function($) {
                         if (!$sectionToggle.hasClass('expanded')) {
                             $sectionToggle.addClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'true');
-                            $sectionContent.removeClass('collapsed');
-                            
-                            // Calculate height and expand using LearnDash method
-                            var totalHeight = 0;
-                            $sectionContent.find('> *').each(function() {
-                                totalHeight += $(this).outerHeight();
-                            });
-                            $sectionContent.attr('data-height', '' + (totalHeight + 50) + '');
-                            $sectionContent.css({'max-height': $sectionContent.data('height')});
+                            $sectionContent.slideDown(500);
                         }
                     });
                     
@@ -134,8 +112,7 @@ jQuery(document).ready(function($) {
                                     if ($sectionToggle.hasClass('expanded')) {
                                         $sectionToggle.removeClass('expanded');
                                         $sectionToggle.attr('aria-expanded', 'false');
-                                        $sectionContent.addClass('collapsed');
-                                        $sectionContent.css({'max-height': 0});
+                                        $sectionContent.slideUp(500);
                                     }
                                 });
                             }
