@@ -52,8 +52,45 @@ jQuery(document).ready(function($) {
             // Expand section
             $toggleBtn.addClass('expanded');
             $toggleBtn.attr('aria-expanded', 'true');
-            $sectionContent.slideDown(300);
+            $sectionContent.slideDown(300, function() {
+                // After section is expanded, check for lessons that were expanded while hidden
+                // and re-trigger their expand functionality to show topics/quizzes
+                fixHiddenExpandedLessons($sectionContent);
+            });
         }
+    }
+    
+    function fixHiddenExpandedLessons($sectionContent) {
+        // Find all lessons within this section that are in "expanded" state
+        $sectionContent.find('.ld-item-list-item').each(function() {
+            var $lesson = $(this);
+            var $lessonToggle = $lesson.find('.ld-expand-button');
+            
+            // Check if lesson toggle exists and is in expanded state
+            if ($lessonToggle.length && $lessonToggle.hasClass('ld-expanded')) {
+                var $lessonContent = $lesson.find('.ld-item-list-item-expanded');
+                
+                // Check if the lesson content exists but topics/quizzes are not visible
+                if ($lessonContent.length) {
+                    var $topics = $lessonContent.find('.ld-item-list-item');
+                    
+                    // If no topics are visible or they seem hidden, re-trigger the expand
+                    if ($topics.length === 0 || !$topics.is(':visible')) {
+                        // Re-trigger LearnDash's expand functionality for this lesson
+                        setTimeout(function() {
+                            // First collapse the lesson
+                            $lessonToggle.removeClass('ld-expanded');
+                            $lessonContent.hide();
+                            
+                            // Then expand it again to trigger proper content loading
+                            setTimeout(function() {
+                                $lessonToggle.trigger('click');
+                            }, 50);
+                        }, 100);
+                    }
+                }
+            }
+        });
     }
     
     // Completely isolated - no integration with LearnDash functionality
