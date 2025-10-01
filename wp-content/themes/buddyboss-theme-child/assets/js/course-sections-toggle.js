@@ -44,15 +44,15 @@ jQuery(document).ready(function($) {
         var isExpanded = $toggleBtn.hasClass('expanded');
         
         if (isExpanded) {
-            // Collapse section
+            // Collapse section - instant like lessons
             $toggleBtn.removeClass('expanded');
             $toggleBtn.attr('aria-expanded', 'false');
-            $sectionContent.slideUp(300);
+            $sectionContent.hide();
         } else {
-            // Expand section
+            // Expand section - instant like lessons
             $toggleBtn.addClass('expanded');
             $toggleBtn.attr('aria-expanded', 'true');
-            $sectionContent.slideDown(300);
+            $sectionContent.show();
         }
     }
     
