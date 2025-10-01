@@ -56,8 +56,41 @@ jQuery(document).ready(function($) {
         }
     }
     
-    // Completely isolated - no integration with LearnDash functionality
-    // This ensures zero interference with existing togglers
+    // Integration with LearnDash's "Expand All" / "Collapse All" functionality
+    initExpandAllIntegration();
+    
+    function initExpandAllIntegration() {
+        // Listen for clicks on LearnDash's main expand/collapse button
+        $(document).on('click.customSectionExpandAll', '.ld-expand-button', function(e) {
+            // Small delay to let LearnDash handle its functionality first
+            setTimeout(function() {
+                var $mainButton = $('.ld-expand-button').first();
+                if ($mainButton.length) {
+                    var isMainExpanded = $mainButton.hasClass('ld-expanded');
+                    
+                    // Sync all custom section toggles with the main expand/collapse state
+                    $('.custom-section-toggle-btn').each(function() {
+                        var $customToggle = $(this);
+                        var sectionId = $customToggle.data('custom-section-id');
+                        var $sectionContent = $('#custom-section-content-' + sectionId);
+                        var isCustomExpanded = $customToggle.hasClass('expanded');
+                        
+                        if (isMainExpanded && !isCustomExpanded) {
+                            // Expand this custom section
+                            $customToggle.addClass('expanded');
+                            $customToggle.attr('aria-expanded', 'true');
+                            $sectionContent.slideDown(300);
+                        } else if (!isMainExpanded && isCustomExpanded) {
+                            // Collapse this custom section
+                            $customToggle.removeClass('expanded');
+                            $customToggle.attr('aria-expanded', 'false');
+                            $sectionContent.slideUp(300);
+                        }
+                    });
+                }
+            }, 100); // Small delay to ensure LearnDash processes first
+        });
+    }
     
     // Handle window resize to ensure proper layout
     $(window).on('resize.customSectionToggle', function() {
