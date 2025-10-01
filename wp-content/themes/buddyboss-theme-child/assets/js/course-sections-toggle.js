@@ -17,8 +17,8 @@ jQuery(document).ready(function($) {
             var sectionId = $toggleBtn.data('custom-section-id');
             var $sectionContent = $('#custom-section-content-' + sectionId);
             
-            // Ensure section content is hidden by default
-            $sectionContent.hide();
+            // Ensure section content is collapsed by default (using CSS max-height)
+            $sectionContent.css('max-height', '0px');
             
             // Add click handler to toggle button
             $toggleBtn.on('click.customSectionToggle', function(e) {
@@ -54,6 +54,8 @@ jQuery(document).ready(function($) {
             $toggleBtn.attr('aria-expanded', 'true');
             
             // Calculate total height like LearnDash does
+            // Temporarily remove max-height to get accurate measurements
+            $sectionContent.css('max-height', 'none');
             var totalHeight = 0;
             $sectionContent.find('> *').each(function() {
                 totalHeight += $(this).outerHeight();
@@ -90,7 +92,15 @@ jQuery(document).ready(function($) {
                         if (!$sectionToggle.hasClass('expanded')) {
                             $sectionToggle.addClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'true');
-                            $sectionContent.show();
+                            
+                            // Calculate height and expand using CSS max-height
+                            // Temporarily remove max-height to get accurate measurements
+                            $sectionContent.css('max-height', 'none');
+                            var totalHeight = 0;
+                            $sectionContent.find('> *').each(function() {
+                                totalHeight += $(this).outerHeight();
+                            });
+                            $sectionContent.css('max-height', (totalHeight + 50) + 'px');
                         }
                     });
                     
@@ -120,7 +130,7 @@ jQuery(document).ready(function($) {
                                     if ($sectionToggle.hasClass('expanded')) {
                                         $sectionToggle.removeClass('expanded');
                                         $sectionToggle.attr('aria-expanded', 'false');
-                                        $sectionContent.hide();
+                                        $sectionContent.css('max-height', '0px');
                                     }
                                 });
                             }
