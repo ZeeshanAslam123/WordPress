@@ -69,30 +69,41 @@ jQuery(document).ready(function($) {
                 return; // Exit if this is not the main expand button
             }
             
-            // Small delay to let LearnDash handle its functionality first
+            // DO NOT interfere with the event - let LearnDash handle it completely
+            // Use multiple checks to ensure LearnDash's processing is fully complete
+            
+            // First check after a short delay
             setTimeout(function() {
-                var isMainExpanded = $clickedButton.hasClass('ld-expanded');
-                
-                // Sync all custom section toggles with the main expand/collapse state
-                $('.custom-section-toggle-btn').each(function() {
-                    var $customToggle = $(this);
-                    var sectionId = $customToggle.data('custom-section-id');
-                    var $sectionContent = $('#custom-section-content-' + sectionId);
-                    var isCustomExpanded = $customToggle.hasClass('expanded');
+                // Wait for any ongoing animations to complete
+                var checkAndSync = function() {
+                    // Double-check the button state after LearnDash has processed
+                    var isMainExpanded = $clickedButton.hasClass('ld-expanded');
                     
-                    if (isMainExpanded && !isCustomExpanded) {
-                        // Expand this custom section
-                        $customToggle.addClass('expanded');
-                        $customToggle.attr('aria-expanded', 'true');
-                        $sectionContent.slideDown(300);
-                    } else if (!isMainExpanded && isCustomExpanded) {
-                        // Collapse this custom section
-                        $customToggle.removeClass('expanded');
-                        $customToggle.attr('aria-expanded', 'false');
-                        $sectionContent.slideUp(300);
-                    }
-                });
-            }, 100); // Small delay to ensure LearnDash processes first
+                    // Sync all custom section toggles with the main expand/collapse state
+                    $('.custom-section-toggle-btn').each(function() {
+                        var $customToggle = $(this);
+                        var sectionId = $customToggle.data('custom-section-id');
+                        var $sectionContent = $('#custom-section-content-' + sectionId);
+                        var isCustomExpanded = $customToggle.hasClass('expanded');
+                        
+                        if (isMainExpanded && !isCustomExpanded) {
+                            // Expand this custom section
+                            $customToggle.addClass('expanded');
+                            $customToggle.attr('aria-expanded', 'true');
+                            $sectionContent.slideDown(300);
+                        } else if (!isMainExpanded && isCustomExpanded) {
+                            // Collapse this custom section
+                            $customToggle.removeClass('expanded');
+                            $customToggle.attr('aria-expanded', 'false');
+                            $sectionContent.slideUp(300);
+                        }
+                    });
+                };
+                
+                // Execute the sync
+                checkAndSync();
+                
+            }, 600); // Longer delay to ensure LearnDash completes all processing and animations
         });
     }
     
