@@ -1,7 +1,9 @@
-/**
- * Custom Course Sections Toggle Functionality
- * Completely independent from LearnDash's existing functionality
- * Uses unique selectors and classes to avoid any conflicts
+/* LearnDash Course Sections - Font Size Adjustments Only */
+
+/* 
+ * This file is intentionally minimal.
+ * Only font size adjustments are applied via CSS.
+ * No toggle functionality is implemented.
  */
 
 jQuery(document).ready(function($) {
@@ -186,3 +188,4 @@ jQuery(document).ready(function($) {
     });
     */
 });
+
