@@ -56,8 +56,79 @@ jQuery(document).ready(function($) {
         }
     }
     
-    // Completely isolated - no integration with LearnDash functionality
-    // This ensures zero interference with existing togglers
+    // Integration with LearnDash's Expand All functionality
+    initExpandAllIntegration();
+    
+    function initExpandAllIntegration() {
+        // Find the main expand/collapse button
+        var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
+        
+        if ($mainExpandButton.length) {
+            // INTERCEPT the click event BEFORE LearnDash processes it
+            $mainExpandButton.on('click.customSectionIntercept', function(e) {
+                var $button = $(this);
+                var isCurrentlyExpanded = $button.hasClass('ld-expanded');
+                
+                // If we're about to expand (button is currently collapsed)
+                if (!isCurrentlyExpanded) {
+                    console.log('Intercepting Expand All - expanding sections first');
+                    
+                    // FIRST: Expand all sections immediately
+                    $('.custom-section-toggle-btn').each(function() {
+                        var $sectionToggle = $(this);
+                        var sectionId = $sectionToggle.data('custom-section-id');
+                        var $sectionContent = $('#custom-section-content-' + sectionId);
+                        
+                        if (!$sectionToggle.hasClass('expanded')) {
+                            $sectionToggle.addClass('expanded');
+                            $sectionToggle.attr('aria-expanded', 'true');
+                            $sectionContent.show();
+                        }
+                    });
+                    
+                    console.log('All sections expanded, now letting LearnDash process lessons');
+                } else {
+                    console.log('Intercepting Collapse All - will sync sections after');
+                }
+            });
+            
+            // ALSO watch for state changes to sync collapse
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        var $button = $(mutation.target);
+                        
+                        if ($button.attr('data-ld-expands')) {
+                            var isExpanded = $button.hasClass('ld-expanded');
+                            
+                            // Only handle collapse case here (expand is handled by click intercept)
+                            if (!isExpanded) {
+                                console.log('Syncing section collapse with main button');
+                                $('.custom-section-toggle-btn').each(function() {
+                                    var $sectionToggle = $(this);
+                                    var sectionId = $sectionToggle.data('custom-section-id');
+                                    var $sectionContent = $('#custom-section-content-' + sectionId);
+                                    
+                                    if ($sectionToggle.hasClass('expanded')) {
+                                        $sectionToggle.removeClass('expanded');
+                                        $sectionToggle.attr('aria-expanded', 'false');
+                                        $sectionContent.hide();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+            
+            observer.observe($mainExpandButton[0], {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
+    }
+    
+
     
     // Handle window resize to ensure proper layout
     $(window).on('resize.customSectionToggle', function() {
