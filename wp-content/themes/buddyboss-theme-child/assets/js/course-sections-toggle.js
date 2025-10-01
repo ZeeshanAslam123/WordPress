@@ -52,49 +52,59 @@ jQuery(document).ready(function($) {
             // Expand section
             $toggleBtn.addClass('expanded');
             $toggleBtn.attr('aria-expanded', 'true');
-            $sectionContent.slideDown(300, function() {
-                // After section is expanded, check for lessons that were expanded while hidden
-                // and re-trigger their expand functionality to show topics/quizzes
-                fixHiddenExpandedLessons($sectionContent);
-            });
+            $sectionContent.slideDown(300);
         }
     }
     
-    function fixHiddenExpandedLessons($sectionContent) {
-        // Find all lessons within this section that are in "expanded" state
-        $sectionContent.find('.ld-item-list-item').each(function() {
-            var $lesson = $(this);
-            var $lessonToggle = $lesson.find('.ld-expand-button');
-            
-            // Check if lesson toggle exists and is in expanded state
-            if ($lessonToggle.length && $lessonToggle.hasClass('ld-expanded')) {
-                var $lessonContent = $lesson.find('.ld-item-list-item-expanded');
-                
-                // Check if the lesson content exists but topics/quizzes are not visible
-                if ($lessonContent.length) {
-                    var $topics = $lessonContent.find('.ld-item-list-item');
-                    
-                    // If no topics are visible or they seem hidden, re-trigger the expand
-                    if ($topics.length === 0 || !$topics.is(':visible')) {
-                        // Re-trigger LearnDash's expand functionality for this lesson
-                        setTimeout(function() {
-                            // First collapse the lesson
-                            $lessonToggle.removeClass('ld-expanded');
-                            $lessonContent.hide();
-                            
-                            // Then expand it again to trigger proper content loading
-                            setTimeout(function() {
-                                $lessonToggle.trigger('click');
-                            }, 50);
-                        }, 100);
-                    }
-                }
-            }
-        });
-    }
+    // Integration with LearnDash's Expand All functionality
+    initExpandAllIntegration();
     
-    // Completely isolated - no integration with LearnDash functionality
-    // This ensures zero interference with existing togglers
+    function initExpandAllIntegration() {
+        // Find the main expand/collapse button
+        var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
+        
+        if ($mainExpandButton.length) {
+            // Watch for changes to the main expand button using MutationObserver
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        var $button = $(mutation.target);
+                        
+                        // Check if this is the main expand button and its state changed
+                        if ($button.attr('data-ld-expands')) {
+                            var isExpanded = $button.hasClass('ld-expanded');
+                            
+                            // Sync all sections with the main expand/collapse state
+                            $('.custom-section-toggle-btn').each(function() {
+                                var $sectionToggle = $(this);
+                                var sectionId = $sectionToggle.data('custom-section-id');
+                                var $sectionContent = $('#custom-section-content-' + sectionId);
+                                var isSectionExpanded = $sectionToggle.hasClass('expanded');
+                                
+                                if (isExpanded && !isSectionExpanded) {
+                                    // Expand section to match main expand state
+                                    $sectionToggle.addClass('expanded');
+                                    $sectionToggle.attr('aria-expanded', 'true');
+                                    $sectionContent.show(); // Use show() instead of slideDown() for instant sync
+                                } else if (!isExpanded && isSectionExpanded) {
+                                    // Collapse section to match main collapse state
+                                    $sectionToggle.removeClass('expanded');
+                                    $sectionToggle.attr('aria-expanded', 'false');
+                                    $sectionContent.hide(); // Use hide() instead of slideUp() for instant sync
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Start observing the main expand button
+            observer.observe($mainExpandButton[0], {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
+    }
     
     // Handle window resize to ensure proper layout
     $(window).on('resize.customSectionToggle', function() {
