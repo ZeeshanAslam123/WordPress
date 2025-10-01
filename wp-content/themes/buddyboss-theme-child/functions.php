@@ -22,21 +22,24 @@ add_action( 'wp_enqueue_scripts', 'learndash_collapsible_sections_assets' );
 function learndash_collapsible_sections_assets() {
 	// Only load on course pages
 	if ( function_exists('learndash_is_course_post') && learndash_is_course_post(get_the_ID()) ) {
-		// Enqueue JavaScript
-		wp_enqueue_script( 
-			'course-sections-toggle', 
-			get_stylesheet_directory_uri() . '/assets/js/course-sections-toggle.js', 
-			array('jquery'), 
-			'1.0.0', 
-			true 
-		);
-		
-		// Enqueue CSS file instead of inline styles
-		wp_enqueue_style( 
-			'course-sections-toggle-css', 
-			get_stylesheet_directory_uri() . '/assets/css/course-sections-toggle.css', 
-			array('child-style'), 
-			'1.0.0' 
-		);
+	    // Random version number (ya timestamp) for cache busting
+	    $version = time(); // ya rand(1000, 9999);
+
+	    // Enqueue JavaScript
+	    wp_enqueue_script( 
+	        'course-sections-toggle', 
+	        get_stylesheet_directory_uri() . '/assets/js/course-sections-toggle.js', 
+	        array('jquery'), 
+	        $version, 
+	        true 
+	    );
+	    
+	    // Enqueue CSS file instead of inline styles
+	    wp_enqueue_style( 
+	        'course-sections-toggle-css', 
+	        get_stylesheet_directory_uri() . '/assets/css/course-sections-toggle.css', 
+	        array('child-style'), 
+	        $version 
+	    );
 	}
 }

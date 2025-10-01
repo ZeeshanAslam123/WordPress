@@ -1,14 +1,8 @@
-/**
- * Custom Course Sections Toggle Styles
- * Matches LearnDash styling for seamless integration
- */
-
-/* Custom Section Header - Matches LearnDash lesson item styling exactly */
 .custom-section-item {
     border: 2px solid #e2e7ed;
     border-radius: 6px;
     margin: 1em 0;
-    background: #fff;
+    background: rgba(146,164,183,.05);
 }
 
 .custom-section-toggle-btn {
@@ -47,14 +41,14 @@
 }
 
 .custom-toggle-icon {
-    background: #00a2e8;
-    color: white;
+    background: #093b7d;
+    color: #a3a5a9;
     border-radius: 100%;
     width: 18px;
     height: 18px;
     flex: 0 0 18px;
     padding: 2px;
-    line-height: 14px;
+    line-height: 15px;
     text-align: center;
     font-weight: bold;
     transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
