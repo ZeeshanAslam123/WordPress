@@ -7,7 +7,7 @@
 
 .custom-section-toggle-btn {
     background: transparent;
-    color: #00a2e8;
+    color: var(--bb-headings-color); /* CHANGED: Match exact LearnDash section heading color */
     padding: 20px;
     border: none;
     cursor: pointer;
@@ -17,15 +17,17 @@
     width: 100%;
     text-decoration: none;
     font-family: inherit;
-    font-size: 0.75em;
+    font-size: 16px; /* CHANGED: Match exact LearnDash default section heading font size */
     font-weight: 800;
     transition: opacity 0.3s ease;
     margin: 0;
     border-radius: 6px;
+    letter-spacing: 0.6px; /* ADDED: Match LearnDash section heading letter-spacing */
+    text-transform: uppercase; /* ADDED: Match LearnDash section heading text-transform */
 }
 
 .custom-section-toggle-btn:hover {
-    color: #00a2e8;
+    color: var(--bb-headings-color); /* CHANGED: Match exact LearnDash section heading color */
     opacity: 0.85;
 }
 
@@ -63,9 +65,11 @@
     padding-left: 0.5em;
     flex: 1;
     text-align: left;
-    font-weight: 600;
-    font-size: 1.1em;
-    color: #495255;
+    font-weight: 500;
+    font-size: 16px; /* CHANGED: Match exact LearnDash default section heading font size */
+    color: var(--bb-headings-color); /* CHANGED: Match exact LearnDash section heading color */
+    letter-spacing: 0.6px; /* ADDED: Match LearnDash section heading letter-spacing */
+    text-transform: uppercase; /* ADDED: Match LearnDash section heading text-transform */
 }
 
 /* Expanded state */
@@ -110,7 +114,7 @@
     }
     
     .custom-toggle-text {
-        font-size: 1em;
+        font-size: 14px; /* Slightly smaller on mobile but still readable */
     }
 }
 
