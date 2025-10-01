@@ -65,7 +65,7 @@
     padding-left: 0.5em;
     flex: 1;
     text-align: left;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 16px; /* CHANGED: Match exact LearnDash default section heading font size */
     color: var(--bb-headings-color); /* CHANGED: Match exact LearnDash section heading color */
     letter-spacing: 0.6px; /* ADDED: Match LearnDash section heading letter-spacing */
