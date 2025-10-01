@@ -64,48 +64,63 @@ jQuery(document).ready(function($) {
         var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
         
         if ($mainExpandButton.length) {
-            // Watch for changes to the main expand button using MutationObserver
+            // INTERCEPT the click event BEFORE LearnDash processes it
+            $mainExpandButton.on('click.customSectionIntercept', function(e) {
+                var $button = $(this);
+                var isCurrentlyExpanded = $button.hasClass('ld-expanded');
+                
+                // If we're about to expand (button is currently collapsed)
+                if (!isCurrentlyExpanded) {
+                    console.log('Intercepting Expand All - expanding sections first');
+                    
+                    // FIRST: Expand all sections immediately
+                    $('.custom-section-toggle-btn').each(function() {
+                        var $sectionToggle = $(this);
+                        var sectionId = $sectionToggle.data('custom-section-id');
+                        var $sectionContent = $('#custom-section-content-' + sectionId);
+                        
+                        if (!$sectionToggle.hasClass('expanded')) {
+                            $sectionToggle.addClass('expanded');
+                            $sectionToggle.attr('aria-expanded', 'true');
+                            $sectionContent.show();
+                        }
+                    });
+                    
+                    console.log('All sections expanded, now letting LearnDash process lessons');
+                } else {
+                    console.log('Intercepting Collapse All - will sync sections after');
+                }
+            });
+            
+            // ALSO watch for state changes to sync collapse
             var observer = new MutationObserver(function(mutations) {
                 mutations.forEach(function(mutation) {
                     if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
                         var $button = $(mutation.target);
                         
-                        // Check if this is the main expand button and its state changed
                         if ($button.attr('data-ld-expands')) {
                             var isExpanded = $button.hasClass('ld-expanded');
                             
-                            // Sync all sections with the main expand/collapse state
-                            $('.custom-section-toggle-btn').each(function() {
-                                var $sectionToggle = $(this);
-                                var sectionId = $sectionToggle.data('custom-section-id');
-                                var $sectionContent = $('#custom-section-content-' + sectionId);
-                                var isSectionExpanded = $sectionToggle.hasClass('expanded');
-                                
-                                if (isExpanded && !isSectionExpanded) {
-                                    // Expand section to match main expand state
-                                    $sectionToggle.addClass('expanded');
-                                    $sectionToggle.attr('aria-expanded', 'true');
-                                    $sectionContent.show(); // Use show() instead of slideDown() for instant sync
+                            // Only handle collapse case here (expand is handled by click intercept)
+                            if (!isExpanded) {
+                                console.log('Syncing section collapse with main button');
+                                $('.custom-section-toggle-btn').each(function() {
+                                    var $sectionToggle = $(this);
+                                    var sectionId = $sectionToggle.data('custom-section-id');
+                                    var $sectionContent = $('#custom-section-content-' + sectionId);
                                     
-                                    // After showing section, trigger a refresh of any expanded lessons
-                                    // to ensure their topics/quizzes display properly
-                                    setTimeout(function() {
-                                        refreshExpandedLessonsInSection($sectionContent);
-                                    }, 100);
-                                    
-                                } else if (!isExpanded && isSectionExpanded) {
-                                    // Collapse section to match main collapse state
-                                    $sectionToggle.removeClass('expanded');
-                                    $sectionToggle.attr('aria-expanded', 'false');
-                                    $sectionContent.hide(); // Use hide() instead of slideUp() for instant sync
-                                }
-                            });
+                                    if ($sectionToggle.hasClass('expanded')) {
+                                        $sectionToggle.removeClass('expanded');
+                                        $sectionToggle.attr('aria-expanded', 'false');
+                                        $sectionContent.hide();
+                                    }
+                                });
+                            }
                         }
                     }
                 });
             });
             
-            // Start observing the main expand button
             observer.observe($mainExpandButton[0], {
                 attributes: true,
                 attributeFilter: ['class']
@@ -113,26 +128,7 @@ jQuery(document).ready(function($) {
         }
     }
     
-    function refreshExpandedLessonsInSection($sectionContent) {
-        // Find lessons that are marked as expanded but may not be showing content
-        $sectionContent.find('.ld-item-list-item').each(function() {
-            var $lesson = $(this);
-            var $lessonToggle = $lesson.find('.ld-expand-button');
-            
-            // Only process lessons that are marked as expanded
-            if ($lessonToggle.length && $lessonToggle.hasClass('ld-expanded')) {
-                var $lessonContent = $lesson.find('.ld-item-list-item-expanded');
-                
-                if ($lessonContent.length) {
-                    // Force a layout recalculation to ensure content is visible
-                    $lessonContent.hide().show();
-                    
-                    // Also trigger a resize event to help LearnDash recalculate layouts
-                    $(window).trigger('resize');
-                }
-            }
-        });
-    }
+
     
     // Handle window resize to ensure proper layout
     $(window).on('resize.customSectionToggle', function() {
