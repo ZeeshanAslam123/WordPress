@@ -81,9 +81,14 @@
     margin-bottom: 20px;
     position: relative;
     height: auto;
-    max-height: 0px;
+    max-height: none; /* Start visible, JavaScript will control */
     overflow: hidden;
     transition: max-height 0.5s ease; /* EXACT LearnDash animation */
+}
+
+/* Hidden state - applied by JavaScript */
+.custom-section-content.collapsed {
+    max-height: 0px;
 }
 
 .ld-section-wrapper {
