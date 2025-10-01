@@ -73,14 +73,17 @@
     transform: rotate(90deg);
 }
 
-/* Section content styling */
+/* Section content styling - EXACTLY like LearnDash lessons */
 .custom-section-content {
     margin-left: 26px;
     border-left: 2px solid #e2e7ed;
     padding-left: 20px;
     margin-bottom: 20px;
+    position: relative;
+    height: auto;
+    max-height: 0px;
     overflow: hidden;
-    /* No CSS transitions - using jQuery slideUp/slideDown animations */
+    transition: max-height 0.5s ease; /* EXACT LearnDash animation */
 }
 
 .ld-section-wrapper {
