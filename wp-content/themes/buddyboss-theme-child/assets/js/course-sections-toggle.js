@@ -44,23 +44,15 @@ jQuery(document).ready(function($) {
         var isExpanded = $toggleBtn.hasClass('expanded');
         
         if (isExpanded) {
-            // Collapse section - exactly like LearnDash lessons
+            // Collapse section - instant like lessons
             $toggleBtn.removeClass('expanded');
             $toggleBtn.attr('aria-expanded', 'false');
-            $sectionContent.css('max-height', '0px');
+            $sectionContent.hide();
         } else {
-            // Expand section - exactly like LearnDash lessons
+            // Expand section - instant like lessons
             $toggleBtn.addClass('expanded');
             $toggleBtn.attr('aria-expanded', 'true');
-            
-            // Calculate total height like LearnDash does
-            var totalHeight = 0;
-            $sectionContent.find('> *').each(function() {
-                totalHeight += $(this).outerHeight();
-            });
-            
-            // Set max-height to calculated height (with padding like LearnDash)
-            $sectionContent.css('max-height', (totalHeight + 50) + 'px');
+            $sectionContent.show();
         }
     }
     
