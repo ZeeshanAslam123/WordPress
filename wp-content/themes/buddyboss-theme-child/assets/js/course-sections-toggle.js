@@ -44,15 +44,15 @@ jQuery(document).ready(function($) {
         var isExpanded = $toggleBtn.hasClass('expanded');
         
         if (isExpanded) {
-            // Collapse section - instant like lessons
+            // Collapse section - smooth like lessons
             $toggleBtn.removeClass('expanded');
             $toggleBtn.attr('aria-expanded', 'false');
-            $sectionContent.hide();
+            $sectionContent.slideUp(500); // Same timing as LearnDash (0.5s)
         } else {
-            // Expand section - instant like lessons
+            // Expand section - smooth like lessons
             $toggleBtn.addClass('expanded');
             $toggleBtn.attr('aria-expanded', 'true');
-            $sectionContent.show();
+            $sectionContent.slideDown(500); // Same timing as LearnDash (0.5s)
         }
     }
     
@@ -82,7 +82,7 @@ jQuery(document).ready(function($) {
                         if (!$sectionToggle.hasClass('expanded')) {
                             $sectionToggle.addClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'true');
-                            $sectionContent.show();
+                            $sectionContent.slideDown(500); // Smooth animation
                         }
                     });
                     
@@ -112,7 +112,7 @@ jQuery(document).ready(function($) {
                                     if ($sectionToggle.hasClass('expanded')) {
                                         $sectionToggle.removeClass('expanded');
                                         $sectionToggle.attr('aria-expanded', 'false');
-                                        $sectionContent.hide();
+                                        $sectionContent.slideUp(500); // Smooth animation
                                     }
                                 });
                             }

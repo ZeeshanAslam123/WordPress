@@ -80,7 +80,7 @@
     padding-left: 20px;
     margin-bottom: 20px;
     overflow: hidden;
-    transition: all 0.3s ease;
+    /* No CSS transitions - using jQuery slideUp/slideDown animations */
 }
 
 .ld-section-wrapper {
