@@ -112,6 +112,7 @@ add_action( 'wp_enqueue_scripts', 'learndash_collapsible_sections_assets' );
 function learndash_collapsible_sections_assets() {
 	// Only load on course pages
 	if ( function_exists('learndash_is_course_post') && learndash_is_course_post(get_the_ID()) ) {
+		// Enqueue JavaScript
 		wp_enqueue_script( 
 			'course-sections-toggle', 
 			get_stylesheet_directory_uri() . '/assets/js/course-sections-toggle.js', 
@@ -120,124 +121,12 @@ function learndash_collapsible_sections_assets() {
 			true 
 		);
 		
-		// Add inline CSS for collapsible sections
-		wp_add_inline_style( 'child-style', '
-			/* Custom Section Header - Matches LearnDash lesson item styling exactly */
-			.custom-section-item {
-				border: 2px solid #e2e7ed;
-				border-radius: 6px;
-				margin: 1em 0;
-				background: #fff;
-			}
-			
-			.custom-section-toggle-btn {
-				background: transparent;
-				color: #00a2e8;
-				padding: 20px;
-				border: none;
-				cursor: pointer;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				width: 100%;
-				text-decoration: none;
-				font-family: inherit;
-				font-size: 0.75em;
-				font-weight: 800;
-				transition: opacity 0.3s ease;
-				margin: 0;
-				border-radius: 6px;
-			}
-			
-			.custom-section-toggle-btn:hover {
-				color: #00a2e8;
-				opacity: 0.85;
-			}
-			
-			.custom-section-toggle-btn:focus {
-				outline: none;
-				opacity: 0.75;
-			}
-			
-			.custom-section-left {
-				display: flex;
-				align-items: center;
-				flex: 1;
-			}
-			
-			.custom-toggle-icon {
-				background: #00a2e8;
-				color: white;
-				border-radius: 100%;
-				width: 18px;
-				height: 18px;
-				flex: 0 0 18px;
-				padding: 2px;
-				line-height: 14px;
-				text-align: center;
-				font-weight: bold;
-				transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
-				margin-right: 0.5em;
-				font-size: 10px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-			
-			.custom-toggle-text {
-				padding-left: 0.5em;
-				flex: 1;
-				text-align: left;
-				font-weight: 600;
-				font-size: 1.1em;
-				color: #495255;
-			}
-			
-			/* Expanded state */
-			.custom-section-toggle-btn.expanded .custom-toggle-icon {
-				transform: rotate(90deg);
-			}
-			
-			/* Section content styling */
-			.custom-section-content {
-				margin-left: 26px;
-				border-left: 2px solid #e2e7ed;
-				padding-left: 20px;
-				margin-bottom: 20px;
-				overflow: hidden;
-				transition: all 0.3s ease;
-			}
-			
-			.ld-section-wrapper {
-				margin-bottom: 20px;
-			}
-			
-			.custom-section-heading-wrapper {
-				margin-bottom: 0;
-			}
-			
-			/* Ensure proper spacing for lessons within sections */
-			.custom-section-content .ld-item-list-item {
-				margin: 1em 0;
-			}
-			
-			/* Remove extra borders from nested lessons */
-			.custom-section-content .ld-item-list-item {
-				border-left: none;
-				margin-left: 0;
-			}
-			
-			/* Responsive adjustments */
-			@media (max-width: 640px) {
-				.custom-section-toggle-btn {
-					text-align: left;
-					padding: 15px;
-				}
-				
-				.custom-toggle-text {
-					font-size: 1em;
-				}
-			}
-		');
+		// Enqueue CSS file instead of inline styles
+		wp_enqueue_style( 
+			'course-sections-toggle-css', 
+			get_stylesheet_directory_uri() . '/assets/css/course-sections-toggle.css', 
+			array('child-style'), 
+			'1.0.0' 
+		);
 	}
 }
