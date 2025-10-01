@@ -60,51 +60,56 @@ jQuery(document).ready(function($) {
     initExpandAllIntegration();
     
     function initExpandAllIntegration() {
-        // Listen ONLY for clicks on the main course expand/collapse button (not individual lesson togglers)
-        $(document).on('click.customSectionExpandAll', '.ld-expand-button.ld-primary-background', function(e) {
-            var $clickedButton = $(this);
-            
-            // Only process if this is the main course expand button (has data-ld-expands attribute)
-            if (!$clickedButton.attr('data-ld-expands')) {
-                return; // Exit if this is not the main expand button
-            }
-            
-            // DO NOT interfere with the event - let LearnDash handle it completely
-            // Use multiple checks to ensure LearnDash's processing is fully complete
-            
-            // First check after a short delay
-            setTimeout(function() {
-                // Wait for any ongoing animations to complete
-                var checkAndSync = function() {
-                    // Double-check the button state after LearnDash has processed
-                    var isMainExpanded = $clickedButton.hasClass('ld-expanded');
-                    
-                    // Sync all custom section toggles with the main expand/collapse state
-                    $('.custom-section-toggle-btn').each(function() {
-                        var $customToggle = $(this);
-                        var sectionId = $customToggle.data('custom-section-id');
-                        var $sectionContent = $('#custom-section-content-' + sectionId);
-                        var isCustomExpanded = $customToggle.hasClass('expanded');
+        // ZERO INTERFERENCE APPROACH: Use MutationObserver to watch for LearnDash state changes
+        // This way we don't hook into any events and let LearnDash work completely independently
+        
+        var $mainExpandButton = $('.ld-expand-button.ld-primary-background[data-ld-expands]');
+        
+        if ($mainExpandButton.length) {
+            // Watch for changes to the main expand button's class (ld-expanded)
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        var $button = $(mutation.target);
                         
-                        if (isMainExpanded && !isCustomExpanded) {
-                            // Expand this custom section
-                            $customToggle.addClass('expanded');
-                            $customToggle.attr('aria-expanded', 'true');
-                            $sectionContent.slideDown(300);
-                        } else if (!isMainExpanded && isCustomExpanded) {
-                            // Collapse this custom section
-                            $customToggle.removeClass('expanded');
-                            $customToggle.attr('aria-expanded', 'false');
-                            $sectionContent.slideUp(300);
+                        // Only process if this is the main expand button
+                        if ($button.hasClass('ld-expand-button') && $button.hasClass('ld-primary-background') && $button.attr('data-ld-expands')) {
+                            
+                            // Small delay to ensure LearnDash's DOM updates are complete
+                            setTimeout(function() {
+                                var isMainExpanded = $button.hasClass('ld-expanded');
+                                
+                                // Sync all custom section toggles with the main expand/collapse state
+                                $('.custom-section-toggle-btn').each(function() {
+                                    var $customToggle = $(this);
+                                    var sectionId = $customToggle.data('custom-section-id');
+                                    var $sectionContent = $('#custom-section-content-' + sectionId);
+                                    var isCustomExpanded = $customToggle.hasClass('expanded');
+                                    
+                                    if (isMainExpanded && !isCustomExpanded) {
+                                        // Expand this custom section
+                                        $customToggle.addClass('expanded');
+                                        $customToggle.attr('aria-expanded', 'true');
+                                        $sectionContent.slideDown(300);
+                                    } else if (!isMainExpanded && isCustomExpanded) {
+                                        // Collapse this custom section
+                                        $customToggle.removeClass('expanded');
+                                        $customToggle.attr('aria-expanded', 'false');
+                                        $sectionContent.slideUp(300);
+                                    }
+                                });
+                            }, 100); // Minimal delay just for DOM updates
                         }
-                    });
-                };
-                
-                // Execute the sync
-                checkAndSync();
-                
-            }, 600); // Longer delay to ensure LearnDash completes all processing and animations
-        });
+                    }
+                });
+            });
+            
+            // Start observing the main expand button for class changes
+            observer.observe($mainExpandButton[0], {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
     }
     
     // Handle window resize to ensure proper layout
