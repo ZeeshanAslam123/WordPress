@@ -7,7 +7,7 @@
 
 .custom-section-toggle-btn {
     background: transparent;
-    color: #00a2e8;
+    color: var(--bb-headings-color); /* CHANGED: Match exact LearnDash section heading color */
     padding: 20px;
     border: none;
     cursor: pointer;
@@ -27,7 +27,7 @@
 }
 
 .custom-section-toggle-btn:hover {
-    color: #00a2e8;
+    color: var(--bb-headings-color); /* CHANGED: Match exact LearnDash section heading color */
     opacity: 0.85;
 }
 
@@ -67,7 +67,7 @@
     text-align: left;
     font-weight: 600;
     font-size: 16px; /* CHANGED: Match exact LearnDash default section heading font size */
-    color: #495255;
+    color: var(--bb-headings-color); /* CHANGED: Match exact LearnDash section heading color */
     letter-spacing: 0.6px; /* ADDED: Match LearnDash section heading letter-spacing */
     text-transform: uppercase; /* ADDED: Match LearnDash section heading text-transform */
 }
@@ -127,4 +127,3 @@ body.single-sfwd-courses .custom-toggle-icon {
 body:not(.single-sfwd-courses) .custom-toggle-icon {
     display: none !important;
 }
-
