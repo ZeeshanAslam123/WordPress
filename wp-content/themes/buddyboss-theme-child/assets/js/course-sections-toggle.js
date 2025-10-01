@@ -60,34 +60,38 @@ jQuery(document).ready(function($) {
     initExpandAllIntegration();
     
     function initExpandAllIntegration() {
-        // Listen for clicks on LearnDash's main expand/collapse button
-        $(document).on('click.customSectionExpandAll', '.ld-expand-button', function(e) {
+        // Listen ONLY for clicks on the main course expand/collapse button (not individual lesson togglers)
+        $(document).on('click.customSectionExpandAll', '.ld-expand-button.ld-primary-background', function(e) {
+            var $clickedButton = $(this);
+            
+            // Only process if this is the main course expand button (has data-ld-expands attribute)
+            if (!$clickedButton.attr('data-ld-expands')) {
+                return; // Exit if this is not the main expand button
+            }
+            
             // Small delay to let LearnDash handle its functionality first
             setTimeout(function() {
-                var $mainButton = $('.ld-expand-button').first();
-                if ($mainButton.length) {
-                    var isMainExpanded = $mainButton.hasClass('ld-expanded');
+                var isMainExpanded = $clickedButton.hasClass('ld-expanded');
+                
+                // Sync all custom section toggles with the main expand/collapse state
+                $('.custom-section-toggle-btn').each(function() {
+                    var $customToggle = $(this);
+                    var sectionId = $customToggle.data('custom-section-id');
+                    var $sectionContent = $('#custom-section-content-' + sectionId);
+                    var isCustomExpanded = $customToggle.hasClass('expanded');
                     
-                    // Sync all custom section toggles with the main expand/collapse state
-                    $('.custom-section-toggle-btn').each(function() {
-                        var $customToggle = $(this);
-                        var sectionId = $customToggle.data('custom-section-id');
-                        var $sectionContent = $('#custom-section-content-' + sectionId);
-                        var isCustomExpanded = $customToggle.hasClass('expanded');
-                        
-                        if (isMainExpanded && !isCustomExpanded) {
-                            // Expand this custom section
-                            $customToggle.addClass('expanded');
-                            $customToggle.attr('aria-expanded', 'true');
-                            $sectionContent.slideDown(300);
-                        } else if (!isMainExpanded && isCustomExpanded) {
-                            // Collapse this custom section
-                            $customToggle.removeClass('expanded');
-                            $customToggle.attr('aria-expanded', 'false');
-                            $sectionContent.slideUp(300);
-                        }
-                    });
-                }
+                    if (isMainExpanded && !isCustomExpanded) {
+                        // Expand this custom section
+                        $customToggle.addClass('expanded');
+                        $customToggle.attr('aria-expanded', 'true');
+                        $sectionContent.slideDown(300);
+                    } else if (!isMainExpanded && isCustomExpanded) {
+                        // Collapse this custom section
+                        $customToggle.removeClass('expanded');
+                        $customToggle.attr('aria-expanded', 'false');
+                        $sectionContent.slideUp(300);
+                    }
+                });
             }, 100); // Small delay to ensure LearnDash processes first
         });
     }
