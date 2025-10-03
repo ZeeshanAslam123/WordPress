@@ -45,22 +45,23 @@
 }
 
 .custom-toggle-icon {
-    background: #093b7d;
-    color: #a3a5a9;
-    border-radius: 100%;
-    width: 18px;
-    height: 18px;
-    flex: 0 0 18px;
-    padding: 2px;
-    line-height: 15px;
+    /* CHANGED: Smart approach - arrow-right/arrow-down, no rotation needed */
+    background: #093b7d; /* LearnDash blue background */
+    color: #a3a5a9; /* LearnDash white icon */
+    border-radius: 100%; /* LearnDash circular shape */
+    width: 18px; /* LearnDash exact size */
+    height: 18px; /* LearnDash exact size */
+    flex: 0 0 18px; /* LearnDash flex sizing */
+    padding: 2px; /* LearnDash padding */
+    line-height: 1; /* Clean line height for dashicons */
     text-align: center;
-    font-weight: bold;
-    transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+    font-weight: bold; /* LearnDash font weight */
+    transition: color 0.3s ease, background 0.3s ease; /* Smooth transitions, no transform needed */
     margin-right: 0.5em;
-    font-size: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 18px; /* Icon font-size instead of width/height approach */
 }
 
 .custom-toggle-text {
@@ -74,10 +75,8 @@
     text-transform: capitalize; /* CHANGED: Less aggressive than uppercase per client request */
 }
 
-/* Expanded state */
-.custom-section-toggle-btn.expanded .custom-toggle-icon {
-    transform: rotate(90deg);
-}
+/* Expanded state - No rotation needed, JavaScript will change icon class */
+/* .custom-section-toggle-btn.expanded .custom-toggle-icon - handled by JavaScript */
 
 /* Section content styling */
 .custom-section-content {

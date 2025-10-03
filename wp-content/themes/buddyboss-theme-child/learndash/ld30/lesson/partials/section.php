@@ -45,7 +45,7 @@ do_action( 'learndash-before-section-heading', $section, $course_id, $user_id );
 				<div class="custom-section-left">
 					<?php 
 					if ( function_exists('learndash_is_course_post') && learndash_is_course_post(get_the_ID()) ) {
-						?><span class="custom-toggle-icon" aria-hidden="true">▶</span><?php
+						?><span class="custom-toggle-icon dashicons dashicons-arrow-right" aria-hidden="true"></span><?php
 					}
 					?>
 					<span class="custom-toggle-text"><?php echo esc_html( $section->post_title ); ?></span>
