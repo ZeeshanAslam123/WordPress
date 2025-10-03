@@ -45,22 +45,20 @@
 }
 
 .custom-toggle-icon {
-    background: #093b7d;
-    color: #a3a5a9;
-    border-radius: 100%;
-    width: 18px;
-    height: 18px;
-    flex: 0 0 18px;
-    padding: 2px;
-    line-height: 15px;
+    /* CHANGED: Using Dashicon for cross-browser consistency */
+    color: #a3a5a9; /* Match LearnDash icon color */
+    width: 20px; /* Standard Dashicon size */
+    height: 20px; /* Standard Dashicon size */
+    flex: 0 0 20px;
+    font-size: 20px; /* Dashicon font size */
+    line-height: 1; /* Proper line height for Dashicons */
     text-align: center;
-    font-weight: bold;
-    transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+    transition: color 0.3s ease, transform 0.3s ease;
     margin-right: 0.5em;
-    font-size: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Remove background and border-radius for clean Dashicon look */
 }
 
 .custom-toggle-text {
@@ -74,9 +72,9 @@
     text-transform: capitalize; /* CHANGED: Less aggressive than uppercase per client request */
 }
 
-/* Expanded state */
+/* Expanded state - Dashicon rotation */
 .custom-section-toggle-btn.expanded .custom-toggle-icon {
-    transform: rotate(90deg);
+    transform: rotate(90deg); /* Rotate Dashicon arrow when expanded */
 }
 
 /* Section content styling */
