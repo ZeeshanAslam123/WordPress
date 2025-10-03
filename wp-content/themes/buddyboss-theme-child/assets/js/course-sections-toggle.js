@@ -75,7 +75,6 @@ jQuery(document).ready(function($) {
                 var isCurrentlyExpanded = $button.hasClass('ld-expanded');
                 
                 if (!isCurrentlyExpanded) {
-                    console.log('Expand All - ONLY expanding sections (NOT lessons per client request)');
                     
                     // ONLY expand sections, do NOT let LearnDash expand lessons
                     $('.custom-section-toggle-btn').each(function() {
@@ -86,7 +85,7 @@ jQuery(document).ready(function($) {
                         if (!$sectionToggle.hasClass('expanded')) {
                             $sectionToggle.addClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'true');
-                            $sectionContent.slideDown(300);
+                            $sectionContent.show();
                         }
                     });
                     
@@ -94,9 +93,7 @@ jQuery(document).ready(function($) {
                     $button.addClass('ld-expanded');
                     $button.find('.ld-text').text($button.data('ld-collapse-text') || 'Collapse All');
                     
-                    console.log('All sections expanded - lessons remain collapsed per client request');
                 } else {
-                    console.log('Collapse All - collapsing sections');
                     
                     // Collapse all sections
                     $('.custom-section-toggle-btn').each(function() {
@@ -107,7 +104,7 @@ jQuery(document).ready(function($) {
                         if ($sectionToggle.hasClass('expanded')) {
                             $sectionToggle.removeClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'false');
-                            $sectionContent.slideUp(300);
+                            $sectionContent.hide();
                         }
                     });
                     
