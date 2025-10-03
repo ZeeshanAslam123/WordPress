@@ -86,7 +86,7 @@ jQuery(document).ready(function($) {
                         if (!$sectionToggle.hasClass('expanded')) {
                             $sectionToggle.addClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'true');
-                            $sectionContent.slideDown(300);
+                            $sectionContent.show();
                         }
                     });
                     
@@ -107,7 +107,7 @@ jQuery(document).ready(function($) {
                         if ($sectionToggle.hasClass('expanded')) {
                             $sectionToggle.removeClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'false');
-                            $sectionContent.slideUp(300);
+                            $sectionContent.hide();
                         }
                     });
                     
