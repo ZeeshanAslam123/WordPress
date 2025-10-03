@@ -64,16 +64,20 @@ jQuery(document).ready(function($) {
         var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
         
         if ($mainExpandButton.length) {
-            // INTERCEPT the click event BEFORE LearnDash processes it
-            $mainExpandButton.on('click.customSectionIntercept', function(e) {
+            // COMPLETELY OVERRIDE the click event to ONLY expand sections, NOT lessons
+            $mainExpandButton.off('click'); // Remove LearnDash's original handler
+            
+            $mainExpandButton.on('click.customSectionOnly', function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                
                 var $button = $(this);
                 var isCurrentlyExpanded = $button.hasClass('ld-expanded');
                 
-                // If we're about to expand (button is currently collapsed)
                 if (!isCurrentlyExpanded) {
-                    console.log('Intercepting Expand All - expanding sections first');
+                    console.log('Expand All - ONLY expanding sections (NOT lessons per client request)');
                     
-                    // FIRST: Expand all sections immediately
+                    // ONLY expand sections, do NOT let LearnDash expand lessons
                     $('.custom-section-toggle-btn').each(function() {
                         var $sectionToggle = $(this);
                         var sectionId = $sectionToggle.data('custom-section-id');
@@ -82,48 +86,37 @@ jQuery(document).ready(function($) {
                         if (!$sectionToggle.hasClass('expanded')) {
                             $sectionToggle.addClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'true');
-                            $sectionContent.show();
+                            $sectionContent.slideDown(300);
                         }
                     });
                     
-                    console.log('All sections expanded, now letting LearnDash process lessons');
+                    // Update button state to expanded
+                    $button.addClass('ld-expanded');
+                    $button.find('.ld-text').text($button.data('ld-collapse-text') || 'Collapse All');
+                    
+                    console.log('All sections expanded - lessons remain collapsed per client request');
                 } else {
-                    console.log('Intercepting Collapse All - will sync sections after');
-                }
-            });
-            
-            // ALSO watch for state changes to sync collapse
-            var observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                        var $button = $(mutation.target);
+                    console.log('Collapse All - collapsing sections');
+                    
+                    // Collapse all sections
+                    $('.custom-section-toggle-btn').each(function() {
+                        var $sectionToggle = $(this);
+                        var sectionId = $sectionToggle.data('custom-section-id');
+                        var $sectionContent = $('#custom-section-content-' + sectionId);
                         
-                        if ($button.attr('data-ld-expands')) {
-                            var isExpanded = $button.hasClass('ld-expanded');
-                            
-                            // Only handle collapse case here (expand is handled by click intercept)
-                            if (!isExpanded) {
-                                console.log('Syncing section collapse with main button');
-                                $('.custom-section-toggle-btn').each(function() {
-                                    var $sectionToggle = $(this);
-                                    var sectionId = $sectionToggle.data('custom-section-id');
-                                    var $sectionContent = $('#custom-section-content-' + sectionId);
-                                    
-                                    if ($sectionToggle.hasClass('expanded')) {
-                                        $sectionToggle.removeClass('expanded');
-                                        $sectionToggle.attr('aria-expanded', 'false');
-                                        $sectionContent.hide();
-                                    }
-                                });
-                            }
+                        if ($sectionToggle.hasClass('expanded')) {
+                            $sectionToggle.removeClass('expanded');
+                            $sectionToggle.attr('aria-expanded', 'false');
+                            $sectionContent.slideUp(300);
                         }
-                    }
-                });
-            });
-            
-            observer.observe($mainExpandButton[0], {
-                attributes: true,
-                attributeFilter: ['class']
+                    });
+                    
+                    // Update button state to collapsed
+                    $button.removeClass('ld-expanded');
+                    $button.find('.ld-text').text($button.data('ld-expand-text') || 'Expand All');
+                }
+                
+                return false;
             });
         }
     }
@@ -186,4 +179,3 @@ jQuery(document).ready(function($) {
     });
     */
 });
-
