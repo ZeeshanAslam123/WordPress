@@ -42,17 +42,24 @@ jQuery(document).ready(function($) {
     
     function toggleCustomSection($toggleBtn, $sectionContent) {
         var isExpanded = $toggleBtn.hasClass('expanded');
+        var $icon = $toggleBtn.find('.custom-toggle-icon');
         
         if (isExpanded) {
             // Collapse section
             $toggleBtn.removeClass('expanded');
             $toggleBtn.attr('aria-expanded', 'false');
             $sectionContent.hide();
+            
+            // Change icon from arrow-down to arrow-right
+            $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-right');
         } else {
             // Expand section
             $toggleBtn.addClass('expanded');
             $toggleBtn.attr('aria-expanded', 'true');
             $sectionContent.show();
+            
+            // Change icon from arrow-right to arrow-down
+            $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
         }
     }
     
@@ -82,11 +89,15 @@ jQuery(document).ready(function($) {
                         var $sectionToggle = $(this);
                         var sectionId = $sectionToggle.data('custom-section-id');
                         var $sectionContent = $('#custom-section-content-' + sectionId);
+                        var $icon = $sectionToggle.find('.custom-toggle-icon');
                         
                         if (!$sectionToggle.hasClass('expanded')) {
                             $sectionToggle.addClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'true');
                             $sectionContent.slideDown(300);
+                            
+                            // Change icon from arrow-right to arrow-down
+                            $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
                         }
                     });
                     
@@ -103,11 +114,15 @@ jQuery(document).ready(function($) {
                         var $sectionToggle = $(this);
                         var sectionId = $sectionToggle.data('custom-section-id');
                         var $sectionContent = $('#custom-section-content-' + sectionId);
+                        var $icon = $sectionToggle.find('.custom-toggle-icon');
                         
                         if ($sectionToggle.hasClass('expanded')) {
                             $sectionToggle.removeClass('expanded');
                             $sectionToggle.attr('aria-expanded', 'false');
                             $sectionContent.slideUp(300);
+                            
+                            // Change icon from arrow-down to arrow-right
+                            $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-right');
                         }
                     });
                     
