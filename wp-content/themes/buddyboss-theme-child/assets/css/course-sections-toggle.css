@@ -23,7 +23,7 @@
     margin: 0;
     border-radius: 6px;
     letter-spacing: 0.6px; /* ADDED: Match LearnDash section heading letter-spacing */
-    text-transform: uppercase; /* ADDED: Match LearnDash section heading text-transform */
+    text-transform: capitalize; /* CHANGED: Less aggressive than uppercase per client request */
 }
 
 .custom-section-toggle-btn:hover {
@@ -69,7 +69,7 @@
     font-size: 16px; /* CHANGED: Match exact LearnDash default section heading font size */
     color: var(--bb-headings-color); /* CHANGED: Match exact LearnDash section heading color */
     letter-spacing: 0.6px; /* ADDED: Match LearnDash section heading letter-spacing */
-    text-transform: uppercase; /* ADDED: Match LearnDash section heading text-transform */
+    text-transform: capitalize; /* CHANGED: Less aggressive than uppercase per client request */
 }
 
 /* Expanded state */
