@@ -3,6 +3,8 @@
     border-radius: 6px;
     margin: 1em 0;
     background: rgba(146,164,183,.05);
+    position: relative; /* ADDED: Allow proper positioning for child elements */
+    z-index: 1; /* ADDED: Base z-index for section items */
 }
 
 .custom-section-toggle-btn {
@@ -83,7 +85,7 @@
     border-left: 2px solid #e2e7ed;
     padding-left: 20px;
     margin-bottom: 20px;
-    overflow: hidden;
+    overflow: visible; /* CHANGED: Allow tooltips to show outside container */
     transition: all 0.3s ease;
 }
 
@@ -126,4 +128,27 @@ body.single-sfwd-courses .custom-toggle-icon {
 /* Hide custom toggle icons on non-course pages */
 body:not(.single-sfwd-courses) .custom-toggle-icon {
     display: none !important;
+}
+
+/* TOOLTIP VISIBILITY FIX: Ensure tooltips display properly above section containers */
+.custom-section-content .ld-item-list-item {
+    position: relative; /* ADDED: Allow proper positioning for tooltips */
+    z-index: 10; /* ADDED: Higher z-index for lesson items to show tooltips */
+}
+
+/* Ensure tooltips have highest z-index */
+.custom-section-content .ld-item-list-item .tooltip,
+.custom-section-content .ld-item-list-item [class*="tooltip"],
+.custom-section-content .ld-item-list-item .ld-status-tooltip,
+.custom-section-content .ld-item-list-item [data-tooltip],
+.custom-section-content .ld-item-list-item .bb-tooltip {
+    z-index: 9999 !important; /* ADDED: Highest z-index for all tooltip types */
+    position: relative !important; /* ADDED: Ensure proper positioning */
+}
+
+/* Fix for BuddyBoss/LearnDash specific tooltip containers */
+.ld-item-list-item-preview .ld-status-tooltip,
+.ld-item-list-item .ld-status-tooltip {
+    z-index: 9999 !important;
+    position: absolute !important;
 }
