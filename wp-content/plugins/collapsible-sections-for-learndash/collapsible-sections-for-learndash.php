@@ -82,7 +82,7 @@ class CollapsibleSectionsLearnDash {
         
         // Frontend hooks
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-        add_filter('learndash_template', array($this, 'override_section_template'), 10, 5);
+        add_filter('learndash_template', array($this, 'override_section_template'), 20, 5); // Higher priority than child theme
     }
     
     /**
@@ -131,6 +131,9 @@ class CollapsibleSectionsLearnDash {
      * Initialize plugin
      */
     public function init() {
+        // Debug: Log plugin initialization
+        error_log("CSLD: Plugin initialized successfully");
+        
         // Load text domain
         load_plugin_textdomain('collapsible-sections-learndash', false, dirname(CSLD_PLUGIN_BASENAME) . '/languages');
         
@@ -180,7 +183,7 @@ class CollapsibleSectionsLearnDash {
      */
     public function add_admin_menu() {
         add_submenu_page(
-            'edit.php?post_type=sfwd-courses',
+            'learndash-lms',
             __('Collapsible Sections', 'collapsible-sections-learndash'),
             __('Collapsible Sections', 'collapsible-sections-learndash'),
             'manage_options',
@@ -236,10 +239,14 @@ class CollapsibleSectionsLearnDash {
      * Enqueue frontend scripts
      */
     public function enqueue_scripts() {
-        // Only load on LearnDash course pages
-        if (!$this->is_learndash_course_page()) {
-            return;
-        }
+        // Debug: Always load for now to test
+        // TODO: Uncomment the course page check after testing
+        // if (!$this->is_learndash_course_page()) {
+        //     return;
+        // }
+        
+        // Debug: Log asset loading
+        error_log("CSLD: Loading frontend assets");
         
         // Enqueue styles
         wp_enqueue_style(
@@ -293,10 +300,14 @@ class CollapsibleSectionsLearnDash {
      * Override LearnDash templates
      */
     public function override_section_template($filepath, $name, $args, $echo, $return_file_path) {
+        // Debug: Log template calls
+        error_log("CSLD Template Override Called: name=$name, filepath=$filepath");
+        
         // Override section template
         if ($name === 'lesson/partials/section' && strpos($filepath, 'ld30') !== false) {
             $custom_template = CSLD_PLUGIN_DIR . 'templates/section.php';
             if (file_exists($custom_template)) {
+                error_log("CSLD: Using custom section template: $custom_template");
                 return $custom_template;
             }
         }
@@ -305,6 +316,7 @@ class CollapsibleSectionsLearnDash {
         if ($name === 'course/listing' && strpos($filepath, 'ld30') !== false) {
             $custom_template = CSLD_PLUGIN_DIR . 'templates/listing.php';
             if (file_exists($custom_template)) {
+                error_log("CSLD: Using custom listing template: $custom_template");
                 return $custom_template;
             }
         }
