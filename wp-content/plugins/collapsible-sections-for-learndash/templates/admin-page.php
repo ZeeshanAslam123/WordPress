@@ -1,0 +1,136 @@
+<?php
+/**
+ * Admin page template for Collapsible Sections for LearnDash
+ *
+ * @package CollapsibleSectionsLearnDash
+ */
+
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Get current settings
+$settings = $this->get_settings();
+?>
+
+<div class="wrap csld-admin-wrap">
+    <h1><?php _e('Collapsible Sections for LearnDash', 'collapsible-sections-learndash'); ?></h1>
+    
+    <div class="csld-admin-header">
+        <p class="description">
+            <?php _e('Customize the appearance of your collapsible course sections to match your site design.', 'collapsible-sections-learndash'); ?>
+        </p>
+    </div>
+
+    <div class="csld-admin-content">
+        <div class="csld-settings-panel">
+            <form id="csld-settings-form" method="post">
+                <?php wp_nonce_field('csld_settings_nonce', 'csld_nonce'); ?>
+                
+                <table class="form-table" role="presentation">
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <label for="toggler_color">
+                                    <?php _e('Toggler Color', 'collapsible-sections-learndash'); ?>
+                                </label>
+                            </th>
+                            <td>
+                                <input 
+                                    type="text" 
+                                    id="toggler_color" 
+                                    name="toggler_color" 
+                                    value="<?php echo esc_attr($settings['toggler_color']); ?>" 
+                                    class="csld-color-picker" 
+                                    data-default-color="#00a2e8"
+                                />
+                                <p class="description">
+                                    <?php _e('Choose the color for the section toggle icons.', 'collapsible-sections-learndash'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th scope="row">
+                                <label for="section_background_color">
+                                    <?php _e('Section Background Color', 'collapsible-sections-learndash'); ?>
+                                </label>
+                            </th>
+                            <td>
+                                <input 
+                                    type="text" 
+                                    id="section_background_color" 
+                                    name="section_background_color" 
+                                    value="<?php echo esc_attr($settings['section_background_color']); ?>" 
+                                    class="csld-color-picker" 
+                                    data-default-color="#ffffff"
+                                />
+                                <p class="description">
+                                    <?php _e('Choose the background color for expanded sections.', 'collapsible-sections-learndash'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="csld-form-actions">
+                    <button type="submit" class="button button-primary" id="csld-save-settings">
+                        <?php _e('Save Settings', 'collapsible-sections-learndash'); ?>
+                    </button>
+                    
+                    <button type="button" class="button button-secondary" id="csld-reset-settings">
+                        <?php _e('Reset to Defaults', 'collapsible-sections-learndash'); ?>
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="csld-info-panel">
+            <div class="csld-info-box">
+                <h3><?php _e('How It Works', 'collapsible-sections-learndash'); ?></h3>
+                <ul>
+                    <li><?php _e('Course sections are collapsed by default', 'collapsible-sections-learndash'); ?></li>
+                    <li><?php _e('Students can click to expand/collapse sections', 'collapsible-sections-learndash'); ?></li>
+                    <li><?php _e('Improves course navigation and reduces clutter', 'collapsible-sections-learndash'); ?></li>
+                    <li><?php _e('Works with all LearnDash themes and templates', 'collapsible-sections-learndash'); ?></li>
+                </ul>
+            </div>
+            
+            <div class="csld-info-box">
+                <h3><?php _e('Plugin Status', 'collapsible-sections-learndash'); ?></h3>
+                <div class="csld-status-item">
+                    <span class="csld-status-label"><?php _e('LearnDash Active:', 'collapsible-sections-learndash'); ?></span>
+                    <span class="csld-status-value csld-status-success">
+                        <?php _e('Yes', 'collapsible-sections-learndash'); ?>
+                    </span>
+                </div>
+                <div class="csld-status-item">
+                    <span class="csld-status-label"><?php _e('Template Override:', 'collapsible-sections-learndash'); ?></span>
+                    <span class="csld-status-value csld-status-success">
+                        <?php _e('Active', 'collapsible-sections-learndash'); ?>
+                    </span>
+                </div>
+                <div class="csld-status-item">
+                    <span class="csld-status-label"><?php _e('Plugin Version:', 'collapsible-sections-learndash'); ?></span>
+                    <span class="csld-status-value"><?php echo CSLD_VERSION; ?></span>
+                </div>
+            </div>
+            
+            <div class="csld-info-box">
+                <h3><?php _e('Need Help?', 'collapsible-sections-learndash'); ?></h3>
+                <p><?php _e('If you encounter any issues or need support, please check the plugin documentation or contact support.', 'collapsible-sections-learndash'); ?></p>
+                <p>
+                    <a href="https://github.com/swrice/collapsible-sections-for-learndash" target="_blank" class="button button-secondary">
+                        <?php _e('Documentation', 'collapsible-sections-learndash'); ?>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="csld-save-message" class="notice notice-success is-dismissible" style="display: none;">
+        <p><?php _e('Settings saved successfully!', 'collapsible-sections-learndash'); ?></p>
+    </div>
+</div>
+
