@@ -83,7 +83,7 @@ class CollapsibleSectionsLearnDash {
         
         // Frontend hooks
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-        add_filter('learndash_template', array($this, 'override_section_template'), 20, 5); // Higher priority than child theme
+        // Template override is handled by CSLD_Template_Override class
     }
     
     /**
@@ -143,8 +143,12 @@ class CollapsibleSectionsLearnDash {
      * Initialize plugin
      */
     public function init() {
-        // Debug: Log plugin initialization
-        error_log("CSLD: Plugin initialized successfully");
+        // Debug: Plugin initialization (visible on frontend)
+        add_action('wp_footer', function() {
+            echo '<div style="background: #fff3cd; padding: 10px; margin: 5px; border: 1px solid #ffeaa7; position: fixed; top: 0; right: 0; z-index: 9999;">';
+            echo '<strong>CSLD DEBUG:</strong> Plugin initialized successfully';
+            echo '</div>';
+        });
         
         // Load text domain
         load_plugin_textdomain('collapsible-sections-learndash', false, dirname(CSLD_PLUGIN_BASENAME) . '/languages');
@@ -162,6 +166,9 @@ class CollapsibleSectionsLearnDash {
     private function include_files() {
         require_once CSLD_PLUGIN_DIR . 'includes/class-settings.php';
         require_once CSLD_PLUGIN_DIR . 'includes/class-template-override.php';
+        
+        // Initialize template override
+        new CSLD_Template_Override();
     }
     
     /**
@@ -257,8 +264,12 @@ class CollapsibleSectionsLearnDash {
         //     return;
         // }
         
-        // Debug: Log asset loading
-        error_log("CSLD: Loading frontend assets");
+        // Debug: Asset loading (visible on frontend)
+        add_action('wp_footer', function() {
+            echo '<div style="background: #d1ecf1; padding: 10px; margin: 5px; border: 1px solid #bee5eb; position: fixed; top: 50px; right: 0; z-index: 9999;">';
+            echo '<strong>CSLD DEBUG:</strong> Frontend assets loaded';
+            echo '</div>';
+        });
         
         // Enqueue styles
         wp_enqueue_style(
@@ -308,33 +319,7 @@ class CollapsibleSectionsLearnDash {
         wp_add_inline_style('csld-style', $custom_css);
     }
     
-    /**
-     * Override LearnDash templates
-     */
-    public function override_section_template($filepath, $name, $args, $echo, $return_file_path) {
-        // Debug: Log template calls
-        error_log("CSLD Template Override Called: name=$name, filepath=$filepath");
-        
-        // Override section template
-        if ($name === 'lesson/partials/section' && strpos($filepath, 'ld30') !== false) {
-            $custom_template = CSLD_PLUGIN_DIR . 'templates/section.php';
-            if (file_exists($custom_template)) {
-                error_log("CSLD: Using custom section template: $custom_template");
-                return $custom_template;
-            }
-        }
-        
-        // Override course listing template
-        if ($name === 'course/listing' && strpos($filepath, 'ld30') !== false) {
-            $custom_template = CSLD_PLUGIN_DIR . 'templates/listing.php';
-            if (file_exists($custom_template)) {
-                error_log("CSLD: Using custom listing template: $custom_template");
-                return $custom_template;
-            }
-        }
-        
-        return $filepath;
-    }
+    // Template override function removed - handled by CSLD_Template_Override class
     
     /**
      * Save settings via AJAX

@@ -39,15 +39,39 @@ class CSLD_Template_Override {
      * Override LearnDash section template
      */
     public function override_section_template($filepath, $name, $args, $echo, $return_file_path) {
-        // Only override the section template for LD30 theme
+        // Debug: Show all template calls
+        echo '<div style="background: #f0f0f0; padding: 10px; margin: 5px; border: 1px solid #ccc;">';
+        echo '<strong>CSLD Template Override Called:</strong><br>';
+        echo 'Name: ' . $name . '<br>';
+        echo 'Filepath: ' . $filepath . '<br>';
+        echo 'Is LD30: ' . ($this->is_ld30_theme($filepath) ? 'YES' : 'NO') . '<br>';
+        echo '</div>';
+        
+        // Override section template
         if ($name === 'lesson/partials/section' && $this->is_ld30_theme($filepath)) {
             $custom_template = $this->get_custom_template_path('section.php');
             
             if (file_exists($custom_template)) {
-                // Log template override for debugging
-                if (defined('WP_DEBUG') && WP_DEBUG) {
-                    error_log('CSLD: Overriding section template: ' . $filepath . ' -> ' . $custom_template);
-                }
+                echo '<div style="background: #d4edda; padding: 10px; margin: 5px; border: 1px solid #c3e6cb;">';
+                echo '<strong>CSLD: Using custom section template:</strong><br>';
+                echo 'Original: ' . $filepath . '<br>';
+                echo 'Custom: ' . $custom_template . '<br>';
+                echo '</div>';
+                
+                return $custom_template;
+            }
+        }
+        
+        // Override course listing template
+        if ($name === 'course/listing' && $this->is_ld30_theme($filepath)) {
+            $custom_template = $this->get_custom_template_path('listing.php');
+            
+            if (file_exists($custom_template)) {
+                echo '<div style="background: #d4edda; padding: 10px; margin: 5px; border: 1px solid #c3e6cb;">';
+                echo '<strong>CSLD: Using custom listing template:</strong><br>';
+                echo 'Original: ' . $filepath . '<br>';
+                echo 'Custom: ' . $custom_template . '<br>';
+                echo '</div>';
                 
                 return $custom_template;
             }
@@ -109,6 +133,4 @@ class CSLD_Template_Override {
     }
 }
 
-// Initialize template override
-new CSLD_Template_Override();
-
+// Template override class is instantiated by main plugin file
