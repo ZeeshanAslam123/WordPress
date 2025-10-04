@@ -143,12 +143,7 @@ class CollapsibleSectionsLearnDash {
      * Initialize plugin
      */
     public function init() {
-        // Debug: Plugin initialization (visible on frontend)
-        add_action('wp_footer', function() {
-            echo '<div style="background: #fff3cd; padding: 10px; margin: 5px; border: 1px solid #ffeaa7; position: fixed; top: 0; right: 0; z-index: 9999;">';
-            echo '<strong>CSLD DEBUG:</strong> Plugin initialized successfully';
-            echo '</div>';
-        });
+        // Plugin initialized
         
         // Load text domain
         load_plugin_textdomain('collapsible-sections-learndash', false, dirname(CSLD_PLUGIN_BASENAME) . '/languages');
@@ -258,18 +253,10 @@ class CollapsibleSectionsLearnDash {
      * Enqueue frontend scripts
      */
     public function enqueue_scripts() {
-        // Debug: Always load for now to test
-        // TODO: Uncomment the course page check after testing
-        // if (!$this->is_learndash_course_page()) {
-        //     return;
-        // }
-        
-        // Debug: Asset loading (visible on frontend)
-        add_action('wp_footer', function() {
-            echo '<div style="background: #d1ecf1; padding: 10px; margin: 5px; border: 1px solid #bee5eb; position: fixed; top: 50px; right: 0; z-index: 9999;">';
-            echo '<strong>CSLD DEBUG:</strong> Frontend assets loaded';
-            echo '</div>';
-        });
+        // Only load on LearnDash pages
+        if (!$this->is_learndash_course_page()) {
+            return;
+        }
         
         // Enqueue styles
         wp_enqueue_style(
@@ -318,8 +305,6 @@ class CollapsibleSectionsLearnDash {
         
         wp_add_inline_style('csld-style', $custom_css);
     }
-    
-    // Template override function removed - handled by CSLD_Template_Override class
     
     /**
      * Save settings via AJAX
