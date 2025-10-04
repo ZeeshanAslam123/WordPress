@@ -78,6 +78,7 @@ class CollapsibleSectionsLearnDash {
             add_action('admin_menu', array($this, 'add_admin_menu'));
             add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
             add_action('wp_ajax_csld_save_settings', array($this, 'save_settings'));
+            add_action('admin_notices', array($this, 'debug_admin_notice')); // Debug notice
         }
         
         // Frontend hooks
@@ -123,6 +124,17 @@ class CollapsibleSectionsLearnDash {
         ?>
         <div class="notice notice-error">
             <p><?php _e('Collapsible Sections for LearnDash has been deactivated because LearnDash LMS plugin is not active.', 'collapsible-sections-learndash'); ?></p>
+        </div>
+        <?php
+    }
+    
+    /**
+     * Debug admin notice to confirm plugin is loading
+     */
+    public function debug_admin_notice() {
+        ?>
+        <div class="notice notice-info is-dismissible">
+            <p><strong>DEBUG:</strong> Collapsible Sections for LearnDash plugin is active and loading. Check error logs for template override debug info.</p>
         </div>
         <?php
     }
