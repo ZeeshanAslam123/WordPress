@@ -180,7 +180,7 @@ class CollapsibleSectionsLearnDash {
      */
     public function add_admin_menu() {
         add_submenu_page(
-            'learndash-lms',
+            'edit.php?post_type=sfwd-courses',
             __('Collapsible Sections', 'collapsible-sections-learndash'),
             __('Collapsible Sections', 'collapsible-sections-learndash'),
             'manage_options',
@@ -266,10 +266,8 @@ class CollapsibleSectionsLearnDash {
      * Check if current page is a LearnDash course page
      */
     private function is_learndash_course_page() {
-        return is_singular('sfwd-courses') || 
-               is_singular('sfwd-lessons') || 
-               is_singular('sfwd-topic') || 
-               is_singular('sfwd-quiz');
+        // Use the same function as child theme
+        return function_exists('learndash_is_course_post') && learndash_is_course_post(get_the_ID());
     }
     
     /**
@@ -292,15 +290,25 @@ class CollapsibleSectionsLearnDash {
     }
     
     /**
-     * Override LearnDash section template
+     * Override LearnDash templates
      */
     public function override_section_template($filepath, $name, $args, $echo, $return_file_path) {
+        // Override section template
         if ($name === 'lesson/partials/section' && strpos($filepath, 'ld30') !== false) {
             $custom_template = CSLD_PLUGIN_DIR . 'templates/section.php';
             if (file_exists($custom_template)) {
                 return $custom_template;
             }
         }
+        
+        // Override course listing template
+        if ($name === 'course/listing' && strpos($filepath, 'ld30') !== false) {
+            $custom_template = CSLD_PLUGIN_DIR . 'templates/listing.php';
+            if (file_exists($custom_template)) {
+                return $custom_template;
+            }
+        }
+        
         return $filepath;
     }
     
@@ -341,4 +349,3 @@ function csld_init() {
 
 // Start the plugin
 csld_init();
-
