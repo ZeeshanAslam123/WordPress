@@ -152,118 +152,81 @@ jQuery(document).ready(function($) {
     }
     
     function initAllContentBehavior($mainExpandButton) {
-        // ALL CONTENT BEHAVIOR - Let LearnDash handle its content AND expand our sections
-        // We don't override LearnDash's click handler, we just add our own logic
+        // ALL CONTENT BEHAVIOR - INTERCEPT BEFORE LearnDash processes (like PR #3)
+        // This is the key difference - we need to run BEFORE LearnDash, not after
         
-        $mainExpandButton.on('click.customSectionAll', function(e) {
-            // Don't prevent default - let LearnDash handle its own content
+        $mainExpandButton.on('click.customSectionIntercept', function(e) {
+            // Don't prevent default - let LearnDash handle its own content after we're done
             // Don't stop propagation - let LearnDash's handler run too
             
             var $button = $(this);
+            var isCurrentlyExpanded = $button.hasClass('ld-expanded');
             
-            // Use multiple timeouts to ensure proper sequencing
-            setTimeout(function() {
-                var isCurrentlyExpanded = $button.hasClass('ld-expanded');
-                console.log('All Content Behavior - Button expanded state:', isCurrentlyExpanded);
+            console.log('All Content Behavior - Intercepting BEFORE LearnDash. Button expanded state:', isCurrentlyExpanded);
+            
+            // If we're about to expand (button is currently collapsed)
+            if (!isCurrentlyExpanded) {
+                console.log('Intercepting Expand All - expanding sections first');
                 
-                if (isCurrentlyExpanded) {
-                    // First expand our custom sections
-                    $('.custom-section-toggle-btn').each(function() {
-                        var $sectionToggle = $(this);
-                        var sectionId = $sectionToggle.data('custom-section-id');
-                        var $sectionContent = $('#custom-section-content-' + sectionId);
-                        var $icon = $sectionToggle.find('.custom-toggle-icon');
-                        
-                        if (!$sectionToggle.hasClass('expanded')) {
-                            $sectionToggle.addClass('expanded');
-                            $sectionToggle.attr('aria-expanded', 'true');
-                            $sectionContent.show();
-                            
-                            // Change icon from arrow-right to arrow-down
-                            $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
-                        }
-                    });
+                // FIRST: Expand all sections immediately BEFORE LearnDash processes
+                $('.custom-section-toggle-btn').each(function() {
+                    var $sectionToggle = $(this);
+                    var sectionId = $sectionToggle.data('custom-section-id');
+                    var $sectionContent = $('#custom-section-content-' + sectionId);
+                    var $icon = $sectionToggle.find('.custom-toggle-icon');
                     
-                    // Then expand individual lesson content with additional delay
-                    setTimeout(function() {
-                        var lessonButtons = $('.ld-expand-button[data-ld-expands]').not($button);
-                        console.log('Found lesson expand buttons:', lessonButtons.length);
+                    if (!$sectionToggle.hasClass('expanded')) {
+                        $sectionToggle.addClass('expanded');
+                        $sectionToggle.attr('aria-expanded', 'true');
+                        $sectionContent.show();
                         
-                        lessonButtons.each(function(index) {
-                            var $lessonExpandButton = $(this);
-                            var expandsTarget = $lessonExpandButton.data('ld-expands');
-                            var $expandTarget = $('#' + expandsTarget);
-                            
-                            console.log('Processing lesson button', index, 'target:', expandsTarget, 'already expanded:', $lessonExpandButton.hasClass('ld-expanded'));
-                            
-                            // Force expand regardless of current state - the issue is that LearnDash expands the container but not the content inside
-                            if ($expandTarget.length) {
-                                // Add a small delay between each expansion to avoid conflicts
-                                setTimeout(function() {
-                                    console.log('Force expanding lesson content for target:', expandsTarget);
+                        // Change icon from arrow-right to arrow-down
+                        $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
+                    }
+                });
+                
+                console.log('All sections expanded, now letting LearnDash process lessons');
+            } else {
+                console.log('Intercepting Collapse All - will sync sections after LearnDash processes');
+            }
+        });
+        
+        // ALSO watch for state changes to sync collapse (using MutationObserver like PR #3)
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    var $button = $(mutation.target);
+                    
+                    if ($button.attr('data-ld-expands')) {
+                        var isExpanded = $button.hasClass('ld-expanded');
+                        
+                        // Only handle collapse case here (expand is handled by click intercept)
+                        if (!isExpanded) {
+                            console.log('Syncing section collapse with main button');
+                            $('.custom-section-toggle-btn').each(function() {
+                                var $sectionToggle = $(this);
+                                var sectionId = $sectionToggle.data('custom-section-id');
+                                var $sectionContent = $('#custom-section-content-' + sectionId);
+                                var $icon = $sectionToggle.find('.custom-toggle-icon');
+                                
+                                if ($sectionToggle.hasClass('expanded')) {
+                                    $sectionToggle.removeClass('expanded');
+                                    $sectionToggle.attr('aria-expanded', 'false');
+                                    $sectionContent.hide();
                                     
-                                    // If already expanded, collapse first then expand to force content to show
-                                    if ($lessonExpandButton.hasClass('ld-expanded')) {
-                                        console.log('Button already expanded, collapsing first then re-expanding');
-                                        if (typeof ld_expand_element === 'function') {
-                                            ld_expand_element($lessonExpandButton); // This will collapse it
-                                            
-                                            // Then expand it again after a short delay
-                                            setTimeout(function() {
-                                                console.log('Re-expanding after collapse for:', expandsTarget);
-                                                ld_expand_element($lessonExpandButton);
-                                            }, 100);
-                                        }
-                                    } else {
-                                        // Not expanded, just expand normally
-                                        console.log('Button not expanded, expanding normally for:', expandsTarget);
-                                        if (typeof ld_expand_element === 'function') {
-                                            ld_expand_element($lessonExpandButton);
-                                        } else {
-                                            console.log('ld_expand_element function not available, trying click trigger');
-                                            $lessonExpandButton.trigger('click');
-                                        }
-                                    }
-                                }, index * 100); // Increased stagger time for collapse/expand cycle
-                            }
-                        });
-                    }, 200); // Additional delay for lesson expansion
-                    
-                } else {
-                    // LearnDash just collapsed, so collapse our sections too
-                    $('.custom-section-toggle-btn').each(function() {
-                        var $sectionToggle = $(this);
-                        var sectionId = $sectionToggle.data('custom-section-id');
-                        var $sectionContent = $('#custom-section-content-' + sectionId);
-                        var $icon = $sectionToggle.find('.custom-toggle-icon');
-                        
-                        if ($sectionToggle.hasClass('expanded')) {
-                            $sectionToggle.removeClass('expanded');
-                            $sectionToggle.attr('aria-expanded', 'false');
-                            $sectionContent.hide();
-                            
-                            // Change icon from arrow-down to arrow-right
-                            $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-right');
-                        }
-                    });
-                    
-                    // ALSO collapse all individual lesson content
-                    setTimeout(function() {
-                        $('.ld-expand-button[data-ld-expands]').not($button).each(function() {
-                            var $lessonExpandButton = $(this);
-                            var expandsTarget = $lessonExpandButton.data('ld-expands');
-                            var $expandTarget = $('#' + expandsTarget);
-                            
-                            // Only collapse if currently expanded
-                            if ($lessonExpandButton.hasClass('ld-expanded') && $expandTarget.length) {
-                                if (typeof ld_expand_element === 'function') {
-                                    ld_expand_element($lessonExpandButton);
+                                    // Change icon from arrow-down to arrow-right
+                                    $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-right');
                                 }
-                            }
-                        });
-                    }, 100);
+                            });
+                        }
+                    }
                 }
-            }, 150); // Initial delay to let LearnDash process first
+            });
+        });
+        
+        observer.observe($mainExpandButton[0], {
+            attributes: true,
+            attributeFilter: ['class']
         });
     }
     
