@@ -96,6 +96,16 @@
     background-color: #ffffff; /* Default background - will be overridden by dynamic CSS */
 }
 
+/* Hide collapsed sections by default */
+.custom-section-content.custom-section-collapsed {
+    display: none;
+}
+
+/* Show expanded sections */
+.custom-section-content.custom-section-expanded {
+    display: block;
+}
+
 .ld-section-wrapper {
     margin-bottom: 20px;
 }
@@ -159,4 +169,3 @@ body:not(.single-sfwd-courses) .custom-toggle-icon {
     z-index: 9999 !important;
     position: absolute !important;
 }
-
