@@ -69,7 +69,8 @@ jQuery(document).ready(function($) {
         var formData = {
             action: 'csld_save_settings',
             nonce: $('#csld_nonce').val(),
-            toggler_color: $('#toggler_color').val(),
+            toggler_outer_color: $('#toggler_outer_color').val(),
+            toggler_inner_color: $('#toggler_inner_color').val(),
             section_background_color: $('#section_background_color').val()
         };
         

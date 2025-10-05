@@ -93,7 +93,7 @@ $settings = $this->get_settings();
                                     data-default-color="#ffffff"
                                 />
                                 <p class="description">
-                                    <?php _e('Choose the background color for section heading wrappers.', 'collapsible-sections-learndash'); ?>
+                                    <?php _e('Choose the background color for section toggle buttons.', 'collapsible-sections-learndash'); ?>
                                 </p>
                             </td>
                         </tr>

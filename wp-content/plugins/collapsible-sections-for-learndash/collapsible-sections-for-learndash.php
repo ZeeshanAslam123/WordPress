@@ -301,7 +301,7 @@ class CollapsibleSectionsLearnDash {
             background: {$toggler_outer_color} !important;
             color: {$toggler_inner_color} !important;
         }
-        .custom-section-heading-wrapper {
+        .custom-section-toggle-btn {
             background-color: {$section_bg_color} !important;
         }
         ";
@@ -324,13 +324,17 @@ class CollapsibleSectionsLearnDash {
         }
         
         // Sanitize and save settings
-        $settings = array(
+        $new_settings = array(
             'toggler_outer_color' => sanitize_hex_color($_POST['toggler_outer_color']),
             'toggler_inner_color' => sanitize_hex_color($_POST['toggler_inner_color']),
             'section_background_color' => sanitize_hex_color($_POST['section_background_color'])
         );
         
-        update_option('csld_settings', $settings);
+        // Get current settings and merge with new ones to preserve other settings
+        $current_settings = CSLD_Settings::get_settings();
+        $settings = array_merge($current_settings, $new_settings);
+        
+        CSLD_Settings::update_settings($settings);
         
         wp_send_json_success(array(
             'message' => __('Settings saved successfully!', 'collapsible-sections-learndash')
