@@ -67,19 +67,28 @@ jQuery(document).ready(function($) {
     }
     
     // Integration with LearnDash's Expand All functionality
-    initExpandAllIntegration();
+    // Use a slight delay to ensure LearnDash's scripts have loaded
+    setTimeout(function() {
+        initExpandAllIntegration();
+    }, 100);
     
     function initExpandAllIntegration() {
-        // Find the main expand/collapse button
-        var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
+        // Get the expand/collapse behavior setting (default to 'all_content' for backward compatibility)
+        var expandCollapseBehavior = (typeof csld_settings !== 'undefined' && csld_settings.expand_collapse_behavior) 
+            ? csld_settings.expand_collapse_behavior 
+            : 'all_content';
         
-        if ($mainExpandButton.length) {
-            // Get the expand/collapse behavior setting (default to 'all_content' for backward compatibility)
-            var expandCollapseBehavior = (typeof csld_settings !== 'undefined' && csld_settings.expand_collapse_behavior) 
-                ? csld_settings.expand_collapse_behavior 
-                : 'all_content';
+        // Debug logging (can be removed in production)
+        if (typeof console !== 'undefined' && console.log) {
+            console.log('CSLD: Expand/Collapse behavior setting:', expandCollapseBehavior);
+        }
+        
+        // Only proceed if we need to override the default behavior
+        if (expandCollapseBehavior === 'sections_only') {
+            // Find the main expand/collapse button
+            var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
             
-            if (expandCollapseBehavior === 'sections_only') {
+            if ($mainExpandButton.length) {
                 // COMPLETELY OVERRIDE the click event to ONLY expand sections, NOT lessons
                 $mainExpandButton.off('click'); // Remove LearnDash's original handler
                 
@@ -140,9 +149,25 @@ jQuery(document).ready(function($) {
                     return false;
                 });
             }
-            // If expandCollapseBehavior is 'all_content', we don't override LearnDash's default behavior
-            // This allows LearnDash to handle expanding/collapsing both sections and lessons/topics
+        } else {
+            // For 'all_content' mode, ensure we don't interfere with LearnDash at all
+            if (typeof console !== 'undefined' && console.log) {
+                console.log('CSLD: Using LearnDash default expand/collapse behavior (all content)');
+            }
+            
+            // Make sure we haven't accidentally bound any handlers that could interfere
+            var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
+            if ($mainExpandButton.length) {
+                // Remove any custom handlers we might have accidentally added
+                $mainExpandButton.off('click.customSectionOnly');
+                
+                // Ensure LearnDash's original functionality is preserved
+                if (typeof console !== 'undefined' && console.log) {
+                    console.log('CSLD: LearnDash expand button found, ensuring no interference');
+                }
+            }
         }
+        // This ensures LearnDash's default behavior works completely uninterrupted
     }
     
     // Handle window resize to ensure proper layout
