@@ -173,7 +173,8 @@ class CollapsibleSectionsLearnDash {
         $default_settings = array(
             'toggler_outer_color' => '#093b7d',
             'toggler_inner_color' => '#a3a5a9',
-            'section_background_color' => '#ffffff'
+            'section_background_color' => '#ffffff',
+            'section_border_color' => '#e2e7ed'
         );
         
         $this->settings = wp_parse_args(get_option('csld_settings', array()), $default_settings);
@@ -295,6 +296,7 @@ class CollapsibleSectionsLearnDash {
         $toggler_outer_color = $this->get_setting('toggler_outer_color', '#093b7d');
         $toggler_inner_color = $this->get_setting('toggler_inner_color', '#a3a5a9');
         $section_bg_color = $this->get_setting('section_background_color', '#ffffff');
+        $section_border_color = $this->get_setting('section_border_color', '#e2e7ed');
         
         $custom_css = "
         .custom-toggle-icon {
@@ -303,6 +305,9 @@ class CollapsibleSectionsLearnDash {
         }
         .custom-section-toggle-btn {
             background-color: {$section_bg_color} !important;
+        }
+        .custom-section-item {
+            border: 2px solid {$section_border_color} !important;
         }
         ";
         
@@ -327,7 +332,8 @@ class CollapsibleSectionsLearnDash {
         $new_settings = array(
             'toggler_outer_color' => sanitize_hex_color($_POST['toggler_outer_color']),
             'toggler_inner_color' => sanitize_hex_color($_POST['toggler_inner_color']),
-            'section_background_color' => sanitize_hex_color($_POST['section_background_color'])
+            'section_background_color' => sanitize_hex_color($_POST['section_background_color']),
+            'section_border_color' => sanitize_hex_color($_POST['section_border_color'])
         );
         
         // Get current settings and merge with new ones to preserve other settings

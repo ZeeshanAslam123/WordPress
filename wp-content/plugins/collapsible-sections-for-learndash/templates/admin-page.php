@@ -97,6 +97,27 @@ $settings = $this->get_settings();
                                 </p>
                             </td>
                         </tr>
+                        
+                        <tr>
+                            <th scope="row">
+                                <label for="section_border_color">
+                                    <?php _e('Section Border Color', 'collapsible-sections-learndash'); ?>
+                                </label>
+                            </th>
+                            <td>
+                                <input 
+                                    type="text" 
+                                    id="section_border_color" 
+                                    name="section_border_color" 
+                                    value="<?php echo esc_attr($settings['section_border_color']); ?>" 
+                                    class="csld-color-picker" 
+                                    data-default-color="#e2e7ed"
+                                />
+                                <p class="description">
+                                    <?php _e('Choose the border color for section items (.custom-section-item).', 'collapsible-sections-learndash'); ?>
+                                </p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 

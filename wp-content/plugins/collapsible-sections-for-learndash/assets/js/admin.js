@@ -71,7 +71,8 @@ jQuery(document).ready(function($) {
             nonce: $('#csld_nonce').val(),
             toggler_outer_color: $('#toggler_outer_color').val(),
             toggler_inner_color: $('#toggler_inner_color').val(),
-            section_background_color: $('#section_background_color').val()
+            section_background_color: $('#section_background_color').val(),
+            section_border_color: $('#section_border_color').val()
         };
         
         // Send AJAX request
@@ -117,7 +118,8 @@ jQuery(document).ready(function($) {
             nonce: $('#csld_nonce').val(),
             toggler_outer_color: '#093b7d',
             toggler_inner_color: '#a3a5a9',
-            section_background_color: '#ffffff'
+            section_background_color: '#ffffff',
+            section_border_color: '#e2e7ed'
         };
         
         // Send AJAX request to save defaults
@@ -131,6 +133,7 @@ jQuery(document).ready(function($) {
                     $('#toggler_outer_color').wpColorPicker('color', '#093b7d');
                     $('#toggler_inner_color').wpColorPicker('color', '#a3a5a9');
                     $('#section_background_color').wpColorPicker('color', '#ffffff');
+                    $('#section_border_color').wpColorPicker('color', '#e2e7ed');
                     
                     showMessage('Settings reset to defaults and saved successfully!', 'success');
                 } else {

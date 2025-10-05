@@ -27,6 +27,7 @@ class CSLD_Settings {
         'toggler_outer_color' => '#093b7d',
         'toggler_inner_color' => '#a3a5a9',
         'section_background_color' => '#ffffff',
+        'section_border_color' => '#e2e7ed',
         'enable_animations' => true,
         'animation_speed' => 300
     );
@@ -93,6 +94,11 @@ class CSLD_Settings {
         // Sanitize section background color
         if (isset($settings['section_background_color'])) {
             $sanitized['section_background_color'] = sanitize_hex_color($settings['section_background_color']);
+        }
+        
+        // Sanitize section border color
+        if (isset($settings['section_border_color'])) {
+            $sanitized['section_border_color'] = sanitize_hex_color($settings['section_border_color']);
         }
         
         // Sanitize enable animations
