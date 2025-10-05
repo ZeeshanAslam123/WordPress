@@ -28,6 +28,7 @@ class CSLD_Settings {
         'toggler_inner_color' => '#a3a5a9',
         'section_background_color' => '#ffffff',
         'section_border_color' => '#e2e7ed',
+        'expand_collapse_behavior' => 'all_content',
         'enable_animations' => true,
         'animation_speed' => 300
     );
@@ -99,6 +100,14 @@ class CSLD_Settings {
         // Sanitize section border color
         if (isset($settings['section_border_color'])) {
             $sanitized['section_border_color'] = sanitize_hex_color($settings['section_border_color']);
+        }
+        
+        // Sanitize expand collapse behavior
+        if (isset($settings['expand_collapse_behavior'])) {
+            $allowed_values = array('all_content', 'sections_only');
+            $sanitized['expand_collapse_behavior'] = in_array($settings['expand_collapse_behavior'], $allowed_values) 
+                ? $settings['expand_collapse_behavior'] 
+                : 'all_content';
         }
         
         // Sanitize enable animations
