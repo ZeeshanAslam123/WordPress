@@ -278,6 +278,11 @@ class CollapsibleSectionsLearnDash {
             true
         );
         
+        // Pass settings to frontend JavaScript
+        wp_localize_script('csld-script', 'csld_settings', array(
+            'expand_collapse_behavior' => $this->get_setting('expand_collapse_behavior', 'all_content')
+        ));
+        
         // Add dynamic CSS for custom colors
         $this->add_dynamic_css();
     }
