@@ -161,7 +161,7 @@ jQuery(document).ready(function($) {
             
             var $button = $(this);
             
-            // Small delay to let LearnDash process first, then handle our sections
+            // Small delay to let LearnDash process first, then handle our sections AND lesson content
             setTimeout(function() {
                 var isCurrentlyExpanded = $button.hasClass('ld-expanded');
                 
@@ -182,6 +182,20 @@ jQuery(document).ready(function($) {
                             $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
                         }
                     });
+                    
+                    // ALSO expand all individual lesson content (topics/quizzes inside lessons)
+                    $('.ld-expand-button[data-ld-expands]').not($button).each(function() {
+                        var $lessonExpandButton = $(this);
+                        var expandsTarget = $lessonExpandButton.data('ld-expands');
+                        var $expandTarget = $('#' + expandsTarget);
+                        
+                        // Only expand if not already expanded
+                        if (!$lessonExpandButton.hasClass('ld-expanded') && $expandTarget.length) {
+                            // Trigger the lesson's individual expand button
+                            $lessonExpandButton.trigger('click');
+                        }
+                    });
+                    
                 } else {
                     // LearnDash just collapsed, so collapse our sections too
                     $('.custom-section-toggle-btn').each(function() {
@@ -199,8 +213,21 @@ jQuery(document).ready(function($) {
                             $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-right');
                         }
                     });
+                    
+                    // ALSO collapse all individual lesson content (topics/quizzes inside lessons)
+                    $('.ld-expand-button[data-ld-expands]').not($button).each(function() {
+                        var $lessonExpandButton = $(this);
+                        var expandsTarget = $lessonExpandButton.data('ld-expands');
+                        var $expandTarget = $('#' + expandsTarget);
+                        
+                        // Only collapse if currently expanded
+                        if ($lessonExpandButton.hasClass('ld-expanded') && $expandTarget.length) {
+                            // Trigger the lesson's individual collapse button
+                            $lessonExpandButton.trigger('click');
+                        }
+                    });
                 }
-            }, 50); // Small delay to ensure LearnDash processes first
+            }, 100); // Slightly longer delay to ensure LearnDash processes first
         });
     }
     
