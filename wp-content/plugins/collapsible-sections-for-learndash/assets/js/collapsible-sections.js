@@ -83,13 +83,12 @@ jQuery(document).ready(function($) {
             console.log('CSLD: Expand/Collapse behavior setting:', expandCollapseBehavior);
         }
         
-        // Only proceed if we need to override the default behavior
-        if (expandCollapseBehavior === 'sections_only') {
-            // Find the main expand/collapse button
-            var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
-            
-            if ($mainExpandButton.length) {
-                // COMPLETELY OVERRIDE the click event to ONLY expand sections, NOT lessons
+        // Find the main expand/collapse button
+        var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
+        
+        if ($mainExpandButton.length) {
+            if (expandCollapseBehavior === 'sections_only') {
+                // SECTIONS ONLY MODE: Override LearnDash completely
                 $mainExpandButton.off('click'); // Remove LearnDash's original handler
                 
                 $mainExpandButton.on('click.customSectionOnly', function(e) {
@@ -148,23 +147,64 @@ jQuery(document).ready(function($) {
                     
                     return false;
                 });
-            }
-        } else {
-            // For 'all_content' mode, ensure we don't interfere with LearnDash at all
-            if (typeof console !== 'undefined' && console.log) {
-                console.log('CSLD: Using LearnDash default expand/collapse behavior (all content)');
-            }
-            
-            // Make sure we haven't accidentally bound any handlers that could interfere
-            var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
-            if ($mainExpandButton.length) {
-                // Remove any custom handlers we might have accidentally added
+                
+            } else {
+                // ALL CONTENT MODE: Add section expansion to LearnDash's default behavior
+                if (typeof console !== 'undefined' && console.log) {
+                    console.log('CSLD: Adding section expansion to LearnDash default behavior (all content)');
+                }
+                
+                // Remove any previous custom handlers to avoid conflicts
                 $mainExpandButton.off('click.customSectionOnly');
                 
-                // Ensure LearnDash's original functionality is preserved
-                if (typeof console !== 'undefined' && console.log) {
-                    console.log('CSLD: LearnDash expand button found, ensuring no interference');
-                }
+                // Add our section expansion as an additional handler (don't override LearnDash)
+                $mainExpandButton.on('click.customSectionExpansion', function(e) {
+                    // Don't prevent default - let LearnDash handle lessons/topics
+                    // Don't stop propagation - let LearnDash's handler run too
+                    
+                    var $button = $(this);
+                    
+                    // Use a small delay to let LearnDash update the button state first
+                    setTimeout(function() {
+                        var isCurrentlyExpanded = $button.hasClass('ld-expanded');
+                        
+                        if (isCurrentlyExpanded) {
+                            // LearnDash just expanded everything, so expand our sections too
+                            $('.custom-section-toggle-btn').each(function() {
+                                var $sectionToggle = $(this);
+                                var sectionId = $sectionToggle.data('custom-section-id');
+                                var $sectionContent = $('#custom-section-content-' + sectionId);
+                                var $icon = $sectionToggle.find('.custom-toggle-icon');
+                                
+                                if (!$sectionToggle.hasClass('expanded')) {
+                                    $sectionToggle.addClass('expanded');
+                                    $sectionToggle.attr('aria-expanded', 'true');
+                                    $sectionContent.show();
+                                    
+                                    // Change icon from arrow-right to arrow-down
+                                    $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
+                                }
+                            });
+                        } else {
+                            // LearnDash just collapsed everything, so collapse our sections too
+                            $('.custom-section-toggle-btn').each(function() {
+                                var $sectionToggle = $(this);
+                                var sectionId = $sectionToggle.data('custom-section-id');
+                                var $sectionContent = $('#custom-section-content-' + sectionId);
+                                var $icon = $sectionToggle.find('.custom-toggle-icon');
+                                
+                                if ($sectionToggle.hasClass('expanded')) {
+                                    $sectionToggle.removeClass('expanded');
+                                    $sectionToggle.attr('aria-expanded', 'false');
+                                    $sectionContent.hide();
+                                    
+                                    // Change icon from arrow-down to arrow-right
+                                    $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-right');
+                                }
+                            });
+                        }
+                    }, 50); // Small delay to let LearnDash process first
+                });
             }
         }
         // This ensures LearnDash's default behavior works completely uninterrupted
