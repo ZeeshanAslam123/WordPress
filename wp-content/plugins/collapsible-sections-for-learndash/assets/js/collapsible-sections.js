@@ -196,26 +196,35 @@ jQuery(document).ready(function($) {
                             
                             console.log('Processing lesson button', index, 'target:', expandsTarget, 'already expanded:', $lessonExpandButton.hasClass('ld-expanded'));
                             
-                            // Only expand if not already expanded
-                            if (!$lessonExpandButton.hasClass('ld-expanded') && $expandTarget.length) {
+                            // Force expand regardless of current state - the issue is that LearnDash expands the container but not the content inside
+                            if ($expandTarget.length) {
                                 // Add a small delay between each expansion to avoid conflicts
                                 setTimeout(function() {
-                                    console.log('Expanding lesson button for target:', expandsTarget);
-                                    if (typeof ld_expand_element === 'function') {
-                                        ld_expand_element($lessonExpandButton);
-                                        
-                                        // Double-check after a short delay if it worked
-                                        setTimeout(function() {
-                                            if (!$lessonExpandButton.hasClass('ld-expanded')) {
-                                                console.log('First attempt failed, trying click trigger for:', expandsTarget);
-                                                $lessonExpandButton.trigger('click');
-                                            }
-                                        }, 100);
+                                    console.log('Force expanding lesson content for target:', expandsTarget);
+                                    
+                                    // If already expanded, collapse first then expand to force content to show
+                                    if ($lessonExpandButton.hasClass('ld-expanded')) {
+                                        console.log('Button already expanded, collapsing first then re-expanding');
+                                        if (typeof ld_expand_element === 'function') {
+                                            ld_expand_element($lessonExpandButton); // This will collapse it
+                                            
+                                            // Then expand it again after a short delay
+                                            setTimeout(function() {
+                                                console.log('Re-expanding after collapse for:', expandsTarget);
+                                                ld_expand_element($lessonExpandButton);
+                                            }, 100);
+                                        }
                                     } else {
-                                        console.log('ld_expand_element function not available, trying click trigger');
-                                        $lessonExpandButton.trigger('click');
+                                        // Not expanded, just expand normally
+                                        console.log('Button not expanded, expanding normally for:', expandsTarget);
+                                        if (typeof ld_expand_element === 'function') {
+                                            ld_expand_element($lessonExpandButton);
+                                        } else {
+                                            console.log('ld_expand_element function not available, trying click trigger');
+                                            $lessonExpandButton.trigger('click');
+                                        }
                                     }
-                                }, index * 50); // Stagger the expansions
+                                }, index * 100); // Increased stagger time for collapse/expand cycle
                             }
                         });
                     }, 200); // Additional delay for lesson expansion
