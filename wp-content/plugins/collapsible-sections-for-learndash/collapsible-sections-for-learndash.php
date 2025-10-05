@@ -277,6 +277,11 @@ class CollapsibleSectionsLearnDash {
             true
         );
         
+        // Pass settings to frontend JavaScript
+        wp_localize_script('csld-script', 'csld_settings', array(
+            'expand_collapse_behavior' => $this->get_setting('expand_collapse_behavior', 'all_content')
+        ));
+        
         // Add dynamic CSS for custom colors
         $this->add_dynamic_css();
     }
@@ -333,7 +338,8 @@ class CollapsibleSectionsLearnDash {
             'toggler_outer_color' => sanitize_hex_color($_POST['toggler_outer_color']),
             'toggler_inner_color' => sanitize_hex_color($_POST['toggler_inner_color']),
             'section_background_color' => sanitize_hex_color($_POST['section_background_color']),
-            'section_border_color' => sanitize_hex_color($_POST['section_border_color'])
+            'section_border_color' => sanitize_hex_color($_POST['section_border_color']),
+            'expand_collapse_behavior' => isset($_POST['expand_collapse_behavior']) ? sanitize_text_field($_POST['expand_collapse_behavior']) : 'all_content'
         );
         
         // Get current settings and merge with new ones to preserve other settings

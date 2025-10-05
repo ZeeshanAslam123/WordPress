@@ -118,6 +118,27 @@ $settings = $this->get_settings();
                                 </p>
                             </td>
                         </tr>
+                        
+                        <tr>
+                            <th scope="row">
+                                <label for="expand_collapse_behavior">
+                                    <?php _e('Expand/Collapse Behavior', 'collapsible-sections-learndash'); ?>
+                                </label>
+                            </th>
+                            <td>
+                                <select id="expand_collapse_behavior" name="expand_collapse_behavior">
+                                    <option value="all_content" <?php selected($settings['expand_collapse_behavior'], 'all_content'); ?>>
+                                        <?php _e('Expand/Collapse All Content', 'collapsible-sections-learndash'); ?>
+                                    </option>
+                                    <option value="sections_only" <?php selected($settings['expand_collapse_behavior'], 'sections_only'); ?>>
+                                        <?php _e('Expand/Collapse Sections Only', 'collapsible-sections-learndash'); ?>
+                                    </option>
+                                </select>
+                                <p class="description">
+                                    <?php _e('Choose how the "Expand All" and "Collapse All" buttons behave. "All Content" expands both sections and lessons/topics. "Sections Only" expands only the sections, leaving lessons/topics unaffected.', 'collapsible-sections-learndash'); ?>
+                                </p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 
