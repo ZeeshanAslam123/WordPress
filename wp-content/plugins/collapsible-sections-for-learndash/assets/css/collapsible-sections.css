@@ -160,3 +160,33 @@ body:not(.single-sfwd-courses) .custom-toggle-icon {
     position: absolute !important;
 }
 
+/* CRITICAL FIX: Ensure lesson topic expansion works within custom sections */
+.custom-section-content .ld-item-list-item-expanded {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Ensure lesson expand buttons are visible and functional */
+.custom-section-content .ld-expand-button {
+    display: flex !important;
+    visibility: visible !important;
+}
+
+/* Ensure topic lists display properly when lessons are expanded */
+.custom-section-content .ld-table-list {
+    display: block !important;
+    visibility: visible !important;
+}
+
+.custom-section-content .ld-table-list-items {
+    display: block !important;
+    visibility: visible !important;
+}
+
+.custom-section-content .ld-table-list-item {
+    display: flex !important;
+    visibility: visible !important;
+}

@@ -25,10 +25,14 @@ jQuery(document).ready(function($) {
             
             // Add click handler to toggle button
             $toggleBtn.on('click.customSectionToggle', function(e) {
-                e.preventDefault();
-                e.stopImmediatePropagation(); // Completely stop event propagation
-                toggleCustomSection($toggleBtn, $sectionContent);
-                return false;
+                // Only handle clicks on our custom section toggle buttons
+                // Don't interfere with LearnDash lesson expand buttons
+                if ($(e.target).closest('.ld-expand-button').length === 0) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    toggleCustomSection($toggleBtn, $sectionContent);
+                    return false;
+                }
             });
             
             // Add keyboard support (Enter and Space)
@@ -63,7 +67,38 @@ jQuery(document).ready(function($) {
             
             // Change icon from arrow-right to arrow-down
             $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
+            
+            // Ensure LearnDash's expand/collapse functionality works within the newly expanded section
+            setTimeout(function() {
+                reinitializeLearnDashExpandButtons($sectionContent);
+            }, 100);
         }
+    }
+    
+    /**
+     * Reinitialize LearnDash expand buttons within a section
+     * This ensures lesson topic expansion works after section expansion
+     */
+    function reinitializeLearnDashExpandButtons($sectionContent) {
+        // Find all LearnDash expand buttons within the section
+        $sectionContent.find('.ld-expand-button').each(function() {
+            var $expandBtn = $(this);
+            var expandsId = $expandBtn.data('ld-expands');
+            
+            if (expandsId) {
+                // Ensure the target element is visible
+                var $targetElement = $('#' + expandsId);
+                if ($targetElement.length) {
+                    // Make sure the target element is properly initialized for LearnDash
+                    $targetElement.attr('data-ld-expand-list', 'true');
+                    
+                    // Trigger LearnDash's initialization if available
+                    if (typeof window.ldExpandInit === 'function') {
+                        window.ldExpandInit($expandBtn);
+                    }
+                }
+            }
+        });
     }
     
     // Integration with LearnDash's Expand All functionality
@@ -114,6 +149,11 @@ jQuery(document).ready(function($) {
                                 
                                 // Change icon from arrow-right to arrow-down
                                 $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
+                                
+                                // Reinitialize LearnDash expand buttons
+                                setTimeout(function() {
+                                    reinitializeLearnDashExpandButtons($sectionContent);
+                                }, 100);
                             }
                         });
                         
@@ -183,6 +223,11 @@ jQuery(document).ready(function($) {
                                     
                                     // Change icon from arrow-right to arrow-down
                                     $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
+                                    
+                                    // Reinitialize LearnDash expand buttons
+                                    setTimeout(function() {
+                                        reinitializeLearnDashExpandButtons($sectionContent);
+                                    }, 100);
                                 }
                             });
                         } else {
