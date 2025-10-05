@@ -24,7 +24,8 @@ class CSLD_Settings {
      * Default settings
      */
     private static $defaults = array(
-        'toggler_color' => '#00a2e8',
+        'toggler_outer_color' => '#093b7d',
+        'toggler_inner_color' => '#a3a5a9',
         'section_background_color' => '#ffffff',
         'enable_animations' => true,
         'animation_speed' => 300
@@ -79,9 +80,14 @@ class CSLD_Settings {
     private static function sanitize_settings($settings) {
         $sanitized = array();
         
-        // Sanitize toggler color
-        if (isset($settings['toggler_color'])) {
-            $sanitized['toggler_color'] = sanitize_hex_color($settings['toggler_color']);
+        // Sanitize toggler outer color
+        if (isset($settings['toggler_outer_color'])) {
+            $sanitized['toggler_outer_color'] = sanitize_hex_color($settings['toggler_outer_color']);
+        }
+        
+        // Sanitize toggler inner color
+        if (isset($settings['toggler_inner_color'])) {
+            $sanitized['toggler_inner_color'] = sanitize_hex_color($settings['toggler_inner_color']);
         }
         
         // Sanitize section background color
@@ -123,4 +129,3 @@ class CSLD_Settings {
         return self::$defaults;
     }
 }
-

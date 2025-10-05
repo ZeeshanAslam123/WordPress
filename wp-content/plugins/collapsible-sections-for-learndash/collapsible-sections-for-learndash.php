@@ -171,7 +171,8 @@ class CollapsibleSectionsLearnDash {
      */
     private function load_settings() {
         $default_settings = array(
-            'toggler_color' => '#00a2e8',
+            'toggler_outer_color' => '#093b7d',
+            'toggler_inner_color' => '#a3a5a9',
             'section_background_color' => '#ffffff'
         );
         
@@ -291,14 +292,16 @@ class CollapsibleSectionsLearnDash {
      * Add dynamic CSS for custom colors
      */
     private function add_dynamic_css() {
-        $toggler_color = $this->get_setting('toggler_color', '#00a2e8');
+        $toggler_outer_color = $this->get_setting('toggler_outer_color', '#093b7d');
+        $toggler_inner_color = $this->get_setting('toggler_inner_color', '#a3a5a9');
         $section_bg_color = $this->get_setting('section_background_color', '#ffffff');
         
         $custom_css = "
         .custom-toggle-icon {
-            background: {$toggler_color} !important;
+            background: {$toggler_outer_color} !important;
+            color: {$toggler_inner_color} !important;
         }
-        .custom-section-content {
+        .custom-section-heading-wrapper {
             background-color: {$section_bg_color} !important;
         }
         ";
@@ -322,7 +325,8 @@ class CollapsibleSectionsLearnDash {
         
         // Sanitize and save settings
         $settings = array(
-            'toggler_color' => sanitize_hex_color($_POST['toggler_color']),
+            'toggler_outer_color' => sanitize_hex_color($_POST['toggler_outer_color']),
+            'toggler_inner_color' => sanitize_hex_color($_POST['toggler_inner_color']),
             'section_background_color' => sanitize_hex_color($_POST['section_background_color'])
         );
         

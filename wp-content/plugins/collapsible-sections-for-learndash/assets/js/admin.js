@@ -105,7 +105,8 @@ jQuery(document).ready(function($) {
         }
         
         // Reset color pickers to default values
-        $('#toggler_color').wpColorPicker('color', '#00a2e8');
+        $('#toggler_outer_color').wpColorPicker('color', '#093b7d');
+        $('#toggler_inner_color').wpColorPicker('color', '#a3a5a9');
         $('#section_background_color').wpColorPicker('color', '#ffffff');
         
         showMessage('Settings reset to defaults. Don\'t forget to save!', 'success');
@@ -195,4 +196,3 @@ jQuery(document).ready(function($) {
         initTabs();
     }
 });
-

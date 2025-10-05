@@ -24,6 +24,11 @@ $settings = $this->get_settings();
     </div>
 
     <div class="csld-admin-content">
+        <!-- Message area for save/error feedback -->
+        <div id="csld-save-message" class="notice" style="display: none;">
+            <p></p>
+        </div>
+        
         <div class="csld-settings-panel">
             <form id="csld-settings-form" method="post">
                 <?php wp_nonce_field('csld_settings_nonce', 'csld_nonce'); ?>
@@ -32,21 +37,42 @@ $settings = $this->get_settings();
                     <tbody>
                         <tr>
                             <th scope="row">
-                                <label for="toggler_color">
-                                    <?php _e('Toggler Color', 'collapsible-sections-learndash'); ?>
+                                <label for="toggler_outer_color">
+                                    <?php _e('Toggler Outer Color', 'collapsible-sections-learndash'); ?>
                                 </label>
                             </th>
                             <td>
                                 <input 
                                     type="text" 
-                                    id="toggler_color" 
-                                    name="toggler_color" 
-                                    value="<?php echo esc_attr($settings['toggler_color']); ?>" 
+                                    id="toggler_outer_color" 
+                                    name="toggler_outer_color" 
+                                    value="<?php echo esc_attr($settings['toggler_outer_color']); ?>" 
                                     class="csld-color-picker" 
-                                    data-default-color="#00a2e8"
+                                    data-default-color="#093b7d"
                                 />
                                 <p class="description">
-                                    <?php _e('Choose the color for the section toggle icons.', 'collapsible-sections-learndash'); ?>
+                                    <?php _e('Choose the background color for the section toggle icons.', 'collapsible-sections-learndash'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th scope="row">
+                                <label for="toggler_inner_color">
+                                    <?php _e('Toggler Inner Color', 'collapsible-sections-learndash'); ?>
+                                </label>
+                            </th>
+                            <td>
+                                <input 
+                                    type="text" 
+                                    id="toggler_inner_color" 
+                                    name="toggler_inner_color" 
+                                    value="<?php echo esc_attr($settings['toggler_inner_color']); ?>" 
+                                    class="csld-color-picker" 
+                                    data-default-color="#a3a5a9"
+                                />
+                                <p class="description">
+                                    <?php _e('Choose the inner fill color for the section toggle icons.', 'collapsible-sections-learndash'); ?>
                                 </p>
                             </td>
                         </tr>
@@ -67,7 +93,7 @@ $settings = $this->get_settings();
                                     data-default-color="#ffffff"
                                 />
                                 <p class="description">
-                                    <?php _e('Choose the background color for expanded sections.', 'collapsible-sections-learndash'); ?>
+                                    <?php _e('Choose the background color for section heading wrappers.', 'collapsible-sections-learndash'); ?>
                                 </p>
                             </td>
                         </tr>
@@ -133,4 +159,3 @@ $settings = $this->get_settings();
         <p><?php _e('Settings saved successfully!', 'collapsible-sections-learndash'); ?></p>
     </div>
 </div>
-
