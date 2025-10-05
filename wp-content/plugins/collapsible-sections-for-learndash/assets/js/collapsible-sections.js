@@ -161,12 +161,13 @@ jQuery(document).ready(function($) {
             
             var $button = $(this);
             
-            // Small delay to let LearnDash process first, then handle our sections AND lesson content
+            // Use multiple timeouts to ensure proper sequencing
             setTimeout(function() {
                 var isCurrentlyExpanded = $button.hasClass('ld-expanded');
+                console.log('All Content Behavior - Button expanded state:', isCurrentlyExpanded);
                 
                 if (isCurrentlyExpanded) {
-                    // LearnDash just expanded, so expand our sections too
+                    // First expand our custom sections
                     $('.custom-section-toggle-btn').each(function() {
                         var $sectionToggle = $(this);
                         var sectionId = $sectionToggle.data('custom-section-id');
@@ -183,21 +184,41 @@ jQuery(document).ready(function($) {
                         }
                     });
                     
-                    // ALSO expand all individual lesson content (topics/quizzes inside lessons)
-                    // Use LearnDash's native ld_expand_element function instead of trigger('click')
-                    $('.ld-expand-button[data-ld-expands]').not($button).each(function() {
-                        var $lessonExpandButton = $(this);
-                        var expandsTarget = $lessonExpandButton.data('ld-expands');
-                        var $expandTarget = $('#' + expandsTarget);
+                    // Then expand individual lesson content with additional delay
+                    setTimeout(function() {
+                        var lessonButtons = $('.ld-expand-button[data-ld-expands]').not($button);
+                        console.log('Found lesson expand buttons:', lessonButtons.length);
                         
-                        // Only expand if not already expanded
-                        if (!$lessonExpandButton.hasClass('ld-expanded') && $expandTarget.length) {
-                            // Call LearnDash's native expand function directly
-                            if (typeof ld_expand_element === 'function') {
-                                ld_expand_element($lessonExpandButton);
+                        lessonButtons.each(function(index) {
+                            var $lessonExpandButton = $(this);
+                            var expandsTarget = $lessonExpandButton.data('ld-expands');
+                            var $expandTarget = $('#' + expandsTarget);
+                            
+                            console.log('Processing lesson button', index, 'target:', expandsTarget, 'already expanded:', $lessonExpandButton.hasClass('ld-expanded'));
+                            
+                            // Only expand if not already expanded
+                            if (!$lessonExpandButton.hasClass('ld-expanded') && $expandTarget.length) {
+                                // Add a small delay between each expansion to avoid conflicts
+                                setTimeout(function() {
+                                    console.log('Expanding lesson button for target:', expandsTarget);
+                                    if (typeof ld_expand_element === 'function') {
+                                        ld_expand_element($lessonExpandButton);
+                                        
+                                        // Double-check after a short delay if it worked
+                                        setTimeout(function() {
+                                            if (!$lessonExpandButton.hasClass('ld-expanded')) {
+                                                console.log('First attempt failed, trying click trigger for:', expandsTarget);
+                                                $lessonExpandButton.trigger('click');
+                                            }
+                                        }, 100);
+                                    } else {
+                                        console.log('ld_expand_element function not available, trying click trigger');
+                                        $lessonExpandButton.trigger('click');
+                                    }
+                                }, index * 50); // Stagger the expansions
                             }
-                        }
-                    });
+                        });
+                    }, 200); // Additional delay for lesson expansion
                     
                 } else {
                     // LearnDash just collapsed, so collapse our sections too
@@ -217,23 +238,23 @@ jQuery(document).ready(function($) {
                         }
                     });
                     
-                    // ALSO collapse all individual lesson content (topics/quizzes inside lessons)
-                    // Use LearnDash's native ld_expand_element function instead of trigger('click')
-                    $('.ld-expand-button[data-ld-expands]').not($button).each(function() {
-                        var $lessonExpandButton = $(this);
-                        var expandsTarget = $lessonExpandButton.data('ld-expands');
-                        var $expandTarget = $('#' + expandsTarget);
-                        
-                        // Only collapse if currently expanded
-                        if ($lessonExpandButton.hasClass('ld-expanded') && $expandTarget.length) {
-                            // Call LearnDash's native expand function directly (it will collapse since it's already expanded)
-                            if (typeof ld_expand_element === 'function') {
-                                ld_expand_element($lessonExpandButton);
+                    // ALSO collapse all individual lesson content
+                    setTimeout(function() {
+                        $('.ld-expand-button[data-ld-expands]').not($button).each(function() {
+                            var $lessonExpandButton = $(this);
+                            var expandsTarget = $lessonExpandButton.data('ld-expands');
+                            var $expandTarget = $('#' + expandsTarget);
+                            
+                            // Only collapse if currently expanded
+                            if ($lessonExpandButton.hasClass('ld-expanded') && $expandTarget.length) {
+                                if (typeof ld_expand_element === 'function') {
+                                    ld_expand_element($lessonExpandButton);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }, 100);
                 }
-            }, 100); // Slightly longer delay to ensure LearnDash processes first
+            }, 150); // Initial delay to let LearnDash process first
         });
     }
     
