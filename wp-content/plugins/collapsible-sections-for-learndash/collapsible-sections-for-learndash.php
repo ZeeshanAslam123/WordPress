@@ -174,7 +174,8 @@ class CollapsibleSectionsLearnDash {
             'toggler_outer_color' => '#093b7d',
             'toggler_inner_color' => '#a3a5a9',
             'section_background_color' => '#ffffff',
-            'section_border_color' => '#e2e7ed'
+            'section_border_color' => '#e2e7ed',
+            'expand_collapse_behavior' => 'all_content'
         );
         
         $this->settings = wp_parse_args(get_option('csld_settings', array()), $default_settings);
