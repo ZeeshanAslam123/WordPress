@@ -69,8 +69,10 @@ jQuery(document).ready(function($) {
         var formData = {
             action: 'csld_save_settings',
             nonce: $('#csld_nonce').val(),
-            toggler_color: $('#toggler_color').val(),
-            section_background_color: $('#section_background_color').val()
+            toggler_outer_color: $('#toggler_outer_color').val(),
+            toggler_inner_color: $('#toggler_inner_color').val(),
+            section_background_color: $('#section_background_color').val(),
+            section_border_color: $('#section_border_color').val()
         };
         
         // Send AJAX request
@@ -104,11 +106,48 @@ jQuery(document).ready(function($) {
             return;
         }
         
-        // Reset color pickers to default values
-        $('#toggler_color').wpColorPicker('color', '#00a2e8');
-        $('#section_background_color').wpColorPicker('color', '#ffffff');
+        var $resetButton = $('#csld-reset-settings');
+        var $message = $('#csld-save-message');
         
-        showMessage('Settings reset to defaults. Don\'t forget to save!', 'success');
+        // Show loading state
+        $resetButton.prop('disabled', true).text('Resetting...');
+        
+        // Prepare default values
+        var defaultData = {
+            action: 'csld_save_settings',
+            nonce: $('#csld_nonce').val(),
+            toggler_outer_color: '#093b7d',
+            toggler_inner_color: '#a3a5a9',
+            section_background_color: '#ffffff',
+            section_border_color: '#e2e7ed'
+        };
+        
+        // Send AJAX request to save defaults
+        $.ajax({
+            url: csld_admin.ajax_url,
+            type: 'POST',
+            data: defaultData,
+            success: function(response) {
+                if (response.success) {
+                    // Update color pickers to default values
+                    $('#toggler_outer_color').wpColorPicker('color', '#093b7d');
+                    $('#toggler_inner_color').wpColorPicker('color', '#a3a5a9');
+                    $('#section_background_color').wpColorPicker('color', '#ffffff');
+                    $('#section_border_color').wpColorPicker('color', '#e2e7ed');
+                    
+                    showMessage('Settings reset to defaults and saved successfully!', 'success');
+                } else {
+                    showMessage('Error resetting settings: ' + (response.data || 'Unknown error'), 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                showMessage('Error resetting settings: ' + error, 'error');
+            },
+            complete: function() {
+                // Restore button state
+                $resetButton.prop('disabled', false).text('Reset to Defaults');
+            }
+        });
     }
     
     /**
@@ -195,4 +234,3 @@ jQuery(document).ready(function($) {
         initTabs();
     }
 });
-
