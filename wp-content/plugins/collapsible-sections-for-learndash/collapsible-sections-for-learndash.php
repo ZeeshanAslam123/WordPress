@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Collapsible Sections for LearnDash
- * Plugin URI: https://github.com/swrice/collapsible-sections-for-learndash
+ * Plugin URI: https://swrice.com/collapsible-sections-for-learndash/
  * Description: Transform your LearnDash course sections into collapsible, user-friendly navigation. Improve course UX by showing only section headings by default, with expandable content on demand.
  * Version: 1.0
  * Author: Swrice
- * Author URI: https://github.com/swrice
+ * Author URI: https://swrice.com/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: collapsible-sections-learndash
