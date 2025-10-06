@@ -74,66 +74,160 @@ jQuery(document).ready(function($) {
         var $mainExpandButton = $('.ld-expand-button[data-ld-expands]').first();
         
         if ($mainExpandButton.length) {
-            // COMPLETELY OVERRIDE the click event to ONLY expand sections, NOT lessons
-            $mainExpandButton.off('click'); // Remove LearnDash's original handler
+            // Get the expand/collapse behavior setting
+            var expandBehavior = (typeof csld_settings !== 'undefined' && csld_settings.expand_collapse_behavior) 
+                ? csld_settings.expand_collapse_behavior 
+                : 'all_content';
             
-            $mainExpandButton.on('click.customSectionOnly', function(e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                
-                var $button = $(this);
-                var isCurrentlyExpanded = $button.hasClass('ld-expanded');
-                
-                if (!isCurrentlyExpanded) {
-                    
-                    // ONLY expand sections, do NOT let LearnDash expand lessons
-                    $('.custom-section-toggle-btn').each(function() {
-                        var $sectionToggle = $(this);
-                        var sectionId = $sectionToggle.data('custom-section-id');
-                        var $sectionContent = $('#custom-section-content-' + sectionId);
-                        var $icon = $sectionToggle.find('.custom-toggle-icon');
-                        
-                        if (!$sectionToggle.hasClass('expanded')) {
-                            $sectionToggle.addClass('expanded');
-                            $sectionToggle.attr('aria-expanded', 'true');
-                            $sectionContent.show();
-                            
-                            // Change icon from arrow-right to arrow-down
-                            $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
-                        }
-                    });
-                    
-                    // Update button state to expanded
-                    $button.addClass('ld-expanded');
-                    $button.find('.ld-text').text($button.data('ld-collapse-text') || 'Collapse All');
-                    
-                } else {
-                    
-                    // Collapse all sections
-                    $('.custom-section-toggle-btn').each(function() {
-                        var $sectionToggle = $(this);
-                        var sectionId = $sectionToggle.data('custom-section-id');
-                        var $sectionContent = $('#custom-section-content-' + sectionId);
-                        var $icon = $sectionToggle.find('.custom-toggle-icon');
-                        
-                        if ($sectionToggle.hasClass('expanded')) {
-                            $sectionToggle.removeClass('expanded');
-                            $sectionToggle.attr('aria-expanded', 'false');
-                            $sectionContent.hide();
-                            
-                            // Change icon from arrow-down to arrow-right
-                            $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-right');
-                        }
-                    });
-                    
-                    // Update button state to collapsed
-                    $button.removeClass('ld-expanded');
-                    $button.find('.ld-text').text($button.data('ld-expand-text') || 'Expand All');
-                }
-                
-                return false;
-            });
+            if (expandBehavior === 'sections_only') {
+                // SECTIONS ONLY BEHAVIOR - Current working implementation
+                initSectionsOnlyBehavior($mainExpandButton);
+            } else {
+                // ALL CONTENT BEHAVIOR - Default behavior (expand everything)
+                initAllContentBehavior($mainExpandButton);
+            }
         }
+    }
+    
+    function initSectionsOnlyBehavior($mainExpandButton) {
+        // COMPLETELY OVERRIDE the click event to ONLY expand sections, NOT lessons
+        $mainExpandButton.off('click'); // Remove LearnDash's original handler
+        
+        $mainExpandButton.on('click.customSectionOnly', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            
+            var $button = $(this);
+            var isCurrentlyExpanded = $button.hasClass('ld-expanded');
+            
+            if (!isCurrentlyExpanded) {
+                
+                // ONLY expand sections, do NOT let LearnDash expand lessons
+                $('.custom-section-toggle-btn').each(function() {
+                    var $sectionToggle = $(this);
+                    var sectionId = $sectionToggle.data('custom-section-id');
+                    var $sectionContent = $('#custom-section-content-' + sectionId);
+                    var $icon = $sectionToggle.find('.custom-toggle-icon');
+                    
+                    if (!$sectionToggle.hasClass('expanded')) {
+                        $sectionToggle.addClass('expanded');
+                        $sectionToggle.attr('aria-expanded', 'true');
+                        $sectionContent.show();
+                        
+                        // Change icon from arrow-right to arrow-down
+                        $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
+                    }
+                });
+                
+                // Update button state to expanded
+                $button.addClass('ld-expanded');
+                $button.find('.ld-text').text($button.data('ld-collapse-text') || 'Collapse All');
+                
+            } else {
+                
+                // Collapse all sections
+                $('.custom-section-toggle-btn').each(function() {
+                    var $sectionToggle = $(this);
+                    var sectionId = $sectionToggle.data('custom-section-id');
+                    var $sectionContent = $('#custom-section-content-' + sectionId);
+                    var $icon = $sectionToggle.find('.custom-toggle-icon');
+                    
+                    if ($sectionToggle.hasClass('expanded')) {
+                        $sectionToggle.removeClass('expanded');
+                        $sectionToggle.attr('aria-expanded', 'false');
+                        $sectionContent.hide();
+                        
+                        // Change icon from arrow-down to arrow-right
+                        $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-right');
+                    }
+                });
+                
+                // Update button state to collapsed
+                $button.removeClass('ld-expanded');
+                $button.find('.ld-text').text($button.data('ld-expand-text') || 'Expand All');
+            }
+            
+            return false;
+        });
+    }
+    
+    function initAllContentBehavior($mainExpandButton) {
+        // ALL CONTENT BEHAVIOR - INTERCEPT BEFORE LearnDash processes (like PR #3)
+        // This is the key difference - we need to run BEFORE LearnDash, not after
+        
+        $mainExpandButton.on('click.customSectionIntercept', function(e) {
+            // Don't prevent default - let LearnDash handle its own content after we're done
+            // Don't stop propagation - let LearnDash's handler run too
+            
+            var $button = $(this);
+            var isCurrentlyExpanded = $button.hasClass('ld-expanded');
+            
+            console.log('All Content Behavior - Intercepting BEFORE LearnDash. Button expanded state:', isCurrentlyExpanded);
+            
+            // If we're about to expand (button is currently collapsed)
+            if (!isCurrentlyExpanded) {
+                console.log('Intercepting Expand All - expanding sections first');
+                
+                // FIRST: Expand all sections immediately BEFORE LearnDash processes
+                $('.custom-section-toggle-btn').each(function() {
+                    var $sectionToggle = $(this);
+                    var sectionId = $sectionToggle.data('custom-section-id');
+                    var $sectionContent = $('#custom-section-content-' + sectionId);
+                    var $icon = $sectionToggle.find('.custom-toggle-icon');
+                    
+                    if (!$sectionToggle.hasClass('expanded')) {
+                        $sectionToggle.addClass('expanded');
+                        $sectionToggle.attr('aria-expanded', 'true');
+                        $sectionContent.show();
+                        
+                        // Change icon from arrow-right to arrow-down
+                        $icon.removeClass('dashicons-arrow-right').addClass('dashicons-arrow-down');
+                    }
+                });
+                
+                console.log('All sections expanded, now letting LearnDash process lessons');
+            } else {
+                console.log('Intercepting Collapse All - will sync sections after LearnDash processes');
+            }
+        });
+        
+        // ALSO watch for state changes to sync collapse (using MutationObserver like PR #3)
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    var $button = $(mutation.target);
+                    
+                    if ($button.attr('data-ld-expands')) {
+                        var isExpanded = $button.hasClass('ld-expanded');
+                        
+                        // Only handle collapse case here (expand is handled by click intercept)
+                        if (!isExpanded) {
+                            console.log('Syncing section collapse with main button');
+                            $('.custom-section-toggle-btn').each(function() {
+                                var $sectionToggle = $(this);
+                                var sectionId = $sectionToggle.data('custom-section-id');
+                                var $sectionContent = $('#custom-section-content-' + sectionId);
+                                var $icon = $sectionToggle.find('.custom-toggle-icon');
+                                
+                                if ($sectionToggle.hasClass('expanded')) {
+                                    $sectionToggle.removeClass('expanded');
+                                    $sectionToggle.attr('aria-expanded', 'false');
+                                    $sectionContent.hide();
+                                    
+                                    // Change icon from arrow-down to arrow-right
+                                    $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-right');
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        });
+        
+        observer.observe($mainExpandButton[0], {
+            attributes: true,
+            attributeFilter: ['class']
+        });
     }
     
     // Handle window resize to ensure proper layout
@@ -192,4 +286,3 @@ jQuery(document).ready(function($) {
     });
     */
 });
-
