@@ -2,7 +2,7 @@
  * Collapsible Sections for LearnDash - Admin JavaScript
  * 
  * @package CollapsibleSectionsLearnDash
- * @version 1.0.0
+ * @version 1.0
  */
 
 jQuery(document).ready(function($) {

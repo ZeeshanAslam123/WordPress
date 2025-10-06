@@ -4,7 +4,7 @@
  * Uses unique selectors and classes to avoid any conflicts
  * 
  * @package CollapsibleSectionsLearnDash
- * @version 1.0.0
+ * @version 1.0
  */
 
 jQuery(document).ready(function($) {
@@ -162,11 +162,11 @@ jQuery(document).ready(function($) {
             var $button = $(this);
             var isCurrentlyExpanded = $button.hasClass('ld-expanded');
             
-            console.log('All Content Behavior - Intercepting BEFORE LearnDash. Button expanded state:', isCurrentlyExpanded);
+
             
             // If we're about to expand (button is currently collapsed)
             if (!isCurrentlyExpanded) {
-                console.log('Intercepting Expand All - expanding sections first');
+
                 
                 // FIRST: Expand all sections immediately BEFORE LearnDash processes
                 $('.custom-section-toggle-btn').each(function() {
@@ -185,9 +185,9 @@ jQuery(document).ready(function($) {
                     }
                 });
                 
-                console.log('All sections expanded, now letting LearnDash process lessons');
+
             } else {
-                console.log('Intercepting Collapse All - will sync sections after LearnDash processes');
+
             }
         });
         
@@ -202,7 +202,7 @@ jQuery(document).ready(function($) {
                         
                         // Only handle collapse case here (expand is handled by click intercept)
                         if (!isExpanded) {
-                            console.log('Syncing section collapse with main button');
+
                             $('.custom-section-toggle-btn').each(function() {
                                 var $sectionToggle = $(this);
                                 var sectionId = $sectionToggle.data('custom-section-id');

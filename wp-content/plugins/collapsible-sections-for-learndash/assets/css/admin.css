@@ -2,7 +2,7 @@
  * Collapsible Sections for LearnDash - Admin Styles
  * 
  * @package CollapsibleSectionsLearnDash
- * @version 1.0.0
+ * @version 1.0
  */
 
 .csld-admin-wrap {
@@ -212,4 +212,3 @@
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
-

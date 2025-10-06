@@ -1,16 +1,31 @@
 # Collapsible Sections for LearnDash
 
-A WordPress plugin that adds collapsible section functionality to LearnDash course pages, displaying only section headings by default with expandable content.
+**Version 1.0** - A powerful WordPress plugin that transforms LearnDash course pages by adding intelligent collapsible section functionality. Display only section headings by default with smooth expandable content, creating a cleaner and more organized learning experience.
 
-## Features
+## ✨ Key Features
 
-- **Collapsible Section Headings**: Shows only section/topic headings by default
-- **Expandable Content**: Click to reveal lessons within each section
-- **LearnDash 3.0 Template Override**: Uses proper template override system that survives plugin updates
-- **Responsive Design**: Works perfectly on desktop and mobile devices
-- **Accessibility Support**: Full keyboard navigation and ARIA attributes
-- **Expand All Integration**: Works with LearnDash's existing "Expand All" button
-- **Clean UI**: Matches LearnDash's existing design language
+### 🎯 **Core Functionality**
+- **Collapsible Section Headings**: Shows only section/topic headings by default for cleaner course navigation
+- **Expandable Content**: Click to reveal lessons, topics, and quizzes within each section
+- **Smart Section Management**: Automatically organizes course content into logical, collapsible groups
+
+### 🔧 **Advanced Integration**
+- **Dual Expand/Collapse Behaviors**: 
+  - **"All Content" (Default)**: Expands both LearnDash content AND custom sections
+  - **"Sections Only"**: Expands only custom sections, keeps LearnDash content collapsed
+- **Perfect LearnDash Integration**: Works seamlessly with LearnDash's native "Expand All" functionality
+- **Template Override System**: Uses proper LearnDash template override system that survives plugin updates
+
+### 🎨 **User Experience**
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
+- **Accessibility Support**: Full keyboard navigation, ARIA attributes, and screen reader compatibility
+- **Smooth Animations**: CSS transitions for expand/collapse actions
+- **Clean UI**: Matches LearnDash's existing design language perfectly
+
+### ⚙️ **Admin Features**
+- **Settings Panel**: Easy-to-use admin interface for configuration
+- **Behavior Control**: Switch between "All Content" and "Sections Only" modes
+- **Real-time Preview**: See changes immediately without page refresh
 
 ## Installation
 
@@ -18,17 +33,33 @@ A WordPress plugin that adds collapsible section functionality to LearnDash cour
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. The plugin will automatically work on LearnDash course pages
 
-## How It Works
+## 🚀 How It Works
 
-### Template Override System
-The plugin uses LearnDash's `learndash_template` filter to override:
-- `lesson/partials/section.php` - Section headings with toggle functionality
-- `course/listing.php` - Course listing with collapsible sections
+### 🔄 **Expand/Collapse Behaviors**
 
-### Default Behavior
-- **Course Page Load**: Only section headings are visible
-- **Section Click**: Expands to show lessons in that section
-- **Expand All Button**: Expands/collapses all sections at once
+#### **"All Content" Mode (Default)**
+- **Expand All**: Expands both LearnDash lessons/topics/quizzes AND custom sections
+- **Individual Sections**: Can be expanded/collapsed independently
+- **Perfect Sync**: Works alongside LearnDash's native functionality
+- **Complete Experience**: Users see everything when they click "Expand All"
+
+#### **"Sections Only" Mode**
+- **Expand All**: Only expands custom section headings
+- **LearnDash Content**: Remains collapsed regardless of main button state
+- **Focused Navigation**: Users see only section structure, not individual lessons
+- **Override Mode**: Completely overrides LearnDash's expand functionality
+
+### 🛠️ **Technical Implementation**
+- **Template Override System**: Uses LearnDash's `learndash_template` filter for update-safe customization
+- **Smart Click Interception**: Intercepts "Expand All" clicks BEFORE LearnDash processes them
+- **MutationObserver**: Watches for state changes to maintain perfect synchronization
+- **Event Namespacing**: Uses unique event namespaces to avoid conflicts
+
+### 📋 **Default Behavior**
+- **Course Page Load**: Only section headings are visible by default
+- **Section Click**: Expands to show lessons, topics, and quizzes in that section
+- **Expand All Button**: Behavior depends on selected mode (All Content vs Sections Only)
+- **Responsive**: Adapts perfectly to all screen sizes
 
 ## File Structure
 
@@ -77,12 +108,51 @@ if ($name === 'lesson/partials/section.php' && $this->is_ld30_theme($filepath)) 
 - Responsive design with mobile optimizations
 - Proper z-index management for tooltips
 
-## Compatibility
+## 📋 Requirements & Compatibility
 
-- **LearnDash**: 3.0+ (LD30 template)
-- **WordPress**: 5.0+
-- **PHP**: 7.4+
-- **Themes**: Compatible with any theme using LearnDash 3.0 templates
+### **System Requirements**
+- **WordPress**: 5.0 or higher
+- **PHP**: 7.4 or higher
+- **LearnDash**: 3.0+ (LD30 template system required)
+
+### **Theme Compatibility**
+- ✅ **BuddyBoss Theme**: Fully tested and optimized
+- ✅ **LearnDash Themes**: Compatible with all official LearnDash themes
+- ✅ **Custom Themes**: Works with any theme using LearnDash 3.0 templates
+- ✅ **Popular Themes**: Tested with Astra, GeneratePress, and other popular themes
+
+### **Browser Support**
+- ✅ Chrome 60+
+- ✅ Firefox 55+
+- ✅ Safari 12+
+- ✅ Edge 79+
+- ✅ Mobile browsers (iOS Safari, Chrome Mobile)
+
+## 📝 Changelog
+
+### **Version 1.0** - *Latest Release*
+
+#### **🎉 Major Features Added**
+- **Dual Expand/Collapse Behaviors**: Complete implementation of both "All Content" and "Sections Only" modes
+- **Perfect LearnDash Integration**: Seamless integration with LearnDash's native "Expand All" functionality
+- **Smart Click Interception**: Advanced timing system that intercepts clicks BEFORE LearnDash processes them
+- **Admin Settings Panel**: Full-featured admin interface for behavior configuration
+
+#### **🔧 Technical Improvements**
+- **MutationObserver Integration**: Real-time state synchronization between plugin and LearnDash
+- **Event Namespacing**: Unique event namespaces prevent conflicts with other plugins
+- **Template Override System**: Update-safe template customization using LearnDash filters
+- **Responsive Design**: Mobile-first approach with perfect cross-device compatibility
+
+#### **🐛 Bug Fixes**
+- **Expand All Conflict Resolution**: Fixed issue where "Expand All" wouldn't show topics/quizzes in collapsed sections
+- **State Synchronization**: Perfect sync between main expand button and individual sections
+- **Memory Optimization**: Improved performance and reduced memory footprint
+
+#### **🧹 Code Quality**
+- **Debug Code Removal**: All console.log and debug messages removed for production
+- **Code Cleanup**: Removed unnecessary comments and optimized file structure
+- **Version Standardization**: Updated all version references to 1.0
 
 ## Customization
 
@@ -140,4 +210,3 @@ For support and customization requests, please contact the development team.
 ## License
 
 This plugin is licensed under the GPL v2 or later.
-
