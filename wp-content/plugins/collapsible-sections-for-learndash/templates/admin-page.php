@@ -48,7 +48,7 @@ $settings = $this->get_settings();
                                         id="enable_plugin" 
                                         name="enable_plugin" 
                                         value="1"
-                                        <?php checked($settings['enable_plugin'], true); ?>
+                                        <?php checked($settings['enable_plugin'], 'yes'); ?>
                                     />
                                     <span class="csld-toggle-slider"></span>
                                 </label>

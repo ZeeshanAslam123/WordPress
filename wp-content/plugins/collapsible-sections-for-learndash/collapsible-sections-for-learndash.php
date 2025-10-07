@@ -162,7 +162,7 @@ class CollapsibleSectionsLearnDash {
      */
     private function load_settings() {
         $default_settings = array(
-            'enable_plugin' => true,
+            'enable_plugin' => 'yes',
             'toggler_outer_color' => '#093b7d',
             'toggler_inner_color' => '#a3a5a9',
             'section_background_color' => '#ffffff',
@@ -249,7 +249,7 @@ class CollapsibleSectionsLearnDash {
      */
     public function enqueue_scripts() {
         // Check if plugin is enabled
-        if (!$this->get_setting('enable_plugin', true)) {
+        if ($this->get_setting('enable_plugin', 'yes') === 'no') {
             return;
         }
         
@@ -333,7 +333,7 @@ class CollapsibleSectionsLearnDash {
         
         // Sanitize and save settings
         $new_settings = array(
-            'enable_plugin' => isset($_POST['enable_plugin']),
+            'enable_plugin' => isset($_POST['enable_plugin']) ? 'yes' : 'no',
             'toggler_outer_color' => sanitize_hex_color($_POST['toggler_outer_color']),
             'toggler_inner_color' => sanitize_hex_color($_POST['toggler_inner_color']),
             'section_background_color' => sanitize_hex_color($_POST['section_background_color']),

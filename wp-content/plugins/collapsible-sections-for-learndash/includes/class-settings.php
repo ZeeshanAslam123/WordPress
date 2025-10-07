@@ -24,7 +24,7 @@ class CSLD_Settings {
      * Default settings
      */
     private static $defaults = array(
-        'enable_plugin' => true,
+        'enable_plugin' => 'yes',
         'toggler_outer_color' => '#093b7d',
         'toggler_inner_color' => '#a3a5a9',
         'section_background_color' => '#ffffff',
