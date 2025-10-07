@@ -36,6 +36,11 @@ class CSLD_Template_Override {
      * Override LearnDash templates
      */
     public function override_section_template($filepath, $name, $args, $echo, $return_file_path) {
+        // Check if plugin is enabled
+        $settings = CSLD_Settings::get_settings();
+        if (!isset($settings['enable_plugin']) || !$settings['enable_plugin']) {
+            return $filepath; // Return original template if plugin is disabled
+        }
         // Override section template
         if ($name === 'lesson/partials/section.php' && $this->is_ld30_theme($filepath)) {
             $custom_template = $this->get_custom_template_path('section.php');

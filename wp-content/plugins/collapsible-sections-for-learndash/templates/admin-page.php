@@ -37,6 +37,29 @@ $settings = $this->get_settings();
                     <tbody>
                         <tr>
                             <th scope="row">
+                                <label for="enable_plugin">
+                                    <?php _e('Enable Plugin', 'collapsible-sections-learndash'); ?>
+                                </label>
+                            </th>
+                            <td>
+                                <label class="csld-toggle-switch">
+                                    <input 
+                                        type="checkbox" 
+                                        id="enable_plugin" 
+                                        name="enable_plugin" 
+                                        value="1"
+                                        <?php checked($settings['enable_plugin'], true); ?>
+                                    />
+                                    <span class="csld-toggle-slider"></span>
+                                </label>
+                                <p class="description">
+                                    <?php _e('Turn the collapsible sections feature on or off. When disabled, normal LearnDash functionality will be used instead.', 'collapsible-sections-learndash'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th scope="row">
                                 <label for="toggler_outer_color">
                                     <?php _e('Toggler Outer Color', 'collapsible-sections-learndash'); ?>
                                 </label>
