@@ -206,7 +206,7 @@ class CollapsibleSectionsLearnDash {
             __('Collapsible Sections for LearnDash', 'collapsible-sections-learndash'),
             __('Collapsible Sections', 'collapsible-sections-learndash'),
             'manage_options',
-            'csld-settings-main',
+            'csld-settings',
             array($this, 'admin_page')
         );
     }
