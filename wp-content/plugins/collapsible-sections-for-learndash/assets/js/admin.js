@@ -118,7 +118,7 @@ jQuery(document).ready(function($) {
         var defaultData = {
             action: 'csld_save_settings',
             nonce: $('#csld_nonce').val(),
-            enable_plugin: '1',
+            enable_plugin: 'yes',
             toggler_outer_color: '#093b7d',
             toggler_inner_color: '#a3a5a9',
             section_background_color: '#ffffff',
