@@ -69,13 +69,17 @@ jQuery(document).ready(function($) {
         var formData = {
             action: 'csld_save_settings',
             nonce: $('#csld_nonce').val(),
-            enable_plugin: $('#enable_plugin').is(':checked') ? '1' : '',
             toggler_outer_color: $('#toggler_outer_color').val(),
             toggler_inner_color: $('#toggler_inner_color').val(),
             section_background_color: $('#section_background_color').val(),
             section_border_color: $('#section_border_color').val(),
             expand_collapse_behavior: $('#expand_collapse_behavior').val()
         };
+        
+        // Only add enable_plugin if checkbox is checked
+        if ($('#enable_plugin').is(':checked')) {
+            formData.enable_plugin = '1';
+        }
         
         // Send AJAX request
         $.ajax({
