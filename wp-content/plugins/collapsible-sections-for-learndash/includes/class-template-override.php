@@ -36,9 +36,9 @@ class CSLD_Template_Override {
      * Override LearnDash templates
      */
     public function override_section_template($filepath, $name, $args, $echo, $return_file_path) {
-        // Check if plugin is enabled
-        $settings = CSLD_Settings::get_settings();
-        if (!isset($settings['enable_plugin']) || !$settings['enable_plugin']) {
+        // Check if plugin is enabled (default to true if not set)
+        $plugin_instance = CollapsibleSectionsLearnDash::get_instance();
+        if (!$plugin_instance->get_setting('enable_plugin', true)) {
             return $filepath; // Return original template if plugin is disabled
         }
         // Override section template
