@@ -333,7 +333,7 @@ class CollapsibleSectionsLearnDash {
         
         // Sanitize and save settings
         $new_settings = array(
-            'enable_plugin' => isset($_POST['enable_plugin']) ? 'yes' : 'no',
+            'enable_plugin' => isset($_POST['enable_plugin']) ? $_POST['enable_plugin'] : 'yes',
             'toggler_outer_color' => sanitize_hex_color($_POST['toggler_outer_color']),
             'toggler_inner_color' => sanitize_hex_color($_POST['toggler_inner_color']),
             'section_background_color' => sanitize_hex_color($_POST['section_background_color']),
