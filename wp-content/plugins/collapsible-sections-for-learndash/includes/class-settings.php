@@ -60,7 +60,7 @@ class CSLD_Settings {
      */
     public static function update_settings($new_settings) {
         $current_settings = self::get_settings();
-        $updated_settings = wp_parse_args($new_settings, $current_settings);
+        $updated_settings = array_merge($current_settings, $new_settings);
         
         // Sanitize settings
         $updated_settings = self::sanitize_settings($updated_settings);
