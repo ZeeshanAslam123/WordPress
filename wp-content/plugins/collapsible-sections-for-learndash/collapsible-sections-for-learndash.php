@@ -78,12 +78,22 @@ class CollapsibleSectionsLearnDash {
             add_action('admin_menu', array($this, 'add_admin_menu'));
             add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
             add_action('wp_ajax_csld_save_settings', array($this, 'save_settings'));
+            add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_plugin_action_links'));
 
         }
         
         // Frontend hooks
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         // Template override is handled by CSLD_Template_Override class
+    }
+
+    /**
+     * Add plugin action links
+     */
+    public function add_plugin_action_links($links) {
+        $settings_link = '<a href="' . admin_url('admin.php?page=csld-settings') . '">' . __('Settings', 'collapsible-sections-learndash') . '</a>';
+        array_unshift($links, $settings_link);
+        return $links;
     }
     
     /**
