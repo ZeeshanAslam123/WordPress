@@ -1,224 +1,363 @@
 /**
- * Collapsible Sections for LearnDash - Admin Styles
+ * Collapsible Sections for LearnDash - Modern Admin Styles
  * 
  * @package CollapsibleSectionsLearnDash
- * @version 1.0
+ * @version 2.0
  */
 
+/* ===== RESET & BASE STYLES ===== */
 .csld-admin-wrap {
-    max-width: 1200px;
+    max-width: 1400px;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    background: #f6f7fb;
+    min-height: 100vh;
+    padding: 0;
 }
 
-.csld-admin-header {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+.csld-admin-wrap * {
+    box-sizing: border-box;
 }
 
-.csld-admin-header h1 {
-    margin-bottom: 10px;
-}
-
-.csld-admin-content {
+/* ===== MODERN HEADER SECTION ===== */
+.csld-header-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 30px;
+    margin: 0 -20px 30px -20px;
     display: flex;
-    gap: 30px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.csld-header-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.csld-header-icon {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.csld-header-text {
+    flex: 1;
+}
+
+.csld-main-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.csld-subtitle {
+    font-size: 16px;
+    margin: 0;
+    opacity: 0.9;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.csld-header-actions {
+    display: flex;
+    gap: 12px;
     flex-wrap: wrap;
 }
 
-.csld-settings-panel {
-    flex: 2;
-    min-width: 600px;
-    background: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+/* ===== MODERN BUTTONS ===== */
+.csld-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
-.csld-info-panel {
-    flex: 1;
-    min-width: 300px;
+.csld-btn-primary {
+    background: #0073aa;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 115, 170, 0.3);
 }
 
-.csld-info-box {
-    background: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0,0,0,.04);
-    margin-bottom: 20px;
+.csld-btn-primary:hover {
+    background: #005a87;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 115, 170, 0.4);
+    color: white;
 }
 
-.csld-info-box h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #23282d;
-    font-size: 16px;
+.csld-btn-secondary {
+    background: #10b981;
+    color: white;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
 }
 
-.csld-info-box ul {
+.csld-btn-secondary:hover {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4);
+    color: white;
+}
+
+.csld-btn-outline {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.csld-btn-outline:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    color: white;
+}
+
+.csld-btn-small {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+/* ===== LAYOUT ===== */
+.csld-admin-content {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 30px;
+    padding: 0 30px;
+}
+
+.csld-main-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ===== MODERN CARDS ===== */
+.csld-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.csld-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.csld-card-header {
+    padding: 24px 24px 16px 24px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.csld-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.csld-card-description {
     margin: 0;
-    padding-left: 20px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
-.csld-info-box li {
-    margin-bottom: 8px;
-    color: #555;
+.csld-card-body {
+    padding: 24px;
+}
+
+/* ===== STATUS INDICATORS ===== */
+.csld-status-grid {
+    display: grid;
+    gap: 16px;
 }
 
 .csld-status-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #f1f1f1;
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
 }
 
-.csld-status-item:last-child {
-    border-bottom: none;
-}
-
-.csld-status-label {
-    font-weight: 500;
-    color: #23282d;
-}
-
-.csld-status-value {
-    color: #555;
+.csld-status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .csld-status-success {
-    color: #46b450;
-    font-weight: 500;
+    background: #10b981;
+}
+
+.csld-status-info {
+    background: #3b82f6;
 }
 
 .csld-status-error {
-    color: #dc3232;
+    background: #ef4444;
+}
+
+.csld-status-details {
+    flex: 1;
+}
+
+.csld-status-label {
+    display: block;
     font-weight: 500;
+    color: #374151;
+    font-size: 14px;
+    margin-bottom: 2px;
 }
 
+.csld-status-value {
+    display: block;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* ===== FORM STYLES ===== */
+.csld-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.csld-form-section {
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 32px;
+}
+
+.csld-form-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.csld-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.csld-section-description {
+    margin: 0 0 24px 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.csld-form-field {
+    margin-bottom: 24px;
+}
+
+.csld-form-field:last-child {
+    margin-bottom: 0;
+}
+
+.csld-field-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.csld-field-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #374151;
+    font-size: 14px;
+}
+
+.csld-field-description {
+    margin: 8px 0 0 0;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* ===== FORM ACTIONS ===== */
 .csld-form-actions {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #ddd;
+    display: flex;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid #f1f5f9;
+    flex-wrap: wrap;
 }
 
-.csld-form-actions .button {
-    margin-right: 10px;
+/* ===== COLOR PICKER STYLES ===== */
+.csld-color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
 }
 
-/* Color picker styling */
+.csld-form-field-color {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.csld-color-input-wrapper {
+    margin-top: 8px;
+}
+
 .csld-color-picker {
     width: 100px !important;
+    border-radius: 6px !important;
+    border: 1px solid #d1d5db !important;
 }
 
 .wp-picker-container {
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 
 .wp-picker-container .wp-color-result {
-    height: 30px;
-    border-radius: 3px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* Form table adjustments */
-.csld-settings-panel .form-table th {
-    width: 200px;
-    padding-left: 0;
+/* ===== TOGGLE SWITCH STYLES ===== */
+.csld-field-toggle {
+    display: flex;
+    align-items: center;
 }
 
-.csld-settings-panel .form-table td {
-    padding-left: 0;
-}
-
-/* Save message styling */
-#csld-save-message {
-    margin-top: 20px;
-}
-
-/* Responsive design */
-@media (max-width: 1024px) {
-    .csld-admin-content {
-        flex-direction: column;
-    }
-    
-    .csld-settings-panel {
-        min-width: auto;
-    }
-    
-    .csld-info-panel {
-        min-width: auto;
-    }
-}
-
-@media (max-width: 640px) {
-    .csld-admin-wrap {
-        margin-right: 10px;
-    }
-    
-    .csld-settings-panel,
-    .csld-info-box {
-        padding: 15px;
-    }
-    
-    .csld-status-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-}
-
-/* Loading states */
-.csld-loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.csld-loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid #0073aa;
-    border-radius: 50%;
-    animation: csld-spin 1s linear infinite;
-}
-
-@keyframes csld-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Success/Error messages */
-.csld-message {
-    padding: 10px 15px;
-    margin: 15px 0;
-    border-radius: 4px;
-    font-weight: 500;
-}
-
-.csld-message-success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.csld-message-error {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-/* Toggle Switch Styles */
 .csld-toggle-switch {
     position: relative;
     display: inline-block;
-    width: 36px;
-    height: 20px;
+    width: 44px;
+    height: 24px;
 }
 
 .csld-toggle-switch input {
@@ -234,40 +373,318 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 20px;
+    background-color: #cbd5e1;
+    transition: 0.3s ease;
+    border-radius: 24px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .csld-toggle-slider:before {
     position: absolute;
     content: "";
-    height: 14px;
-    width: 14px;
+    height: 18px;
+    width: 18px;
     left: 3px;
     bottom: 3px;
     background-color: white;
-    transition: .4s;
+    transition: 0.3s ease;
     border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .csld-toggle-switch input:checked + .csld-toggle-slider {
-    background-color: #2196F3;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .csld-toggle-switch input:focus + .csld-toggle-slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .csld-toggle-switch input:checked + .csld-toggle-slider:before {
-    transform: translateX(16px);
+    transform: translateX(20px);
 }
 
-/* Hover effect */
-.csld-toggle-slider:hover {
-    background-color: #b3b3b3;
+/* ===== SELECT STYLES ===== */
+.csld-select-wrapper {
+    position: relative;
+    margin-top: 8px;
 }
 
-.csld-toggle-switch input:checked + .csld-toggle-slider:hover {
-    background-color: #1976D2;
+.csld-select {
+    width: 100%;
+    padding: 12px 40px 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+    color: #374151;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.csld-select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.csld-select-arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.csld-behavior-options {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.csld-behavior-option {
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 6px;
+    border-left: 3px solid #e2e8f0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* ===== SIDEBAR STYLES ===== */
+.csld-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.csld-quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.csld-quick-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #374151;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.csld-quick-action:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #1e293b;
+    transform: translateY(-1px);
+}
+
+.csld-feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.csld-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #374151;
+}
+
+.csld-support-text {
+    margin: 0 0 16px 0;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.csld-support-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ===== NOTICE STYLES ===== */
+.csld-notice {
+    background: white;
+    border: 1px solid #10b981;
+    border-radius: 8px;
+    margin: 0 30px 20px 30px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.csld-notice-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+}
+
+.csld-notice-icon {
+    color: #10b981;
+    flex-shrink: 0;
+}
+
+.csld-notice p {
+    margin: 0;
+    color: #374151;
+    font-weight: 500;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1200px) {
+    .csld-admin-content {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
+    .csld-sidebar {
+        order: -1;
+    }
+    
+    .csld-color-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .csld-header-section {
+        padding: 30px 20px;
+        margin: 0 -20px 20px -20px;
+    }
+    
+    .csld-header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+    
+    .csld-main-title {
+        font-size: 24px;
+    }
+    
+    .csld-subtitle {
+        font-size: 15px;
+    }
+    
+    .csld-admin-content {
+        padding: 0 20px;
+    }
+    
+    .csld-card-header,
+    .csld-card-body {
+        padding: 20px;
+    }
+    
+    .csld-color-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .csld-form-actions {
+        flex-direction: column;
+    }
+    
+    .csld-btn {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .csld-header-section {
+        padding: 20px 15px;
+    }
+    
+    .csld-main-title {
+        font-size: 20px;
+    }
+    
+    .csld-admin-content {
+        padding: 0 15px;
+    }
+    
+    .csld-card-header,
+    .csld-card-body {
+        padding: 16px;
+    }
+    
+    .csld-header-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .csld-btn {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+/* ===== LOADING STATES ===== */
+.csld-loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.csld-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #667eea;
+    border-radius: 50%;
+    animation: csld-spin 1s linear infinite;
+    z-index: 10;
+}
+
+@keyframes csld-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== ACCESSIBILITY ===== */
+.csld-btn:focus,
+.csld-select:focus,
+.csld-toggle-switch input:focus + .csld-toggle-slider {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.csld-quick-action:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .csld-header-section {
+        background: #f8fafc !important;
+        color: #1e293b !important;
+        box-shadow: none !important;
+    }
+    
+    .csld-btn,
+    .csld-header-actions {
+        display: none !important;
+    }
+    
+    .csld-card {
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+    }
 }

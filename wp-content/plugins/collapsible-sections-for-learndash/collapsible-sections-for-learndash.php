@@ -191,9 +191,19 @@ class CollapsibleSectionsLearnDash {
      * Add admin menu
      */
     public function add_admin_menu() {
+        // Add submenu under LearnDash
         add_submenu_page(
             'learndash-lms',
             __('Collapsible Sections', 'collapsible-sections-learndash'),
+            __('Collapsible Sections', 'collapsible-sections-learndash'),
+            'manage_options',
+            'csld-settings',
+            array($this, 'admin_page')
+        );
+        
+        // Add direct settings link in main Settings menu for easy access
+        add_options_page(
+            __('Collapsible Sections for LearnDash', 'collapsible-sections-learndash'),
             __('Collapsible Sections', 'collapsible-sections-learndash'),
             'manage_options',
             'csld-settings',
