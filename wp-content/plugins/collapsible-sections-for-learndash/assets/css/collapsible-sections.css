@@ -2,7 +2,7 @@
  * Collapsible Sections for LearnDash - Frontend Styles
  * 
  * @package CollapsibleSectionsLearnDash
- * @version 1.0.0
+ * @version 1.0
  */
 
 .custom-section-item {
@@ -159,4 +159,3 @@ body:not(.single-sfwd-courses) .custom-toggle-icon {
     z-index: 9999 !important;
     position: absolute !important;
 }
-

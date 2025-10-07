@@ -189,8 +189,11 @@ $settings = $this->get_settings();
                 <h3><?php _e('Need Help?', 'collapsible-sections-learndash'); ?></h3>
                 <p><?php _e('If you encounter any issues or need support, please check the plugin documentation or contact support.', 'collapsible-sections-learndash'); ?></p>
                 <p>
-                    <a href="https://github.com/swrice/collapsible-sections-for-learndash" target="_blank" class="button button-secondary">
+                    <a href="https://swrice.com/collapsible-sections-for-learndash/" target="_blank" class="button button-secondary">
                         <?php _e('Documentation', 'collapsible-sections-learndash'); ?>
+                    </a>
+                    <a href="https://swrice.com/contact-us/" target="_blank" class="button button-secondary" style="margin-left: 10px;">
+                        <?php _e('Contact Support', 'collapsible-sections-learndash'); ?>
                     </a>
                 </p>
             </div>
