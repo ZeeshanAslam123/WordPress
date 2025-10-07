@@ -69,6 +69,7 @@ jQuery(document).ready(function($) {
         var formData = {
             action: 'csld_save_settings',
             nonce: $('#csld_nonce').val(),
+            enable_plugin: $('#enable_plugin').is(':checked') ? 'yes' : 'no',
             toggler_outer_color: $('#toggler_outer_color').val(),
             toggler_inner_color: $('#toggler_inner_color').val(),
             section_background_color: $('#section_background_color').val(),
@@ -117,6 +118,7 @@ jQuery(document).ready(function($) {
         var defaultData = {
             action: 'csld_save_settings',
             nonce: $('#csld_nonce').val(),
+            enable_plugin: 'yes',
             toggler_outer_color: '#093b7d',
             toggler_inner_color: '#a3a5a9',
             section_background_color: '#ffffff',
@@ -131,6 +133,9 @@ jQuery(document).ready(function($) {
             data: defaultData,
             success: function(response) {
                 if (response.success) {
+                    // Update toggle switch to default (enabled)
+                    $('#enable_plugin').prop('checked', true);
+                    
                     // Update color pickers to default values
                     $('#toggler_outer_color').wpColorPicker('color', '#093b7d');
                     $('#toggler_inner_color').wpColorPicker('color', '#a3a5a9');

@@ -24,6 +24,7 @@ class CSLD_Settings {
      * Default settings
      */
     private static $defaults = array(
+        'enable_plugin' => 'yes',
         'toggler_outer_color' => '#093b7d',
         'toggler_inner_color' => '#a3a5a9',
         'section_background_color' => '#ffffff',
@@ -58,8 +59,9 @@ class CSLD_Settings {
      * Update settings
      */
     public static function update_settings($new_settings) {
+        
         $current_settings = self::get_settings();
-        $updated_settings = wp_parse_args($new_settings, $current_settings);
+        $updated_settings = array_merge($current_settings, $new_settings);
         
         // Sanitize settings
         $updated_settings = self::sanitize_settings($updated_settings);
@@ -81,7 +83,12 @@ class CSLD_Settings {
      */
     private static function sanitize_settings($settings) {
         $sanitized = array();
-        
+
+        // Sanitize enable plugin field
+        if (isset($settings['enable_plugin'])) {
+            $sanitized['enable_plugin'] = $settings['enable_plugin'];
+        }
+
         // Sanitize toggler outer color
         if (isset($settings['toggler_outer_color'])) {
             $sanitized['toggler_outer_color'] = sanitize_hex_color($settings['toggler_outer_color']);
