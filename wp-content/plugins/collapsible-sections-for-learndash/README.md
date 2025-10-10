@@ -1,7 +1,11 @@
 # 🚀 Collapsible Sections for LearnDash
-### Transform Your Course Navigation Into a Clean, Professional Learning Experience
+### Choose How Your Students Experience Course Content
 
-**Stop overwhelming your students with cluttered course pages.** Our premium plugin creates an elegant, organized learning environment with a **modern admin interface**, **professional loading states**, and **customizable design options** that **increases course completion rates** and **improves student satisfaction**.
+**Two Powerful Modes for Ultimate Flexibility:**
+- 🎯 **"All Content" Mode**: Expand/collapse both sections AND individual lessons (perfect sync with LearnDash)
+- 🎯 **"Sections Only" Mode**: Expand/collapse section headings only, keeping lessons always visible
+
+**Stop overwhelming your students with cluttered course pages.** Our premium plugin creates an elegant, organized learning environment with **dual expand/collapse modes**, **modern admin interface**, and **professional loading states** that **increases course completion rates** and **improves student satisfaction**.
 
 ---
 
@@ -23,10 +27,11 @@ Perfect responsive design ensures your courses look amazing on every device. You
 
 ## 🔥 **Powerful Features That Drive Results**
 
-### 🎨 **Smart Dual-Mode System**
-- **"All Content" Mode**: Perfect sync with LearnDash's expand/collapse functionality
-- **"Sections Only" Mode**: Override LearnDash behavior for maximum control
+### 🎯 **Revolutionary Dual-Mode System** ⭐ **KEY FEATURE**
+- **"All Content" Mode**: Expands/collapses both sections AND individual lessons - perfect sync with LearnDash's native functionality
+- **"Sections Only" Mode**: Expands/collapses section headings only, keeping all lessons visible - ideal for focused learning
 - **One-Click Switching**: Change modes instantly from your admin panel
+- **Smart Behavior**: Choose the perfect experience for your specific course structure and learning objectives
 
 ### 🎨 **Modern Admin Interface**
 - **Professional Design**: Modern card-based layout with gradient headers
@@ -55,6 +60,24 @@ Perfect responsive design ensures your courses look amazing on every device. You
 - **No Coding Required**: Works perfectly out of the box
 - **Status Dashboard**: Real-time plugin health and integration status
 - **Quick Actions**: Direct links to LearnDash settings and course management
+
+---
+
+## 🎯 **Which Mode Should You Choose?**
+
+### 📚 **"All Content" Mode - Best For:**
+- **Sequential Learning**: When students should complete lessons in order
+- **LearnDash Integration**: Perfect sync with existing LearnDash expand/collapse buttons
+- **Comprehensive Courses**: Large courses with many lessons per section
+- **Traditional LMS Experience**: Familiar behavior that matches standard LMS patterns
+
+### 🎯 **"Sections Only" Mode - Best For:**
+- **Quick Navigation**: Students need to jump between lessons easily
+- **Reference Materials**: Courses used as resource libraries or documentation
+- **Advanced Learners**: Students who prefer to see all available content at once
+- **Flexible Learning Paths**: Non-linear courses where lesson order doesn't matter
+
+### ⚡ **Switch Anytime**: Change modes based on course type, student feedback, or learning objectives!
 
 ---
 
@@ -155,10 +178,11 @@ Expert help when you need it most
 ## 📈 **Version 2.0 - Enhanced Professional Edition**
 
 ### ✨ **Latest Features**
+- **🎯 Dual Expand/Collapse Modes**: Choose "All Content" or "Sections Only" behavior
+- **🎯 Smart Mode Selection**: Perfect for any course structure or learning style
 - **Modern Admin Interface** with card-based design and gradient headers
 - **Professional Loading States** with backdrop blur and rotating spinners
 - **Advanced Color Customization** with live preview color pickers
-- **Dual Expand/Collapse Behaviors** for maximum flexibility
 - **Perfect LearnDash Integration** with native functionality
 - **Smart Click Interception** for seamless user experience
 - **Plugin Settings Link** for quick access from WordPress plugins page
