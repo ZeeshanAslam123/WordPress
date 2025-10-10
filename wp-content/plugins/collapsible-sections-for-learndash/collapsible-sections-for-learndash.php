@@ -79,7 +79,13 @@ class CollapsibleSectionsLearnDash {
             add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
             add_action('wp_ajax_csld_save_settings', array($this, 'save_settings'));
             add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_plugin_action_links'));
-
+            
+            add_action('admin_notices', function() {
+                if (isset($_GET['page']) && $_GET['page'] === 'csld-settings') {
+                    remove_all_actions('admin_notices');
+                    remove_all_actions('all_admin_notices');
+                }
+            }, 1);
         }
         
         // Frontend hooks
