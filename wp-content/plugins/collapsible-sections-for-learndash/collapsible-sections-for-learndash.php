@@ -2,20 +2,14 @@
 /**
  * Plugin Name: Collapsible Sections for LearnDash
  * Plugin URI: https://swrice.com/collapsible-sections-for-learndash/
- * Description: Transform your LearnDash courses with dual expand/collapse modes: "All Content" (sections + lessons) or "Sections Only" (headings only). Features modern admin interface, customizable colors, professional loading states, and update-safe template overrides.
- * Version: 2.0
+ * Description: Transform your LearnDash courses with flexible expand/collapse options. Choose between “All Content” (sections + lessons) or “Sections Only” (headings only). Enjoy a smooth, user-friendly experience with update-safe template overrides for easy customization.
+ * Version: 1.0
  * Author: Swrice
  * Author URI: https://swrice.com/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: collapsible-sections-learndash
  * Domain Path: /languages
- * Requires at least: 5.0
- * Tested up to: 6.4
- * Requires PHP: 7.4
- * Network: false
- * 
- * @package CollapsibleSectionsLearnDash
  */
 
 // Prevent direct access
@@ -79,7 +73,7 @@ class CollapsibleSectionsLearnDash {
             add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
             add_action('wp_ajax_csld_save_settings', array($this, 'save_settings'));
             add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_plugin_action_links'));
-            
+
             add_action('admin_notices', function() {
                 if (isset($_GET['page']) && $_GET['page'] === 'csld-settings') {
                     remove_all_actions('admin_notices');
