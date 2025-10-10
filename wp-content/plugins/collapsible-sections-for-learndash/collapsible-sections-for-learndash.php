@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Collapsible Sections for LearnDash
  * Plugin URI: https://swrice.com/collapsible-sections-for-learndash/
- * Description: Transform your LearnDash courses with flexible expand/collapse options. Choose between “All Content” (sections + lessons) or “Sections Only” (headings only). Enjoy a smooth, user-friendly experience with update-safe template overrides for easy customization.
+ * Description: Transform your LearnDash course sections into collapsible, user-friendly navigation with modern admin interface.
  * Version: 1.0
  * Author: Swrice
  * Author URI: https://swrice.com/
