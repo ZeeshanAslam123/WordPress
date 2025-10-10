@@ -108,11 +108,13 @@ jQuery(document).ready(function($) {
             return;
         }
         
+        var $form = $('#csld-settings-form');
         var $resetButton = $('#csld-reset-settings');
         var $message = $('#csld-save-message');
         
         // Show loading state
         $resetButton.prop('disabled', true).text('Resetting...');
+        $form.addClass('csld-loading');
         
         // Prepare default values
         var defaultData = {
@@ -154,8 +156,9 @@ jQuery(document).ready(function($) {
                 showMessage('Error resetting settings: ' + error, 'error');
             },
             complete: function() {
-                // Restore button state
+                // Remove loading state
                 $resetButton.prop('disabled', false).text('Reset to Defaults');
+                $form.removeClass('csld-loading');
             }
         });
     }
