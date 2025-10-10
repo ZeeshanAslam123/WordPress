@@ -55,7 +55,7 @@ class CollapsibleSectionsLearnDash {
     private function __construct() {
         $this->init_hooks();
     }
-    
+
     /**
      * Initialize hooks
      */
@@ -73,18 +73,58 @@ class CollapsibleSectionsLearnDash {
             add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
             add_action('wp_ajax_csld_save_settings', array($this, 'save_settings'));
             add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_plugin_action_links'));
-
-            add_action('admin_notices', function() {
-                if (isset($_GET['page']) && $_GET['page'] === 'csld-settings') {
-                    remove_all_actions('admin_notices');
-                    remove_all_actions('all_admin_notices');
-                }
-            }, 1);
         }
         
         // Frontend hooks
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         // Template override is handled by CSLD_Template_Override class
+
+        $this->freemium_init();
+    }
+
+    /**
+     * Initialize freemium features
+     */
+    public function freemium_init() {
+        
+        if ( ! function_exists( 'csfl_fs' ) ) {
+            // Create a helper function for easy SDK access.
+            function csfl_fs() {
+                global $csfl_fs;
+
+                if ( ! isset( $csfl_fs ) ) {
+                    // Include Freemius SDK.
+                    require_once dirname( __FILE__ ) . '/freemius/start.php';
+                    $csfl_fs = fs_dynamic_init( array(
+                        'id'                  => '21131',
+                        'slug'                => 'collapsible-sections-for-learndash',
+                        'premium_slug'        => 'collapsible-sections-for-learndash',
+                        'type'                => 'plugin',
+                        'public_key'          => 'pk_5deac6b2dbfc3abf9a4a69353a522',
+                        'is_premium'          => true,
+                        'is_premium_only'     => true,
+                        'has_addons'          => false,
+                        'has_paid_plans'      => true,
+                        'is_org_compliant'    => false,
+                        'menu'                => array(
+                            'slug'           => 'csld-settings',
+                            'first-path'     => 'admin.php?page=csld-settings',
+                            'support'        => false,
+                            'parent'         => array(
+                                'slug' => 'learndash-setup',
+                            ),
+                        ),
+                    ) );
+                }
+
+                return $csfl_fs;
+            }
+
+            // Init Freemius.
+            csfl_fs();
+            // Signal that SDK was initiated.
+            do_action( 'csfl_fs_loaded' );
+        }
     }
 
     /**
