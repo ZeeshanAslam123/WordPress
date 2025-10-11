@@ -249,16 +249,30 @@ class SwricePluginPageManager {
             'plugin_price',
             'plugin_original_price',
             'buy_now_shortcode',
-            'meta_title',
-            'meta_description',
-            'meta_keywords',
             'hero_subtitle',
+            'problem_heading',
+            'problem_icon',
+            'solution_heading',
+            'solution_icon',
+            'solution_description',
+            'how_it_works_heading',
+            'how_it_works_icon',
             'faq_heading',
             'faq_icon',
             'features_heading',
             'features_icon',
             'testimonials_heading',
-            'testimonials_icon'
+            'testimonials_icon',
+            'bonuses_heading',
+            'bonuses_icon',
+            'guarantee_heading',
+            'guarantee_icon',
+            'guarantee_text',
+            'why_choose_heading',
+            'why_choose_icon',
+            'about_heading',
+            'about_icon',
+            'about_description'
         );
         
         foreach ($meta_fields as $field) {
@@ -268,6 +282,35 @@ class SwricePluginPageManager {
         }
         
         // Save repeater fields
+        
+        // Save Problem items
+        if (isset($_POST['problem_items']) && is_array($_POST['problem_items'])) {
+            $problem_items = array();
+            foreach ($_POST['problem_items'] as $item) {
+                if (!empty($item['title']) || !empty($item['description'])) {
+                    $problem_items[] = array(
+                        'title' => sanitize_text_field($item['title']),
+                        'description' => sanitize_textarea_field($item['description']),
+                        'icon' => sanitize_text_field($item['icon'])
+                    );
+                }
+            }
+            update_post_meta($post_id, 'problem_items', $problem_items);
+        }
+        
+        // Save Steps items
+        if (isset($_POST['steps_items']) && is_array($_POST['steps_items'])) {
+            $steps_items = array();
+            foreach ($_POST['steps_items'] as $item) {
+                if (!empty($item['title']) || !empty($item['description'])) {
+                    $steps_items[] = array(
+                        'title' => sanitize_text_field($item['title']),
+                        'description' => sanitize_textarea_field($item['description'])
+                    );
+                }
+            }
+            update_post_meta($post_id, 'steps_items', $steps_items);
+        }
         
         // Save FAQ items
         if (isset($_POST['faq_items']) && is_array($_POST['faq_items'])) {
@@ -312,6 +355,50 @@ class SwricePluginPageManager {
                 }
             }
             update_post_meta($post_id, 'testimonial_items', $testimonial_items);
+        }
+        
+        // Save Bonus items
+        if (isset($_POST['bonus_items']) && is_array($_POST['bonus_items'])) {
+            $bonus_items = array();
+            foreach ($_POST['bonus_items'] as $item) {
+                if (!empty($item['title']) || !empty($item['description'])) {
+                    $bonus_items[] = array(
+                        'title' => sanitize_text_field($item['title']),
+                        'description' => sanitize_textarea_field($item['description']),
+                        'value' => sanitize_text_field($item['value']),
+                        'icon' => sanitize_text_field($item['icon'])
+                    );
+                }
+            }
+            update_post_meta($post_id, 'bonus_items', $bonus_items);
+        }
+        
+        // Save Guarantee Points
+        if (isset($_POST['guarantee_points']) && is_array($_POST['guarantee_points'])) {
+            $guarantee_points = array();
+            foreach ($_POST['guarantee_points'] as $item) {
+                if (!empty($item['point'])) {
+                    $guarantee_points[] = array(
+                        'point' => sanitize_text_field($item['point'])
+                    );
+                }
+            }
+            update_post_meta($post_id, 'guarantee_points', $guarantee_points);
+        }
+        
+        // Save Why Choose items
+        if (isset($_POST['why_choose_items']) && is_array($_POST['why_choose_items'])) {
+            $why_choose_items = array();
+            foreach ($_POST['why_choose_items'] as $item) {
+                if (!empty($item['title']) || !empty($item['description'])) {
+                    $why_choose_items[] = array(
+                        'title' => sanitize_text_field($item['title']),
+                        'description' => sanitize_textarea_field($item['description']),
+                        'icon' => sanitize_text_field($item['icon'])
+                    );
+                }
+            }
+            update_post_meta($post_id, 'why_choose_items', $why_choose_items);
         }
     }
     

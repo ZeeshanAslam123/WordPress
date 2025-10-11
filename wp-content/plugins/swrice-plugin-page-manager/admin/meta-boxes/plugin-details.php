@@ -28,7 +28,6 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
             <li><a href="#tab-basic" class="sppm-tab-link active">Basic Info</a></li>
             <li><a href="#tab-content" class="sppm-tab-link">Content</a></li>
             <li><a href="#tab-pricing" class="sppm-tab-link">Pricing</a></li>
-            <li><a href="#tab-seo" class="sppm-tab-link">SEO</a></li>
         </ul>
         
         <div id="tab-basic" class="sppm-tab-content active">
@@ -564,6 +563,101 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
                 </div>
             </div>
             
+            
+            <!-- Why Choose Section -->
+            <div class="sppm-section-control">
+                <h3><?php _e('Why Choose Section', 'swrice-plugin-manager'); ?></h3>
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="why_choose_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'why_choose_heading', true) ?: 'Why Choose This Plugin?'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="why_choose_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="🎯" <?php selected(get_post_meta($post->ID, 'why_choose_icon', true), '🎯'); ?>>🎯 Target</option>
+                            <option value="⭐" <?php selected(get_post_meta($post->ID, 'why_choose_icon', true), '⭐'); ?>>⭐ Star</option>
+                            <option value="🏆" <?php selected(get_post_meta($post->ID, 'why_choose_icon', true), '🏆'); ?>>🏆 Trophy</option>
+                            <option value="💎" <?php selected(get_post_meta($post->ID, 'why_choose_icon', true), '💎'); ?>>💎 Diamond</option>
+                            <option value="🚀" <?php selected(get_post_meta($post->ID, 'why_choose_icon', true), '🚀'); ?>>🚀 Rocket</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sppm-control-group">
+                    <label><?php _e('Why Choose Items', 'swrice-plugin-manager'); ?></label>
+                    <div id="sppm-why-choose-items" class="sppm-repeater">
+                        <?php
+                        $why_choose_items = get_post_meta($post->ID, 'why_choose_items', true);
+                        if (!is_array($why_choose_items)) $why_choose_items = array();
+                        
+                        if (empty($why_choose_items)) {
+                            $why_choose_items = array(
+                                array('title' => 'Boost User Engagement', 'description' => 'Reduce cognitive overload and help users focus on one section at a time. Studies show organized content increases completion rates by up to 40%.', 'icon' => '📈'),
+                                array('title' => 'Professional Design', 'description' => 'Seamlessly integrates with your existing theme. No design conflicts, no broken layouts - just clean, professional pages that build trust.', 'icon' => '💼'),
+                                array('title' => 'Mobile-First Experience', 'description' => 'Perfect responsive design ensures your content looks amazing on every device. Your mobile users will thank you.', 'icon' => '📱'),
+                                array('title' => 'Instant Organization', 'description' => 'Transform chaotic layouts into clean, professional navigation that users love. Show only what matters with smooth expandable content.', 'icon' => '⚡')
+                            );
+                        }
+                        
+                        foreach ($why_choose_items as $index => $item):
+                        ?>
+                        <div class="sppm-repeater-item" data-index="<?php echo $index; ?>">
+                            <div class="sppm-repeater-header">
+                                <span class="sppm-repeater-title">Benefit #<?php echo ($index + 1); ?></span>
+                                <div class="sppm-repeater-actions">
+                                    <button type="button" class="sppm-toggle-item">▼</button>
+                                    <button type="button" class="sppm-remove-item">✕</button>
+                                </div>
+                            </div>
+                            <div class="sppm-repeater-content">
+                                <div class="sppm-field">
+                                    <label><?php _e('Benefit Title', 'swrice-plugin-manager'); ?></label>
+                                    <input type="text" name="why_choose_items[<?php echo $index; ?>][title]" value="<?php echo esc_attr($item['title'] ?? ''); ?>" placeholder="Benefit title..." class="sppm-full-width" />
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Benefit Icon', 'swrice-plugin-manager'); ?></label>
+                                    <select name="why_choose_items[<?php echo $index; ?>][icon]" class="sppm-icon-select">
+                                        <option value="">No Icon</option>
+                                        <option value="📈" <?php selected($item['icon'] ?? '', '📈'); ?>>📈 Chart</option>
+                                        <option value="💼" <?php selected($item['icon'] ?? '', '💼'); ?>>💼 Briefcase</option>
+                                        <option value="📱" <?php selected($item['icon'] ?? '', '📱'); ?>>📱 Mobile</option>
+                                        <option value="⚡" <?php selected($item['icon'] ?? '', '⚡'); ?>>⚡ Lightning</option>
+                                        <option value="🎯" <?php selected($item['icon'] ?? '', '🎯'); ?>>🎯 Target</option>
+                                        <option value="🚀" <?php selected($item['icon'] ?? '', '🚀'); ?>>🚀 Rocket</option>
+                                    </select>
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Benefit Description', 'swrice-plugin-manager'); ?></label>
+                                    <textarea name="why_choose_items[<?php echo $index; ?>][description]" rows="3" placeholder="Describe this benefit..." class="sppm-full-width"><?php echo esc_textarea($item['description'] ?? ''); ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" id="sppm-add-why-choose" class="button button-secondary"><?php _e('Add Benefit', 'swrice-plugin-manager'); ?></button>
+                </div>
+            </div>
+            
+            <!-- About Section -->
+            <div class="sppm-section-control">
+                <h3><?php _e('About Section', 'swrice-plugin-manager'); ?></h3>
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="about_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'about_heading', true) ?: 'About Our Company'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="about_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="👨‍💻" <?php selected(get_post_meta($post->ID, 'about_icon', true), '👨‍💻'); ?>>👨‍💻 Developer</option>
+                            <option value="🏢" <?php selected(get_post_meta($post->ID, 'about_icon', true), '🏢'); ?>>🏢 Company</option>
+                            <option value="ℹ️" <?php selected(get_post_meta($post->ID, 'about_icon', true), 'ℹ️'); ?>>ℹ️ Information</option>
+                            <option value="🎯" <?php selected(get_post_meta($post->ID, 'about_icon', true), '🎯'); ?>>🎯 Mission</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sppm-control-group">
+                    <label><?php _e('About Description', 'swrice-plugin-manager'); ?></label>
+                    <textarea name="about_description" rows="8" class="sppm-full-width" placeholder="Tell your story..."><?php echo esc_textarea(get_post_meta($post->ID, 'about_description', true) ?: 'We specialize in creating premium WordPress plugins that solve real problems for online educators and course creators. With years of experience in development and a deep understanding of online learning challenges, we build tools that make a real difference in user engagement and success.\n\nOur plugins are used by thousands of educators worldwide, from individual course creators to large educational institutions. We\'re committed to providing high-quality, reliable solutions that help you create better experiences.\n\nNeed Help? Contact us at support@yoursite.com\nWebsite: https://yoursite.com'); ?></textarea>
+                </div>
+            </div>
+
         </div>
         
         <div id="tab-pricing" class="sppm-tab-content">
@@ -590,39 +684,6 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
             </table>
         </div>
         
-        <div id="tab-seo" class="sppm-tab-content">
-            <table class="form-table">
-                <tr>
-                    <th scope="row">
-                        <label for="meta_title"><?php _e('Meta Title', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <input type="text" id="meta_title" name="meta_title" value="<?php echo esc_attr($meta_title); ?>" class="large-text" />
-                        <p class="description"><?php _e('SEO title for the page (recommended: 50-60 characters).', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="meta_description"><?php _e('Meta Description', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="meta_description" name="meta_description" rows="3" cols="50" class="large-text"><?php echo esc_textarea($meta_description); ?></textarea>
-                        <p class="description"><?php _e('SEO description for the page (recommended: 150-160 characters).', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="meta_keywords"><?php _e('Meta Keywords', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="meta_keywords" name="meta_keywords" rows="2" cols="50" class="large-text"><?php echo esc_textarea($meta_keywords); ?></textarea>
-                        <p class="description"><?php _e('SEO keywords separated by commas.', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
-            </table>
-        </div>
     </div>
 </div>
 
@@ -1065,6 +1126,200 @@ jQuery(document).ready(function($) {
         });
     }
     
+    
+    // Add Problem item
+    $('#sppm-add-problem').on('click', function(e) {
+        e.preventDefault();
+        var $container = $('#sppm-problem-items');
+        var index = $container.find('.sppm-repeater-item').length;
+        
+        var template = `
+            <div class="sppm-repeater-item" data-index="${index}">
+                <div class="sppm-repeater-header">
+                    <span class="sppm-repeater-title">Problem #${index + 1}</span>
+                    <div class="sppm-repeater-actions">
+                        <button type="button" class="sppm-toggle-item">▼</button>
+                        <button type="button" class="sppm-remove-item">✕</button>
+                    </div>
+                </div>
+                <div class="sppm-repeater-content">
+                    <div class="sppm-field">
+                        <label>Problem Title</label>
+                        <input type="text" name="problem_items[${index}][title]" value="" placeholder="Problem title..." class="sppm-full-width" />
+                    </div>
+                    <div class="sppm-field">
+                        <label>Problem Icon</label>
+                        <select name="problem_items[${index}][icon]" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="🚫">🚫 Prohibited</option>
+                            <option value="📱">📱 Mobile</option>
+                            <option value="⏰">⏰ Time</option>
+                            <option value="💸">💸 Money Loss</option>
+                            <option value="😤">😤 Frustrated</option>
+                            <option value="📉">📉 Declining</option>
+                        </select>
+                    </div>
+                    <div class="sppm-field">
+                        <label>Problem Description</label>
+                        <textarea name="problem_items[${index}][description]" rows="3" placeholder="Describe this problem..." class="sppm-full-width"></textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $container.append(template);
+    });
+    
+    // Add Step item
+    $('#sppm-add-step').on('click', function(e) {
+        e.preventDefault();
+        var $container = $('#sppm-steps-items');
+        var index = $container.find('.sppm-repeater-item').length;
+        
+        var template = `
+            <div class="sppm-repeater-item" data-index="${index}">
+                <div class="sppm-repeater-header">
+                    <span class="sppm-repeater-title">Step #${index + 1}</span>
+                    <div class="sppm-repeater-actions">
+                        <button type="button" class="sppm-toggle-item">▼</button>
+                        <button type="button" class="sppm-remove-item">✕</button>
+                    </div>
+                </div>
+                <div class="sppm-repeater-content">
+                    <div class="sppm-field">
+                        <label>Step Title</label>
+                        <input type="text" name="steps_items[${index}][title]" value="" placeholder="Step title..." class="sppm-full-width" />
+                    </div>
+                    <div class="sppm-field">
+                        <label>Step Description</label>
+                        <textarea name="steps_items[${index}][description]" rows="3" placeholder="Describe this step..." class="sppm-full-width"></textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $container.append(template);
+    });
+    
+    // Add Bonus item
+    $('#sppm-add-bonus').on('click', function(e) {
+        e.preventDefault();
+        var $container = $('#sppm-bonus-items');
+        var index = $container.find('.sppm-repeater-item').length;
+        
+        var template = `
+            <div class="sppm-repeater-item" data-index="${index}">
+                <div class="sppm-repeater-header">
+                    <span class="sppm-repeater-title">Bonus #${index + 1}</span>
+                    <div class="sppm-repeater-actions">
+                        <button type="button" class="sppm-toggle-item">▼</button>
+                        <button type="button" class="sppm-remove-item">✕</button>
+                    </div>
+                </div>
+                <div class="sppm-repeater-content">
+                    <div class="sppm-field-row">
+                        <div class="sppm-field sppm-field-half">
+                            <label>Bonus Title</label>
+                            <input type="text" name="bonus_items[${index}][title]" value="" placeholder="Bonus title..." />
+                        </div>
+                        <div class="sppm-field sppm-field-half">
+                            <label>Bonus Value</label>
+                            <input type="text" name="bonus_items[${index}][value]" value="" placeholder="$47" />
+                        </div>
+                    </div>
+                    <div class="sppm-field">
+                        <label>Bonus Icon</label>
+                        <select name="bonus_items[${index}][icon]" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="📚">📚 Books</option>
+                            <option value="🎨">🎨 Art</option>
+                            <option value="⚡">⚡ Lightning</option>
+                            <option value="🎁">🎁 Gift</option>
+                            <option value="💎">💎 Diamond</option>
+                            <option value="🏆">🏆 Trophy</option>
+                        </select>
+                    </div>
+                    <div class="sppm-field">
+                        <label>Bonus Description</label>
+                        <textarea name="bonus_items[${index}][description]" rows="3" placeholder="Describe this bonus..." class="sppm-full-width"></textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $container.append(template);
+    });
+    
+    // Add Guarantee Point item
+    $('#sppm-add-guarantee-point').on('click', function(e) {
+        e.preventDefault();
+        var $container = $('#sppm-guarantee-points');
+        var index = $container.find('.sppm-repeater-item').length;
+        
+        var template = `
+            <div class="sppm-repeater-item" data-index="${index}">
+                <div class="sppm-repeater-header">
+                    <span class="sppm-repeater-title">Point #${index + 1}</span>
+                    <div class="sppm-repeater-actions">
+                        <button type="button" class="sppm-toggle-item">▼</button>
+                        <button type="button" class="sppm-remove-item">✕</button>
+                    </div>
+                </div>
+                <div class="sppm-repeater-content">
+                    <div class="sppm-field">
+                        <label>Guarantee Point</label>
+                        <input type="text" name="guarantee_points[${index}][point]" value="" placeholder="Guarantee point..." class="sppm-full-width" />
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $container.append(template);
+    });
+    
+    // Add Why Choose item
+    $('#sppm-add-why-choose').on('click', function(e) {
+        e.preventDefault();
+        var $container = $('#sppm-why-choose-items');
+        var index = $container.find('.sppm-repeater-item').length;
+        
+        var template = `
+            <div class="sppm-repeater-item" data-index="${index}">
+                <div class="sppm-repeater-header">
+                    <span class="sppm-repeater-title">Benefit #${index + 1}</span>
+                    <div class="sppm-repeater-actions">
+                        <button type="button" class="sppm-toggle-item">▼</button>
+                        <button type="button" class="sppm-remove-item">✕</button>
+                    </div>
+                </div>
+                <div class="sppm-repeater-content">
+                    <div class="sppm-field">
+                        <label>Benefit Title</label>
+                        <input type="text" name="why_choose_items[${index}][title]" value="" placeholder="Benefit title..." class="sppm-full-width" />
+                    </div>
+                    <div class="sppm-field">
+                        <label>Benefit Icon</label>
+                        <select name="why_choose_items[${index}][icon]" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="📈">📈 Chart</option>
+                            <option value="💼">💼 Briefcase</option>
+                            <option value="📱">📱 Mobile</option>
+                            <option value="⚡">⚡ Lightning</option>
+                            <option value="🎯">🎯 Target</option>
+                            <option value="🚀">🚀 Rocket</option>
+                        </select>
+                    </div>
+                    <div class="sppm-field">
+                        <label>Benefit Description</label>
+                        <textarea name="why_choose_items[${index}][description]" rows="3" placeholder="Describe this benefit..." class="sppm-full-width"></textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $container.append(template);
+    });
+
     // Initialize collapsed state for existing items
     $('.sppm-repeater-content').each(function(index) {
         if (index > 0) { // Keep first item open, collapse others
