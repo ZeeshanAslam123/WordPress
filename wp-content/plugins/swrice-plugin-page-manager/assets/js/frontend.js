@@ -72,7 +72,13 @@
      * Initialize FAQ toggles
      */
     function initFAQToggles() {
-        $('.sppm-faq-question').on('click', function() {
+        // Remove any existing event handlers to prevent conflicts
+        $('.sppm-faq-question').off('click');
+        
+        // Add new click handler
+        $('.sppm-faq-question').on('click', function(e) {
+            e.preventDefault();
+            
             const $faqItem = $(this).closest('.sppm-faq-item');
             const $answer = $faqItem.find('.sppm-faq-answer');
             const $toggle = $(this).find('.sppm-faq-toggle');
@@ -286,32 +292,3 @@
     initCountdownTimer();
     
 })(jQuery);
-
-// Global function for FAQ toggle (for onclick attribute)
-function toggleFAQ(button) {
-    const faqItem = button.closest('.sppm-faq-item');
-    const answer = faqItem.querySelector('.sppm-faq-answer');
-    const toggle = button.querySelector('.sppm-faq-toggle');
-    
-    // Close all other FAQs
-    document.querySelectorAll('.sppm-faq-item').forEach(function(item) {
-        if (item !== faqItem) {
-            item.classList.remove('active');
-            const otherAnswer = item.querySelector('.sppm-faq-answer');
-            const otherToggle = item.querySelector('.sppm-faq-toggle');
-            otherAnswer.style.display = 'none';
-            otherToggle.textContent = '+';
-        }
-    });
-    
-    // Toggle current FAQ
-    if (faqItem.classList.contains('active')) {
-        faqItem.classList.remove('active');
-        answer.style.display = 'none';
-        toggle.textContent = '+';
-    } else {
-        faqItem.classList.add('active');
-        answer.style.display = 'block';
-        toggle.textContent = '-';
-    }
-}

@@ -208,7 +208,7 @@ if (empty($plugin_bonuses) || !is_array($plugin_bonuses)) {
             <div class="sppm-faq-list">
                 <?php $faq_index = 0; foreach ($plugin_faq as $faq): ?>
                 <div class="sppm-faq-item <?php echo $faq_index === 0 ? 'active' : ''; ?>">
-                    <button class="sppm-faq-question" onclick="toggleFAQ(this)">
+                    <button class="sppm-faq-question">
                         <span><?php echo esc_html($faq['question']); ?></span>
                         <span class="sppm-faq-toggle"><?php echo $faq_index === 0 ? '-' : '+'; ?></span>
                     </button>
