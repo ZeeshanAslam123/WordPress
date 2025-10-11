@@ -106,6 +106,7 @@ if (empty($plugin_bonuses) || !is_array($plugin_bonuses)) {
                         <?php if ($buy_now_shortcode): ?>
                         <div class="sppm-hero-cta">
                             <?php echo do_shortcode($buy_now_shortcode); ?>
+                            <a href="#" class="sppm-demo-button">See Live Demo</a>
                         </div>
                         <?php endif; ?>
                     </div>
@@ -256,6 +257,7 @@ if (empty($plugin_bonuses) || !is_array($plugin_bonuses)) {
                     <?php if ($buy_now_shortcode): ?>
                     <div class="sppm-cta-button">
                         <?php echo do_shortcode($buy_now_shortcode); ?>
+                        <a href="#" class="sppm-demo-button">See Live Demo</a>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -270,4 +272,3 @@ if (empty($plugin_bonuses) || !is_array($plugin_bonuses)) {
     </section>
 
 </div>
-

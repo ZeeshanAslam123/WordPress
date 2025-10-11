@@ -1,4 +1,4 @@
-/* Plugin Page Manager - EXACT Image Match Design */
+/* Plugin Page Manager - EXACT Image Match with Consistent White Background */
 
 /* Import Google Fonts - Matching Your Image */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -24,7 +24,7 @@
     padding: 0 24px;
 }
 
-/* Hero Section - EXACT Match to Your Image */
+/* Hero Section - Blue Gradient Like Your Image */
 .sppm-hero-section {
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     color: white;
@@ -123,9 +123,15 @@
     border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Section Base Styles - Matching Your Image */
+/* ALL SECTIONS - CONSISTENT WHITE BACKGROUND LIKE YOUR IMAGE */
 .sppm-section {
-    padding: 64px 0;
+    padding: 60px 0;
+    background: #ffffff;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.sppm-section:last-child {
+    border-bottom: none;
 }
 
 .sppm-section-title {
@@ -138,9 +144,9 @@
     letter-spacing: -0.025em;
 }
 
-/* Problems Section - Exact Colors from Your Image */
+/* Problems Section - White Background with Subtle Cards */
 .sppm-problems-section {
-    background: #fef2f2;
+    background: #ffffff;
 }
 
 .sppm-problems-grid {
@@ -156,6 +162,7 @@
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f3f4f6;
     border-left: 4px solid #ef4444;
     transition: all 0.2s ease;
 }
@@ -186,9 +193,9 @@
     font-weight: 400;
 }
 
-/* Solution Section - Exact Match */
+/* Solution Section - White Background */
 .sppm-solution-section {
-    background: #eff6ff;
+    background: #ffffff;
 }
 
 .sppm-solution-content {
@@ -205,7 +212,7 @@
     margin: 0;
 }
 
-/* How It Works Section - Exact Styling */
+/* How It Works Section - White Background */
 .sppm-how-works-section {
     background: #ffffff;
 }
@@ -223,6 +230,7 @@
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f3f4f6;
     transition: all 0.2s ease;
 }
 
@@ -261,9 +269,9 @@
     font-weight: 400;
 }
 
-/* Features Section - Exact Green Theme */
+/* Features Section - White Background */
 .sppm-features-section {
-    background: #f0fdf4;
+    background: #ffffff;
 }
 
 .sppm-features-grid {
@@ -279,6 +287,7 @@
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f3f4f6;
     border-top: 4px solid #22c55e;
     transition: all 0.2s ease;
 }
@@ -309,7 +318,7 @@
     font-weight: 400;
 }
 
-/* Testimonials Section - Exact Orange Theme */
+/* Testimonials Section - White Background */
 .sppm-testimonials-section {
     background: #ffffff;
 }
@@ -326,6 +335,7 @@
     padding: 32px 24px;
     border-radius: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f3f4f6;
     border-left: 4px solid #f97316;
     transition: all 0.2s ease;
 }
@@ -372,9 +382,9 @@
     font-weight: 400;
 }
 
-/* FAQ Section - Clean Design */
+/* FAQ Section - White Background */
 .sppm-faq-section {
-    background: #f9fafb;
+    background: #ffffff;
 }
 
 .sppm-faq-list {
@@ -387,6 +397,7 @@
     margin-bottom: 16px;
     border-radius: 8px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid #f3f4f6;
     overflow: hidden;
 }
 
@@ -424,9 +435,9 @@
     font-weight: 400;
 }
 
-/* Bonuses Section - Purple Theme */
+/* Bonuses Section - White Background */
 .sppm-bonuses-section {
-    background: #faf5ff;
+    background: #ffffff;
 }
 
 .sppm-bonuses-grid {
@@ -442,6 +453,7 @@
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f3f4f6;
     border-top: 4px solid #a855f7;
     transition: all 0.2s ease;
 }
@@ -539,6 +551,20 @@
 
 .sppm-cta-button {
     margin: 24px 0;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.sppm-hero-cta {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 24px;
 }
 
 .sppm-cta-guarantees {
@@ -552,9 +578,9 @@
     font-weight: 500;
 }
 
-/* Button Styling - Exact Match */
-.sppm-hero-cta a,
-.sppm-cta-button a,
+/* Button Styling - Buy Now Button */
+.sppm-hero-cta a:not(.sppm-demo-button),
+.sppm-cta-button a:not(.sppm-demo-button),
 .sppm-plugin-page .wp-block-button__link {
     background: linear-gradient(135deg, #22c55e, #16a34a) !important;
     color: white !important;
@@ -571,14 +597,36 @@
     box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39) !important;
 }
 
-.sppm-hero-cta a:hover,
-.sppm-cta-button a:hover,
+.sppm-hero-cta a:not(.sppm-demo-button):hover,
+.sppm-cta-button a:not(.sppm-demo-button):hover,
 .sppm-plugin-page .wp-block-button__link:hover {
     transform: translateY(-1px) !important;
     box-shadow: 0 6px 20px 0 rgba(34, 197, 94, 0.5) !important;
 }
 
-/* Responsive Design - Exact Breakpoints */
+/* Demo Button Styling */
+.sppm-demo-button {
+    background: transparent !important;
+    color: white !important;
+    padding: 16px 32px !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 1.125rem !important;
+    display: inline-block !important;
+    transition: all 0.2s ease !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+}
+
+.sppm-demo-button:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Responsive Design - Equal Spacing */
 @media (max-width: 768px) {
     .sppm-hero-grid {
         grid-template-columns: 1fr;
@@ -615,6 +663,19 @@
     .sppm-current-price,
     .sppm-cta-amount {
         font-size: 2.5rem;
+    }
+    
+    .sppm-hero-cta,
+    .sppm-cta-button {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .sppm-hero-cta a,
+    .sppm-cta-button a,
+    .sppm-demo-button {
+        width: 100%;
+        text-align: center;
     }
 }
 
