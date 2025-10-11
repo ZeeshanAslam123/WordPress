@@ -20,9 +20,6 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
 
 // Get featured image
 $featured_image = get_the_post_thumbnail_url($post->ID, 'large');
-
-// Start output buffering
-ob_start();
 ?>
 
 <div class="sppm-plugin-page">
@@ -331,8 +328,3 @@ ob_start();
     </main>
     
 </div>
-
-<?php
-return ob_get_clean();
-?>
-
