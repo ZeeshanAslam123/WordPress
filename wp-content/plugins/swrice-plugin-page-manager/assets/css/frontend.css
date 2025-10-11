@@ -1,0 +1,483 @@
+/* Swrice Plugin Page Manager - Frontend Styles */
+
+/* Reset and Base Styles */
+.sppm-plugin-page {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.sppm-plugin-page * {
+    box-sizing: border-box;
+}
+
+.sppm-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section */
+.sppm-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.sppm-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.sppm-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.sppm-hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    line-height: 1.2;
+}
+
+.sppm-hero-subtitle {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 0 0 40px 0;
+    opacity: 0.95;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sppm-hero-image {
+    margin: 40px 0;
+}
+
+.sppm-hero-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.sppm-hero-cta {
+    margin-top: 40px;
+}
+
+.sppm-price-display {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    margin: 20px 0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.sppm-currency {
+    font-size: 1.5rem;
+    margin-right: 5px;
+}
+
+.sppm-price {
+    font-size: 3rem;
+    color: #ffd700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sppm-original-price {
+    font-size: 1.2rem;
+    text-decoration: line-through;
+    opacity: 0.7;
+    margin-left: 15px;
+}
+
+/* Section Styles */
+.sppm-section {
+    padding: 60px 0;
+}
+
+.sppm-section:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.sppm-section-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Problem Section */
+.sppm-problem-section {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+}
+
+.sppm-problem-section h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Solution Section */
+.sppm-solution-section {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+}
+
+.sppm-solution-section h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Features Section */
+.sppm-features-section {
+    background: white;
+}
+
+.sppm-features-section h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #2c3e50;
+}
+
+/* Testimonials Section */
+.sppm-testimonials-section {
+    background: #f8f9fa;
+}
+
+.sppm-testimonials-section h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #2c3e50;
+}
+
+/* FAQ Section */
+.sppm-faq-section {
+    background: white;
+}
+
+.sppm-faq-section h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #2c3e50;
+}
+
+/* Pricing Section */
+.sppm-pricing-section {
+    background: linear-gradient(135deg, #3742fa 0%, #2f3542 100%);
+    color: white;
+    text-align: center;
+}
+
+.sppm-pricing-card {
+    background: white;
+    color: #333;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transform: translateY(-20px);
+}
+
+.sppm-pricing-header h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.sppm-pricing-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.sppm-pricing-price .sppm-currency {
+    font-size: 1.5rem;
+    margin-right: 5px;
+}
+
+.sppm-pricing-price .sppm-amount {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #27ae60;
+}
+
+.sppm-pricing-price .sppm-period {
+    font-size: 1rem;
+    margin-left: 10px;
+    opacity: 0.7;
+}
+
+.sppm-pricing-discount {
+    margin: 15px 0;
+}
+
+.sppm-original {
+    text-decoration: line-through;
+    opacity: 0.6;
+    margin-right: 10px;
+}
+
+.sppm-save {
+    background: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.sppm-pricing-cta {
+    margin: 30px 0;
+}
+
+.sppm-pricing-guarantee {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Bonuses Section */
+.sppm-bonuses-section {
+    background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+    color: #333;
+}
+
+.sppm-bonuses-section h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 50px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Guarantee Section */
+.sppm-guarantee-section {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    color: white;
+    text-align: center;
+}
+
+.sppm-guarantee-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Final CTA Section */
+.sppm-final-cta-section {
+    background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+    color: white;
+    text-align: center;
+}
+
+.sppm-final-cta-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sppm-final-benefits {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sppm-final-benefits p {
+    margin: 5px 0;
+    font-size: 1.1rem;
+}
+
+/* About Section */
+.sppm-about-section {
+    background: #2c3e50;
+    color: white;
+}
+
+.sppm-about-section h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Button Styles */
+.sppm-buy-now-btn,
+.sppm-plugin-page .sppm-buy-now-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    color: white !important;
+    padding: 18px 40px;
+    border-radius: 50px;
+    text-decoration: none !important;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.sppm-buy-now-btn:hover,
+.sppm-plugin-page .sppm-buy-now-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(39, 174, 96, 0.4);
+    color: white !important;
+}
+
+.sppm-buy-now-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Typography */
+.sppm-plugin-page h1,
+.sppm-plugin-page h2,
+.sppm-plugin-page h3,
+.sppm-plugin-page h4,
+.sppm-plugin-page h5,
+.sppm-plugin-page h6 {
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 20px;
+}
+
+.sppm-plugin-page p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.sppm-plugin-page ul,
+.sppm-plugin-page ol {
+    margin-bottom: 20px;
+    padding-left: 30px;
+}
+
+.sppm-plugin-page li {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sppm-hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .sppm-hero-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .sppm-section {
+        padding: 40px 0;
+    }
+    
+    .sppm-section h2 {
+        font-size: 2rem !important;
+    }
+    
+    .sppm-pricing-card {
+        margin: 20px;
+        padding: 30px 20px;
+    }
+    
+    .sppm-pricing-price .sppm-amount {
+        font-size: 2.5rem;
+    }
+    
+    .sppm-final-benefits {
+        grid-template-columns: 1fr;
+    }
+    
+    .sppm-container {
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sppm-hero-title {
+        font-size: 2rem;
+    }
+    
+    .sppm-hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .sppm-buy-now-btn,
+    .sppm-plugin-page .sppm-buy-now-btn {
+        padding: 15px 30px;
+        font-size: 1rem;
+    }
+    
+    .sppm-pricing-price .sppm-amount {
+        font-size: 2rem;
+    }
+}
+
+/* Animation Classes */
+.sppm-fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.sppm-fade-in.sppm-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Utility Classes */
+.sppm-text-center {
+    text-align: center;
+}
+
+.sppm-text-left {
+    text-align: left;
+}
+
+.sppm-text-right {
+    text-align: right;
+}
+
+.sppm-mb-20 {
+    margin-bottom: 20px;
+}
+
+.sppm-mb-40 {
+    margin-bottom: 40px;
+}
+
+.sppm-mt-20 {
+    margin-top: 20px;
+}
+
+.sppm-mt-40 {
+    margin-top: 40px;
+}
