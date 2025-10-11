@@ -26,9 +26,10 @@
 
 /* Hero Section - Blue Gradient Like Your Image */
 .sppm-hero-section {
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
     color: white;
     padding: 60px 0;
+    margin-top: 60px;
     position: relative;
 }
 
@@ -116,11 +117,27 @@
 }
 
 .sppm-hero-image img {
-    max-width: 100%;
+    max-width: 120%;
     height: auto;
     border-radius: 12px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    animation: float 6s ease-in-out infinite;
+}
+
+.sppm-hero-image img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.35);
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 /* ALL SECTIONS - CONSISTENT WHITE BACKGROUND LIKE YOUR IMAGE */
@@ -168,8 +185,8 @@
 }
 
 .sppm-problem-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px -3px rgba(0, 0, 0, 0.15);
 }
 
 .sppm-problem-icon {
@@ -235,14 +252,14 @@
 }
 
 .sppm-step-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px -3px rgba(0, 0, 0, 0.15);
 }
 
 .sppm-step-number {
     width: 56px;
     height: 56px;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -251,7 +268,13 @@
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 auto 20px;
-    box-shadow: 0 10px 25px -3px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 10px 25px -3px rgba(96, 165, 250, 0.3);
+    transition: all 0.3s ease;
+}
+
+.sppm-step-number:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 35px -3px rgba(96, 165, 250, 0.4);
 }
 
 .sppm-step-title {
@@ -293,8 +316,8 @@
 }
 
 .sppm-feature-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px -3px rgba(0, 0, 0, 0.15);
 }
 
 .sppm-feature-icon {
@@ -433,6 +456,20 @@
     line-height: 1.6;
     font-size: 1rem;
     font-weight: 400;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.sppm-faq-item.active .sppm-faq-question {
+    background: #f8fafc;
+}
+
+.sppm-faq-toggle {
+    transition: transform 0.3s ease;
+}
+
+.sppm-faq-item.active .sppm-faq-toggle {
+    transform: rotate(180deg);
 }
 
 /* Bonuses Section - White Background */
@@ -493,7 +530,7 @@
 
 /* Final CTA Section - Matching Hero */
 .sppm-final-cta-section {
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
     color: white;
     padding: 80px 0;
     text-align: center;
@@ -710,4 +747,3 @@
         padding: 24px 20px;
     }
 }
-

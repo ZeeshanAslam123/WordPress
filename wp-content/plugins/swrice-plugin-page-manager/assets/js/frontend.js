@@ -72,44 +72,27 @@
      * Initialize FAQ toggles
      */
     function initFAQToggles() {
-        // Create FAQ toggle functionality
-        $('.sppm-faq-section').on('click', 'h3, h4', function() {
-            const $this = $(this);
-            const $content = $this.next('p, div');
-            
-            if ($content.length) {
-                $content.slideToggle(300);
-                $this.toggleClass('sppm-faq-open');
-            }
-        });
-        
-        // Style FAQ items
-        $('.sppm-faq-section h3, .sppm-faq-section h4').css({
-            'cursor': 'pointer',
-            'position': 'relative',
-            'padding-right': '30px'
-        }).after('<span class="sppm-faq-toggle">+</span>');
-        
-        $('.sppm-faq-toggle').css({
-            'position': 'absolute',
-            'right': '0',
-            'top': '50%',
-            'transform': 'translateY(-50%)',
-            'font-size': '1.5rem',
-            'font-weight': 'bold',
-            'transition': 'transform 0.3s ease'
-        });
-        
-        // Hide FAQ content initially
-        $('.sppm-faq-section h3 + p, .sppm-faq-section h4 + p, .sppm-faq-section h3 + div, .sppm-faq-section h4 + div').hide();
-        
-        // Update toggle icon
-        $('.sppm-faq-section').on('click', 'h3, h4', function() {
+        $('.sppm-faq-question').on('click', function() {
+            const $faqItem = $(this).closest('.sppm-faq-item');
+            const $answer = $faqItem.find('.sppm-faq-answer');
             const $toggle = $(this).find('.sppm-faq-toggle');
-            if ($(this).hasClass('sppm-faq-open')) {
-                $toggle.text('-').css('transform', 'translateY(-50%) rotate(180deg)');
+            
+            // Close all other FAQs
+            $('.sppm-faq-item').not($faqItem).each(function() {
+                $(this).removeClass('active');
+                $(this).find('.sppm-faq-answer').slideUp(300);
+                $(this).find('.sppm-faq-toggle').text('+');
+            });
+            
+            // Toggle current FAQ
+            if ($faqItem.hasClass('active')) {
+                $faqItem.removeClass('active');
+                $answer.slideUp(300);
+                $toggle.text('+');
             } else {
-                $toggle.text('+').css('transform', 'translateY(-50%) rotate(0deg)');
+                $faqItem.addClass('active');
+                $answer.slideDown(300);
+                $toggle.text('-');
             }
         });
     }
@@ -303,3 +286,32 @@
     initCountdownTimer();
     
 })(jQuery);
+
+// Global function for FAQ toggle (for onclick attribute)
+function toggleFAQ(button) {
+    const faqItem = button.closest('.sppm-faq-item');
+    const answer = faqItem.querySelector('.sppm-faq-answer');
+    const toggle = button.querySelector('.sppm-faq-toggle');
+    
+    // Close all other FAQs
+    document.querySelectorAll('.sppm-faq-item').forEach(function(item) {
+        if (item !== faqItem) {
+            item.classList.remove('active');
+            const otherAnswer = item.querySelector('.sppm-faq-answer');
+            const otherToggle = item.querySelector('.sppm-faq-toggle');
+            otherAnswer.style.display = 'none';
+            otherToggle.textContent = '+';
+        }
+    });
+    
+    // Toggle current FAQ
+    if (faqItem.classList.contains('active')) {
+        faqItem.classList.remove('active');
+        answer.style.display = 'none';
+        toggle.textContent = '+';
+    } else {
+        faqItem.classList.add('active');
+        answer.style.display = 'block';
+        toggle.textContent = '-';
+    }
+}
