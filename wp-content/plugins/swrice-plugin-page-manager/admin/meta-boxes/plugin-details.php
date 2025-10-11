@@ -56,87 +56,216 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
         </div>
         
         <div id="tab-content" class="sppm-tab-content">
-            <table class="form-table">
-                <tr>
-                    <th scope="row">
-                        <label for="problem_section"><?php _e('Problem Section', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="problem_section" name="problem_section" rows="8" cols="50" class="large-text"><?php echo esc_textarea($problem_section); ?></textarea>
-                        <p class="description"><?php _e('Describe the problems your plugin solves. Use HTML for formatting.', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
+            
+            <!-- FAQ Section with Full Control -->
+            <div class="sppm-section-control">
+                <h3><?php _e('FAQ Section', 'swrice-plugin-manager'); ?></h3>
                 
-                <tr>
-                    <th scope="row">
-                        <label for="solution_section"><?php _e('Solution Section', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="solution_section" name="solution_section" rows="8" cols="50" class="large-text"><?php echo esc_textarea($solution_section); ?></textarea>
-                        <p class="description"><?php _e('Describe how your plugin solves the problems. Use HTML for formatting.', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
+                <!-- FAQ Section Header Control -->
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="faq_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'faq_heading', true) ?: 'Frequently Asked Questions'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="faq_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="❓" <?php selected(get_post_meta($post->ID, 'faq_icon', true), '❓'); ?>>❓ Question Mark</option>
+                            <option value="💬" <?php selected(get_post_meta($post->ID, 'faq_icon', true), '💬'); ?>>💬 Speech Bubble</option>
+                            <option value="🤔" <?php selected(get_post_meta($post->ID, 'faq_icon', true), '🤔'); ?>>🤔 Thinking Face</option>
+                            <option value="📋" <?php selected(get_post_meta($post->ID, 'faq_icon', true), '📋'); ?>>📋 Clipboard</option>
+                            <option value="ℹ️" <?php selected(get_post_meta($post->ID, 'faq_icon', true), 'ℹ️'); ?>>ℹ️ Information</option>
+                            <option value="🔍" <?php selected(get_post_meta($post->ID, 'faq_icon', true), '🔍'); ?>>🔍 Magnifying Glass</option>
+                        </select>
+                    </div>
+                    <p class="description"><?php _e('Set the heading and icon for the FAQ section.', 'swrice-plugin-manager'); ?></p>
+                </div>
                 
-                <tr>
-                    <th scope="row">
-                        <label for="plugin_features"><?php _e('Plugin Features', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="plugin_features" name="plugin_features" rows="10" cols="50" class="large-text"><?php echo esc_textarea($plugin_features); ?></textarea>
-                        <p class="description"><?php _e('List the key features of your plugin. Use HTML for formatting.', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
+                <!-- FAQ Items Repeater -->
+                <div class="sppm-control-group">
+                    <label><?php _e('FAQ Items', 'swrice-plugin-manager'); ?></label>
+                    <div id="sppm-faq-items" class="sppm-repeater">
+                        <?php
+                        $faq_items = get_post_meta($post->ID, 'faq_items', true);
+                        if (!is_array($faq_items)) $faq_items = array();
+                        
+                        if (empty($faq_items)) {
+                            $faq_items = array(array('question' => '', 'answer' => ''));
+                        }
+                        
+                        foreach ($faq_items as $index => $item):
+                        ?>
+                        <div class="sppm-repeater-item" data-index="<?php echo $index; ?>">
+                            <div class="sppm-repeater-header">
+                                <span class="sppm-repeater-title">FAQ Item #<?php echo ($index + 1); ?></span>
+                                <div class="sppm-repeater-actions">
+                                    <button type="button" class="sppm-toggle-item">▼</button>
+                                    <button type="button" class="sppm-remove-item">✕</button>
+                                </div>
+                            </div>
+                            <div class="sppm-repeater-content">
+                                <div class="sppm-field">
+                                    <label><?php _e('Question', 'swrice-plugin-manager'); ?></label>
+                                    <input type="text" name="faq_items[<?php echo $index; ?>][question]" value="<?php echo esc_attr($item['question'] ?? ''); ?>" placeholder="Enter your question here..." class="sppm-full-width" />
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Answer', 'swrice-plugin-manager'); ?></label>
+                                    <textarea name="faq_items[<?php echo $index; ?>][answer]" rows="4" placeholder="Enter the answer here..." class="sppm-full-width"><?php echo esc_textarea($item['answer'] ?? ''); ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" id="sppm-add-faq" class="button button-secondary"><?php _e('Add FAQ Item', 'swrice-plugin-manager'); ?></button>
+                    <p class="description"><?php _e('Add multiple questions and answers. They will automatically display on the frontend.', 'swrice-plugin-manager'); ?></p>
+                </div>
+            </div>
+            
+            <!-- Features Section with Full Control -->
+            <div class="sppm-section-control">
+                <h3><?php _e('Features Section', 'swrice-plugin-manager'); ?></h3>
                 
-                <tr>
-                    <th scope="row">
-                        <label for="plugin_testimonials"><?php _e('Testimonials', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="plugin_testimonials" name="plugin_testimonials" rows="8" cols="50" class="large-text"><?php echo esc_textarea($plugin_testimonials); ?></textarea>
-                        <p class="description"><?php _e('Customer testimonials. Use HTML for formatting.', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
+                <!-- Features Section Header Control -->
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="features_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'features_heading', true) ?: 'Powerful Features'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="features_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="🔥" <?php selected(get_post_meta($post->ID, 'features_icon', true), '🔥'); ?>>🔥 Fire</option>
+                            <option value="⚡" <?php selected(get_post_meta($post->ID, 'features_icon', true), '⚡'); ?>>⚡ Lightning</option>
+                            <option value="🚀" <?php selected(get_post_meta($post->ID, 'features_icon', true), '🚀'); ?>>🚀 Rocket</option>
+                            <option value="✨" <?php selected(get_post_meta($post->ID, 'features_icon', true), '✨'); ?>>✨ Sparkles</option>
+                            <option value="🎯" <?php selected(get_post_meta($post->ID, 'features_icon', true), '🎯'); ?>>🎯 Target</option>
+                            <option value="💎" <?php selected(get_post_meta($post->ID, 'features_icon', true), '💎'); ?>>💎 Diamond</option>
+                        </select>
+                    </div>
+                </div>
                 
-                <tr>
-                    <th scope="row">
-                        <label for="plugin_faq"><?php _e('FAQ Section', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="plugin_faq" name="plugin_faq" rows="10" cols="50" class="large-text"><?php echo esc_textarea($plugin_faq); ?></textarea>
-                        <p class="description"><?php _e('Frequently asked questions. Use HTML for formatting.', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
+                <!-- Features Items Repeater -->
+                <div class="sppm-control-group">
+                    <label><?php _e('Feature Items', 'swrice-plugin-manager'); ?></label>
+                    <div id="sppm-feature-items" class="sppm-repeater">
+                        <?php
+                        $feature_items = get_post_meta($post->ID, 'feature_items', true);
+                        if (!is_array($feature_items)) $feature_items = array();
+                        
+                        if (empty($feature_items)) {
+                            $feature_items = array(array('title' => '', 'description' => '', 'icon' => ''));
+                        }
+                        
+                        foreach ($feature_items as $index => $item):
+                        ?>
+                        <div class="sppm-repeater-item" data-index="<?php echo $index; ?>">
+                            <div class="sppm-repeater-header">
+                                <span class="sppm-repeater-title">Feature #<?php echo ($index + 1); ?></span>
+                                <div class="sppm-repeater-actions">
+                                    <button type="button" class="sppm-toggle-item">▼</button>
+                                    <button type="button" class="sppm-remove-item">✕</button>
+                                </div>
+                            </div>
+                            <div class="sppm-repeater-content">
+                                <div class="sppm-field">
+                                    <label><?php _e('Feature Title', 'swrice-plugin-manager'); ?></label>
+                                    <input type="text" name="feature_items[<?php echo $index; ?>][title]" value="<?php echo esc_attr($item['title'] ?? ''); ?>" placeholder="Feature title..." class="sppm-full-width" />
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Feature Icon', 'swrice-plugin-manager'); ?></label>
+                                    <select name="feature_items[<?php echo $index; ?>][icon]" class="sppm-icon-select">
+                                        <option value="">No Icon</option>
+                                        <option value="✅" <?php selected($item['icon'] ?? '', '✅'); ?>>✅ Check Mark</option>
+                                        <option value="🎯" <?php selected($item['icon'] ?? '', '🎯'); ?>>🎯 Target</option>
+                                        <option value="⚡" <?php selected($item['icon'] ?? '', '⚡'); ?>>⚡ Lightning</option>
+                                        <option value="🚀" <?php selected($item['icon'] ?? '', '🚀'); ?>>🚀 Rocket</option>
+                                        <option value="💎" <?php selected($item['icon'] ?? '', '💎'); ?>>💎 Diamond</option>
+                                        <option value="🔧" <?php selected($item['icon'] ?? '', '🔧'); ?>>🔧 Wrench</option>
+                                        <option value="📱" <?php selected($item['icon'] ?? '', '📱'); ?>>📱 Mobile</option>
+                                        <option value="🎨" <?php selected($item['icon'] ?? '', '🎨'); ?>>🎨 Art</option>
+                                    </select>
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Feature Description', 'swrice-plugin-manager'); ?></label>
+                                    <textarea name="feature_items[<?php echo $index; ?>][description]" rows="3" placeholder="Describe this feature..." class="sppm-full-width"><?php echo esc_textarea($item['description'] ?? ''); ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" id="sppm-add-feature" class="button button-secondary"><?php _e('Add Feature', 'swrice-plugin-manager'); ?></button>
+                </div>
+            </div>
+            
+            <!-- Testimonials Section with Full Control -->
+            <div class="sppm-section-control">
+                <h3><?php _e('Testimonials Section', 'swrice-plugin-manager'); ?></h3>
                 
-                <tr>
-                    <th scope="row">
-                        <label for="plugin_bonuses"><?php _e('Bonuses Section', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="plugin_bonuses" name="plugin_bonuses" rows="8" cols="50" class="large-text"><?php echo esc_textarea($plugin_bonuses); ?></textarea>
-                        <p class="description"><?php _e('Bonus offers and additional value. Use HTML for formatting.', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
+                <!-- Testimonials Section Header Control -->
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="testimonials_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'testimonials_heading', true) ?: 'What Our Customers Say'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="testimonials_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="💬" <?php selected(get_post_meta($post->ID, 'testimonials_icon', true), '💬'); ?>>💬 Speech Bubble</option>
+                            <option value="⭐" <?php selected(get_post_meta($post->ID, 'testimonials_icon', true), '⭐'); ?>>⭐ Star</option>
+                            <option value="👥" <?php selected(get_post_meta($post->ID, 'testimonials_icon', true), '👥'); ?>>👥 People</option>
+                            <option value="💝" <?php selected(get_post_meta($post->ID, 'testimonials_icon', true), '💝'); ?>>💝 Heart Gift</option>
+                            <option value="🎉" <?php selected(get_post_meta($post->ID, 'testimonials_icon', true), '🎉'); ?>>🎉 Party</option>
+                        </select>
+                    </div>
+                </div>
                 
-                <tr>
-                    <th scope="row">
-                        <label for="guarantee_text"><?php _e('Guarantee Text', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="guarantee_text" name="guarantee_text" rows="5" cols="50" class="large-text"><?php echo esc_textarea($guarantee_text); ?></textarea>
-                        <p class="description"><?php _e('Money-back guarantee details. Use HTML for formatting.', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th scope="row">
-                        <label for="about_section"><?php _e('About Section', 'swrice-plugin-manager'); ?></label>
-                    </th>
-                    <td>
-                        <textarea id="about_section" name="about_section" rows="6" cols="50" class="large-text"><?php echo esc_textarea($about_section); ?></textarea>
-                        <p class="description"><?php _e('About the company/developer. Use HTML for formatting.', 'swrice-plugin-manager'); ?></p>
-                    </td>
-                </tr>
-            </table>
+                <!-- Testimonials Items Repeater -->
+                <div class="sppm-control-group">
+                    <label><?php _e('Testimonial Items', 'swrice-plugin-manager'); ?></label>
+                    <div id="sppm-testimonial-items" class="sppm-repeater">
+                        <?php
+                        $testimonial_items = get_post_meta($post->ID, 'testimonial_items', true);
+                        if (!is_array($testimonial_items)) $testimonial_items = array();
+                        
+                        if (empty($testimonial_items)) {
+                            $testimonial_items = array(array('name' => '', 'title' => '', 'content' => '', 'rating' => '5'));
+                        }
+                        
+                        foreach ($testimonial_items as $index => $item):
+                        ?>
+                        <div class="sppm-repeater-item" data-index="<?php echo $index; ?>">
+                            <div class="sppm-repeater-header">
+                                <span class="sppm-repeater-title">Testimonial #<?php echo ($index + 1); ?></span>
+                                <div class="sppm-repeater-actions">
+                                    <button type="button" class="sppm-toggle-item">▼</button>
+                                    <button type="button" class="sppm-remove-item">✕</button>
+                                </div>
+                            </div>
+                            <div class="sppm-repeater-content">
+                                <div class="sppm-field-row">
+                                    <div class="sppm-field sppm-field-half">
+                                        <label><?php _e('Customer Name', 'swrice-plugin-manager'); ?></label>
+                                        <input type="text" name="testimonial_items[<?php echo $index; ?>][name]" value="<?php echo esc_attr($item['name'] ?? ''); ?>" placeholder="Customer name..." />
+                                    </div>
+                                    <div class="sppm-field sppm-field-half">
+                                        <label><?php _e('Customer Title/Company', 'swrice-plugin-manager'); ?></label>
+                                        <input type="text" name="testimonial_items[<?php echo $index; ?>][title]" value="<?php echo esc_attr($item['title'] ?? ''); ?>" placeholder="Title or company..." />
+                                    </div>
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Rating', 'swrice-plugin-manager'); ?></label>
+                                    <select name="testimonial_items[<?php echo $index; ?>][rating]">
+                                        <option value="5" <?php selected($item['rating'] ?? '5', '5'); ?>>⭐⭐⭐⭐⭐ (5 stars)</option>
+                                        <option value="4" <?php selected($item['rating'] ?? '5', '4'); ?>>⭐⭐⭐⭐ (4 stars)</option>
+                                        <option value="3" <?php selected($item['rating'] ?? '5', '3'); ?>>⭐⭐⭐ (3 stars)</option>
+                                    </select>
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Testimonial Content', 'swrice-plugin-manager'); ?></label>
+                                    <textarea name="testimonial_items[<?php echo $index; ?>][content]" rows="4" placeholder="What did they say about your plugin..." class="sppm-full-width"><?php echo esc_textarea($item['content'] ?? ''); ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" id="sppm-add-testimonial" class="button button-secondary"><?php _e('Add Testimonial', 'swrice-plugin-manager'); ?></button>
+                </div>
+            </div>
+            
         </div>
         
         <div id="tab-pricing" class="sppm-tab-content">
@@ -257,10 +386,202 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
     width: 100%;
     max-width: 600px;
 }
+
+/* Section Control Styles */
+.sppm-section-control {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.sppm-section-control h3 {
+    margin: 0 0 20px 0;
+    padding: 0 0 10px 0;
+    border-bottom: 2px solid #2271b1;
+    color: #2271b1;
+    font-size: 18px;
+}
+
+.sppm-control-group {
+    margin-bottom: 25px;
+}
+
+.sppm-control-group > label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #23282d;
+}
+
+.sppm-heading-control {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.sppm-heading-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.sppm-icon-select {
+    min-width: 200px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Repeater Styles */
+.sppm-repeater {
+    border: 1px solid #e1e1e1;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.sppm-repeater-item {
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.sppm-repeater-item:last-child {
+    border-bottom: none;
+}
+
+.sppm-repeater-header {
+    background: #f8f9fa;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.sppm-repeater-title {
+    font-weight: 600;
+    color: #2271b1;
+}
+
+.sppm-repeater-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.sppm-toggle-item,
+.sppm-remove-item {
+    background: none;
+    border: none;
+    padding: 5px 8px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.sppm-toggle-item:hover {
+    background: #e1e1e1;
+}
+
+.sppm-remove-item {
+    color: #dc3545;
+}
+
+.sppm-remove-item:hover {
+    background: #dc3545;
+    color: white;
+}
+
+.sppm-repeater-content {
+    padding: 20px;
+    display: block;
+}
+
+.sppm-repeater-content.collapsed {
+    display: none;
+}
+
+.sppm-field {
+    margin-bottom: 15px;
+}
+
+.sppm-field label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.sppm-field input,
+.sppm-field textarea,
+.sppm-field select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.sppm-field input:focus,
+.sppm-field textarea:focus,
+.sppm-field select:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+.sppm-field-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.sppm-field-half {
+    flex: 1;
+}
+
+.sppm-full-width {
+    width: 100%;
+}
+
+/* Button Styles */
+.button.button-secondary {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: white;
+}
+
+.button.button-secondary:hover {
+    background: #135e96;
+    border-color: #135e96;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .sppm-heading-control {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .sppm-field-row {
+        flex-direction: column;
+    }
+    
+    .sppm-repeater-header {
+        padding: 10px;
+    }
+    
+    .sppm-repeater-content {
+        padding: 15px;
+    }
+}
 </style>
 
 <script>
 jQuery(document).ready(function($) {
+    // Tab functionality
     $('.sppm-tab-link').on('click', function(e) {
         e.preventDefault();
         
@@ -273,6 +594,185 @@ jQuery(document).ready(function($) {
         // Add active class to clicked tab and corresponding content
         $(this).addClass('active');
         $(target).addClass('active');
+    });
+    
+    // Repeater functionality
+    
+    // Toggle repeater item
+    $(document).on('click', '.sppm-toggle-item', function(e) {
+        e.preventDefault();
+        var $content = $(this).closest('.sppm-repeater-item').find('.sppm-repeater-content');
+        var $icon = $(this);
+        
+        if ($content.hasClass('collapsed')) {
+            $content.removeClass('collapsed').slideDown(200);
+            $icon.text('▼');
+        } else {
+            $content.addClass('collapsed').slideUp(200);
+            $icon.text('▶');
+        }
+    });
+    
+    // Remove repeater item
+    $(document).on('click', '.sppm-remove-item', function(e) {
+        e.preventDefault();
+        if (confirm('Are you sure you want to remove this item?')) {
+            $(this).closest('.sppm-repeater-item').slideUp(200, function() {
+                $(this).remove();
+                updateRepeaterIndexes();
+            });
+        }
+    });
+    
+    // Add FAQ item
+    $('#sppm-add-faq').on('click', function(e) {
+        e.preventDefault();
+        var $container = $('#sppm-faq-items');
+        var index = $container.find('.sppm-repeater-item').length;
+        
+        var template = `
+            <div class="sppm-repeater-item" data-index="${index}">
+                <div class="sppm-repeater-header">
+                    <span class="sppm-repeater-title">FAQ Item #${index + 1}</span>
+                    <div class="sppm-repeater-actions">
+                        <button type="button" class="sppm-toggle-item">▼</button>
+                        <button type="button" class="sppm-remove-item">✕</button>
+                    </div>
+                </div>
+                <div class="sppm-repeater-content">
+                    <div class="sppm-field">
+                        <label>Question</label>
+                        <input type="text" name="faq_items[${index}][question]" value="" placeholder="Enter your question here..." class="sppm-full-width" />
+                    </div>
+                    <div class="sppm-field">
+                        <label>Answer</label>
+                        <textarea name="faq_items[${index}][answer]" rows="4" placeholder="Enter the answer here..." class="sppm-full-width"></textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $container.append(template);
+    });
+    
+    // Add Feature item
+    $('#sppm-add-feature').on('click', function(e) {
+        e.preventDefault();
+        var $container = $('#sppm-feature-items');
+        var index = $container.find('.sppm-repeater-item').length;
+        
+        var template = `
+            <div class="sppm-repeater-item" data-index="${index}">
+                <div class="sppm-repeater-header">
+                    <span class="sppm-repeater-title">Feature #${index + 1}</span>
+                    <div class="sppm-repeater-actions">
+                        <button type="button" class="sppm-toggle-item">▼</button>
+                        <button type="button" class="sppm-remove-item">✕</button>
+                    </div>
+                </div>
+                <div class="sppm-repeater-content">
+                    <div class="sppm-field">
+                        <label>Feature Title</label>
+                        <input type="text" name="feature_items[${index}][title]" value="" placeholder="Feature title..." class="sppm-full-width" />
+                    </div>
+                    <div class="sppm-field">
+                        <label>Feature Icon</label>
+                        <select name="feature_items[${index}][icon]" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="✅">✅ Check Mark</option>
+                            <option value="🎯">🎯 Target</option>
+                            <option value="⚡">⚡ Lightning</option>
+                            <option value="🚀">🚀 Rocket</option>
+                            <option value="💎">💎 Diamond</option>
+                            <option value="🔧">🔧 Wrench</option>
+                            <option value="📱">📱 Mobile</option>
+                            <option value="🎨">🎨 Art</option>
+                        </select>
+                    </div>
+                    <div class="sppm-field">
+                        <label>Feature Description</label>
+                        <textarea name="feature_items[${index}][description]" rows="3" placeholder="Describe this feature..." class="sppm-full-width"></textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $container.append(template);
+    });
+    
+    // Add Testimonial item
+    $('#sppm-add-testimonial').on('click', function(e) {
+        e.preventDefault();
+        var $container = $('#sppm-testimonial-items');
+        var index = $container.find('.sppm-repeater-item').length;
+        
+        var template = `
+            <div class="sppm-repeater-item" data-index="${index}">
+                <div class="sppm-repeater-header">
+                    <span class="sppm-repeater-title">Testimonial #${index + 1}</span>
+                    <div class="sppm-repeater-actions">
+                        <button type="button" class="sppm-toggle-item">▼</button>
+                        <button type="button" class="sppm-remove-item">✕</button>
+                    </div>
+                </div>
+                <div class="sppm-repeater-content">
+                    <div class="sppm-field-row">
+                        <div class="sppm-field sppm-field-half">
+                            <label>Customer Name</label>
+                            <input type="text" name="testimonial_items[${index}][name]" value="" placeholder="Customer name..." />
+                        </div>
+                        <div class="sppm-field sppm-field-half">
+                            <label>Customer Title/Company</label>
+                            <input type="text" name="testimonial_items[${index}][title]" value="" placeholder="Title or company..." />
+                        </div>
+                    </div>
+                    <div class="sppm-field">
+                        <label>Rating</label>
+                        <select name="testimonial_items[${index}][rating]">
+                            <option value="5">⭐⭐⭐⭐⭐ (5 stars)</option>
+                            <option value="4">⭐⭐⭐⭐ (4 stars)</option>
+                            <option value="3">⭐⭐⭐ (3 stars)</option>
+                        </select>
+                    </div>
+                    <div class="sppm-field">
+                        <label>Testimonial Content</label>
+                        <textarea name="testimonial_items[${index}][content]" rows="4" placeholder="What did they say about your plugin..." class="sppm-full-width"></textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        $container.append(template);
+    });
+    
+    // Update repeater indexes
+    function updateRepeaterIndexes() {
+        $('.sppm-repeater').each(function() {
+            $(this).find('.sppm-repeater-item').each(function(index) {
+                $(this).attr('data-index', index);
+                $(this).find('.sppm-repeater-title').text(function() {
+                    var text = $(this).text();
+                    return text.replace(/#\d+/, '#' + (index + 1));
+                });
+                
+                // Update input names
+                $(this).find('input, textarea, select').each(function() {
+                    var name = $(this).attr('name');
+                    if (name) {
+                        var newName = name.replace(/\[\d+\]/, '[' + index + ']');
+                        $(this).attr('name', newName);
+                    }
+                });
+            });
+        });
+    }
+    
+    // Initialize collapsed state for existing items
+    $('.sppm-repeater-content').each(function(index) {
+        if (index > 0) { // Keep first item open, collapse others
+            $(this).addClass('collapsed').hide();
+            $(this).siblings('.sppm-repeater-header').find('.sppm-toggle-item').text('▶');
+        }
     });
 });
 </script>

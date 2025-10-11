@@ -244,29 +244,74 @@ class SwricePluginPageManager {
             return;
         }
         
-        // Save meta fields
+        // Save simple meta fields
         $meta_fields = array(
             'plugin_price',
             'plugin_original_price',
-            'plugin_features',
-            'plugin_testimonials',
-            'plugin_faq',
-            'plugin_bonuses',
             'buy_now_shortcode',
             'meta_title',
             'meta_description',
             'meta_keywords',
             'hero_subtitle',
-            'problem_section',
-            'solution_section',
-            'guarantee_text',
-            'about_section'
+            'faq_heading',
+            'faq_icon',
+            'features_heading',
+            'features_icon',
+            'testimonials_heading',
+            'testimonials_icon'
         );
         
         foreach ($meta_fields as $field) {
             if (isset($_POST[$field])) {
                 update_post_meta($post_id, $field, sanitize_textarea_field($_POST[$field]));
             }
+        }
+        
+        // Save repeater fields
+        
+        // Save FAQ items
+        if (isset($_POST['faq_items']) && is_array($_POST['faq_items'])) {
+            $faq_items = array();
+            foreach ($_POST['faq_items'] as $item) {
+                if (!empty($item['question']) || !empty($item['answer'])) {
+                    $faq_items[] = array(
+                        'question' => sanitize_text_field($item['question']),
+                        'answer' => sanitize_textarea_field($item['answer'])
+                    );
+                }
+            }
+            update_post_meta($post_id, 'faq_items', $faq_items);
+        }
+        
+        // Save Feature items
+        if (isset($_POST['feature_items']) && is_array($_POST['feature_items'])) {
+            $feature_items = array();
+            foreach ($_POST['feature_items'] as $item) {
+                if (!empty($item['title']) || !empty($item['description'])) {
+                    $feature_items[] = array(
+                        'title' => sanitize_text_field($item['title']),
+                        'description' => sanitize_textarea_field($item['description']),
+                        'icon' => sanitize_text_field($item['icon'])
+                    );
+                }
+            }
+            update_post_meta($post_id, 'feature_items', $feature_items);
+        }
+        
+        // Save Testimonial items
+        if (isset($_POST['testimonial_items']) && is_array($_POST['testimonial_items'])) {
+            $testimonial_items = array();
+            foreach ($_POST['testimonial_items'] as $item) {
+                if (!empty($item['name']) || !empty($item['content'])) {
+                    $testimonial_items[] = array(
+                        'name' => sanitize_text_field($item['name']),
+                        'title' => sanitize_text_field($item['title']),
+                        'content' => sanitize_textarea_field($item['content']),
+                        'rating' => sanitize_text_field($item['rating'])
+                    );
+                }
+            }
+            update_post_meta($post_id, 'testimonial_items', $testimonial_items);
         }
     }
     

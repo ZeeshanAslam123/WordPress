@@ -125,30 +125,165 @@ $featured_image = get_the_post_thumbnail_url($post->ID, 'large');
             <?php endif; ?>
             
             <!-- Features Section -->
-            <?php if ($plugin_features): ?>
+            <?php 
+            $features_heading = get_post_meta($post->ID, 'features_heading', true);
+            $features_icon = get_post_meta($post->ID, 'features_icon', true);
+            $feature_items = get_post_meta($post->ID, 'feature_items', true);
+            
+            if (!empty($feature_items) && is_array($feature_items)): ?>
             <div class="sppm-section sppm-features-section">
                 <div class="sppm-section-content">
-                    <?php echo wp_kses_post($plugin_features); ?>
+                    <?php if ($features_heading): ?>
+                    <h2 class="sppm-section-heading">
+                        <?php if ($features_icon): ?>
+                        <span class="sppm-section-icon"><?php echo esc_html($features_icon); ?></span>
+                        <?php endif; ?>
+                        <?php echo esc_html($features_heading); ?>
+                    </h2>
+                    <?php endif; ?>
+                    
+                    <div class="sppm-features-grid">
+                        <?php foreach ($feature_items as $feature): ?>
+                        <?php if (!empty($feature['title']) || !empty($feature['description'])): ?>
+                        <div class="sppm-feature-item">
+                            <?php if (!empty($feature['icon'])): ?>
+                            <div class="sppm-feature-icon"><?php echo esc_html($feature['icon']); ?></div>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($feature['title'])): ?>
+                            <h3 class="sppm-feature-title"><?php echo esc_html($feature['title']); ?></h3>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($feature['description'])): ?>
+                            <p class="sppm-feature-description"><?php echo esc_html($feature['description']); ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
             <?php endif; ?>
             
             <!-- Testimonials Section -->
-            <?php if ($plugin_testimonials): ?>
+            <?php 
+            $testimonials_heading = get_post_meta($post->ID, 'testimonials_heading', true);
+            $testimonials_icon = get_post_meta($post->ID, 'testimonials_icon', true);
+            $testimonial_items = get_post_meta($post->ID, 'testimonial_items', true);
+            
+            if (!empty($testimonial_items) && is_array($testimonial_items)): ?>
             <div class="sppm-section sppm-testimonials-section">
                 <div class="sppm-section-content">
-                    <?php echo wp_kses_post($plugin_testimonials); ?>
+                    <?php if ($testimonials_heading): ?>
+                    <h2 class="sppm-section-heading">
+                        <?php if ($testimonials_icon): ?>
+                        <span class="sppm-section-icon"><?php echo esc_html($testimonials_icon); ?></span>
+                        <?php endif; ?>
+                        <?php echo esc_html($testimonials_heading); ?>
+                    </h2>
+                    <?php endif; ?>
+                    
+                    <div class="sppm-testimonials-grid">
+                        <?php foreach ($testimonial_items as $testimonial): ?>
+                        <?php if (!empty($testimonial['name']) || !empty($testimonial['content'])): ?>
+                        <div class="sppm-testimonial-item">
+                            <?php if (!empty($testimonial['content'])): ?>
+                            <div class="sppm-testimonial-content">
+                                <p>"<?php echo esc_html($testimonial['content']); ?>"</p>
+                            </div>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($testimonial['rating'])): ?>
+                            <div class="sppm-testimonial-rating">
+                                <?php 
+                                $rating = intval($testimonial['rating']);
+                                for ($i = 1; $i <= 5; $i++) {
+                                    echo $i <= $rating ? '⭐' : '☆';
+                                }
+                                ?>
+                            </div>
+                            <?php endif; ?>
+                            
+                            <div class="sppm-testimonial-author">
+                                <?php if (!empty($testimonial['name'])): ?>
+                                <strong><?php echo esc_html($testimonial['name']); ?></strong>
+                                <?php endif; ?>
+                                
+                                <?php if (!empty($testimonial['title'])): ?>
+                                <span class="sppm-testimonial-title"><?php echo esc_html($testimonial['title']); ?></span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
             <?php endif; ?>
             
             <!-- FAQ Section -->
-            <?php if ($plugin_faq): ?>
+            <?php 
+            $faq_heading = get_post_meta($post->ID, 'faq_heading', true);
+            $faq_icon = get_post_meta($post->ID, 'faq_icon', true);
+            $faq_items = get_post_meta($post->ID, 'faq_items', true);
+            
+            if (!empty($faq_items) && is_array($faq_items)): ?>
             <div class="sppm-section sppm-faq-section">
                 <div class="sppm-section-content">
-                    <?php echo wp_kses_post($plugin_faq); ?>
+                    <?php if ($faq_heading): ?>
+                    <h2 class="sppm-section-heading">
+                        <?php if ($faq_icon): ?>
+                        <span class="sppm-section-icon"><?php echo esc_html($faq_icon); ?></span>
+                        <?php endif; ?>
+                        <?php echo esc_html($faq_heading); ?>
+                    </h2>
+                    <?php endif; ?>
+                    
+                    <div class="sppm-faq-list">
+                        <?php foreach ($faq_items as $index => $faq): ?>
+                        <?php if (!empty($faq['question']) || !empty($faq['answer'])): ?>
+                        <div class="sppm-faq-item" data-index="<?php echo $index; ?>">
+                            <?php if (!empty($faq['question'])): ?>
+                            <h3 class="sppm-faq-question" onclick="toggleFAQ(<?php echo $index; ?>)">
+                                <span class="sppm-faq-icon">+</span>
+                                <?php echo esc_html($faq['question']); ?>
+                            </h3>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($faq['answer'])): ?>
+                            <div class="sppm-faq-answer" id="faq-answer-<?php echo $index; ?>">
+                                <p><?php echo esc_html($faq['answer']); ?></p>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
+            
+            <script>
+            function toggleFAQ(index) {
+                var answer = document.getElementById('faq-answer-' + index);
+                var icon = document.querySelector('[data-index="' + index + '"] .sppm-faq-icon');
+                
+                if (answer.style.display === 'none' || answer.style.display === '') {
+                    answer.style.display = 'block';
+                    icon.textContent = '-';
+                } else {
+                    answer.style.display = 'none';
+                    icon.textContent = '+';
+                }
+            }
+            
+            // Initialize FAQ answers as hidden
+            document.addEventListener('DOMContentLoaded', function() {
+                var answers = document.querySelectorAll('.sppm-faq-answer');
+                answers.forEach(function(answer) {
+                    answer.style.display = 'none';
+                });
+            });
+            </script>
             <?php endif; ?>
             
             <!-- Pricing Section -->
