@@ -644,3 +644,168 @@
 .sppm-mt-40 {
     margin-top: 40px;
 }
+
+/* Problem Section */
+.sppm-problem-section {
+    background: #fff5f5;
+    padding: 60px 0;
+}
+
+.sppm-problems-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.sppm-problem-item {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    border-left: 4px solid #e74c3c;
+}
+
+.sppm-problem-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.sppm-problem-title {
+    color: #e74c3c;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.sppm-problem-description {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Solution Section */
+.sppm-solution-section {
+    background: #f0f8ff;
+    padding: 60px 0;
+}
+
+.sppm-solution-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.sppm-solution-content p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: #555;
+}
+
+/* How It Works Section */
+.sppm-how-it-works-section {
+    background: white;
+    padding: 60px 0;
+}
+
+.sppm-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.sppm-step-item {
+    text-align: center;
+    position: relative;
+}
+
+.sppm-step-number {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 auto 20px;
+}
+
+.sppm-step-title {
+    color: #2c3e50;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.sppm-step-description {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Why Choose Section */
+.sppm-why-choose-section {
+    background: #f8f9fa;
+    padding: 60px 0;
+}
+
+.sppm-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.sppm-benefit-item {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    border-top: 4px solid #27ae60;
+}
+
+.sppm-benefit-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.sppm-benefit-title {
+    color: #27ae60;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.sppm-benefit-description {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Enhanced About Section */
+.sppm-about-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 768px) {
+    .sppm-problems-grid,
+    .sppm-steps-grid,
+    .sppm-benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .sppm-step-number {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}

@@ -98,19 +98,108 @@ $featured_image = get_the_post_thumbnail_url($post->ID, 'large');
         <div class="sppm-container">
             
             <!-- Problem Section -->
-            <?php if ($problem_section): ?>
+            <?php 
+            $problem_heading = get_post_meta($post->ID, 'problem_heading', true);
+            $problem_icon = get_post_meta($post->ID, 'problem_icon', true);
+            $problem_items = get_post_meta($post->ID, 'problem_items', true);
+            
+            if (!empty($problem_items) && is_array($problem_items)): ?>
             <div class="sppm-section sppm-problem-section">
                 <div class="sppm-section-content">
-                    <?php echo wp_kses_post($problem_section); ?>
+                    <?php if ($problem_heading): ?>
+                    <h2 class="sppm-section-heading">
+                        <?php if ($problem_icon): ?>
+                        <span class="sppm-section-icon"><?php echo esc_html($problem_icon); ?></span>
+                        <?php endif; ?>
+                        <?php echo esc_html($problem_heading); ?>
+                    </h2>
+                    <?php endif; ?>
+                    
+                    <div class="sppm-problems-grid">
+                        <?php foreach ($problem_items as $problem): ?>
+                        <?php if (!empty($problem['title']) || !empty($problem['description'])): ?>
+                        <div class="sppm-problem-item">
+                            <?php if (!empty($problem['icon'])): ?>
+                            <div class="sppm-problem-icon"><?php echo esc_html($problem['icon']); ?></div>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($problem['title'])): ?>
+                            <h3 class="sppm-problem-title"><?php echo esc_html($problem['title']); ?></h3>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($problem['description'])): ?>
+                            <p class="sppm-problem-description"><?php echo esc_html($problem['description']); ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
             <?php endif; ?>
             
             <!-- Solution Section -->
-            <?php if ($solution_section): ?>
+            <?php 
+            $solution_heading = get_post_meta($post->ID, 'solution_heading', true);
+            $solution_icon = get_post_meta($post->ID, 'solution_icon', true);
+            $solution_description = get_post_meta($post->ID, 'solution_description', true);
+            
+            if ($solution_heading || $solution_description): ?>
             <div class="sppm-section sppm-solution-section">
                 <div class="sppm-section-content">
-                    <?php echo wp_kses_post($solution_section); ?>
+                    <?php if ($solution_heading): ?>
+                    <h2 class="sppm-section-heading">
+                        <?php if ($solution_icon): ?>
+                        <span class="sppm-section-icon"><?php echo esc_html($solution_icon); ?></span>
+                        <?php endif; ?>
+                        <?php echo esc_html($solution_heading); ?>
+                    </h2>
+                    <?php endif; ?>
+                    
+                    <?php if ($solution_description): ?>
+                    <div class="sppm-solution-content">
+                        <p><?php echo esc_html($solution_description); ?></p>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+            
+            <!-- How It Works Section -->
+            <?php 
+            $how_it_works_heading = get_post_meta($post->ID, 'how_it_works_heading', true);
+            $how_it_works_icon = get_post_meta($post->ID, 'how_it_works_icon', true);
+            $steps_items = get_post_meta($post->ID, 'steps_items', true);
+            
+            if (!empty($steps_items) && is_array($steps_items)): ?>
+            <div class="sppm-section sppm-how-it-works-section">
+                <div class="sppm-section-content">
+                    <?php if ($how_it_works_heading): ?>
+                    <h2 class="sppm-section-heading">
+                        <?php if ($how_it_works_icon): ?>
+                        <span class="sppm-section-icon"><?php echo esc_html($how_it_works_icon); ?></span>
+                        <?php endif; ?>
+                        <?php echo esc_html($how_it_works_heading); ?>
+                    </h2>
+                    <?php endif; ?>
+                    
+                    <div class="sppm-steps-grid">
+                        <?php foreach ($steps_items as $index => $step): ?>
+                        <?php if (!empty($step['title']) || !empty($step['description'])): ?>
+                        <div class="sppm-step-item">
+                            <div class="sppm-step-number"><?php echo ($index + 1); ?></div>
+                            
+                            <?php if (!empty($step['title'])): ?>
+                            <h3 class="sppm-step-title"><?php echo esc_html($step['title']); ?></h3>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($step['description'])): ?>
+                            <p class="sppm-step-description"><?php echo esc_html($step['description']); ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
             <?php endif; ?>
@@ -337,6 +426,47 @@ $featured_image = get_the_post_thumbnail_url($post->ID, 'large');
             </div>
             <?php endif; ?>
             
+            <!-- Why Choose Section -->
+            <?php 
+            $why_choose_heading = get_post_meta($post->ID, 'why_choose_heading', true);
+            $why_choose_icon = get_post_meta($post->ID, 'why_choose_icon', true);
+            $why_choose_items = get_post_meta($post->ID, 'why_choose_items', true);
+            
+            if (!empty($why_choose_items) && is_array($why_choose_items)): ?>
+            <div class="sppm-section sppm-why-choose-section">
+                <div class="sppm-section-content">
+                    <?php if ($why_choose_heading): ?>
+                    <h2 class="sppm-section-heading">
+                        <?php if ($why_choose_icon): ?>
+                        <span class="sppm-section-icon"><?php echo esc_html($why_choose_icon); ?></span>
+                        <?php endif; ?>
+                        <?php echo esc_html($why_choose_heading); ?>
+                    </h2>
+                    <?php endif; ?>
+                    
+                    <div class="sppm-benefits-grid">
+                        <?php foreach ($why_choose_items as $benefit): ?>
+                        <?php if (!empty($benefit['title']) || !empty($benefit['description'])): ?>
+                        <div class="sppm-benefit-item">
+                            <?php if (!empty($benefit['icon'])): ?>
+                            <div class="sppm-benefit-icon"><?php echo esc_html($benefit['icon']); ?></div>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($benefit['title'])): ?>
+                            <h3 class="sppm-benefit-title"><?php echo esc_html($benefit['title']); ?></h3>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($benefit['description'])): ?>
+                            <p class="sppm-benefit-description"><?php echo esc_html($benefit['description']); ?></p>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+            
             <!-- Final CTA Section -->
             <div class="sppm-section sppm-final-cta-section">
                 <div class="sppm-section-content">
@@ -363,6 +493,33 @@ $featured_image = get_the_post_thumbnail_url($post->ID, 'large');
             <div class="sppm-section sppm-about-section">
                 <div class="sppm-section-content">
                     <?php echo wp_kses_post($about_section); ?>
+                </div>
+            </div>
+            <?php endif; ?>
+            
+            <!-- About Section -->
+            <?php 
+            $about_heading = get_post_meta($post->ID, 'about_heading', true);
+            $about_icon = get_post_meta($post->ID, 'about_icon', true);
+            $about_description = get_post_meta($post->ID, 'about_description', true);
+            
+            if ($about_heading || $about_description): ?>
+            <div class="sppm-section sppm-about-section">
+                <div class="sppm-section-content">
+                    <?php if ($about_heading): ?>
+                    <h2 class="sppm-section-heading">
+                        <?php if ($about_icon): ?>
+                        <span class="sppm-section-icon"><?php echo esc_html($about_icon); ?></span>
+                        <?php endif; ?>
+                        <?php echo esc_html($about_heading); ?>
+                    </h2>
+                    <?php endif; ?>
+                    
+                    <?php if ($about_description): ?>
+                    <div class="sppm-about-content">
+                        <?php echo wpautop(esc_html($about_description)); ?>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <?php endif; ?>
