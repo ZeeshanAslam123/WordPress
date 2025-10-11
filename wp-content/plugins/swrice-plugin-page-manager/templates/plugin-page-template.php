@@ -60,8 +60,17 @@ $featured_image = get_the_post_thumbnail_url($post->ID, 'large');
             
             <!-- Problem Section -->
             <?php 
-            $problem_heading = get_post_meta($post->ID, 'problem_heading', true);
+            $problem_heading = get_post_meta($post->ID, 'problem_heading', true) ?: 'Common Problems';
             $problem_items = get_post_meta($post->ID, 'problem_items', true);
+            
+            // Add default content if none exists
+            if (empty($problem_items) || !is_array($problem_items)) {
+                $problem_items = array(
+                    array('title' => 'Problem 1', 'description' => 'Description of the first problem', 'icon' => '❌'),
+                    array('title' => 'Problem 2', 'description' => 'Description of the second problem', 'icon' => '⚠️'),
+                    array('title' => 'Problem 3', 'description' => 'Description of the third problem', 'icon' => '🚫')
+                );
+            }
             
             if (!empty($problem_items) && is_array($problem_items)): ?>
             <section class="sppm-section sppm-problems">
@@ -93,8 +102,8 @@ $featured_image = get_the_post_thumbnail_url($post->ID, 'large');
             
             <!-- Solution Section -->
             <?php 
-            $solution_heading = get_post_meta($post->ID, 'solution_heading', true);
-            $solution_description = get_post_meta($post->ID, 'solution_description', true);
+            $solution_heading = get_post_meta($post->ID, 'solution_heading', true) ?: 'Our Solution';
+            $solution_description = get_post_meta($post->ID, 'solution_description', true) ?: 'This plugin provides the perfect solution to all your problems with an easy-to-use interface and powerful features.';
             
             if ($solution_heading || $solution_description): ?>
             <section class="sppm-section sppm-solution">
@@ -112,8 +121,17 @@ $featured_image = get_the_post_thumbnail_url($post->ID, 'large');
             
             <!-- How It Works Section -->
             <?php 
-            $how_it_works_heading = get_post_meta($post->ID, 'how_it_works_heading', true);
+            $how_it_works_heading = get_post_meta($post->ID, 'how_it_works_heading', true) ?: 'How It Works';
             $how_it_works_items = get_post_meta($post->ID, 'how_it_works_items', true);
+            
+            // Add default content if none exists
+            if (empty($how_it_works_items) || !is_array($how_it_works_items)) {
+                $how_it_works_items = array(
+                    array('title' => 'Install Plugin', 'description' => 'Download and install the plugin on your WordPress site'),
+                    array('title' => 'Configure Settings', 'description' => 'Set up the plugin according to your needs'),
+                    array('title' => 'Enjoy Results', 'description' => 'Start benefiting from the improved functionality')
+                );
+            }
             
             if (!empty($how_it_works_items) && is_array($how_it_works_items)): ?>
             <section class="sppm-section sppm-how-it-works">
@@ -145,7 +163,16 @@ $featured_image = get_the_post_thumbnail_url($post->ID, 'large');
             
             <!-- Features Section -->
             <?php 
-            $features_heading = get_post_meta($post->ID, 'features_heading', true);
+            $features_heading = get_post_meta($post->ID, 'features_heading', true) ?: 'Key Features';
+            
+            // Add default content if none exists
+            if (empty($plugin_features) || !is_array($plugin_features)) {
+                $plugin_features = array(
+                    array('title' => 'Easy to Use', 'description' => 'Simple and intuitive interface', 'icon' => '✅'),
+                    array('title' => 'Fast Performance', 'description' => 'Optimized for speed and efficiency', 'icon' => '⚡'),
+                    array('title' => 'Great Support', 'description' => 'Dedicated customer support team', 'icon' => '🎯')
+                );
+            }
             
             if (!empty($plugin_features) && is_array($plugin_features)): ?>
             <section class="sppm-section sppm-features">
