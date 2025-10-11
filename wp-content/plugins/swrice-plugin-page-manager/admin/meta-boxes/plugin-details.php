@@ -57,6 +57,159 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
         
         <div id="tab-content" class="sppm-tab-content">
             
+            <!-- Problem Section -->
+            <div class="sppm-section-control">
+                <h3><?php _e('Problem Section', 'swrice-plugin-manager'); ?></h3>
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="problem_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'problem_heading', true) ?: 'The Problems Killing Your Success'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="problem_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="😤" <?php selected(get_post_meta($post->ID, 'problem_icon', true), '😤'); ?>>😤 Frustrated Face</option>
+                            <option value="🚫" <?php selected(get_post_meta($post->ID, 'problem_icon', true), '🚫'); ?>>🚫 Prohibited</option>
+                            <option value="⚠️" <?php selected(get_post_meta($post->ID, 'problem_icon', true), '⚠️'); ?>>⚠️ Warning</option>
+                            <option value="💸" <?php selected(get_post_meta($post->ID, 'problem_icon', true), '💸'); ?>>💸 Money Loss</option>
+                            <option value="📉" <?php selected(get_post_meta($post->ID, 'problem_icon', true), '📉'); ?>>📉 Declining</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sppm-control-group">
+                    <label><?php _e('Problem Items', 'swrice-plugin-manager'); ?></label>
+                    <div id="sppm-problem-items" class="sppm-repeater">
+                        <?php
+                        $problem_items = get_post_meta($post->ID, 'problem_items', true);
+                        if (!is_array($problem_items)) $problem_items = array();
+                        
+                        if (empty($problem_items)) {
+                            $problem_items = array(
+                                array('title' => 'Overwhelming Experience', 'description' => 'Long, cluttered content confuses users and hurts completion rates', 'icon' => '🚫'),
+                                array('title' => 'Poor Mobile Experience', 'description' => 'Users struggle to navigate on mobile devices, leading to dropouts', 'icon' => '📱'),
+                                array('title' => 'Wasted Time', 'description' => 'Users spend more time searching for content than actually using it', 'icon' => '⏰'),
+                                array('title' => 'Lost Revenue', 'description' => 'Poor user experience leads to refund requests and negative reviews', 'icon' => '💸')
+                            );
+                        }
+                        
+                        foreach ($problem_items as $index => $item):
+                        ?>
+                        <div class="sppm-repeater-item" data-index="<?php echo $index; ?>">
+                            <div class="sppm-repeater-header">
+                                <span class="sppm-repeater-title">Problem #<?php echo ($index + 1); ?></span>
+                                <div class="sppm-repeater-actions">
+                                    <button type="button" class="sppm-toggle-item">▼</button>
+                                    <button type="button" class="sppm-remove-item">✕</button>
+                                </div>
+                            </div>
+                            <div class="sppm-repeater-content">
+                                <div class="sppm-field">
+                                    <label><?php _e('Problem Title', 'swrice-plugin-manager'); ?></label>
+                                    <input type="text" name="problem_items[<?php echo $index; ?>][title]" value="<?php echo esc_attr($item['title'] ?? ''); ?>" placeholder="Problem title..." class="sppm-full-width" />
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Problem Icon', 'swrice-plugin-manager'); ?></label>
+                                    <select name="problem_items[<?php echo $index; ?>][icon]" class="sppm-icon-select">
+                                        <option value="">No Icon</option>
+                                        <option value="🚫" <?php selected($item['icon'] ?? '', '🚫'); ?>>🚫 Prohibited</option>
+                                        <option value="📱" <?php selected($item['icon'] ?? '', '📱'); ?>>📱 Mobile</option>
+                                        <option value="⏰" <?php selected($item['icon'] ?? '', '⏰'); ?>>⏰ Time</option>
+                                        <option value="💸" <?php selected($item['icon'] ?? '', '💸'); ?>>💸 Money Loss</option>
+                                        <option value="😤" <?php selected($item['icon'] ?? '', '😤'); ?>>😤 Frustrated</option>
+                                        <option value="📉" <?php selected($item['icon'] ?? '', '📉'); ?>>📉 Declining</option>
+                                    </select>
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Problem Description', 'swrice-plugin-manager'); ?></label>
+                                    <textarea name="problem_items[<?php echo $index; ?>][description]" rows="3" placeholder="Describe this problem..." class="sppm-full-width"><?php echo esc_textarea($item['description'] ?? ''); ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" id="sppm-add-problem" class="button button-secondary"><?php _e('Add Problem', 'swrice-plugin-manager'); ?></button>
+                </div>
+            </div>
+            
+            <!-- Solution Section -->
+            <div class="sppm-section-control">
+                <h3><?php _e('Solution Section', 'swrice-plugin-manager'); ?></h3>
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="solution_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'solution_heading', true) ?: 'Introducing Your Perfect Solution'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="solution_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="✨" <?php selected(get_post_meta($post->ID, 'solution_icon', true), '✨'); ?>>✨ Sparkles</option>
+                            <option value="🚀" <?php selected(get_post_meta($post->ID, 'solution_icon', true), '🚀'); ?>>🚀 Rocket</option>
+                            <option value="💡" <?php selected(get_post_meta($post->ID, 'solution_icon', true), '💡'); ?>>💡 Light Bulb</option>
+                            <option value="🎯" <?php selected(get_post_meta($post->ID, 'solution_icon', true), '🎯'); ?>>🎯 Target</option>
+                            <option value="⚡" <?php selected(get_post_meta($post->ID, 'solution_icon', true), '⚡'); ?>>⚡ Lightning</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sppm-control-group">
+                    <label><?php _e('Solution Description', 'swrice-plugin-manager'); ?></label>
+                    <textarea name="solution_description" rows="6" class="sppm-full-width" placeholder="Describe your solution..."><?php echo esc_textarea(get_post_meta($post->ID, 'solution_description', true) ?: 'Transform chaotic layouts into clean, professional navigation that users love. Our premium plugin creates an elegant, organized environment that increases completion rates and improves user satisfaction.'); ?></textarea>
+                </div>
+            </div>
+            
+            <!-- How It Works Section -->
+            <div class="sppm-section-control">
+                <h3><?php _e('How It Works Section', 'swrice-plugin-manager'); ?></h3>
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="how_it_works_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'how_it_works_heading', true) ?: 'How It Works - Simple 3-Step Setup'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="how_it_works_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="🛠️" <?php selected(get_post_meta($post->ID, 'how_it_works_icon', true), '🛠️'); ?>>🛠️ Tools</option>
+                            <option value="⚙️" <?php selected(get_post_meta($post->ID, 'how_it_works_icon', true), '⚙️'); ?>>⚙️ Gear</option>
+                            <option value="📋" <?php selected(get_post_meta($post->ID, 'how_it_works_icon', true), '📋'); ?>>📋 Clipboard</option>
+                            <option value="🎯" <?php selected(get_post_meta($post->ID, 'how_it_works_icon', true), '🎯'); ?>>🎯 Target</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sppm-control-group">
+                    <label><?php _e('Steps', 'swrice-plugin-manager'); ?></label>
+                    <div id="sppm-steps-items" class="sppm-repeater">
+                        <?php
+                        $steps_items = get_post_meta($post->ID, 'steps_items', true);
+                        if (!is_array($steps_items)) $steps_items = array();
+                        
+                        if (empty($steps_items)) {
+                            $steps_items = array(
+                                array('title' => 'Install & Activate', 'description' => 'Upload the plugin, activate it, and you\'re 90% done. No complex configuration required.', 'step' => '1'),
+                                array('title' => 'Choose Your Settings', 'description' => 'Configure your preferences using the intuitive admin interface.', 'step' => '2'),
+                                array('title' => 'Customize & Launch', 'description' => 'Use the modern admin interface to customize and watch your results soar.', 'step' => '3')
+                            );
+                        }
+                        
+                        foreach ($steps_items as $index => $item):
+                        ?>
+                        <div class="sppm-repeater-item" data-index="<?php echo $index; ?>">
+                            <div class="sppm-repeater-header">
+                                <span class="sppm-repeater-title">Step #<?php echo ($index + 1); ?></span>
+                                <div class="sppm-repeater-actions">
+                                    <button type="button" class="sppm-toggle-item">▼</button>
+                                    <button type="button" class="sppm-remove-item">✕</button>
+                                </div>
+                            </div>
+                            <div class="sppm-repeater-content">
+                                <div class="sppm-field">
+                                    <label><?php _e('Step Title', 'swrice-plugin-manager'); ?></label>
+                                    <input type="text" name="steps_items[<?php echo $index; ?>][title]" value="<?php echo esc_attr($item['title'] ?? ''); ?>" placeholder="Step title..." class="sppm-full-width" />
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Step Description', 'swrice-plugin-manager'); ?></label>
+                                    <textarea name="steps_items[<?php echo $index; ?>][description]" rows="3" placeholder="Describe this step..." class="sppm-full-width"><?php echo esc_textarea($item['description'] ?? ''); ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" id="sppm-add-step" class="button button-secondary"><?php _e('Add Step', 'swrice-plugin-manager'); ?></button>
+                </div>
+            </div>
+            
             <!-- FAQ Section with Full Control -->
             <div class="sppm-section-control">
                 <h3><?php _e('FAQ Section', 'swrice-plugin-manager'); ?></h3>
@@ -88,7 +241,11 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
                         if (!is_array($faq_items)) $faq_items = array();
                         
                         if (empty($faq_items)) {
-                            $faq_items = array(array('question' => '', 'answer' => ''));
+                            $faq_items = array(
+                                array('question' => 'Will this plugin conflict with my theme or other plugins?', 'answer' => 'No! Our plugin uses official template systems, ensuring zero conflicts with themes and other plugins. It\'s designed to work seamlessly with any WordPress theme.'),
+                                array('question' => 'Do I need coding skills to use this plugin?', 'answer' => 'Absolutely not! The plugin works perfectly out of the box with default settings. The modern admin interface makes customization as simple as clicking options.'),
+                                array('question' => 'Will this work on mobile devices?', 'answer' => 'Yes! The plugin is built with a mobile-first approach. All features work perfectly on smartphones and tablets.')
+                            );
                         }
                         
                         foreach ($faq_items as $index => $item):
@@ -222,7 +379,11 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
                         if (!is_array($testimonial_items)) $testimonial_items = array();
                         
                         if (empty($testimonial_items)) {
-                            $testimonial_items = array(array('name' => '', 'title' => '', 'content' => '', 'rating' => '5'));
+                            $testimonial_items = array(
+                                array('name' => 'Sarah Johnson', 'title' => 'Corporate Training Manager', 'content' => 'This plugin transformed our corporate training platform. Course completion rates increased by 35% within the first month. The dual-mode system is genius!', 'rating' => '5'),
+                                array('name' => 'Mike Chen', 'title' => 'Online Course Creator', 'content' => 'Finally, a plugin that makes courses look professional on mobile. Our students love the clean navigation, and we\'ve seen fewer support tickets.', 'rating' => '5'),
+                                array('name' => 'Lisa Rodriguez', 'title' => 'Educational Director', 'content' => 'The modern admin interface is beautiful and so easy to use. We customized the colors to match our brand in minutes. Best plugin investment we\'ve made.', 'rating' => '5')
+                            );
                         }
                         
                         foreach ($testimonial_items as $index => $item):
@@ -263,6 +424,143 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
                         <?php endforeach; ?>
                     </div>
                     <button type="button" id="sppm-add-testimonial" class="button button-secondary"><?php _e('Add Testimonial', 'swrice-plugin-manager'); ?></button>
+                </div>
+            </div>
+            
+            <!-- Bonuses Section -->
+            <div class="sppm-section-control">
+                <h3><?php _e('Bonuses Section', 'swrice-plugin-manager'); ?></h3>
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="bonuses_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'bonuses_heading', true) ?: 'Exclusive Launch Bonuses (Limited Time)'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="bonuses_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="🎁" <?php selected(get_post_meta($post->ID, 'bonuses_icon', true), '🎁'); ?>>🎁 Gift</option>
+                            <option value="🎉" <?php selected(get_post_meta($post->ID, 'bonuses_icon', true), '🎉'); ?>>🎉 Party</option>
+                            <option value="💎" <?php selected(get_post_meta($post->ID, 'bonuses_icon', true), '💎'); ?>>💎 Diamond</option>
+                            <option value="⭐" <?php selected(get_post_meta($post->ID, 'bonuses_icon', true), '⭐'); ?>>⭐ Star</option>
+                            <option value="🏆" <?php selected(get_post_meta($post->ID, 'bonuses_icon', true), '🏆'); ?>>🏆 Trophy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sppm-control-group">
+                    <label><?php _e('Bonus Items', 'swrice-plugin-manager'); ?></label>
+                    <div id="sppm-bonus-items" class="sppm-repeater">
+                        <?php
+                        $bonus_items = get_post_meta($post->ID, 'bonus_items', true);
+                        if (!is_array($bonus_items)) $bonus_items = array();
+                        
+                        if (empty($bonus_items)) {
+                            $bonus_items = array(
+                                array('title' => 'Optimization Guide', 'description' => 'Complete PDF guide with 25+ tips to optimize your setup for maximum engagement and completion rates.', 'value' => '$47', 'icon' => '📚'),
+                                array('title' => 'Custom CSS Snippets Collection', 'description' => '20+ ready-to-use CSS snippets to further customize your setup, including hover effects, animations, and styling options.', 'value' => '$37', 'icon' => '🎨'),
+                                array('title' => 'Priority Email Support', 'description' => 'Get your questions answered within 24 hours with priority email support for the first 90 days after purchase.', 'value' => '$97', 'icon' => '⚡')
+                            );
+                        }
+                        
+                        foreach ($bonus_items as $index => $item):
+                        ?>
+                        <div class="sppm-repeater-item" data-index="<?php echo $index; ?>">
+                            <div class="sppm-repeater-header">
+                                <span class="sppm-repeater-title">Bonus #<?php echo ($index + 1); ?></span>
+                                <div class="sppm-repeater-actions">
+                                    <button type="button" class="sppm-toggle-item">▼</button>
+                                    <button type="button" class="sppm-remove-item">✕</button>
+                                </div>
+                            </div>
+                            <div class="sppm-repeater-content">
+                                <div class="sppm-field-row">
+                                    <div class="sppm-field sppm-field-half">
+                                        <label><?php _e('Bonus Title', 'swrice-plugin-manager'); ?></label>
+                                        <input type="text" name="bonus_items[<?php echo $index; ?>][title]" value="<?php echo esc_attr($item['title'] ?? ''); ?>" placeholder="Bonus title..." />
+                                    </div>
+                                    <div class="sppm-field sppm-field-half">
+                                        <label><?php _e('Bonus Value', 'swrice-plugin-manager'); ?></label>
+                                        <input type="text" name="bonus_items[<?php echo $index; ?>][value]" value="<?php echo esc_attr($item['value'] ?? ''); ?>" placeholder="$47" />
+                                    </div>
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Bonus Icon', 'swrice-plugin-manager'); ?></label>
+                                    <select name="bonus_items[<?php echo $index; ?>][icon]" class="sppm-icon-select">
+                                        <option value="">No Icon</option>
+                                        <option value="📚" <?php selected($item['icon'] ?? '', '📚'); ?>>📚 Books</option>
+                                        <option value="🎨" <?php selected($item['icon'] ?? '', '🎨'); ?>>🎨 Art</option>
+                                        <option value="⚡" <?php selected($item['icon'] ?? '', '⚡'); ?>>⚡ Lightning</option>
+                                        <option value="🎁" <?php selected($item['icon'] ?? '', '🎁'); ?>>🎁 Gift</option>
+                                        <option value="💎" <?php selected($item['icon'] ?? '', '💎'); ?>>💎 Diamond</option>
+                                        <option value="🏆" <?php selected($item['icon'] ?? '', '🏆'); ?>>🏆 Trophy</option>
+                                    </select>
+                                </div>
+                                <div class="sppm-field">
+                                    <label><?php _e('Bonus Description', 'swrice-plugin-manager'); ?></label>
+                                    <textarea name="bonus_items[<?php echo $index; ?>][description]" rows="3" placeholder="Describe this bonus..." class="sppm-full-width"><?php echo esc_textarea($item['description'] ?? ''); ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" id="sppm-add-bonus" class="button button-secondary"><?php _e('Add Bonus', 'swrice-plugin-manager'); ?></button>
+                </div>
+            </div>
+            
+            <!-- Guarantee Section -->
+            <div class="sppm-section-control">
+                <h3><?php _e('Guarantee Section', 'swrice-plugin-manager'); ?></h3>
+                <div class="sppm-control-group">
+                    <label><?php _e('Section Heading', 'swrice-plugin-manager'); ?></label>
+                    <div class="sppm-heading-control">
+                        <input type="text" name="guarantee_heading" value="<?php echo esc_attr(get_post_meta($post->ID, 'guarantee_heading', true) ?: 'Risk-Free 30-Day Money-Back Guarantee'); ?>" placeholder="Section Heading" class="sppm-heading-input" />
+                        <select name="guarantee_icon" class="sppm-icon-select">
+                            <option value="">No Icon</option>
+                            <option value="🛡️" <?php selected(get_post_meta($post->ID, 'guarantee_icon', true), '🛡️'); ?>>🛡️ Shield</option>
+                            <option value="💯" <?php selected(get_post_meta($post->ID, 'guarantee_icon', true), '💯'); ?>>💯 Hundred</option>
+                            <option value="✅" <?php selected(get_post_meta($post->ID, 'guarantee_icon', true), '✅'); ?>>✅ Check Mark</option>
+                            <option value="🔒" <?php selected(get_post_meta($post->ID, 'guarantee_icon', true), '🔒'); ?>>🔒 Lock</option>
+                            <option value="💎" <?php selected(get_post_meta($post->ID, 'guarantee_icon', true), '💎'); ?>>💎 Diamond</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sppm-control-group">
+                    <label><?php _e('Guarantee Text', 'swrice-plugin-manager'); ?></label>
+                    <textarea name="guarantee_text" rows="6" class="sppm-full-width" placeholder="Describe your guarantee..."><?php echo esc_textarea(get_post_meta($post->ID, 'guarantee_text', true) ?: 'We\'re so confident that this plugin will transform your experience and boost engagement that we offer a complete 30-day money-back guarantee. If you\'re not completely satisfied for any reason, simply contact us within 30 days for a full refund. No questions asked.'); ?></textarea>
+                </div>
+                <div class="sppm-control-group">
+                    <label><?php _e('Guarantee Points', 'swrice-plugin-manager'); ?></label>
+                    <div id="sppm-guarantee-points" class="sppm-repeater">
+                        <?php
+                        $guarantee_points = get_post_meta($post->ID, 'guarantee_points', true);
+                        if (!is_array($guarantee_points)) $guarantee_points = array();
+                        
+                        if (empty($guarantee_points)) {
+                            $guarantee_points = array(
+                                array('point' => 'Try the plugin risk-free for 30 full days'),
+                                array('point' => 'Test all features and customization options'),
+                                array('point' => 'See the impact on your completion rates'),
+                                array('point' => 'Full refund if not completely satisfied')
+                            );
+                        }
+                        
+                        foreach ($guarantee_points as $index => $item):
+                        ?>
+                        <div class="sppm-repeater-item" data-index="<?php echo $index; ?>">
+                            <div class="sppm-repeater-header">
+                                <span class="sppm-repeater-title">Point #<?php echo ($index + 1); ?></span>
+                                <div class="sppm-repeater-actions">
+                                    <button type="button" class="sppm-toggle-item">▼</button>
+                                    <button type="button" class="sppm-remove-item">✕</button>
+                                </div>
+                            </div>
+                            <div class="sppm-repeater-content">
+                                <div class="sppm-field">
+                                    <label><?php _e('Guarantee Point', 'swrice-plugin-manager'); ?></label>
+                                    <input type="text" name="guarantee_points[<?php echo $index; ?>][point]" value="<?php echo esc_attr($item['point'] ?? ''); ?>" placeholder="Guarantee point..." class="sppm-full-width" />
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" id="sppm-add-guarantee-point" class="button button-secondary"><?php _e('Add Guarantee Point', 'swrice-plugin-manager'); ?></button>
                 </div>
             </div>
             
