@@ -166,7 +166,7 @@ function render_stars($rating) {
             
             if (!container) return;
             
-            // Hide disabled sections
+            // Step 1: Hide disabled sections (this preserves all styling)
             Object.keys(sectionEnabled).forEach(function(sectionKey) {
                 if (!sectionEnabled[sectionKey]) {
                     var sectionElement = container.querySelector('.sppm-' + sectionKey.replace('_', '-') + '-section');
@@ -176,23 +176,46 @@ function render_stars($rating) {
                 }
             });
             
-            // Reorder sections based on admin settings
-            var sections = {};
+            // Step 2: Reorder sections using a clean DOM manipulation approach
+            var sectionsToReorder = [];
+            var firstSectionFound = null;
+            
+            // Collect enabled sections in the admin-specified order
             sectionOrder.forEach(function(sectionKey) {
-                var className = '.sppm-' + sectionKey.replace('_', '-') + '-section';
-                var element = container.querySelector(className);
-                if (element && sectionEnabled[sectionKey]) {
-                    sections[sectionKey] = element;
-                    element.remove();
+                if (sectionEnabled[sectionKey]) {
+                    var className = '.sppm-' + sectionKey.replace('_', '-') + '-section';
+                    var element = container.querySelector(className);
+                    if (element) {
+                        sectionsToReorder.push(element);
+                        if (!firstSectionFound) {
+                            firstSectionFound = element;
+                        }
+                    }
                 }
             });
             
-            // Append sections in the specified order
-            sectionOrder.forEach(function(sectionKey) {
-                if (sections[sectionKey] && sectionEnabled[sectionKey]) {
-                    container.appendChild(sections[sectionKey]);
-                }
-            });
+            // Only reorder if we have sections and a reference point
+            if (sectionsToReorder.length > 1 && firstSectionFound) {
+                // Store the parent and the next sibling of the first section for reference
+                var parentElement = firstSectionFound.parentNode;
+                var nextSibling = firstSectionFound.nextSibling;
+                
+                // Remove all sections from DOM temporarily
+                sectionsToReorder.forEach(function(section) {
+                    section.remove();
+                });
+                
+                // Re-insert sections in the correct order
+                var insertBeforeElement = nextSibling;
+                sectionsToReorder.forEach(function(section) {
+                    if (insertBeforeElement) {
+                        parentElement.insertBefore(section, insertBeforeElement);
+                    } else {
+                        parentElement.appendChild(section);
+                    }
+                    insertBeforeElement = section.nextSibling;
+                });
+            }
         });
         </script>
 
