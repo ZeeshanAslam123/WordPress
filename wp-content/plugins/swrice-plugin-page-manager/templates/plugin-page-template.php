@@ -430,7 +430,6 @@ function render_final_cta_section($buy_now_shortcode, $final_cta_heading, $final
         if (!is_array($section_enabled)) {
             $section_enabled = array_fill_keys($section_order, true);
         }
-        ?>
         
         // Render sections in the admin-specified order
         foreach ($section_order as $section_key) {
