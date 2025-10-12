@@ -215,11 +215,15 @@ function render_stars($rating) {
             <div class="sppm-features-grid">
                 <?php foreach ($feature_items as $feature): ?>
                 <div class="sppm-feature-card">
-                    <?php if (!empty($feature['icon'])): ?>
-                    <div class="sppm-feature-icon"><?php echo $feature['icon']; ?></div>
-                    <?php endif; ?>
-                    <h3 class="sppm-feature-title"><?php echo esc_html($feature['title']); ?></h3>
-                    <p class="sppm-feature-desc"><?php echo esc_html($feature['description']); ?></p>
+                    <div class="sppm-feature-card-header">
+                        <?php if (!empty($feature['icon'])): ?>
+                        <div class="sppm-feature-icon"><?php echo $feature['icon']; ?></div>
+                        <?php endif; ?>
+                        <h3 class="sppm-feature-title"><?php echo esc_html($feature['title']); ?></h3>
+                    </div>
+                    <div class="sppm-feature-card-body">
+                        <p class="sppm-feature-desc"><?php echo esc_html($feature['description']); ?></p>
+                    </div>
                 </div>
                 <?php endforeach; ?>
             </div>
