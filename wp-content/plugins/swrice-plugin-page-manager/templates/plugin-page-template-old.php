@@ -1,8 +1,8 @@
 <?php
 /**
- * Fully Dynamic Plugin Page Template - Using Your Exact Styling
+ * Plugin Page Template - Your Custom Design
  * 
- * This template uses your exact CSS styling but makes everything dynamic
+ * This template displays the plugin landing page with your exact styling
  */
 
 // Prevent direct access
@@ -10,41 +10,15 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Get all dynamic data from WordPress meta fields
+// Get plugin data
 $plugin_name = get_post_meta($post->ID, '_plugin_name', true) ?: $post->post_title;
-$plugin_subtitle = get_post_meta($post->ID, '_plugin_subtitle', true) ?: 'Organize your LearnDash courses like a pro — cleaner, faster, smarter.';
 $plugin_price = get_post_meta($post->ID, '_plugin_price', true) ?: '29';
 $plugin_original_price = get_post_meta($post->ID, '_plugin_original_price', true) ?: '';
-$plugin_rating = get_post_meta($post->ID, '_plugin_rating', true) ?: '5.0';
+$hero_subtitle = get_post_meta($post->ID, '_hero_subtitle', true) ?: 'Organize your LearnDash courses like a pro — cleaner, faster, smarter.';
 $buy_now_shortcode = get_post_meta($post->ID, '_buy_now_shortcode', true) ?: '';
-$demo_link = get_post_meta($post->ID, '_demo_link', true) ?: '#';
+$featured_image = get_the_post_thumbnail_url($post->ID, 'large') ?: plugin_dir_url(__FILE__) . '../assets/images/plugin-preview.png';
 
-// Hero image - fully dynamic
-$hero_image = get_post_meta($post->ID, '_hero_image', true);
-if (!$hero_image) {
-    $hero_image = get_the_post_thumbnail_url($post->ID, 'large');
-}
-if (!$hero_image) {
-    $hero_image = plugin_dir_url(__FILE__) . '../assets/images/default-hero.png';
-}
-
-// Logo and branding - dynamic
-$logo_text_line1 = get_post_meta($post->ID, '_logo_text_line1', true) ?: 'COLLAPSIBLE';
-$logo_text_line2 = get_post_meta($post->ID, '_logo_text_line2', true) ?: 'SECTIONS';
-
-// Device mockup content - dynamic
-$device_title = get_post_meta($post->ID, '_device_title', true) ?: 'Introduction to LearnDash';
-$device_sections = get_post_meta($post->ID, '_device_sections', true);
-if (empty($device_sections) || !is_array($device_sections)) {
-    $device_sections = array(
-        'Getting Started',
-        'The Basics', 
-        'Setting Up Your Course'
-    );
-}
-
-// Features section - fully dynamic
-$features_title = get_post_meta($post->ID, '_features_title', true) ?: 'Why You\'ll Love It';
+// Get features
 $plugin_features = get_post_meta($post->ID, '_plugin_features', true);
 if (empty($plugin_features) || !is_array($plugin_features)) {
     $plugin_features = array(
@@ -55,53 +29,15 @@ if (empty($plugin_features) || !is_array($plugin_features)) {
     );
 }
 
-// Sidebar content - dynamic
-$sidebar_title = get_post_meta($post->ID, '_sidebar_title', true) ?: 'The Basics';
-$sidebar_items = get_post_meta($post->ID, '_sidebar_items', true);
-if (empty($sidebar_items) || !is_array($sidebar_items)) {
-    $sidebar_items = array(
-        array('title' => 'Setting Up', 'subtitle' => 'Your Course'),
-        array('title' => 'Custom Styles', 'subtitle' => 'Match your look')
-    );
-}
-
-// Checklist section - dynamic
-$checklist_title = get_post_meta($post->ID, '_checklist_title', true) ?: 'Powerful Features That Simplify Your Course Layout';
-$plugin_checklist = get_post_meta($post->ID, '_plugin_checklist', true);
-if (empty($plugin_checklist) || !is_array($plugin_checklist)) {
-    $plugin_checklist = array(
-        'Collapse/Expand Sections',
-        'Auto Save State', 
-        'Theme Compatibility',
-        'Developer Friendly Hooks'
-    );
-}
-
-// Screenshots section - dynamic
-$screenshots_title = get_post_meta($post->ID, '_screenshots_title', true) ?: 'Screenshots & Demo Preview';
-$plugin_screenshots = get_post_meta($post->ID, '_plugin_screenshots', true);
-if (empty($plugin_screenshots) || !is_array($plugin_screenshots)) {
-    // Default placeholder screenshots
-    $plugin_screenshots = array(
-        array('url' => 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'380\'><rect width=\'100%\' height=\'100%\' fill=\'%23f7fbff\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239bbfe0\' font-family=\'Inter\' font-size=\'20\'>Screenshot 1</text></svg>', 'alt' => 'Screenshot 1'),
-        array('url' => 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'380\'><rect width=\'100%\' height=\'100%\' fill=\'%23f7fbff\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239bbfe0\' font-family=\'Inter\' font-size=\'20\'>Screenshot 2</text></svg>', 'alt' => 'Screenshot 2'),
-        array('url' => 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'380\'><rect width=\'100%\' height=\'100%\' fill=\'%23f7fbff\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239bbfe0\' font-family=\'Inter\' font-size=\'20\'>Screenshot 3</text></svg>', 'alt' => 'Screenshot 3')
-    );
-}
-
-// Testimonials section - dynamic
-$testimonials_title = get_post_meta($post->ID, '_testimonials_title', true) ?: 'What People Are Saying';
 $plugin_testimonials = get_post_meta($post->ID, '_plugin_testimonials', true);
 if (empty($plugin_testimonials) || !is_array($plugin_testimonials)) {
     $plugin_testimonials = array(
-        array('content' => 'Saved me hours of layout work — simple & reliable.', 'author' => 'Ayesha F.', 'title' => 'Course Creator'),
-        array('content' => 'Lightweight plugin that just works with my custom theme.', 'author' => 'Hamza K.', 'title' => 'Dev'),
-        array('content' => 'Students love the clearer navigation. 10/10.', 'author' => 'Maria G.', 'title' => 'Instructor')
+        array('content' => 'Saved me hours of layout work — simple & reliable.', 'author' => 'Ayesha F.', 'title' => 'Course Creator', 'rating' => 5),
+        array('content' => 'Lightweight plugin that just works with my custom theme.', 'author' => 'Hamza K.', 'title' => 'Dev', 'rating' => 5),
+        array('content' => 'Students love the clearer navigation. 10/10.', 'author' => 'Maria G.', 'title' => 'Instructor', 'rating' => 5)
     );
 }
 
-// FAQ section - dynamic
-$faq_title = get_post_meta($post->ID, '_faq_title', true) ?: 'FAQ';
 $plugin_faq = get_post_meta($post->ID, '_plugin_faq', true);
 if (empty($plugin_faq) || !is_array($plugin_faq)) {
     $plugin_faq = array(
@@ -111,9 +47,15 @@ if (empty($plugin_faq) || !is_array($plugin_faq)) {
     );
 }
 
-// Bottom CTA section - dynamic
-$cta_title = get_post_meta($post->ID, '_cta_title', true) ?: 'Ready to organize your courses?';
-$cta_subtitle = get_post_meta($post->ID, '_cta_subtitle', true) ?: 'Buy now and get updates + support for one year.';
+$plugin_checklist = get_post_meta($post->ID, '_plugin_checklist', true);
+if (empty($plugin_checklist) || !is_array($plugin_checklist)) {
+    $plugin_checklist = array(
+        'Collapse/Expand Sections',
+        'Auto Save State', 
+        'Theme Compatibility',
+        'Developer Friendly Hooks'
+    );
+}
 
 // Function to get feature icon SVG
 function get_feature_icon($icon_type) {
@@ -421,25 +363,13 @@ function get_feature_icon($icon_type) {
     .rating{font-size:13px}
     .btn{padding:10px 14px;font-size:14px}
   }
-
-  /* Dynamic hero image support */
-  .hero-right.has-image .device {
-    display: none;
-  }
-  .hero-right.has-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 18px;
-    box-shadow: 0 18px 40px rgba(25,45,65,0.06);
-    transform: rotate(-6deg);
-  }
 </style>
 </head>
 <body>
 
 <div class="container">
 
-  <!-- HERO - FULLY DYNAMIC -->
+  <!-- HERO -->
   <section class="hero" aria-label="Hero">
     <div class="hero-left">
       <div class="logo-row">
@@ -452,17 +382,17 @@ function get_feature_icon($icon_type) {
           </svg>
         </div>
         <div>
-          <div style="font-weight:800;letter-spacing:0.2px"><?php echo esc_html($logo_text_line1); ?><br><?php echo esc_html($logo_text_line2); ?></div>
+          <div style="font-weight:800;letter-spacing:0.2px">COLLAPSIBLE<br>SECTIONS</div>
         </div>
       </div>
 
       <div class="rating" aria-hidden="true">
         <div class="stars">★ ★ ★ ★ ★</div>
-        <div style="font-size:15px"><?php echo esc_html($plugin_rating); ?></div>
+        <div style="font-size:15px">5.0</div>
       </div>
 
       <h1 class="title"><?php echo esc_html($plugin_name); ?></h1>
-      <p class="lead"><?php echo esc_html($plugin_subtitle); ?></p>
+      <p class="lead"><?php echo esc_html($hero_subtitle); ?></p>
 
       <div class="hero-ctas">
         <?php if ($buy_now_shortcode): ?>
@@ -470,31 +400,28 @@ function get_feature_icon($icon_type) {
         <?php else: ?>
             <button class="btn btn-primary">Buy Now - $<?php echo esc_html($plugin_price); ?></button>
         <?php endif; ?>
-        <a href="<?php echo esc_url($demo_link); ?>" class="btn btn-ghost">Live Demo</a>
+        <a href="#" class="btn btn-ghost">Live Demo</a>
       </div>
     </div>
 
-    <div class="hero-right <?php echo $hero_image && strpos($hero_image, 'default-hero.png') === false ? 'has-image' : ''; ?>" aria-hidden="true">
-      <?php if ($hero_image && strpos($hero_image, 'default-hero.png') === false): ?>
-        <img src="<?php echo esc_url($hero_image); ?>" alt="<?php echo esc_attr($plugin_name); ?>" />
-      <?php else: ?>
-        <div class="device" role="img" aria-label="Product preview">
-          <div class="device-inner">
-            <h3><?php echo esc_html($device_title); ?></h3>
-            <?php foreach ($device_sections as $section): ?>
-            <div class="section-row"><?php echo esc_html($section); ?> <span>▾</span></div>
-            <?php endforeach; ?>
-          </div>
+    <div class="hero-right" aria-hidden="true">
+      <div class="device" role="img" aria-label="Product preview">
+        <div class="device-inner">
+          <h3>Introduction to LearnDash</h3>
+
+          <div class="section-row">Getting Started <span>▾</span></div>
+          <div class="section-row">The Basics <span>▾</span></div>
+          <div class="section-row">Setting Up Your Course <span>▾</span></div>
         </div>
-      <?php endif; ?>
+      </div>
     </div>
   </section>
 
-  <!-- WHY YOU'LL LOVE IT - FULLY DYNAMIC -->
-  <section class="spaced" aria-label="<?php echo esc_attr($features_title); ?>">
+  <!-- WHY YOU'LL LOVE IT -->
+  <section class="spaced" aria-label="Why You'll Love It">
     <div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;">
       <div style="flex:1;min-width:320px;">
-        <h2 style="font-size:32px;margin:4px 0 18px;font-weight:800"><?php echo esc_html($features_title); ?></h2>
+        <h2 style="font-size:32px;margin:4px 0 18px;font-weight:800">Why You'll Love It</h2>
 
         <div class="features-grid">
           <?php foreach ($plugin_features as $feature): ?>
@@ -513,21 +440,25 @@ function get_feature_icon($icon_type) {
 
       <div style="flex:0 0 320px; min-width:260px;">
         <div style="background:white;padding:18px;border-radius:14px;box-shadow:var(--shadow);">
-          <h4 style="margin:0 0 12px"><?php echo esc_html($sidebar_title); ?></h4>
-          <?php foreach ($sidebar_items as $item): ?>
+          <h4 style="margin:0 0 12px">The Basics</h4>
+
           <div style="background:var(--soft);padding:12px;border-radius:10px;margin-bottom:8px">
-            <strong><?php echo esc_html($item['title']); ?></strong>
-            <div style="color:var(--muted);margin-top:8px"><?php echo esc_html($item['subtitle']); ?></div>
+            <strong>Setting Up</strong>
+            <div style="color:var(--muted);margin-top:8px">Your Course</div>
           </div>
-          <?php endforeach; ?>
+
+          <div style="background:var(--soft);padding:12px;border-radius:10px">
+            <strong>Custom Styles</strong>
+            <div style="color:var(--muted);margin-top:8px">Match your look</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- POWERFUL FEATURES - FULLY DYNAMIC -->
+  <!-- POWERFUL FEATURES -->
   <section class="spaced" aria-label="Powerful Features">
-    <h2 style="font-size:30px;margin:0 0 12px;font-weight:800;"><?php echo esc_html($checklist_title); ?></h2>
+    <h2 style="font-size:30px;margin:0 0 12px;font-weight:800;">Powerful Features That Simplify Your Course Layout</h2>
 
     <div class="checklist">
       <?php foreach ($plugin_checklist as $item): ?>
@@ -542,22 +473,20 @@ function get_feature_icon($icon_type) {
     </div>
   </section>
 
-  <!-- SCREENSHOTS - FULLY DYNAMIC -->
+  <!-- SCREENSHOTS -->
   <section class="spaced" aria-label="Screenshots">
-    <h3 style="font-size:24px;margin:0 0 12px;font-weight:800"><?php echo esc_html($screenshots_title); ?></h3>
+    <h3 style="font-size:24px;margin:0 0 12px;font-weight:800">Screenshots & Demo Preview</h3>
 
     <div class="screens" aria-hidden="true">
-      <?php foreach ($plugin_screenshots as $screenshot): ?>
-      <div class="ss">
-        <img src="<?php echo esc_url($screenshot['url']); ?>" alt="<?php echo esc_attr($screenshot['alt']); ?>">
-      </div>
-      <?php endforeach; ?>
+      <div class="ss"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='380'><rect width='100%' height='100%' fill='%23f7fbff'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%239bbfe0' font-family='Inter' font-size='20'>Screenshot 1</text></svg>" alt="screenshot 1"></div>
+      <div class="ss"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='380'><rect width='100%' height='100%' fill='%23f7fbff'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%239bbfe0' font-family='Inter' font-size='20'>Screenshot 2</text></svg>" alt="screenshot 2"></div>
+      <div class="ss"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='380'><rect width='100%' height='100%' fill='%23f7fbff'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%239bbfe0' font-family='Inter' font-size='20'>Screenshot 3</text></svg>" alt="screenshot 3"></div>
     </div>
   </section>
 
-  <!-- TESTIMONIALS - FULLY DYNAMIC -->
+  <!-- TESTIMONIALS -->
   <section class="spaced" aria-label="Testimonials">
-    <h3 style="font-size:24px;margin:0 0 12px;font-weight:800"><?php echo esc_html($testimonials_title); ?></h3>
+    <h3 style="font-size:24px;margin:0 0 12px;font-weight:800">What People Are Saying</h3>
 
     <div class="testimonials" role="list">
       <?php foreach ($plugin_testimonials as $testimonial): ?>
@@ -569,9 +498,9 @@ function get_feature_icon($icon_type) {
     </div>
   </section>
 
-  <!-- FAQ - FULLY DYNAMIC -->
+  <!-- FAQ -->
   <section class="spaced" aria-label="FAQ">
-    <h3 style="font-size:24px;margin:0 0 12px;font-weight:800"><?php echo esc_html($faq_title); ?></h3>
+    <h3 style="font-size:24px;margin:0 0 12px;font-weight:800">FAQ</h3>
 
     <div class="faq-list">
       <?php foreach ($plugin_faq as $index => $faq): ?>
@@ -583,12 +512,12 @@ function get_feature_icon($icon_type) {
     </div>
   </section>
 
-  <!-- BOTTOM CTA - FULLY DYNAMIC -->
+  <!-- BOTTOM CTA -->
   <section class="spaced" aria-label="Purchase CTA">
     <div class="bottom-cta">
       <div>
-        <div style="font-weight:800;font-size:18px"><?php echo esc_html($cta_title); ?></div>
-        <div style="color:var(--muted);margin-top:6px"><?php echo esc_html($cta_subtitle); ?></div>
+        <div style="font-weight:800;font-size:18px">Ready to organize your courses?</div>
+        <div style="color:var(--muted);margin-top:6px">Buy now and get updates + support for one year.</div>
       </div>
 
       <div style="display:flex;gap:12px;align-items:center">
@@ -597,7 +526,7 @@ function get_feature_icon($icon_type) {
         <?php else: ?>
             <button class="btn btn-primary">Buy Now - $<?php echo esc_html($plugin_price); ?></button>
         <?php endif; ?>
-        <a href="<?php echo esc_url($demo_link); ?>" class="btn btn-ghost">Live Demo</a>
+        <a href="#" class="btn btn-ghost">Live Demo</a>
       </div>
     </div>
   </section>
@@ -627,3 +556,4 @@ function get_feature_icon($icon_type) {
 </script>
 </body>
 </html>
+
