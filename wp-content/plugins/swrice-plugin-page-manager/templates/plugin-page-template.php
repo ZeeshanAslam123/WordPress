@@ -283,17 +283,16 @@ function render_stars($rating) {
                         <div class="sppm-testimonials-grid">
                             <?php if (is_array($testimonial_items) && !empty($testimonial_items)): ?>
                                 <?php foreach ($testimonial_items as $testimonial): ?>
-                                    <div class="sppm-testimonial-item">
-                                        <div class="sppm-testimonial-content">
-                                            <p class="sppm-testimonial-text">"<?php echo esc_html($testimonial['text']); ?>"</p>
-                                            <div class="sppm-testimonial-author">
-                                                <strong><?php echo esc_html($testimonial['author']); ?></strong>
-                                                <?php if (!empty($testimonial['position'])): ?>
-                                                    <span class="sppm-testimonial-position"><?php echo esc_html($testimonial['position']); ?></span>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
+                                <div class="sppm-testimonial-card">
+                                    <div class="sppm-testimonial-rating">
+                                        <?php echo render_stars(intval($testimonial['rating'])); ?>
                                     </div>
+                                    <div class="sppm-testimonial-content">"<?php echo esc_html($testimonial['content']); ?>"</div>
+                                    <div class="sppm-testimonial-author">
+                                        <strong><?php echo esc_html($testimonial['name']); ?></strong>
+                                        <span><?php echo esc_html($testimonial['title']); ?></span>
+                                    </div>
+                                </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </div>
@@ -314,15 +313,13 @@ function render_stars($rating) {
                         <div class="sppm-faq-list">
                             <?php if (is_array($faq_items) && !empty($faq_items)): ?>
                                 <?php foreach ($faq_items as $index => $faq): ?>
-                                    <div class="sppm-faq-item">
-                                        <div class="sppm-faq-question" data-faq="<?php echo $index; ?>">
-                                            <h3><?php echo esc_html($faq['question']); ?></h3>
-                                            <span class="sppm-faq-toggle">+</span>
-                                        </div>
-                                        <div class="sppm-faq-answer" id="faq-<?php echo $index; ?>">
-                                            <p><?php echo esc_html($faq['answer']); ?></p>
-                                        </div>
+                                <div class="sppm-faq-item" data-faq="<?php echo $index; ?>">
+                                    <div class="sppm-faq-question">
+                                        <?php echo esc_html($faq['question']); ?>
+                                        <span>+</span>
                                     </div>
+                                    <div class="sppm-faq-answer"><?php echo esc_html($faq['answer']); ?></div>
+                                </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </div>
@@ -343,16 +340,16 @@ function render_stars($rating) {
                         <div class="sppm-bonuses-grid">
                             <?php if (is_array($bonus_items) && !empty($bonus_items)): ?>
                                 <?php foreach ($bonus_items as $bonus): ?>
-                                    <div class="sppm-bonus-item">
-                                        <?php if (!empty($bonus['icon'])): ?>
-                                            <div class="sppm-bonus-icon"><?php echo $bonus['icon']; ?></div>
-                                        <?php endif; ?>
-                                        <h3 class="sppm-bonus-title"><?php echo esc_html($bonus['title']); ?></h3>
-                                        <p class="sppm-bonus-description"><?php echo esc_html($bonus['description']); ?></p>
-                                        <?php if (!empty($bonus['value'])): ?>
-                                            <div class="sppm-bonus-value">Value: $<?php echo esc_html($bonus['value']); ?></div>
-                                        <?php endif; ?>
-                                    </div>
+                                <div class="sppm-bonus-card">
+                                    <?php if (!empty($bonus['icon'])): ?>
+                                    <div class="sppm-bonus-icon"><?php echo $bonus['icon']; ?></div>
+                                    <?php endif; ?>
+                                    <h3 class="sppm-bonus-title"><?php echo esc_html($bonus['title']); ?></h3>
+                                    <?php if (!empty($bonus['value'])): ?>
+                                    <div class="sppm-bonus-value">Value: <?php echo esc_html($bonus['value']); ?></div>
+                                    <?php endif; ?>
+                                    <p class="sppm-bonus-desc"><?php echo esc_html($bonus['description']); ?></p>
+                                </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </div>
