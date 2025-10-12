@@ -31,6 +31,11 @@
     padding: 0;
 }
 
+/* Ensure all elements use Inter font */
+.sppm-plugin-page * {
+    font-family: inherit;
+}
+
 .sppm-container {
     max-width: 1150px;
     margin: 40px auto;

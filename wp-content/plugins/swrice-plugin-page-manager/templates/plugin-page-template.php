@@ -13,124 +13,64 @@ if (!defined('ABSPATH')) {
 
 // Get all dynamic data from WordPress meta fields using ACTUAL backend keys
 $plugin_name = $post->post_title;
-$hero_subtitle = get_post_meta($post->ID, 'hero_subtitle', true) ?: 'Transform your website with our powerful plugin solution.';
-$plugin_price = get_post_meta($post->ID, 'plugin_price', true) ?: '29';
-$plugin_original_price = get_post_meta($post->ID, 'plugin_original_price', true) ?: '';
-$buy_now_shortcode = get_post_meta($post->ID, 'buy_now_shortcode', true) ?: '';
+$hero_subtitle = get_post_meta($post->ID, 'hero_subtitle', true);
+$plugin_price = get_post_meta($post->ID, 'plugin_price', true);
+$plugin_original_price = get_post_meta($post->ID, 'plugin_original_price', true);
+$buy_now_shortcode = get_post_meta($post->ID, 'buy_now_shortcode', true);
 
 // Hero image - from featured image
 $hero_image = get_the_post_thumbnail_url($post->ID, 'large');
 
 // Section 1: Problem Section
-$problem_heading = get_post_meta($post->ID, 'problem_heading', true) ?: 'The Problems Killing Your Success';
-$problem_icon = get_post_meta($post->ID, 'problem_icon', true) ?: '😤';
+$problem_heading = get_post_meta($post->ID, 'problem_heading', true);
+$problem_icon = get_post_meta($post->ID, 'problem_icon', true);
 $problem_items = get_post_meta($post->ID, 'problem_items', true);
-if (!is_array($problem_items) || empty($problem_items)) {
-    $problem_items = array(
-        array('title' => 'Overwhelming Experience', 'description' => 'Long, cluttered content confuses users and hurts completion rates', 'icon' => '🚫'),
-        array('title' => 'Poor Mobile Experience', 'description' => 'Users struggle to navigate on mobile devices, leading to dropouts', 'icon' => '📱'),
-        array('title' => 'Wasted Time', 'description' => 'Users spend more time searching for content than actually using it', 'icon' => '⏰'),
-        array('title' => 'Lost Revenue', 'description' => 'Poor user experience leads to refund requests and negative reviews', 'icon' => '💸')
-    );
-}
 
 // Section 2: Solution Section
-$solution_heading = get_post_meta($post->ID, 'solution_heading', true) ?: 'Introducing Your Perfect Solution';
-$solution_icon = get_post_meta($post->ID, 'solution_icon', true) ?: '✨';
-$solution_description = get_post_meta($post->ID, 'solution_description', true) ?: 'Transform chaotic layouts into clean, professional navigation that users love. Our premium plugin creates an elegant, organized environment that increases completion rates and improves user satisfaction.';
+$solution_heading = get_post_meta($post->ID, 'solution_heading', true);
+$solution_icon = get_post_meta($post->ID, 'solution_icon', true);
+$solution_description = get_post_meta($post->ID, 'solution_description', true);
 
 // Section 3: How It Works Section
-$how_it_works_heading = get_post_meta($post->ID, 'how_it_works_heading', true) ?: 'How It Works - Simple 3-Step Setup';
-$how_it_works_icon = get_post_meta($post->ID, 'how_it_works_icon', true) ?: '🛠️';
+$how_it_works_heading = get_post_meta($post->ID, 'how_it_works_heading', true);
+$how_it_works_icon = get_post_meta($post->ID, 'how_it_works_icon', true);
 $steps_items = get_post_meta($post->ID, 'steps_items', true);
-if (!is_array($steps_items) || empty($steps_items)) {
-    $steps_items = array(
-        array('title' => 'Install & Activate', 'description' => 'Upload the plugin, activate it, and you\'re 90% done. No complex configuration required.'),
-        array('title' => 'Choose Your Settings', 'description' => 'Configure your preferences using the intuitive admin interface.'),
-        array('title' => 'Customize & Launch', 'description' => 'Use the modern admin interface to customize and watch your results soar.')
-    );
-}
 
 // Section 4: Features Section
-$features_heading = get_post_meta($post->ID, 'features_heading', true) ?: 'Powerful Features';
-$features_icon = get_post_meta($post->ID, 'features_icon', true) ?: '🔥';
+$features_heading = get_post_meta($post->ID, 'features_heading', true);
+$features_icon = get_post_meta($post->ID, 'features_icon', true);
 $feature_items = get_post_meta($post->ID, 'feature_items', true);
-if (!is_array($feature_items) || empty($feature_items)) {
-    $feature_items = array(
-        array('title' => 'Lightning Fast', 'description' => 'Optimized for maximum speed and performance', 'icon' => '⚡'),
-        array('title' => 'Easy to Use', 'description' => 'Intuitive interface that anyone can master', 'icon' => '🎯'),
-        array('title' => 'Secure & Reliable', 'description' => 'Built with security and stability in mind', 'icon' => '🔧'),
-        array('title' => 'Mobile Friendly', 'description' => 'Perfect performance on all devices', 'icon' => '📱')
-    );
-}
 
 // Section 5: Testimonials Section
-$testimonials_heading = get_post_meta($post->ID, 'testimonials_heading', true) ?: 'What Our Customers Say';
-$testimonials_icon = get_post_meta($post->ID, 'testimonials_icon', true) ?: '💬';
+$testimonials_heading = get_post_meta($post->ID, 'testimonials_heading', true);
+$testimonials_icon = get_post_meta($post->ID, 'testimonials_icon', true);
 $testimonial_items = get_post_meta($post->ID, 'testimonial_items', true);
-if (!is_array($testimonial_items) || empty($testimonial_items)) {
-    $testimonial_items = array(
-        array('name' => 'Sarah Johnson', 'title' => 'Corporate Training Manager', 'content' => 'This plugin transformed our corporate training platform. Course completion rates increased by 35% within the first month. The dual-mode system is genius!', 'rating' => '5'),
-        array('name' => 'Mike Chen', 'title' => 'Online Course Creator', 'content' => 'Finally, a plugin that makes courses look professional on mobile. Our students love the clean navigation, and we\'ve seen fewer support tickets.', 'rating' => '5'),
-        array('name' => 'Lisa Rodriguez', 'title' => 'Educational Director', 'content' => 'The modern admin interface is beautiful and so easy to use. We customized the colors to match our brand in minutes. Best plugin investment we\'ve made.', 'rating' => '5')
-    );
-}
 
 // Section 6: FAQ Section
-$faq_heading = get_post_meta($post->ID, 'faq_heading', true) ?: 'Frequently Asked Questions';
-$faq_icon = get_post_meta($post->ID, 'faq_icon', true) ?: '❓';
+$faq_heading = get_post_meta($post->ID, 'faq_heading', true);
+$faq_icon = get_post_meta($post->ID, 'faq_icon', true);
 $faq_items = get_post_meta($post->ID, 'faq_items', true);
-if (!is_array($faq_items) || empty($faq_items)) {
-    $faq_items = array(
-        array('question' => 'Will this plugin conflict with my theme or other plugins?', 'answer' => 'No! Our plugin uses official template systems, ensuring zero conflicts with themes and other plugins. It\'s designed to work seamlessly with any WordPress theme.'),
-        array('question' => 'Do I need coding skills to use this plugin?', 'answer' => 'Absolutely not! The plugin works perfectly out of the box with default settings. The modern admin interface makes customization as simple as clicking options.'),
-        array('question' => 'Will this work on mobile devices?', 'answer' => 'Yes! The plugin is built with a mobile-first approach. All features work perfectly on smartphones and tablets.')
-    );
-}
 
 // Section 7: Bonuses Section
-$bonuses_heading = get_post_meta($post->ID, 'bonuses_heading', true) ?: 'Exclusive Bonuses';
-$bonuses_icon = get_post_meta($post->ID, 'bonuses_icon', true) ?: '🎁';
+$bonuses_heading = get_post_meta($post->ID, 'bonuses_heading', true);
+$bonuses_icon = get_post_meta($post->ID, 'bonuses_icon', true);
 $bonus_items = get_post_meta($post->ID, 'bonus_items', true);
-if (!is_array($bonus_items) || empty($bonus_items)) {
-    $bonus_items = array(
-        array('title' => 'Premium Support', 'description' => 'Get priority email support for 1 year', 'value' => '$99', 'icon' => '🎧'),
-        array('title' => 'Custom CSS Guide', 'description' => 'Step-by-step customization guide', 'value' => '$49', 'icon' => '🎨'),
-        array('title' => 'Video Tutorials', 'description' => 'Complete video tutorial series', 'value' => '$79', 'icon' => '📹')
-    );
-}
 
 // Section 8: Guarantee Section
-$guarantee_heading = get_post_meta($post->ID, 'guarantee_heading', true) ?: 'Risk-Free 30-Day Money-Back Guarantee';
-$guarantee_icon = get_post_meta($post->ID, 'guarantee_icon', true) ?: '🛡️';
-$guarantee_text = get_post_meta($post->ID, 'guarantee_text', true) ?: 'We\'re so confident that this plugin will transform your experience and boost engagement that we offer a complete 30-day money-back guarantee. If you\'re not completely satisfied for any reason, simply contact us within 30 days for a full refund. No questions asked.';
+$guarantee_heading = get_post_meta($post->ID, 'guarantee_heading', true);
+$guarantee_icon = get_post_meta($post->ID, 'guarantee_icon', true);
+$guarantee_text = get_post_meta($post->ID, 'guarantee_text', true);
 $guarantee_points = get_post_meta($post->ID, 'guarantee_points', true);
-if (!is_array($guarantee_points) || empty($guarantee_points)) {
-    $guarantee_points = array(
-        array('point' => 'Try the plugin risk-free for 30 full days'),
-        array('point' => 'Test all features and customization options'),
-        array('point' => 'See the impact on your completion rates'),
-        array('point' => 'Full refund if not completely satisfied')
-    );
-}
 
 // Section 9: Why Choose Section
-$why_choose_heading = get_post_meta($post->ID, 'why_choose_heading', true) ?: 'Why Choose This Plugin?';
-$why_choose_icon = get_post_meta($post->ID, 'why_choose_icon', true) ?: '🎯';
+$why_choose_heading = get_post_meta($post->ID, 'why_choose_heading', true);
+$why_choose_icon = get_post_meta($post->ID, 'why_choose_icon', true);
 $why_choose_items = get_post_meta($post->ID, 'why_choose_items', true);
-if (!is_array($why_choose_items) || empty($why_choose_items)) {
-    $why_choose_items = array(
-        array('title' => 'Boost User Engagement', 'description' => 'Reduce cognitive overload and help users focus on one section at a time. Studies show organized content increases completion rates by up to 40%.', 'icon' => '📈'),
-        array('title' => 'Professional Design', 'description' => 'Seamlessly integrates with your existing theme. No design conflicts, no broken layouts - just clean, professional pages that build trust.', 'icon' => '💼'),
-        array('title' => 'Mobile-First Experience', 'description' => 'Perfect responsive design ensures your content looks amazing on every device. Your mobile users will thank you.', 'icon' => '📱'),
-        array('title' => 'Instant Organization', 'description' => 'Transform chaotic layouts into clean, professional navigation that users love. Show only what matters with smooth expandable content.', 'icon' => '⚡')
-    );
-}
 
 // Section 10: About Section
-$about_heading = get_post_meta($post->ID, 'about_heading', true) ?: 'About Our Company';
-$about_icon = get_post_meta($post->ID, 'about_icon', true) ?: '👨‍💻';
-$about_description = get_post_meta($post->ID, 'about_description', true) ?: 'We specialize in creating premium WordPress plugins that solve real problems for online educators and course creators. With years of experience in development and a deep understanding of online learning challenges, we build tools that make a real difference in user engagement and success.';
+$about_heading = get_post_meta($post->ID, 'about_heading', true);
+$about_icon = get_post_meta($post->ID, 'about_icon', true);
+$about_description = get_post_meta($post->ID, 'about_description', true);
 
 // Function to render stars for ratings
 function render_stars($rating) {
@@ -196,7 +136,7 @@ function render_stars($rating) {
         </section>
 
         <!-- SECTION 1: PROBLEM SECTION - FULLY DYNAMIC -->
-        <?php if (!empty($problem_items)): ?>
+        <?php if (!empty($problem_items) && is_array($problem_items)): ?>
         <section class="sppm-section sppm-problem-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -220,6 +160,7 @@ function render_stars($rating) {
         <?php endif; ?>
 
         <!-- SECTION 2: SOLUTION SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($solution_heading) || !empty($solution_description)): ?>
         <section class="sppm-section sppm-solution-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -232,9 +173,10 @@ function render_stars($rating) {
                 <p><?php echo esc_html($solution_description); ?></p>
             </div>
         </section>
+        <?php endif; ?>
 
         <!-- SECTION 3: HOW IT WORKS SECTION - FULLY DYNAMIC -->
-        <?php if (!empty($steps_items)): ?>
+        <?php if (!empty($steps_items) && is_array($steps_items)): ?>
         <section class="sppm-section sppm-steps-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -256,7 +198,7 @@ function render_stars($rating) {
         <?php endif; ?>
 
         <!-- SECTION 4: FEATURES SECTION - FULLY DYNAMIC -->
-        <?php if (!empty($feature_items)): ?>
+        <?php if (!empty($feature_items) && is_array($feature_items)): ?>
         <section class="sppm-section sppm-features-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -280,7 +222,7 @@ function render_stars($rating) {
         <?php endif; ?>
 
         <!-- SECTION 5: TESTIMONIALS SECTION - FULLY DYNAMIC -->
-        <?php if (!empty($testimonial_items)): ?>
+        <?php if (!empty($testimonial_items) && is_array($testimonial_items)): ?>
         <section class="sppm-section sppm-testimonials-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -307,7 +249,7 @@ function render_stars($rating) {
         <?php endif; ?>
 
         <!-- SECTION 6: FAQ SECTION - FULLY DYNAMIC -->
-        <?php if (!empty($faq_items)): ?>
+        <?php if (!empty($faq_items) && is_array($faq_items)): ?>
         <section class="sppm-section sppm-faq-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -331,7 +273,7 @@ function render_stars($rating) {
         <?php endif; ?>
 
         <!-- SECTION 7: BONUSES SECTION - FULLY DYNAMIC -->
-        <?php if (!empty($bonus_items)): ?>
+        <?php if (!empty($bonus_items) && is_array($bonus_items)): ?>
         <section class="sppm-section sppm-bonuses-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -358,6 +300,7 @@ function render_stars($rating) {
         <?php endif; ?>
 
         <!-- SECTION 8: GUARANTEE SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($guarantee_heading) || !empty($guarantee_text)): ?>
         <section class="sppm-section sppm-guarantee-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -381,9 +324,10 @@ function render_stars($rating) {
                 <?php endif; ?>
             </div>
         </section>
+        <?php endif; ?>
 
         <!-- SECTION 9: WHY CHOOSE SECTION - FULLY DYNAMIC -->
-        <?php if (!empty($why_choose_items)): ?>
+        <?php if (!empty($why_choose_items) && is_array($why_choose_items)): ?>
         <section class="sppm-section sppm-why-choose-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -407,6 +351,7 @@ function render_stars($rating) {
         <?php endif; ?>
 
         <!-- SECTION 10: ABOUT SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($about_heading) || !empty($about_description)): ?>
         <section class="sppm-section sppm-about-section">
             <div class="sppm-section-header">
                 <h2 class="sppm-section-title">
@@ -419,6 +364,7 @@ function render_stars($rating) {
                 <p><?php echo nl2br(esc_html($about_description)); ?></p>
             </div>
         </section>
+        <?php endif; ?>
 
         <!-- FINAL CTA SECTION - FULLY DYNAMIC -->
         <section class="sppm-section sppm-final-cta">
