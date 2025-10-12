@@ -280,7 +280,12 @@ class SwricePluginPageManager {
         
         foreach ($meta_fields as $field) {
             if (isset($_POST[$field])) {
-                update_post_meta($post_id, $field, sanitize_textarea_field($_POST[$field]));
+                // Special handling for URL fields
+                if ($field === 'demo_link') {
+                    update_post_meta($post_id, $field, esc_url_raw($_POST[$field]));
+                } else {
+                    update_post_meta($post_id, $field, sanitize_textarea_field($_POST[$field]));
+                }
             }
         }
         
