@@ -27,7 +27,7 @@ $hero_image = get_the_post_thumbnail_url($post->ID, 'large');
 // Section 1: Problem Section
 $problem_heading = isset($all_meta['problem_heading'][0]) ? $all_meta['problem_heading'][0] : '';
 $problem_icon = isset($all_meta['problem_icon'][0]) ? $all_meta['problem_icon'][0] : '';
-$problem_items = isset($all_meta['problem_items'][0]) ? $all_meta['problem_items'][0] : '';
+$problem_items = isset($all_meta['problem_items'][0]) ? maybe_unserialize($all_meta['problem_items'][0]) : array();
 
 // Section 2: Solution Section
 $solution_heading = isset($all_meta['solution_heading'][0]) ? $all_meta['solution_heading'][0] : '';
@@ -37,38 +37,38 @@ $solution_description = isset($all_meta['solution_description'][0]) ? $all_meta[
 // Section 3: How It Works Section
 $how_it_works_heading = isset($all_meta['how_it_works_heading'][0]) ? $all_meta['how_it_works_heading'][0] : '';
 $how_it_works_icon = isset($all_meta['how_it_works_icon'][0]) ? $all_meta['how_it_works_icon'][0] : '';
-$steps_items = isset($all_meta['steps_items'][0]) ? $all_meta['steps_items'][0] : '';
+$steps_items = isset($all_meta['steps_items'][0]) ? maybe_unserialize($all_meta['steps_items'][0]) : array();
 
 // Section 4: Features Section
 $features_heading = isset($all_meta['features_heading'][0]) ? $all_meta['features_heading'][0] : '';
 $features_icon = isset($all_meta['features_icon'][0]) ? $all_meta['features_icon'][0] : '';
-$feature_items = isset($all_meta['feature_items'][0]) ? $all_meta['feature_items'][0] : '';
+$feature_items = isset($all_meta['feature_items'][0]) ? maybe_unserialize($all_meta['feature_items'][0]) : array();
 
 // Section 5: Testimonials Section
 $testimonials_heading = isset($all_meta['testimonials_heading'][0]) ? $all_meta['testimonials_heading'][0] : '';
 $testimonials_icon = isset($all_meta['testimonials_icon'][0]) ? $all_meta['testimonials_icon'][0] : '';
-$testimonial_items = isset($all_meta['testimonial_items'][0]) ? $all_meta['testimonial_items'][0] : '';
+$testimonial_items = isset($all_meta['testimonial_items'][0]) ? maybe_unserialize($all_meta['testimonial_items'][0]) : array();
 
 // Section 6: FAQ Section
 $faq_heading = isset($all_meta['faq_heading'][0]) ? $all_meta['faq_heading'][0] : '';
 $faq_icon = isset($all_meta['faq_icon'][0]) ? $all_meta['faq_icon'][0] : '';
-$faq_items = isset($all_meta['faq_items'][0]) ? $all_meta['faq_items'][0] : '';
+$faq_items = isset($all_meta['faq_items'][0]) ? maybe_unserialize($all_meta['faq_items'][0]) : array();
 
 // Section 7: Bonuses Section
 $bonuses_heading = isset($all_meta['bonuses_heading'][0]) ? $all_meta['bonuses_heading'][0] : '';
 $bonuses_icon = isset($all_meta['bonuses_icon'][0]) ? $all_meta['bonuses_icon'][0] : '';
-$bonus_items = isset($all_meta['bonus_items'][0]) ? $all_meta['bonus_items'][0] : '';
+$bonus_items = isset($all_meta['bonus_items'][0]) ? maybe_unserialize($all_meta['bonus_items'][0]) : array();
 
 // Section 8: Guarantee Section
 $guarantee_heading = isset($all_meta['guarantee_heading'][0]) ? $all_meta['guarantee_heading'][0] : '';
 $guarantee_icon = isset($all_meta['guarantee_icon'][0]) ? $all_meta['guarantee_icon'][0] : '';
 $guarantee_text = isset($all_meta['guarantee_text'][0]) ? $all_meta['guarantee_text'][0] : '';
-$guarantee_points = isset($all_meta['guarantee_points'][0]) ? $all_meta['guarantee_points'][0] : '';
+$guarantee_points = isset($all_meta['guarantee_points'][0]) ? maybe_unserialize($all_meta['guarantee_points'][0]) : array();
 
 // Section 9: Why Choose Section
 $why_choose_heading = isset($all_meta['why_choose_heading'][0]) ? $all_meta['why_choose_heading'][0] : '';
 $why_choose_icon = isset($all_meta['why_choose_icon'][0]) ? $all_meta['why_choose_icon'][0] : '';
-$why_choose_items = isset($all_meta['why_choose_items'][0]) ? $all_meta['why_choose_items'][0] : '';
+$why_choose_items = isset($all_meta['why_choose_items'][0]) ? maybe_unserialize($all_meta['why_choose_items'][0]) : array();
 
 // Section 10: About Section
 $about_heading = isset($all_meta['about_heading'][0]) ? $all_meta['about_heading'][0] : '';
@@ -156,15 +156,17 @@ function render_stars($rating) {
             </div>
             
             <div class="sppm-problem-grid">
-                <?php foreach ($problem_items as $problem): ?>
-                <div class="sppm-problem-card">
-                    <?php if (!empty($problem['icon'])): ?>
-                    <div class="sppm-problem-icon"><?php echo $problem['icon']; ?></div>
-                    <?php endif; ?>
-                    <h3 class="sppm-problem-title"><?php echo esc_html($problem['title']); ?></h3>
-                    <p class="sppm-problem-desc"><?php echo esc_html($problem['description']); ?></p>
-                </div>
-                <?php endforeach; ?>
+                <?php if (is_array($problem_items) && !empty($problem_items)): ?>
+                    <?php foreach ($problem_items as $problem): ?>
+                    <div class="sppm-problem-card">
+                        <?php if (!empty($problem['icon'])): ?>
+                        <div class="sppm-problem-icon"><?php echo $problem['icon']; ?></div>
+                        <?php endif; ?>
+                        <h3 class="sppm-problem-title"><?php echo esc_html($problem['title']); ?></h3>
+                        <p class="sppm-problem-desc"><?php echo esc_html($problem['description']); ?></p>
+                    </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </section>
         <?php endif; ?>
@@ -196,13 +198,15 @@ function render_stars($rating) {
             </div>
             
             <div class="sppm-steps-grid">
-                <?php foreach ($steps_items as $index => $step): ?>
-                <div class="sppm-step-card">
-                    <div class="sppm-step-number"><?php echo ($index + 1); ?></div>
-                    <h3 class="sppm-step-title"><?php echo esc_html($step['title']); ?></h3>
-                    <p class="sppm-step-desc"><?php echo esc_html($step['description']); ?></p>
-                </div>
-                <?php endforeach; ?>
+                <?php if (is_array($steps_items) && !empty($steps_items)): ?>
+                    <?php foreach ($steps_items as $index => $step): ?>
+                    <div class="sppm-step-card">
+                        <div class="sppm-step-number"><?php echo ($index + 1); ?></div>
+                        <h3 class="sppm-step-title"><?php echo esc_html($step['title']); ?></h3>
+                        <p class="sppm-step-desc"><?php echo esc_html($step['description']); ?></p>
+                    </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </section>
         <?php endif; ?>
@@ -218,19 +222,21 @@ function render_stars($rating) {
             </div>
             
             <div class="sppm-features-grid">
-                <?php foreach ($feature_items as $feature): ?>
-                <div class="sppm-feature-card">
-                    <div class="sppm-feature-card-header">
-                        <?php if (!empty($feature['icon'])): ?>
-                        <div class="sppm-feature-icon"><?php echo $feature['icon']; ?></div>
-                        <?php endif; ?>
-                        <h3 class="sppm-feature-title"><?php echo esc_html($feature['title']); ?></h3>
+                <?php if (is_array($feature_items) && !empty($feature_items)): ?>
+                    <?php foreach ($feature_items as $feature): ?>
+                    <div class="sppm-feature-card">
+                        <div class="sppm-feature-card-header">
+                            <?php if (!empty($feature['icon'])): ?>
+                            <div class="sppm-feature-icon"><?php echo $feature['icon']; ?></div>
+                            <?php endif; ?>
+                            <h3 class="sppm-feature-title"><?php echo esc_html($feature['title']); ?></h3>
+                        </div>
+                        <div class="sppm-feature-card-body">
+                            <p class="sppm-feature-desc"><?php echo esc_html($feature['description']); ?></p>
+                        </div>
                     </div>
-                    <div class="sppm-feature-card-body">
-                        <p class="sppm-feature-desc"><?php echo esc_html($feature['description']); ?></p>
-                    </div>
-                </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </section>
         <?php endif; ?>
@@ -246,18 +252,20 @@ function render_stars($rating) {
             </div>
             
             <div class="sppm-testimonials-grid">
-                <?php foreach ($testimonial_items as $testimonial): ?>
-                <div class="sppm-testimonial-card">
-                    <div class="sppm-testimonial-rating">
-                        <?php echo render_stars(intval($testimonial['rating'])); ?>
+                <?php if (is_array($testimonial_items) && !empty($testimonial_items)): ?>
+                    <?php foreach ($testimonial_items as $testimonial): ?>
+                    <div class="sppm-testimonial-card">
+                        <div class="sppm-testimonial-rating">
+                            <?php echo render_stars(intval($testimonial['rating'])); ?>
+                        </div>
+                        <div class="sppm-testimonial-content">"<?php echo esc_html($testimonial['content']); ?>"</div>
+                        <div class="sppm-testimonial-author">
+                            <strong><?php echo esc_html($testimonial['name']); ?></strong>
+                            <span><?php echo esc_html($testimonial['title']); ?></span>
+                        </div>
                     </div>
-                    <div class="sppm-testimonial-content">"<?php echo esc_html($testimonial['content']); ?>"</div>
-                    <div class="sppm-testimonial-author">
-                        <strong><?php echo esc_html($testimonial['name']); ?></strong>
-                        <span><?php echo esc_html($testimonial['title']); ?></span>
-                    </div>
-                </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </section>
         <?php endif; ?>
@@ -273,15 +281,17 @@ function render_stars($rating) {
             </div>
             
             <div class="sppm-faq-list">
-                <?php foreach ($faq_items as $index => $faq): ?>
-                <div class="sppm-faq-item" data-faq="<?php echo $index; ?>">
-                    <div class="sppm-faq-question">
-                        <?php echo esc_html($faq['question']); ?>
-                        <span>+</span>
+                <?php if (is_array($faq_items) && !empty($faq_items)): ?>
+                    <?php foreach ($faq_items as $index => $faq): ?>
+                    <div class="sppm-faq-item" data-faq="<?php echo $index; ?>">
+                        <div class="sppm-faq-question">
+                            <?php echo esc_html($faq['question']); ?>
+                            <span>+</span>
+                        </div>
+                        <div class="sppm-faq-answer"><?php echo esc_html($faq['answer']); ?></div>
                     </div>
-                    <div class="sppm-faq-answer"><?php echo esc_html($faq['answer']); ?></div>
-                </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </section>
         <?php endif; ?>
@@ -297,18 +307,20 @@ function render_stars($rating) {
             </div>
             
             <div class="sppm-bonuses-grid">
-                <?php foreach ($bonus_items as $bonus): ?>
-                <div class="sppm-bonus-card">
-                    <?php if (!empty($bonus['icon'])): ?>
-                    <div class="sppm-bonus-icon"><?php echo $bonus['icon']; ?></div>
-                    <?php endif; ?>
-                    <h3 class="sppm-bonus-title"><?php echo esc_html($bonus['title']); ?></h3>
-                    <?php if (!empty($bonus['value'])): ?>
-                    <div class="sppm-bonus-value">Value: <?php echo esc_html($bonus['value']); ?></div>
-                    <?php endif; ?>
-                    <p class="sppm-bonus-desc"><?php echo esc_html($bonus['description']); ?></p>
-                </div>
-                <?php endforeach; ?>
+                <?php if (is_array($bonus_items) && !empty($bonus_items)): ?>
+                    <?php foreach ($bonus_items as $bonus): ?>
+                    <div class="sppm-bonus-card">
+                        <?php if (!empty($bonus['icon'])): ?>
+                        <div class="sppm-bonus-icon"><?php echo $bonus['icon']; ?></div>
+                        <?php endif; ?>
+                        <h3 class="sppm-bonus-title"><?php echo esc_html($bonus['title']); ?></h3>
+                        <?php if (!empty($bonus['value'])): ?>
+                        <div class="sppm-bonus-value">Value: <?php echo esc_html($bonus['value']); ?></div>
+                        <?php endif; ?>
+                        <p class="sppm-bonus-desc"><?php echo esc_html($bonus['description']); ?></p>
+                    </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </section>
         <?php endif; ?>
@@ -326,7 +338,7 @@ function render_stars($rating) {
             <div class="sppm-guarantee-content">
                 <p class="sppm-guarantee-text"><?php echo esc_html($guarantee_text); ?></p>
                 
-                <?php if (!empty($guarantee_points)): ?>
+                <?php if (is_array($guarantee_points) && !empty($guarantee_points)): ?>
                 <div class="sppm-guarantee-points">
                     <?php foreach ($guarantee_points as $point): ?>
                     <div class="sppm-guarantee-point">
@@ -351,15 +363,17 @@ function render_stars($rating) {
             </div>
             
             <div class="sppm-why-choose-grid">
-                <?php foreach ($why_choose_items as $benefit): ?>
-                <div class="sppm-benefit-card">
-                    <?php if (!empty($benefit['icon'])): ?>
-                    <div class="sppm-benefit-icon"><?php echo $benefit['icon']; ?></div>
-                    <?php endif; ?>
-                    <h3 class="sppm-benefit-title"><?php echo esc_html($benefit['title']); ?></h3>
-                    <p class="sppm-benefit-desc"><?php echo esc_html($benefit['description']); ?></p>
-                </div>
-                <?php endforeach; ?>
+                <?php if (is_array($why_choose_items) && !empty($why_choose_items)): ?>
+                    <?php foreach ($why_choose_items as $benefit): ?>
+                    <div class="sppm-benefit-card">
+                        <?php if (!empty($benefit['icon'])): ?>
+                        <div class="sppm-benefit-icon"><?php echo $benefit['icon']; ?></div>
+                        <?php endif; ?>
+                        <h3 class="sppm-benefit-title"><?php echo esc_html($benefit['title']); ?></h3>
+                        <p class="sppm-benefit-desc"><?php echo esc_html($benefit['description']); ?></p>
+                    </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </section>
         <?php endif; ?>
