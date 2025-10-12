@@ -74,11 +74,14 @@ $why_choose_items = isset($all_meta['why_choose_items'][0]) ? maybe_unserialize(
 $about_heading = isset($all_meta['about_heading'][0]) ? $all_meta['about_heading'][0] : '';
 $about_icon = isset($all_meta['about_icon'][0]) ? $all_meta['about_icon'][0] : '';
 $about_description = isset($all_meta['about_description'][0]) ? $all_meta['about_description'][0] : '';
+$about_section = isset($all_meta['about_section'][0]) ? $all_meta['about_section'][0] : '';
 
 // Final CTA Section
 $cta_title = isset($all_meta['cta_title'][0]) ? $all_meta['cta_title'][0] : '';
 $cta_subtitle = isset($all_meta['cta_subtitle'][0]) ? $all_meta['cta_subtitle'][0] : '';
 $demo_link = isset($all_meta['demo_link'][0]) ? $all_meta['demo_link'][0] : '';
+$final_cta_heading = isset($all_meta['final_cta_heading'][0]) ? $all_meta['final_cta_heading'][0] : '';
+$final_cta_icon = isset($all_meta['final_cta_icon'][0]) ? $all_meta['final_cta_icon'][0] : '';
 
 // Function to render stars for ratings
 function render_stars($rating) {
