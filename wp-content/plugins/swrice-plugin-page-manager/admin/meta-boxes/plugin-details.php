@@ -20,6 +20,7 @@ $problem_section = get_post_meta($post->ID, 'problem_section', true);
 $solution_section = get_post_meta($post->ID, 'solution_section', true);
 $guarantee_text = get_post_meta($post->ID, 'guarantee_text', true);
 $about_section = get_post_meta($post->ID, 'about_section', true);
+$demo_link = get_post_meta($post->ID, 'demo_link', true);
 ?>
 
 <div class="sppm-meta-box">
@@ -51,6 +52,17 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
                         <p class="description"><?php _e('Paste your buy now shortcode here (e.g., from payment processors like Stripe, PayPal, etc.).', 'swrice-plugin-manager'); ?></p>
                     </td>
                 </tr>
+                
+                <tr>
+                    <th scope="row">
+                        <label for="demo_link"><?php _e('Live Demo Link', 'swrice-plugin-manager'); ?></label>
+                    </th>
+                    <td>
+                        <input type="url" id="demo_link" name="demo_link" value="<?php echo esc_attr($demo_link); ?>" class="large-text" placeholder="https://demo.yoursite.com" />
+                        <p class="description"><?php _e('Enter the URL for your live demo or preview. This will show as a "Live Demo" button on your plugin page.', 'swrice-plugin-manager'); ?></p>
+                    </td>
+                </tr>
+                
             </table>
         </div>
         
@@ -669,11 +681,6 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
                     <label><?php _e('CTA Subtitle', 'swrice-plugin-manager'); ?></label>
                     <textarea name="cta_subtitle" rows="3" class="sppm-full-width" placeholder="CTA subtitle text..."><?php echo esc_textarea(get_post_meta($post->ID, 'cta_subtitle', true) ?: 'Join thousands of satisfied customers and transform your website today.'); ?></textarea>
                 </div>
-                <div class="sppm-control-group">
-                    <label><?php _e('Demo Link', 'swrice-plugin-manager'); ?></label>
-                    <input type="url" name="demo_link" value="<?php echo esc_attr(get_post_meta($post->ID, 'demo_link', true) ?: '#'); ?>" placeholder="https://demo.yoursite.com" class="sppm-full-width" />
-                    <p class="description"><?php _e('Link to your live demo or preview.', 'swrice-plugin-manager'); ?></p>
-                </div>
             </div>
 
         </div>
@@ -699,6 +706,7 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
                         <p class="description"><?php _e('Original price (for showing discounts). Leave empty if no discount.', 'swrice-plugin-manager'); ?></p>
                     </td>
                 </tr>
+                
             </table>
         </div>
         
