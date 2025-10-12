@@ -272,7 +272,10 @@ class SwricePluginPageManager {
             'why_choose_icon',
             'about_heading',
             'about_icon',
-            'about_description'
+            'about_description',
+            'cta_title',
+            'cta_subtitle',
+            'demo_link'
         );
         
         foreach ($meta_fields as $field) {

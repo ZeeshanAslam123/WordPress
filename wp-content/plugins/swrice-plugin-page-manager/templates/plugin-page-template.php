@@ -1,9 +1,9 @@
 <?php
 /**
- * Fully Dynamic Plugin Page Template
+ * Fully Dynamic Plugin Page Template - Fixed to Match Backend
  * 
- * This template creates a dynamic plugin sales page with proper HTML/CSS separation
- * All content is pulled from WordPress meta fields - no static content
+ * This template uses the ACTUAL meta keys from the backend admin interface
+ * All 10 sections are displayed dynamically from WordPress meta fields
  */
 
 // Prevent direct access
@@ -11,121 +11,79 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Get all dynamic data from WordPress meta fields
-$plugin_name = get_post_meta($post->ID, '_plugin_name', true) ?: $post->post_title;
-$plugin_subtitle = get_post_meta($post->ID, '_plugin_subtitle', true) ?: 'Transform your website with our powerful plugin solution.';
-$plugin_price = get_post_meta($post->ID, '_plugin_price', true) ?: '29';
-$plugin_original_price = get_post_meta($post->ID, '_plugin_original_price', true) ?: '';
-$plugin_rating = get_post_meta($post->ID, '_plugin_rating', true) ?: '5.0';
-$buy_now_shortcode = get_post_meta($post->ID, '_buy_now_shortcode', true) ?: '';
-$demo_link = get_post_meta($post->ID, '_demo_link', true) ?: '#';
+// Get all dynamic data from WordPress meta fields using ACTUAL backend keys
+$plugin_name = $post->post_title;
+$hero_subtitle = get_post_meta($post->ID, 'hero_subtitle', true);
+$plugin_price = get_post_meta($post->ID, 'plugin_price', true);
+$plugin_original_price = get_post_meta($post->ID, 'plugin_original_price', true);
+$buy_now_shortcode = get_post_meta($post->ID, 'buy_now_shortcode', true);
 
-// Logo and branding - dynamic
-$logo_text_line1 = get_post_meta($post->ID, '_logo_text_line1', true) ?: 'YOUR';
-$logo_text_line2 = get_post_meta($post->ID, '_logo_text_line2', true) ?: 'PLUGIN';
+// Hero image - from featured image
+$hero_image = get_the_post_thumbnail_url($post->ID, 'large');
 
-// Hero image - fully dynamic
-$hero_image = get_post_meta($post->ID, '_hero_image', true);
-if (!$hero_image) {
-    $hero_image = get_the_post_thumbnail_url($post->ID, 'large');
-}
+// Section 1: Problem Section
+$problem_heading = get_post_meta($post->ID, 'problem_heading', true);
+$problem_icon = get_post_meta($post->ID, 'problem_icon', true);
+$problem_items = get_post_meta($post->ID, 'problem_items', true);
 
-// Device mockup content - dynamic
-$device_title = get_post_meta($post->ID, '_device_title', true) ?: 'Plugin Preview';
-$device_sections = get_post_meta($post->ID, '_device_sections', true);
-if (empty($device_sections) || !is_array($device_sections)) {
-    $device_sections = array(
-        'Getting Started',
-        'Configuration', 
-        'Advanced Features'
-    );
-}
+// Section 2: Solution Section
+$solution_heading = get_post_meta($post->ID, 'solution_heading', true);
+$solution_icon = get_post_meta($post->ID, 'solution_icon', true);
+$solution_description = get_post_meta($post->ID, 'solution_description', true);
 
-// Features section - fully dynamic
-$features_title = get_post_meta($post->ID, '_features_title', true) ?: 'Why You\'ll Love It';
-$plugin_features = get_post_meta($post->ID, '_plugin_features', true);
-if (empty($plugin_features) || !is_array($plugin_features)) {
-    $plugin_features = array(
-        array('title' => 'Lightning Fast', 'description' => 'Optimized for maximum speed and performance', 'icon' => 'lightning'),
-        array('title' => 'Easy to Use', 'description' => 'Intuitive interface that anyone can master', 'icon' => 'pen'),
-        array('title' => 'Secure & Reliable', 'description' => 'Built with security and stability in mind', 'icon' => 'save'),
-        array('title' => 'Mobile Friendly', 'description' => 'Perfect performance on all devices', 'icon' => 'circle')
-    );
-}
+// Section 3: How It Works Section
+$how_it_works_heading = get_post_meta($post->ID, 'how_it_works_heading', true);
+$how_it_works_icon = get_post_meta($post->ID, 'how_it_works_icon', true);
+$steps_items = get_post_meta($post->ID, 'steps_items', true);
 
-// Sidebar content - dynamic
-$sidebar_title = get_post_meta($post->ID, '_sidebar_title', true) ?: 'Quick Setup';
-$sidebar_items = get_post_meta($post->ID, '_sidebar_items', true);
-if (empty($sidebar_items) || !is_array($sidebar_items)) {
-    $sidebar_items = array(
-        array('title' => 'Install & Activate', 'subtitle' => 'One-click setup'),
-        array('title' => 'Configure Settings', 'subtitle' => 'Customize to your needs')
-    );
-}
+// Section 4: Features Section
+$features_heading = get_post_meta($post->ID, 'features_heading', true);
+$features_icon = get_post_meta($post->ID, 'features_icon', true);
+$feature_items = get_post_meta($post->ID, 'feature_items', true);
 
-// Checklist section - dynamic
-$checklist_title = get_post_meta($post->ID, '_checklist_title', true) ?: 'Powerful Features';
-$plugin_checklist = get_post_meta($post->ID, '_plugin_checklist', true);
-if (empty($plugin_checklist) || !is_array($plugin_checklist)) {
-    $plugin_checklist = array(
-        'Easy Installation',
-        'Responsive Design', 
-        'SEO Optimized',
-        'Regular Updates'
-    );
-}
+// Section 5: Testimonials Section
+$testimonials_heading = get_post_meta($post->ID, 'testimonials_heading', true);
+$testimonials_icon = get_post_meta($post->ID, 'testimonials_icon', true);
+$testimonial_items = get_post_meta($post->ID, 'testimonial_items', true);
 
-// Screenshots section - dynamic
-$screenshots_title = get_post_meta($post->ID, '_screenshots_title', true) ?: 'Screenshots';
-$plugin_screenshots = get_post_meta($post->ID, '_plugin_screenshots', true);
-if (empty($plugin_screenshots) || !is_array($plugin_screenshots)) {
-    // Default placeholder screenshots
-    $plugin_screenshots = array(
-        array('url' => 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'380\'><rect width=\'100%\' height=\'100%\' fill=\'%23f7fbff\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239bbfe0\' font-family=\'Inter\' font-size=\'20\'>Screenshot 1</text></svg>', 'alt' => 'Screenshot 1'),
-        array('url' => 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'380\'><rect width=\'100%\' height=\'100%\' fill=\'%23f7fbff\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239bbfe0\' font-family=\'Inter\' font-size=\'20\'>Screenshot 2</text></svg>', 'alt' => 'Screenshot 2'),
-        array('url' => 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'380\'><rect width=\'100%\' height=\'100%\' fill=\'%23f7fbff\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239bbfe0\' font-family=\'Inter\' font-size=\'20\'>Screenshot 3</text></svg>', 'alt' => 'Screenshot 3')
-    );
-}
+// Section 6: FAQ Section
+$faq_heading = get_post_meta($post->ID, 'faq_heading', true);
+$faq_icon = get_post_meta($post->ID, 'faq_icon', true);
+$faq_items = get_post_meta($post->ID, 'faq_items', true);
 
-// Testimonials section - dynamic
-$testimonials_title = get_post_meta($post->ID, '_testimonials_title', true) ?: 'What People Are Saying';
-$plugin_testimonials = get_post_meta($post->ID, '_plugin_testimonials', true);
-if (empty($plugin_testimonials) || !is_array($plugin_testimonials)) {
-    $plugin_testimonials = array(
-        array('content' => 'This plugin completely transformed my website. Highly recommended!', 'author' => 'Sarah Johnson', 'title' => 'Web Developer'),
-        array('content' => 'Easy to use and excellent support. Worth every penny!', 'author' => 'Mike Chen', 'title' => 'Business Owner'),
-        array('content' => 'The best investment I made for my WordPress site.', 'author' => 'Lisa Rodriguez', 'title' => 'Blogger')
-    );
-}
+// Section 7: Bonuses Section
+$bonuses_heading = get_post_meta($post->ID, 'bonuses_heading', true);
+$bonuses_icon = get_post_meta($post->ID, 'bonuses_icon', true);
+$bonus_items = get_post_meta($post->ID, 'bonus_items', true);
 
-// FAQ section - dynamic
-$faq_title = get_post_meta($post->ID, '_faq_title', true) ?: 'Frequently Asked Questions';
-$plugin_faq = get_post_meta($post->ID, '_plugin_faq', true);
-if (empty($plugin_faq) || !is_array($plugin_faq)) {
-    $plugin_faq = array(
-        array('question' => 'How easy is it to install?', 'answer' => 'Installation is simple - just upload, activate, and configure in minutes.'),
-        array('question' => 'Do you offer support?', 'answer' => 'Yes! We provide 24/7 support to help you with any questions or issues.'),
-        array('question' => 'Is it compatible with my theme?', 'answer' => 'Our plugin works with all standard WordPress themes and popular page builders.')
-    );
-}
+// Section 8: Guarantee Section
+$guarantee_heading = get_post_meta($post->ID, 'guarantee_heading', true);
+$guarantee_icon = get_post_meta($post->ID, 'guarantee_icon', true);
+$guarantee_text = get_post_meta($post->ID, 'guarantee_text', true);
+$guarantee_points = get_post_meta($post->ID, 'guarantee_points', true);
 
-// CTA section - dynamic
-$cta_title = get_post_meta($post->ID, '_cta_title', true) ?: 'Ready to Get Started?';
-$cta_subtitle = get_post_meta($post->ID, '_cta_subtitle', true) ?: 'Join thousands of satisfied customers and transform your website today.';
+// Section 9: Why Choose Section
+$why_choose_heading = get_post_meta($post->ID, 'why_choose_heading', true);
+$why_choose_icon = get_post_meta($post->ID, 'why_choose_icon', true);
+$why_choose_items = get_post_meta($post->ID, 'why_choose_items', true);
 
-// Function to get feature icon SVG
-function get_feature_icon($icon_type) {
-    switch($icon_type) {
-        case 'lightning':
-            return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" fill="#4a8bbd"/></svg>';
-        case 'pen':
-            return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" fill="#4a8bbd"/><path d="M20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#82bfe4"/></svg>';
-        case 'save':
-            return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4z" fill="#4a8bbd"/><path d="M17 3v4H7V3" fill="#82bfe4"/></svg>';
-        case 'circle':
-        default:
-            return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" fill="#bcdff6"/></svg>';
+// Section 10: About Section
+$about_heading = get_post_meta($post->ID, 'about_heading', true);
+$about_icon = get_post_meta($post->ID, 'about_icon', true);
+$about_description = get_post_meta($post->ID, 'about_description', true);
+
+// Final CTA Section
+$cta_title = get_post_meta($post->ID, 'cta_title', true);
+$cta_subtitle = get_post_meta($post->ID, 'cta_subtitle', true);
+$demo_link = get_post_meta($post->ID, 'demo_link', true);
+
+// Function to render stars for ratings
+function render_stars($rating) {
+    $stars = '';
+    for ($i = 1; $i <= 5; $i++) {
+        $stars .= $i <= $rating ? '⭐' : '☆';
     }
+    return $stars;
 }
 ?>
 
@@ -144,17 +102,17 @@ function get_feature_icon($icon_type) {
                         </svg>
                     </div>
                     <div class="sppm-logo-text">
-                        <?php echo esc_html($logo_text_line1); ?><br><?php echo esc_html($logo_text_line2); ?>
+                        <?php echo esc_html($plugin_name); ?>
                     </div>
                 </div>
 
                 <div class="sppm-rating">
                     <div class="sppm-rating-stars">★ ★ ★ ★ ★</div>
-                    <div><?php echo esc_html($plugin_rating); ?></div>
+                    <div>5.0</div>
                 </div>
 
                 <h1 class="sppm-hero-title"><?php echo esc_html($plugin_name); ?></h1>
-                <p class="sppm-hero-subtitle"><?php echo esc_html($plugin_subtitle); ?></p>
+                <p class="sppm-hero-subtitle"><?php echo esc_html($hero_subtitle); ?></p>
 
                 <div class="sppm-hero-ctas">
                     <?php if ($buy_now_shortcode): ?>
@@ -162,7 +120,7 @@ function get_feature_icon($icon_type) {
                     <?php else: ?>
                         <button class="sppm-btn sppm-btn-primary">Buy Now - $<?php echo esc_html($plugin_price); ?></button>
                     <?php endif; ?>
-                    <a href="<?php echo esc_url($demo_link); ?>" class="sppm-btn sppm-btn-ghost">Live Demo</a>
+                    <a href="#" class="sppm-btn sppm-btn-ghost">Live Demo</a>
                 </div>
             </div>
 
@@ -172,101 +130,141 @@ function get_feature_icon($icon_type) {
                 <?php else: ?>
                     <div class="sppm-device">
                         <div class="sppm-device-inner">
-                            <h3><?php echo esc_html($device_title); ?></h3>
-                            <?php foreach ($device_sections as $section): ?>
-                            <div class="sppm-section-row"><?php echo esc_html($section); ?> <span>▾</span></div>
-                            <?php endforeach; ?>
+                            <h3>Plugin Preview</h3>
+                            <div class="sppm-section-row">Getting Started <span>▾</span></div>
+                            <div class="sppm-section-row">Configuration <span>▾</span></div>
+                            <div class="sppm-section-row">Advanced Features <span>▾</span></div>
                         </div>
                     </div>
                 <?php endif; ?>
             </div>
         </section>
 
-        <!-- FEATURES SECTION - FULLY DYNAMIC -->
-        <section class="sppm-section">
-            <div class="sppm-features-wrapper">
-                <div class="sppm-features-main">
-                    <h2 class="sppm-section-title"><?php echo esc_html($features_title); ?></h2>
-                    
-                    <div class="sppm-features-grid">
-                        <?php foreach ($plugin_features as $feature): ?>
-                        <div class="sppm-feature-card">
-                            <div class="sppm-feature-icon">
-                                <?php echo get_feature_icon($feature['icon']); ?>
-                            </div>
-                            <div>
-                                <h3 class="sppm-feature-title"><?php echo esc_html($feature['title']); ?></h3>
-                                <p class="sppm-feature-desc"><?php echo esc_html($feature['description']); ?></p>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-
-                <div class="sppm-sidebar">
-                    <div class="sppm-sidebar-card">
-                        <h4 class="sppm-sidebar-title"><?php echo esc_html($sidebar_title); ?></h4>
-                        <?php foreach ($sidebar_items as $item): ?>
-                        <div class="sppm-sidebar-item">
-                            <strong><?php echo esc_html($item['title']); ?></strong>
-                            <div class="sppm-sidebar-item-subtitle"><?php echo esc_html($item['subtitle']); ?></div>
-                        </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
+        <!-- SECTION 1: PROBLEM SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($problem_items) && is_array($problem_items)): ?>
+        <section class="sppm-section sppm-problem-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($problem_icon): ?><span class="sppm-section-icon"><?php echo $problem_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($problem_heading); ?>
+                </h2>
             </div>
-        </section>
-
-        <!-- CHECKLIST SECTION - FULLY DYNAMIC -->
-        <section class="sppm-section">
-            <h2 class="sppm-checklist-title"><?php echo esc_html($checklist_title); ?></h2>
             
-            <div class="sppm-checklist">
-                <?php foreach ($plugin_checklist as $item): ?>
-                <div class="sppm-check-item">
-                    <svg class="sppm-check-icon" viewBox="0 0 24 24" width="20" height="20">
-                        <circle cx="12" cy="12" r="10" fill="#eaf6fc"/>
-                        <path d="M9 12.5l1.8 1.8L15 10" stroke="#2b7fb3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                    </svg>
-                    <div class="sppm-check-text"><?php echo esc_html($item); ?></div>
+            <div class="sppm-problem-grid">
+                <?php foreach ($problem_items as $problem): ?>
+                <div class="sppm-problem-card">
+                    <?php if (!empty($problem['icon'])): ?>
+                    <div class="sppm-problem-icon"><?php echo $problem['icon']; ?></div>
+                    <?php endif; ?>
+                    <h3 class="sppm-problem-title"><?php echo esc_html($problem['title']); ?></h3>
+                    <p class="sppm-problem-desc"><?php echo esc_html($problem['description']); ?></p>
                 </div>
                 <?php endforeach; ?>
             </div>
         </section>
+        <?php endif; ?>
 
-        <!-- SCREENSHOTS SECTION - FULLY DYNAMIC -->
-        <section class="sppm-section">
-            <h3 class="sppm-screenshots-title"><?php echo esc_html($screenshots_title); ?></h3>
+        <!-- SECTION 2: SOLUTION SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($solution_heading) || !empty($solution_description)): ?>
+        <section class="sppm-section sppm-solution-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($solution_icon): ?><span class="sppm-section-icon"><?php echo $solution_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($solution_heading); ?>
+                </h2>
+            </div>
             
-            <div class="sppm-screenshots">
-                <?php foreach ($plugin_screenshots as $screenshot): ?>
-                <div class="sppm-screenshot">
-                    <img src="<?php echo esc_url($screenshot['url']); ?>" alt="<?php echo esc_attr($screenshot['alt']); ?>">
+            <div class="sppm-solution-content">
+                <p><?php echo esc_html($solution_description); ?></p>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- SECTION 3: HOW IT WORKS SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($steps_items) && is_array($steps_items)): ?>
+        <section class="sppm-section sppm-steps-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($how_it_works_icon): ?><span class="sppm-section-icon"><?php echo $how_it_works_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($how_it_works_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-steps-grid">
+                <?php foreach ($steps_items as $index => $step): ?>
+                <div class="sppm-step-card">
+                    <div class="sppm-step-number"><?php echo ($index + 1); ?></div>
+                    <h3 class="sppm-step-title"><?php echo esc_html($step['title']); ?></h3>
+                    <p class="sppm-step-desc"><?php echo esc_html($step['description']); ?></p>
                 </div>
                 <?php endforeach; ?>
             </div>
         </section>
+        <?php endif; ?>
 
-        <!-- TESTIMONIALS SECTION - FULLY DYNAMIC -->
-        <section class="sppm-section">
-            <h3 class="sppm-testimonials-title"><?php echo esc_html($testimonials_title); ?></h3>
+        <!-- SECTION 4: FEATURES SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($feature_items) && is_array($feature_items)): ?>
+        <section class="sppm-section sppm-features-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($features_icon): ?><span class="sppm-section-icon"><?php echo $features_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($features_heading); ?>
+                </h2>
+            </div>
             
-            <div class="sppm-testimonials">
-                <?php foreach ($plugin_testimonials as $testimonial): ?>
+            <div class="sppm-features-grid">
+                <?php foreach ($feature_items as $feature): ?>
+                <div class="sppm-feature-card">
+                    <?php if (!empty($feature['icon'])): ?>
+                    <div class="sppm-feature-icon"><?php echo $feature['icon']; ?></div>
+                    <?php endif; ?>
+                    <h3 class="sppm-feature-title"><?php echo esc_html($feature['title']); ?></h3>
+                    <p class="sppm-feature-desc"><?php echo esc_html($feature['description']); ?></p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- SECTION 5: TESTIMONIALS SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($testimonial_items) && is_array($testimonial_items)): ?>
+        <section class="sppm-section sppm-testimonials-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($testimonials_icon): ?><span class="sppm-section-icon"><?php echo $testimonials_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($testimonials_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-testimonials-grid">
+                <?php foreach ($testimonial_items as $testimonial): ?>
                 <div class="sppm-testimonial-card">
-                    <div class="sppm-testimonial-quote">"<?php echo esc_html($testimonial['content']); ?>"</div>
-                    <div class="sppm-testimonial-meta">— <?php echo esc_html($testimonial['author']); ?>, <?php echo esc_html($testimonial['title']); ?></div>
+                    <div class="sppm-testimonial-rating">
+                        <?php echo render_stars(intval($testimonial['rating'])); ?>
+                    </div>
+                    <div class="sppm-testimonial-content">"<?php echo esc_html($testimonial['content']); ?>"</div>
+                    <div class="sppm-testimonial-author">
+                        <strong><?php echo esc_html($testimonial['name']); ?></strong>
+                        <span><?php echo esc_html($testimonial['title']); ?></span>
+                    </div>
                 </div>
                 <?php endforeach; ?>
             </div>
         </section>
+        <?php endif; ?>
 
-        <!-- FAQ SECTION - FULLY DYNAMIC -->
-        <section class="sppm-section">
-            <h3 class="sppm-faq-title"><?php echo esc_html($faq_title); ?></h3>
+        <!-- SECTION 6: FAQ SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($faq_items) && is_array($faq_items)): ?>
+        <section class="sppm-section sppm-faq-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($faq_icon): ?><span class="sppm-section-icon"><?php echo $faq_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($faq_heading); ?>
+                </h2>
+            </div>
             
             <div class="sppm-faq-list">
-                <?php foreach ($plugin_faq as $index => $faq): ?>
+                <?php foreach ($faq_items as $index => $faq): ?>
                 <div class="sppm-faq-item" data-faq="<?php echo $index; ?>">
                     <div class="sppm-faq-question">
                         <?php echo esc_html($faq['question']); ?>
@@ -277,13 +275,113 @@ function get_feature_icon($icon_type) {
                 <?php endforeach; ?>
             </div>
         </section>
+        <?php endif; ?>
 
-        <!-- CTA SECTION - FULLY DYNAMIC -->
-        <section class="sppm-section">
+        <!-- SECTION 7: BONUSES SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($bonus_items) && is_array($bonus_items)): ?>
+        <section class="sppm-section sppm-bonuses-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($bonuses_icon): ?><span class="sppm-section-icon"><?php echo $bonuses_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($bonuses_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-bonuses-grid">
+                <?php foreach ($bonus_items as $bonus): ?>
+                <div class="sppm-bonus-card">
+                    <?php if (!empty($bonus['icon'])): ?>
+                    <div class="sppm-bonus-icon"><?php echo $bonus['icon']; ?></div>
+                    <?php endif; ?>
+                    <h3 class="sppm-bonus-title"><?php echo esc_html($bonus['title']); ?></h3>
+                    <?php if (!empty($bonus['value'])): ?>
+                    <div class="sppm-bonus-value">Value: <?php echo esc_html($bonus['value']); ?></div>
+                    <?php endif; ?>
+                    <p class="sppm-bonus-desc"><?php echo esc_html($bonus['description']); ?></p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- SECTION 8: GUARANTEE SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($guarantee_heading) || !empty($guarantee_text)): ?>
+        <section class="sppm-section sppm-guarantee-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($guarantee_icon): ?><span class="sppm-section-icon"><?php echo $guarantee_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($guarantee_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-guarantee-content">
+                <p class="sppm-guarantee-text"><?php echo esc_html($guarantee_text); ?></p>
+                
+                <?php if (!empty($guarantee_points)): ?>
+                <div class="sppm-guarantee-points">
+                    <?php foreach ($guarantee_points as $point): ?>
+                    <div class="sppm-guarantee-point">
+                        <span class="sppm-guarantee-check">✅</span>
+                        <?php echo esc_html($point['point']); ?>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- SECTION 9: WHY CHOOSE SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($why_choose_items) && is_array($why_choose_items)): ?>
+        <section class="sppm-section sppm-why-choose-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($why_choose_icon): ?><span class="sppm-section-icon"><?php echo $why_choose_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($why_choose_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-why-choose-grid">
+                <?php foreach ($why_choose_items as $benefit): ?>
+                <div class="sppm-benefit-card">
+                    <?php if (!empty($benefit['icon'])): ?>
+                    <div class="sppm-benefit-icon"><?php echo $benefit['icon']; ?></div>
+                    <?php endif; ?>
+                    <h3 class="sppm-benefit-title"><?php echo esc_html($benefit['title']); ?></h3>
+                    <p class="sppm-benefit-desc"><?php echo esc_html($benefit['description']); ?></p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- SECTION 10: ABOUT SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($about_heading) || !empty($about_description)): ?>
+        <section class="sppm-section sppm-about-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($about_icon): ?><span class="sppm-section-icon"><?php echo $about_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($about_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-about-content">
+                <p><?php echo nl2br(esc_html($about_description)); ?></p>
+            </div>
+        </section>
+        <?php endif; ?>
+
+        <!-- FINAL CTA SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($cta_title) || !empty($cta_subtitle)): ?>
+        <section class="sppm-section sppm-final-cta">
             <div class="sppm-cta">
                 <div class="sppm-cta-content">
+                    <?php if (!empty($cta_title)): ?>
                     <h3 class="sppm-cta-title"><?php echo esc_html($cta_title); ?></h3>
+                    <?php endif; ?>
+                    <?php if (!empty($cta_subtitle)): ?>
                     <p class="sppm-cta-subtitle"><?php echo esc_html($cta_subtitle); ?></p>
+                    <?php endif; ?>
                 </div>
                 
                 <div class="sppm-cta-buttons">
@@ -292,10 +390,13 @@ function get_feature_icon($icon_type) {
                     <?php else: ?>
                         <button class="sppm-btn sppm-btn-primary">Buy Now - $<?php echo esc_html($plugin_price); ?></button>
                     <?php endif; ?>
-                    <a href="<?php echo esc_url($demo_link); ?>" class="sppm-btn sppm-btn-ghost">Live Demo</a>
+                    <?php if (!empty($demo_link) && $demo_link !== '#'): ?>
+                    <a href="<?php echo esc_url($demo_link); ?>" class="sppm-btn sppm-btn-ghost" target="_blank">Live Demo</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
+        <?php endif; ?>
 
     </div>
 </div>
