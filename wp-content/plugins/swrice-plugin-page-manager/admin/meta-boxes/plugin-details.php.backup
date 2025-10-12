@@ -658,24 +658,6 @@ $about_section = get_post_meta($post->ID, 'about_section', true);
                 </div>
             </div>
 
-            <!-- Final CTA Section -->
-            <div class="sppm-section-control">
-                <h3><?php _e('Final CTA Section', 'swrice-plugin-manager'); ?></h3>
-                <div class="sppm-control-group">
-                    <label><?php _e('CTA Title', 'swrice-plugin-manager'); ?></label>
-                    <input type="text" name="cta_title" value="<?php echo esc_attr(get_post_meta($post->ID, 'cta_title', true) ?: 'Ready to Get Started?'); ?>" placeholder="CTA Title" class="sppm-full-width" />
-                </div>
-                <div class="sppm-control-group">
-                    <label><?php _e('CTA Subtitle', 'swrice-plugin-manager'); ?></label>
-                    <textarea name="cta_subtitle" rows="3" class="sppm-full-width" placeholder="CTA subtitle text..."><?php echo esc_textarea(get_post_meta($post->ID, 'cta_subtitle', true) ?: 'Join thousands of satisfied customers and transform your website today.'); ?></textarea>
-                </div>
-                <div class="sppm-control-group">
-                    <label><?php _e('Demo Link', 'swrice-plugin-manager'); ?></label>
-                    <input type="url" name="demo_link" value="<?php echo esc_attr(get_post_meta($post->ID, 'demo_link', true) ?: '#'); ?>" placeholder="https://demo.yoursite.com" class="sppm-full-width" />
-                    <p class="description"><?php _e('Link to your live demo or preview.', 'swrice-plugin-manager'); ?></p>
-                </div>
-            </div>
-
         </div>
         
         <div id="tab-pricing" class="sppm-tab-content">

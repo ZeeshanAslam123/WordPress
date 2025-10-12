@@ -72,6 +72,11 @@ $about_heading = get_post_meta($post->ID, 'about_heading', true);
 $about_icon = get_post_meta($post->ID, 'about_icon', true);
 $about_description = get_post_meta($post->ID, 'about_description', true);
 
+// Final CTA Section
+$cta_title = get_post_meta($post->ID, 'cta_title', true);
+$cta_subtitle = get_post_meta($post->ID, 'cta_subtitle', true);
+$demo_link = get_post_meta($post->ID, 'demo_link', true);
+
 // Function to render stars for ratings
 function render_stars($rating) {
     $stars = '';
@@ -367,11 +372,16 @@ function render_stars($rating) {
         <?php endif; ?>
 
         <!-- FINAL CTA SECTION - FULLY DYNAMIC -->
+        <?php if (!empty($cta_title) || !empty($cta_subtitle)): ?>
         <section class="sppm-section sppm-final-cta">
             <div class="sppm-cta">
                 <div class="sppm-cta-content">
-                    <h3 class="sppm-cta-title">Ready to Get Started?</h3>
-                    <p class="sppm-cta-subtitle">Join thousands of satisfied customers and transform your website today.</p>
+                    <?php if (!empty($cta_title)): ?>
+                    <h3 class="sppm-cta-title"><?php echo esc_html($cta_title); ?></h3>
+                    <?php endif; ?>
+                    <?php if (!empty($cta_subtitle)): ?>
+                    <p class="sppm-cta-subtitle"><?php echo esc_html($cta_subtitle); ?></p>
+                    <?php endif; ?>
                 </div>
                 
                 <div class="sppm-cta-buttons">
@@ -380,10 +390,13 @@ function render_stars($rating) {
                     <?php else: ?>
                         <button class="sppm-btn sppm-btn-primary">Buy Now - $<?php echo esc_html($plugin_price); ?></button>
                     <?php endif; ?>
-                    <a href="#" class="sppm-btn sppm-btn-ghost">Live Demo</a>
+                    <?php if (!empty($demo_link) && $demo_link !== '#'): ?>
+                    <a href="<?php echo esc_url($demo_link); ?>" class="sppm-btn sppm-btn-ghost" target="_blank">Live Demo</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
+        <?php endif; ?>
 
     </div>
 </div>
