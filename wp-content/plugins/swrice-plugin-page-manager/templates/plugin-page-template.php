@@ -146,30 +146,55 @@ function render_stars($rating) {
         </section>
 
         <?php
-        // Get section order and enabled states for drag-and-drop functionality
+        // Get section order for drag-and-drop (minimal implementation)
         $section_order = get_post_meta($post->ID, 'section_order', true);
         $section_enabled = get_post_meta($post->ID, 'section_enabled', true);
         
-        // Default section order if not set
         if (!is_array($section_order) || empty($section_order)) {
-            $section_order = array(
-                'problem', 'solution', 'how_it_works', 'features', 
-                'testimonials', 'faq', 'bonuses', 'guarantee', 
-                'why_choose', 'about', 'final_cta'
-            );
+            $section_order = array('problem', 'solution', 'how_it_works', 'features', 'testimonials', 'faq', 'bonuses', 'guarantee', 'why_choose', 'about', 'final_cta');
         }
-        
-        // Default enabled states if not set
         if (!is_array($section_enabled)) {
-            $section_enabled = array();
-            foreach ($section_order as $section) {
-                $section_enabled[$section] = true;
-            }
+            $section_enabled = array_fill_keys($section_order, true);
         }
-        
-        // Start output buffering to capture all sections
-        ob_start();
         ?>
+        
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var sectionOrder = <?php echo json_encode($section_order); ?>;
+            var sectionEnabled = <?php echo json_encode($section_enabled); ?>;
+            var container = document.querySelector('.sppm-plugin-page');
+            
+            if (!container) return;
+            
+            // Hide disabled sections
+            Object.keys(sectionEnabled).forEach(function(sectionKey) {
+                if (!sectionEnabled[sectionKey]) {
+                    var sectionElement = container.querySelector('.sppm-' + sectionKey.replace('_', '-') + '-section');
+                    if (sectionElement) {
+                        sectionElement.style.display = 'none';
+                    }
+                }
+            });
+            
+            // Reorder sections based on admin settings
+            var sections = {};
+            sectionOrder.forEach(function(sectionKey) {
+                var className = '.sppm-' + sectionKey.replace('_', '-') + '-section';
+                var element = container.querySelector(className);
+                if (element && sectionEnabled[sectionKey]) {
+                    sections[sectionKey] = element;
+                    element.remove();
+                }
+            });
+            
+            // Append sections in the specified order
+            sectionOrder.forEach(function(sectionKey) {
+                if (sections[sectionKey] && sectionEnabled[sectionKey]) {
+                    container.appendChild(sections[sectionKey]);
+                }
+            });
+        });
+        </script>
 
         <!-- SECTION 1: PROBLEM SECTION - FULLY DYNAMIC -->
         <?php if (!empty($problem_items) && is_array($problem_items)): ?>
@@ -446,36 +471,6 @@ function render_stars($rating) {
             </div>
         </section>
         <?php endif; ?>
-
-        <?php
-        // Capture all sections content
-        $all_sections_content = ob_get_clean();
-        
-        // Parse sections and create a mapping
-        $sections_map = array();
-        
-        // Extract each section with its identifier
-        preg_match_all('/<!-- SECTION \d+: (.+?) SECTION[^>]*-->(.*?)(?=<!-- SECTION \d+:|$)/s', $all_sections_content, $matches, PREG_SET_ORDER);
-        
-        foreach ($matches as $match) {
-            $section_name = strtolower(str_replace(' ', '_', trim($match[1])));
-            $section_name = str_replace('_-_fully_dynamic', '', $section_name);
-            $sections_map[$section_name] = $match[0];
-        }
-        
-        // Output sections in the specified order
-        foreach ($section_order as $section_key) {
-            // Skip if section is disabled
-            if (!isset($section_enabled[$section_key]) || !$section_enabled[$section_key]) {
-                continue;
-            }
-            
-            // Output the section if it exists
-            if (isset($sections_map[$section_key])) {
-                echo $sections_map[$section_key];
-            }
-        }
-        ?>
 
     </div>
 </div>
