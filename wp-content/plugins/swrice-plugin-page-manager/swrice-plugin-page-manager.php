@@ -24,7 +24,9 @@ define('SPPM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SPPM_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('SPPM_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
+/**
  * Main plugin class
+ */
 class SwricePluginPageManager {
     
     private static $instance = null;
@@ -110,7 +112,9 @@ class SwricePluginPageManager {
         add_shortcode('buy_now_button', array($this, 'buy_now_button_shortcode'));
     }
     
+    /**
      * Plugin page shortcode
+     */
     public function plugin_page_shortcode($atts) {
         $atts = shortcode_atts(array(
             'id' => 0,
@@ -134,7 +138,9 @@ class SwricePluginPageManager {
         return ob_get_clean();
     }
     
-     * Buy now button shortcode
+     /**
+      * Buy now button shortcode
+      */
     public function buy_now_button_shortcode($atts, $content = '') {
         $atts = shortcode_atts(array(
             'url' => '#',
@@ -172,7 +178,9 @@ class SwricePluginPageManager {
         );
     }
     
-     * Plugin page details meta box callback
+     /**
+      * Plugin page details meta box callback
+      */
     public function plugin_page_details_callback($post) {
         wp_nonce_field('plugin_page_details_nonce', 'plugin_page_details_nonce');
         
@@ -181,14 +189,18 @@ class SwricePluginPageManager {
         include SPPM_PLUGIN_DIR . 'admin/meta-boxes/plugin-details.php';
     }
     
-     * Plugin page shortcode meta box callback
+     /**
+      * Plugin page shortcode meta box callback
+      */
     public function plugin_page_shortcode_callback($post) {
         echo '<p><strong>Use this shortcode to display the plugin page:</strong></p>';
         echo '<input type="text" value="[plugin_page id=&quot;' . $post->ID . '&quot;]" readonly style="width: 100%;" onclick="this.select();" />';
         echo '<p><small>Copy and paste this shortcode anywhere you want to display this plugin page.</small></p>';
     }
     
-     * Save meta boxes
+     /**
+      * Save meta boxes
+      */
     public function save_meta_boxes($post_id) {
         if (!isset($_POST['plugin_page_details_nonce']) || !wp_verify_nonce($_POST['plugin_page_details_nonce'], 'plugin_page_details_nonce')) {
             return;
@@ -408,7 +420,9 @@ class SwricePluginPageManager {
         }
     }
     
-     * Load and render a section template
+     /**
+      * Load and render a section template
+      */
     public function load_section($section_key, $all_meta, $post_id) {
         $section_file = SPPM_PLUGIN_DIR . 'templates/sections/section-' . $section_key . '.php';
         
@@ -422,7 +436,9 @@ class SwricePluginPageManager {
         }
     }
     
-     * Render section inline (fallback for sections not yet extracted)
+     /**
+      * Render section inline (fallback for sections not yet extracted)
+      */
     private function render_section_inline($section_key, $all_meta, $post_id) {
         // This will contain the inline rendering logic for sections
         // that haven't been extracted to separate files yet
@@ -463,7 +479,9 @@ class SwricePluginPageManager {
         }
     }
     
-     * Render problem section inline
+     /**
+      * Render problem section inline
+      */
     private function render_problem_section($all_meta) {
         $problem_heading = isset($all_meta['problem_heading'][0]) ? $all_meta['problem_heading'][0] : 'Common Problems';
         $problem_icon = isset($all_meta['problem_icon'][0]) ? $all_meta['problem_icon'][0] : '';
@@ -493,7 +511,9 @@ class SwricePluginPageManager {
         <?php endif;
     }
     
-     * Render solution section inline
+     /**
+      * Render solution section inline
+      */
     private function render_solution_section($all_meta) {
         $solution_heading = isset($all_meta['solution_heading'][0]) ? $all_meta['solution_heading'][0] : 'Our Solution';
         $solution_icon = isset($all_meta['solution_icon'][0]) ? $all_meta['solution_icon'][0] : '';
@@ -514,7 +534,9 @@ class SwricePluginPageManager {
         <?php
     }
     
-     * Render how it works section inline
+     /**
+      * Render how it works section inline
+      */
     private function render_how_it_works_section($all_meta) {
         $how_it_works_heading = isset($all_meta['how_it_works_heading'][0]) ? $all_meta['how_it_works_heading'][0] : 'How It Works';
         $how_it_works_icon = isset($all_meta['how_it_works_icon'][0]) ? $all_meta['how_it_works_icon'][0] : '';
@@ -542,7 +564,9 @@ class SwricePluginPageManager {
         <?php endif;
     }
     
-     * Render features section inline
+     /**
+      * Render features section inline
+      */
     private function render_features_section($all_meta) {
         $features_heading = isset($all_meta['features_heading'][0]) ? $all_meta['features_heading'][0] : 'Features';
         $features_icon = isset($all_meta['features_icon'][0]) ? $all_meta['features_icon'][0] : '';
@@ -572,7 +596,9 @@ class SwricePluginPageManager {
         <?php endif;
     }
     
-     * Render testimonials section inline
+     /**
+      * Render testimonials section inline
+      */
     private function render_testimonials_section($all_meta) {
         $testimonials_heading = isset($all_meta['testimonials_heading'][0]) ? $all_meta['testimonials_heading'][0] : 'Testimonials';
         $testimonials_icon = isset($all_meta['testimonials_icon'][0]) ? $all_meta['testimonials_icon'][0] : '';
@@ -606,7 +632,9 @@ class SwricePluginPageManager {
         <?php endif;
     }
     
-     * Render FAQ section inline
+     /**
+      * Render FAQ section inline
+      */
     private function render_faq_section($all_meta) {
         $faq_heading = isset($all_meta['faq_heading'][0]) ? $all_meta['faq_heading'][0] : 'FAQ';
         $faq_icon = isset($all_meta['faq_icon'][0]) ? $all_meta['faq_icon'][0] : '';
@@ -638,7 +666,9 @@ class SwricePluginPageManager {
         <?php endif;
     }
     
-     * Render bonuses section inline
+     /**
+      * Render bonuses section inline
+      */
     private function render_bonuses_section($all_meta) {
         $bonuses_heading = isset($all_meta['bonuses_heading'][0]) ? $all_meta['bonuses_heading'][0] : 'Bonuses';
         $bonuses_icon = isset($all_meta['bonuses_icon'][0]) ? $all_meta['bonuses_icon'][0] : '';
@@ -671,7 +701,9 @@ class SwricePluginPageManager {
         <?php endif;
     }
     
-     * Render guarantee section inline
+     /**
+      * Render guarantee section inline
+      */
     private function render_guarantee_section($all_meta) {
         $guarantee_heading = isset($all_meta['guarantee_heading'][0]) ? $all_meta['guarantee_heading'][0] : 'Guarantee';
         $guarantee_icon = isset($all_meta['guarantee_icon'][0]) ? $all_meta['guarantee_icon'][0] : '';
@@ -692,7 +724,9 @@ class SwricePluginPageManager {
         <?php
     }
     
-     * Render why choose section inline
+     /**
+      * Render why choose section inline
+      */
     private function render_why_choose_section($all_meta) {
         $why_choose_heading = isset($all_meta['why_choose_heading'][0]) ? $all_meta['why_choose_heading'][0] : 'Why Choose Us';
         $why_choose_icon = isset($all_meta['why_choose_icon'][0]) ? $all_meta['why_choose_icon'][0] : '';
@@ -722,7 +756,9 @@ class SwricePluginPageManager {
         <?php endif;
     }
     
-     * Render about section inline
+     /**
+      * Render about section inline
+      */
     private function render_about_section($all_meta) {
         $about_heading = isset($all_meta['about_heading'][0]) ? $all_meta['about_heading'][0] : 'About';
         $about_icon = isset($all_meta['about_icon'][0]) ? $all_meta['about_icon'][0] : '';
@@ -743,7 +779,9 @@ class SwricePluginPageManager {
         <?php
     }
     
-     * Render final CTA section inline
+     /**
+      * Render final CTA section inline
+      */
     private function render_final_cta_section($all_meta) {
         $cta_title = isset($all_meta['cta_title'][0]) ? $all_meta['cta_title'][0] : '';
         $cta_subtitle = isset($all_meta['cta_subtitle'][0]) ? $all_meta['cta_subtitle'][0] : '';
@@ -778,18 +816,18 @@ class SwricePluginPageManager {
         <?php endif;
     }
     
-    /**
-     * Add admin columns
-     */
+     /**
+      * Add admin columns
+      */
     public function add_admin_columns($columns) {
         $columns['shortcode'] = __('Shortcode', 'swrice-plugin-manager');
         $columns['price'] = __('Price', 'swrice-plugin-manager');
         return $columns;
     }
     
-    /**
-     * Display admin columns
-     */
+     /**
+      * Display admin columns
+      */
     public function display_admin_columns($column, $post_id) {
         switch ($column) {
             case 'shortcode':
@@ -816,17 +854,17 @@ class SwricePluginPageManager {
         }
     }
     
-    /**
-     * Plugin activation
-     */
+     /**
+      * Plugin activation
+      */
     public function activate() {
         $this->register_post_type();
         flush_rewrite_rules();
     }
     
-    /**
-     * Plugin deactivation
-     */
+     /**
+      * Plugin deactivation
+      */
     public function deactivate() {
         flush_rewrite_rules();
     }
