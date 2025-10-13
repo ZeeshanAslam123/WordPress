@@ -211,12 +211,13 @@ function render_testimonials_section($testimonial_items, $testimonials_heading, 
         <div class="sppm-testimonials-grid">
             <?php foreach ($testimonial_items as $testimonial): ?>
             <div class="sppm-testimonial-card">
-                <div class="sppm-testimonial-content">
-                    <p class="sppm-testimonial-text"><?php echo esc_html($testimonial['content']); ?></p>
+                <div class="sppm-testimonial-rating">
+                    <?php echo render_stars(intval($testimonial['rating'])); ?>
                 </div>
+                <div class="sppm-testimonial-content">"<?php echo esc_html($testimonial['content']); ?>"</div>
                 <div class="sppm-testimonial-author">
-                    <div class="sppm-testimonial-name"><?php echo esc_html($testimonial['name']); ?></div>
-                    <div class="sppm-testimonial-title"><?php echo esc_html($testimonial['title']); ?></div>
+                    <strong><?php echo esc_html($testimonial['name']); ?></strong>
+                    <span><?php echo esc_html($testimonial['title']); ?></span>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -238,14 +239,12 @@ function render_faq_section($faq_items, $faq_heading, $faq_icon) {
         
         <div class="sppm-faq-list">
             <?php foreach ($faq_items as $index => $faq): ?>
-            <div class="sppm-faq-item">
-                <div class="sppm-faq-question" onclick="toggleFAQ(<?php echo $index; ?>)">
-                    <h3><?php echo esc_html($faq['question']); ?></h3>
-                    <span class="sppm-faq-toggle">+</span>
+            <div class="sppm-faq-item" data-faq="<?php echo $index; ?>">
+                <div class="sppm-faq-question">
+                    <?php echo esc_html($faq['question']); ?>
+                    <span>+</span>
                 </div>
-                <div class="sppm-faq-answer" id="faq-<?php echo $index; ?>">
-                    <p><?php echo esc_html($faq['answer']); ?></p>
-                </div>
+                <div class="sppm-faq-answer"><?php echo esc_html($faq['answer']); ?></div>
             </div>
             <?php endforeach; ?>
         </div>
@@ -267,18 +266,14 @@ function render_bonuses_section($bonus_items, $bonuses_heading, $bonuses_icon) {
         <div class="sppm-bonuses-grid">
             <?php foreach ($bonus_items as $bonus): ?>
             <div class="sppm-bonus-card">
-                <div class="sppm-bonus-header">
-                    <?php if (!empty($bonus['icon'])): ?>
-                    <div class="sppm-bonus-icon"><?php echo $bonus['icon']; ?></div>
-                    <?php endif; ?>
-                    <h3 class="sppm-bonus-title"><?php echo esc_html($bonus['title']); ?></h3>
-                    <?php if (!empty($bonus['value'])): ?>
-                    <div class="sppm-bonus-value"><?php echo esc_html($bonus['value']); ?></div>
-                    <?php endif; ?>
-                </div>
-                <div class="sppm-bonus-body">
-                    <p class="sppm-bonus-desc"><?php echo esc_html($bonus['description']); ?></p>
-                </div>
+                <?php if (!empty($bonus['icon'])): ?>
+                <div class="sppm-bonus-icon"><?php echo $bonus['icon']; ?></div>
+                <?php endif; ?>
+                <h3 class="sppm-bonus-title"><?php echo esc_html($bonus['title']); ?></h3>
+                <?php if (!empty($bonus['value'])): ?>
+                <div class="sppm-bonus-value">Value: <?php echo esc_html($bonus['value']); ?></div>
+                <?php endif; ?>
+                <p class="sppm-bonus-desc"><?php echo esc_html($bonus['description']); ?></p>
             </div>
             <?php endforeach; ?>
         </div>
@@ -286,8 +281,8 @@ function render_bonuses_section($bonus_items, $bonuses_heading, $bonuses_icon) {
     <?php
 }
 
-function render_guarantee_section($guarantee_text, $guarantee_heading, $guarantee_icon) {
-    if (empty($guarantee_text)) return;
+function render_guarantee_section($guarantee_text, $guarantee_heading, $guarantee_icon, $guarantee_points = array()) {
+    if (empty($guarantee_text) && empty($guarantee_heading)) return;
     ?>
     <section class="sppm-section sppm-guarantee-section">
         <div class="sppm-section-header">
@@ -298,7 +293,18 @@ function render_guarantee_section($guarantee_text, $guarantee_heading, $guarante
         </div>
         
         <div class="sppm-guarantee-content">
-            <p><?php echo esc_html($guarantee_text); ?></p>
+            <p class="sppm-guarantee-text"><?php echo esc_html($guarantee_text); ?></p>
+            
+            <?php if (is_array($guarantee_points) && !empty($guarantee_points)): ?>
+            <div class="sppm-guarantee-points">
+                <?php foreach ($guarantee_points as $point): ?>
+                <div class="sppm-guarantee-point">
+                    <span class="sppm-guarantee-check">✅</span>
+                    <?php echo esc_html($point['point']); ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
         </div>
     </section>
     <?php
@@ -316,13 +322,13 @@ function render_why_choose_section($why_choose_items, $why_choose_heading, $why_
         </div>
         
         <div class="sppm-why-choose-grid">
-            <?php foreach ($why_choose_items as $item): ?>
-            <div class="sppm-why-choose-card">
-                <?php if (!empty($item['icon'])): ?>
-                <div class="sppm-why-choose-icon"><?php echo $item['icon']; ?></div>
+            <?php foreach ($why_choose_items as $benefit): ?>
+            <div class="sppm-benefit-card">
+                <?php if (!empty($benefit['icon'])): ?>
+                <div class="sppm-benefit-icon"><?php echo $benefit['icon']; ?></div>
                 <?php endif; ?>
-                <h3 class="sppm-why-choose-title"><?php echo esc_html($item['title']); ?></h3>
-                <p class="sppm-why-choose-desc"><?php echo esc_html($item['description']); ?></p>
+                <h3 class="sppm-benefit-title"><?php echo esc_html($benefit['title']); ?></h3>
+                <p class="sppm-benefit-desc"><?php echo esc_html($benefit['description']); ?></p>
             </div>
             <?php endforeach; ?>
         </div>
@@ -348,136 +354,29 @@ function render_about_section($about_section, $about_heading, $about_icon) {
     <?php
 }
 
-function render_final_cta_section($buy_now_shortcode, $final_cta_heading, $final_cta_icon) {
-    if (empty($buy_now_shortcode)) return;
+function render_final_cta_section($buy_now_shortcode, $final_cta_heading, $final_cta_icon, $cta_title = '', $cta_subtitle = '', $plugin_price = '') {
+    if (empty($cta_title) && empty($cta_subtitle) && empty($buy_now_shortcode)) return;
     ?>
-    <section class="sppm-section sppm-final-cta-section">
-        <div class="sppm-section-header">
-            <h2 class="sppm-section-title">
-                <?php if ($final_cta_icon): ?><span class="sppm-section-icon"><?php echo $final_cta_icon; ?></span><?php endif; ?>
-                <?php echo esc_html($final_cta_heading); ?>
-            </h2>
-        </div>
-        
-        <div class="sppm-final-cta-content">
-            <?php echo do_shortcode($buy_now_shortcode); ?>
+    <section class="sppm-section sppm-final-cta">
+        <div class="sppm-cta">
+            <div class="sppm-cta-content">
+                <?php if (!empty($cta_title)): ?>
+                <h3 class="sppm-cta-title"><?php echo esc_html($cta_title); ?></h3>
+                <?php endif; ?>
+                <?php if (!empty($cta_subtitle)): ?>
+                <p class="sppm-cta-subtitle"><?php echo esc_html($cta_subtitle); ?></p>
+                <?php endif; ?>
+            </div>
+            
+            <div class="sppm-cta-buttons">
+                <?php if ($buy_now_shortcode): ?>
+                    <?php echo do_shortcode($buy_now_shortcode); ?>
+                <?php else: ?>
+                    <button class="sppm-btn sppm-btn-primary">Buy Now - $<?php echo esc_html($plugin_price); ?></button>
+                <?php endif; ?>
+            </div>
         </div>
     </section>
     <?php
 }
 ?>
-
-<div class="sppm-plugin-page">
-    <div class="sppm-container">
-        
-        <!-- HERO SECTION - FULLY DYNAMIC -->
-        <section class="sppm-hero">
-            <div class="sppm-hero-left">
-                <div class="sppm-logo-row">
-                    <div class="sppm-logo-mark">
-                        <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="2" y="2" width="20" height="4" rx="2" fill="#5fa0d8"/>
-                            <rect x="2" y="10" width="16" height="4" rx="2" fill="#82bfe4"/>
-                            <rect x="2" y="18" width="12" height="4" rx="2" fill="#bcdff6"/>
-                        </svg>
-                    </div>
-                    <div class="sppm-logo-text">
-                        <?php echo esc_html($plugin_name); ?>
-                    </div>
-                </div>
-
-                <div class="sppm-rating">
-                    <div class="sppm-rating-stars">★ ★ ★ ★ ★</div>
-                    <div>5.0</div>
-                </div>
-
-                <h1 class="sppm-hero-title"><?php echo esc_html($plugin_name); ?></h1>
-                <p class="sppm-hero-subtitle"><?php echo esc_html($hero_subtitle); ?></p>
-
-                <div class="sppm-hero-ctas">
-                    <?php if ($buy_now_shortcode): ?>
-                        <?php echo do_shortcode($buy_now_shortcode); ?>
-                    <?php else: ?>
-                        <button class="sppm-btn sppm-btn-primary">Buy Now - $<?php echo esc_html($plugin_price); ?></button>
-                    <?php endif; ?>
-                    <?php if (!empty($demo_link) && $demo_link !== '#'): ?>
-                        <a href="<?php echo esc_url($demo_link); ?>" class="sppm-btn sppm-btn-ghost" target="_blank">Live Demo</a>
-                    <?php endif; ?>
-                </div>
-            </div>
-
-            <div class="sppm-hero-right">
-                <?php if ($hero_image): ?>
-                    <img src="<?php echo esc_url($hero_image); ?>" alt="<?php echo esc_attr($plugin_name); ?>" class="sppm-hero-image" />
-                <?php else: ?>
-                    <div class="sppm-device">
-                        <div class="sppm-device-inner">
-                            <h3>Plugin Preview</h3>
-                            <div class="sppm-section-row">Getting Started <span>▾</span></div>
-                            <div class="sppm-section-row">Configuration <span>▾</span></div>
-                            <div class="sppm-section-row">Advanced Features <span>▾</span></div>
-                        </div>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </section>
-
-        <?php
-        // Get section order for drag-and-drop (minimal implementation)
-        $section_order = get_post_meta($post->ID, 'section_order', true);
-        $section_enabled = get_post_meta($post->ID, 'section_enabled', true);
-        
-        if (!is_array($section_order) || empty($section_order)) {
-            $section_order = array('problem', 'solution', 'how_it_works', 'features', 'testimonials', 'faq', 'bonuses', 'guarantee', 'why_choose', 'about', 'final_cta');
-        }
-        if (!is_array($section_enabled)) {
-            $section_enabled = array_fill_keys($section_order, true);
-        }
-        
-        // Render sections in the admin-specified order
-        foreach ($section_order as $section_key) {
-            // Only render if section is enabled
-            if (!isset($section_enabled[$section_key]) || !$section_enabled[$section_key]) {
-                continue;
-            }
-            
-            switch ($section_key) {
-                case 'problem':
-                    render_problem_section($problem_items, $problem_heading, $problem_icon);
-                    break;
-                case 'solution':
-                    render_solution_section($solution_heading, $solution_description, $solution_icon);
-                    break;
-                case 'how_it_works':
-                    render_how_it_works_section($steps_items, $how_it_works_heading, $how_it_works_icon);
-                    break;
-                case 'features':
-                    render_features_section($feature_items, $features_heading, $features_icon);
-                    break;
-                case 'testimonials':
-                    render_testimonials_section($testimonial_items, $testimonials_heading, $testimonials_icon);
-                    break;
-                case 'faq':
-                    render_faq_section($faq_items, $faq_heading, $faq_icon);
-                    break;
-                case 'bonuses':
-                    render_bonuses_section($bonus_items, $bonuses_heading, $bonuses_icon);
-                    break;
-                case 'guarantee':
-                    render_guarantee_section($guarantee_text, $guarantee_heading, $guarantee_icon);
-                    break;
-                case 'why_choose':
-                    render_why_choose_section($why_choose_items, $why_choose_heading, $why_choose_icon);
-                    break;
-                case 'about':
-                    render_about_section($about_section, $about_heading, $about_icon);
-                    break;
-                case 'final_cta':
-                    render_final_cta_section($buy_now_shortcode, $final_cta_heading, $final_cta_icon);
-                    break;
-            }
-        }
-        ?>
-
-    </div>
-</div>
