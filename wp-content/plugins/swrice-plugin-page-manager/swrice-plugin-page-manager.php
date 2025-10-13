@@ -408,6 +408,442 @@ class SwricePluginPageManager {
             }
             update_post_meta($post_id, 'why_choose_items', $why_choose_items);
         }
+        
+        // Save section order
+        if (isset($_POST['section_order']) && is_array($_POST['section_order'])) {
+            $section_order = array();
+            foreach ($_POST['section_order'] as $section) {
+                $section_order[] = sanitize_text_field($section);
+            }
+            update_post_meta($post_id, 'section_order', $section_order);
+        }
+        
+        // Save section enabled states
+        if (isset($_POST['section_enabled']) && is_array($_POST['section_enabled'])) {
+            $section_enabled = array();
+            // First, set all sections to disabled
+            $all_sections = array(
+                'problem', 'solution', 'how_it_works', 'features', 
+                'testimonials', 'faq', 'bonuses', 'guarantee', 
+                'why_choose', 'about', 'final_cta'
+            );
+            foreach ($all_sections as $section) {
+                $section_enabled[$section] = false;
+            }
+            // Then, enable the checked ones
+            foreach ($_POST['section_enabled'] as $section => $value) {
+                $section_enabled[sanitize_text_field($section)] = true;
+            }
+            update_post_meta($post_id, 'section_enabled', $section_enabled);
+        } else {
+            // If no sections are enabled, disable all
+            $section_enabled = array();
+            $all_sections = array(
+                'problem', 'solution', 'how_it_works', 'features', 
+                'testimonials', 'faq', 'bonuses', 'guarantee', 
+                'why_choose', 'about', 'final_cta'
+            );
+            foreach ($all_sections as $section) {
+                $section_enabled[$section] = false;
+            }
+            update_post_meta($post_id, 'section_enabled', $section_enabled);
+        }
+    }
+    
+    /**
+     * Load and render a section template
+     */
+    public function load_section($section_key, $all_meta, $post_id) {
+        $section_file = SPPM_PLUGIN_DIR . 'templates/sections/section-' . $section_key . '.php';
+        
+        if (file_exists($section_file)) {
+            // Extract meta data for easier access in section templates
+            extract($all_meta);
+            include $section_file;
+        } else {
+            // Fallback to inline rendering for sections not yet extracted
+            $this->render_section_inline($section_key, $all_meta, $post_id);
+        }
+    }
+    
+    /**
+     * Render section inline (fallback for sections not yet extracted)
+     */
+    private function render_section_inline($section_key, $all_meta, $post_id) {
+        // This will contain the inline rendering logic for sections
+        // that haven't been extracted to separate files yet
+        switch ($section_key) {
+            case 'problem':
+                $this->render_problem_section($all_meta);
+                break;
+            case 'solution':
+                $this->render_solution_section($all_meta);
+                break;
+            case 'how_it_works':
+                $this->render_how_it_works_section($all_meta);
+                break;
+            case 'features':
+                $this->render_features_section($all_meta);
+                break;
+            case 'testimonials':
+                $this->render_testimonials_section($all_meta);
+                break;
+            case 'faq':
+                $this->render_faq_section($all_meta);
+                break;
+            case 'bonuses':
+                $this->render_bonuses_section($all_meta);
+                break;
+            case 'guarantee':
+                $this->render_guarantee_section($all_meta);
+                break;
+            case 'why_choose':
+                $this->render_why_choose_section($all_meta);
+                break;
+            case 'about':
+                $this->render_about_section($all_meta);
+                break;
+            case 'final_cta':
+                $this->render_final_cta_section($all_meta);
+                break;
+        }
+    }
+    
+    /**
+     * Render problem section inline
+     */
+    private function render_problem_section($all_meta) {
+        $problem_heading = isset($all_meta['problem_heading'][0]) ? $all_meta['problem_heading'][0] : 'Common Problems';
+        $problem_icon = isset($all_meta['problem_icon'][0]) ? $all_meta['problem_icon'][0] : '';
+        $problem_items = maybe_unserialize(isset($all_meta['problem_items'][0]) ? $all_meta['problem_items'][0] : array());
+        
+        if (!empty($problem_items) && is_array($problem_items)): ?>
+        <section class="sppm-section sppm-problem-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($problem_icon): ?><span class="sppm-section-icon"><?php echo $problem_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($problem_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-problem-grid">
+                <?php foreach ($problem_items as $problem): ?>
+                    <div class="sppm-problem-item">
+                        <?php if (!empty($problem['icon'])): ?>
+                            <div class="sppm-problem-icon"><?php echo $problem['icon']; ?></div>
+                        <?php endif; ?>
+                        <h3 class="sppm-problem-title"><?php echo esc_html($problem['title']); ?></h3>
+                        <p class="sppm-problem-description"><?php echo esc_html($problem['description']); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif;
+    }
+    
+    /**
+     * Render solution section inline
+     */
+    private function render_solution_section($all_meta) {
+        $solution_heading = isset($all_meta['solution_heading'][0]) ? $all_meta['solution_heading'][0] : 'Our Solution';
+        $solution_icon = isset($all_meta['solution_icon'][0]) ? $all_meta['solution_icon'][0] : '';
+        $solution_description = isset($all_meta['solution_description'][0]) ? $all_meta['solution_description'][0] : '';
+        ?>
+        <section class="sppm-section sppm-solution-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($solution_icon): ?><span class="sppm-section-icon"><?php echo $solution_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($solution_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-solution-content">
+                <p class="sppm-solution-description"><?php echo esc_html($solution_description); ?></p>
+            </div>
+        </section>
+        <?php
+    }
+    
+    /**
+     * Render how it works section inline
+     */
+    private function render_how_it_works_section($all_meta) {
+        $how_it_works_heading = isset($all_meta['how_it_works_heading'][0]) ? $all_meta['how_it_works_heading'][0] : 'How It Works';
+        $how_it_works_icon = isset($all_meta['how_it_works_icon'][0]) ? $all_meta['how_it_works_icon'][0] : '';
+        $how_it_works_items = maybe_unserialize(isset($all_meta['how_it_works_items'][0]) ? $all_meta['how_it_works_items'][0] : array());
+        
+        if (!empty($how_it_works_items) && is_array($how_it_works_items)): ?>
+        <section class="sppm-section sppm-how-it-works-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($how_it_works_icon): ?><span class="sppm-section-icon"><?php echo $how_it_works_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($how_it_works_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-how-it-works-grid">
+                <?php foreach ($how_it_works_items as $index => $step): ?>
+                    <div class="sppm-how-it-works-item">
+                        <div class="sppm-step-number"><?php echo ($index + 1); ?></div>
+                        <h3 class="sppm-step-title"><?php echo esc_html($step['title']); ?></h3>
+                        <p class="sppm-step-description"><?php echo esc_html($step['description']); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif;
+    }
+    
+    /**
+     * Render features section inline
+     */
+    private function render_features_section($all_meta) {
+        $features_heading = isset($all_meta['features_heading'][0]) ? $all_meta['features_heading'][0] : 'Features';
+        $features_icon = isset($all_meta['features_icon'][0]) ? $all_meta['features_icon'][0] : '';
+        $features_items = maybe_unserialize(isset($all_meta['features_items'][0]) ? $all_meta['features_items'][0] : array());
+        
+        if (!empty($features_items) && is_array($features_items)): ?>
+        <section class="sppm-section sppm-features-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($features_icon): ?><span class="sppm-section-icon"><?php echo $features_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($features_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-features-grid">
+                <?php foreach ($features_items as $feature): ?>
+                    <div class="sppm-feature-item">
+                        <?php if (!empty($feature['icon'])): ?>
+                            <div class="sppm-feature-icon"><?php echo $feature['icon']; ?></div>
+                        <?php endif; ?>
+                        <h3 class="sppm-feature-title"><?php echo esc_html($feature['title']); ?></h3>
+                        <p class="sppm-feature-description"><?php echo esc_html($feature['description']); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif;
+    }
+    
+    /**
+     * Render testimonials section inline
+     */
+    private function render_testimonials_section($all_meta) {
+        $testimonials_heading = isset($all_meta['testimonials_heading'][0]) ? $all_meta['testimonials_heading'][0] : 'Testimonials';
+        $testimonials_icon = isset($all_meta['testimonials_icon'][0]) ? $all_meta['testimonials_icon'][0] : '';
+        $testimonials_items = maybe_unserialize(isset($all_meta['testimonials_items'][0]) ? $all_meta['testimonials_items'][0] : array());
+        
+        if (!empty($testimonials_items) && is_array($testimonials_items)): ?>
+        <section class="sppm-section sppm-testimonials-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($testimonials_icon): ?><span class="sppm-section-icon"><?php echo $testimonials_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($testimonials_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-testimonials-grid">
+                <?php foreach ($testimonials_items as $testimonial): ?>
+                    <div class="sppm-testimonial-item">
+                        <div class="sppm-testimonial-content">
+                            <p class="sppm-testimonial-text">"<?php echo esc_html($testimonial['text']); ?>"</p>
+                            <div class="sppm-testimonial-author">
+                                <strong><?php echo esc_html($testimonial['author']); ?></strong>
+                                <?php if (!empty($testimonial['position'])): ?>
+                                    <span class="sppm-testimonial-position"><?php echo esc_html($testimonial['position']); ?></span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif;
+    }
+    
+    /**
+     * Render FAQ section inline
+     */
+    private function render_faq_section($all_meta) {
+        $faq_heading = isset($all_meta['faq_heading'][0]) ? $all_meta['faq_heading'][0] : 'FAQ';
+        $faq_icon = isset($all_meta['faq_icon'][0]) ? $all_meta['faq_icon'][0] : '';
+        $faq_items = maybe_unserialize(isset($all_meta['faq_items'][0]) ? $all_meta['faq_items'][0] : array());
+        
+        if (!empty($faq_items) && is_array($faq_items)): ?>
+        <section class="sppm-section sppm-faq-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($faq_icon): ?><span class="sppm-section-icon"><?php echo $faq_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($faq_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-faq-list">
+                <?php foreach ($faq_items as $index => $faq): ?>
+                    <div class="sppm-faq-item">
+                        <div class="sppm-faq-question" data-faq="<?php echo $index; ?>">
+                            <h3><?php echo esc_html($faq['question']); ?></h3>
+                            <span class="sppm-faq-toggle">+</span>
+                        </div>
+                        <div class="sppm-faq-answer" id="faq-<?php echo $index; ?>">
+                            <p><?php echo esc_html($faq['answer']); ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif;
+    }
+    
+    /**
+     * Render bonuses section inline
+     */
+    private function render_bonuses_section($all_meta) {
+        $bonuses_heading = isset($all_meta['bonuses_heading'][0]) ? $all_meta['bonuses_heading'][0] : 'Bonuses';
+        $bonuses_icon = isset($all_meta['bonuses_icon'][0]) ? $all_meta['bonuses_icon'][0] : '';
+        $bonuses_items = maybe_unserialize(isset($all_meta['bonuses_items'][0]) ? $all_meta['bonuses_items'][0] : array());
+        
+        if (!empty($bonuses_items) && is_array($bonuses_items)): ?>
+        <section class="sppm-section sppm-bonuses-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($bonuses_icon): ?><span class="sppm-section-icon"><?php echo $bonuses_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($bonuses_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-bonuses-grid">
+                <?php foreach ($bonuses_items as $bonus): ?>
+                    <div class="sppm-bonus-item">
+                        <?php if (!empty($bonus['icon'])): ?>
+                            <div class="sppm-bonus-icon"><?php echo $bonus['icon']; ?></div>
+                        <?php endif; ?>
+                        <h3 class="sppm-bonus-title"><?php echo esc_html($bonus['title']); ?></h3>
+                        <p class="sppm-bonus-description"><?php echo esc_html($bonus['description']); ?></p>
+                        <?php if (!empty($bonus['value'])): ?>
+                            <div class="sppm-bonus-value">Value: $<?php echo esc_html($bonus['value']); ?></div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif;
+    }
+    
+    /**
+     * Render guarantee section inline
+     */
+    private function render_guarantee_section($all_meta) {
+        $guarantee_heading = isset($all_meta['guarantee_heading'][0]) ? $all_meta['guarantee_heading'][0] : 'Guarantee';
+        $guarantee_icon = isset($all_meta['guarantee_icon'][0]) ? $all_meta['guarantee_icon'][0] : '';
+        $guarantee_text = isset($all_meta['guarantee_text'][0]) ? $all_meta['guarantee_text'][0] : '';
+        ?>
+        <section class="sppm-section sppm-guarantee-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($guarantee_icon): ?><span class="sppm-section-icon"><?php echo $guarantee_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($guarantee_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-guarantee-content">
+                <p class="sppm-guarantee-text"><?php echo esc_html($guarantee_text); ?></p>
+            </div>
+        </section>
+        <?php
+    }
+    
+    /**
+     * Render why choose section inline
+     */
+    private function render_why_choose_section($all_meta) {
+        $why_choose_heading = isset($all_meta['why_choose_heading'][0]) ? $all_meta['why_choose_heading'][0] : 'Why Choose Us';
+        $why_choose_icon = isset($all_meta['why_choose_icon'][0]) ? $all_meta['why_choose_icon'][0] : '';
+        $why_choose_items = maybe_unserialize(isset($all_meta['why_choose_items'][0]) ? $all_meta['why_choose_items'][0] : array());
+        
+        if (!empty($why_choose_items) && is_array($why_choose_items)): ?>
+        <section class="sppm-section sppm-why-choose-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($why_choose_icon): ?><span class="sppm-section-icon"><?php echo $why_choose_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($why_choose_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-why-choose-grid">
+                <?php foreach ($why_choose_items as $item): ?>
+                    <div class="sppm-why-choose-item">
+                        <?php if (!empty($item['icon'])): ?>
+                            <div class="sppm-why-choose-icon"><?php echo $item['icon']; ?></div>
+                        <?php endif; ?>
+                        <h3 class="sppm-why-choose-title"><?php echo esc_html($item['title']); ?></h3>
+                        <p class="sppm-why-choose-description"><?php echo esc_html($item['description']); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif;
+    }
+    
+    /**
+     * Render about section inline
+     */
+    private function render_about_section($all_meta) {
+        $about_heading = isset($all_meta['about_heading'][0]) ? $all_meta['about_heading'][0] : 'About';
+        $about_icon = isset($all_meta['about_icon'][0]) ? $all_meta['about_icon'][0] : '';
+        $about_description = isset($all_meta['about_description'][0]) ? $all_meta['about_description'][0] : '';
+        ?>
+        <section class="sppm-section sppm-about-section">
+            <div class="sppm-section-header">
+                <h2 class="sppm-section-title">
+                    <?php if ($about_icon): ?><span class="sppm-section-icon"><?php echo $about_icon; ?></span><?php endif; ?>
+                    <?php echo esc_html($about_heading); ?>
+                </h2>
+            </div>
+            
+            <div class="sppm-about-content">
+                <p class="sppm-about-description"><?php echo esc_html($about_description); ?></p>
+            </div>
+        </section>
+        <?php
+    }
+    
+    /**
+     * Render final CTA section inline
+     */
+    private function render_final_cta_section($all_meta) {
+        $cta_title = isset($all_meta['cta_title'][0]) ? $all_meta['cta_title'][0] : '';
+        $cta_subtitle = isset($all_meta['cta_subtitle'][0]) ? $all_meta['cta_subtitle'][0] : '';
+        $buy_now_shortcode = isset($all_meta['buy_now_shortcode'][0]) ? $all_meta['buy_now_shortcode'][0] : '';
+        $plugin_price = isset($all_meta['plugin_price'][0]) ? $all_meta['plugin_price'][0] : '';
+        $demo_link = isset($all_meta['demo_link'][0]) ? $all_meta['demo_link'][0] : '';
+        
+        if (!empty($cta_title) || !empty($cta_subtitle)): ?>
+        <section class="sppm-section sppm-final-cta">
+            <div class="sppm-cta">
+                <div class="sppm-cta-content">
+                    <?php if (!empty($cta_title)): ?>
+                    <h3 class="sppm-cta-title"><?php echo esc_html($cta_title); ?></h3>
+                    <?php endif; ?>
+                    <?php if (!empty($cta_subtitle)): ?>
+                    <p class="sppm-cta-subtitle"><?php echo esc_html($cta_subtitle); ?></p>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="sppm-cta-buttons">
+                    <?php if ($buy_now_shortcode): ?>
+                        <?php echo do_shortcode($buy_now_shortcode); ?>
+                    <?php else: ?>
+                        <button class="sppm-btn sppm-btn-primary">Buy Now - $<?php echo esc_html($plugin_price); ?></button>
+                    <?php endif; ?>
+                    <?php if (!empty($demo_link) && $demo_link !== '#'): ?>
+                    <a href="<?php echo esc_url($demo_link); ?>" class="sppm-btn sppm-btn-ghost" target="_blank">Live Demo</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </section>
+        <?php endif;
     }
     
     /**

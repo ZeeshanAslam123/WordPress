@@ -408,4 +408,85 @@
         initRichTextEditor();
     }
     
+    /**
+     * Initialize Section Manager functionality
+     */
+    function initSectionManager() {
+        // Initialize sortable functionality
+        if ($('#sppm-section-sortable').length) {
+            $('#sppm-section-sortable').sortable({
+                handle: '.sppm-section-handle',
+                placeholder: 'ui-sortable-placeholder',
+                cursor: 'move',
+                tolerance: 'pointer',
+                opacity: 0.8,
+                start: function(event, ui) {
+                    ui.placeholder.height(ui.item.height());
+                },
+                update: function(event, ui) {
+                    // Update the hidden inputs with new order
+                    updateSectionOrder();
+                    
+                    // Show save notification
+                    showSaveNotification('Section order updated. Don\'t forget to save your changes!');
+                }
+            });
+        }
+        
+        // Handle toggle switches
+        $('.sppm-toggle-switch input').on('change', function() {
+            const $this = $(this);
+            const sectionName = $this.attr('name').match(/\[(.*?)\]/)[1];
+            const isEnabled = $this.is(':checked');
+            
+            // Visual feedback
+            const $sectionItem = $this.closest('.sppm-section-item');
+            if (isEnabled) {
+                $sectionItem.removeClass('sppm-section-disabled');
+            } else {
+                $sectionItem.addClass('sppm-section-disabled');
+            }
+            
+            // Show save notification
+            const status = isEnabled ? 'enabled' : 'disabled';
+            showSaveNotification(`Section "${sectionName}" ${status}. Don't forget to save your changes!`);
+        });
+    }
+    
+    /**
+     * Update section order hidden inputs
+     */
+    function updateSectionOrder() {
+        $('#sppm-section-sortable .sppm-section-item').each(function(index) {
+            const sectionKey = $(this).data('section');
+            $(this).find('input[name="section_order[]"]').val(sectionKey);
+        });
+    }
+    
+    /**
+     * Show save notification
+     */
+    function showSaveNotification(message) {
+        // Remove existing notifications
+        $('.sppm-save-notification').remove();
+        
+        // Create notification
+        const $notification = $('<div class="sppm-save-notification">' + message + '</div>');
+        
+        // Add to page
+        $('.sppm-section-manager').prepend($notification);
+        
+        // Auto-hide after 3 seconds
+        setTimeout(function() {
+            $notification.fadeOut(300, function() {
+                $(this).remove();
+            });
+        }, 3000);
+    }
+    
+    // Initialize section manager when document is ready
+    $(document).ready(function() {
+        initSectionManager();
+    });
+    
 })(jQuery);
