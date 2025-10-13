@@ -1,4 +1,5 @@
 <?php
+/**
  * Plugin Name: Swrice Plugin Page Manager
  * Plugin URI: https://swrice.com/
  * Description: Create and manage professional plugin landing pages with custom post types, shortcodes, and SEO-optimized output.
@@ -9,6 +10,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: swrice-plugin-manager
  * Domain Path: /languages
+ */
 
 // Prevent direct access
 if (!defined('ABSPATH')) {
@@ -776,14 +778,18 @@ class SwricePluginPageManager {
         <?php endif;
     }
     
+    /**
      * Add admin columns
+     */
     public function add_admin_columns($columns) {
         $columns['shortcode'] = __('Shortcode', 'swrice-plugin-manager');
         $columns['price'] = __('Price', 'swrice-plugin-manager');
         return $columns;
     }
     
+    /**
      * Display admin columns
+     */
     public function display_admin_columns($column, $post_id) {
         switch ($column) {
             case 'shortcode':
@@ -810,13 +816,17 @@ class SwricePluginPageManager {
         }
     }
     
+    /**
      * Plugin activation
+     */
     public function activate() {
         $this->register_post_type();
         flush_rewrite_rules();
     }
     
+    /**
      * Plugin deactivation
+     */
     public function deactivate() {
         flush_rewrite_rules();
     }
