@@ -113,11 +113,53 @@ class SwricePluginPageManager {
     }
     
     /**
+     * Comprehensive admin context detection for Gutenberg compatibility
+     */
+    private function is_admin_context() {
+        // Traditional admin check
+        if (is_admin()) {
+            return true;
+        }
+        
+        // REST API request check (Gutenberg uses REST API for saves)
+        if (defined('REST_REQUEST') && REST_REQUEST) {
+            return true;
+        }
+        
+        // Check for REST API in request URI (Gutenberg pattern)
+        if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/wp-json/') !== false) {
+            return true;
+        }
+        
+        // Check for AJAX requests (including Gutenberg AJAX)
+        if (defined('DOING_AJAX') && DOING_AJAX) {
+            return true;
+        }
+        
+        // Check for wp_is_json_request if available (WordPress 5.0+)
+        if (function_exists('wp_is_json_request') && wp_is_json_request()) {
+            return true;
+        }
+        
+        // Check for Gutenberg-specific actions
+        if (isset($_POST['action']) && in_array($_POST['action'], array('edit', 'editpost', 'heartbeat'))) {
+            return true;
+        }
+        
+        // Check if user has edit capabilities (additional safety check)
+        if (current_user_can('edit_posts') && !is_singular()) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
      * Plugin page shortcode
      */
     public function plugin_page_shortcode($atts) {
-        // Only process shortcode on frontend, not in admin/backend
-        if (is_admin()) {
+        // Only process shortcode on frontend, not in admin/backend or during saves
+        if ($this->is_admin_context()) {
             return '';
         }
         
@@ -147,8 +189,8 @@ class SwricePluginPageManager {
       * Buy now button shortcode
       */
     public function buy_now_button_shortcode($atts, $content = '') {
-        // Only process shortcode on frontend, not in admin/backend
-        if (is_admin()) {
+        // Only process shortcode on frontend, not in admin/backend or during saves
+        if ($this->is_admin_context()) {
             return '';
         }
         
