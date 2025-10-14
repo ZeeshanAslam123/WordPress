@@ -116,6 +116,11 @@ class SwricePluginPageManager {
      * Plugin page shortcode
      */
     public function plugin_page_shortcode($atts) {
+        // Only process shortcode on frontend, not in admin/backend
+        if (is_admin()) {
+            return '';
+        }
+        
         $atts = shortcode_atts(array(
             'id' => 0,
         ), $atts, 'plugin_page');
@@ -142,6 +147,11 @@ class SwricePluginPageManager {
       * Buy now button shortcode
       */
     public function buy_now_button_shortcode($atts, $content = '') {
+        // Only process shortcode on frontend, not in admin/backend
+        if (is_admin()) {
+            return '';
+        }
+        
         $atts = shortcode_atts(array(
             'url' => '#',
             'text' => 'Buy Now',

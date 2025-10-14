@@ -365,7 +365,7 @@ function render_final_cta_section($buy_now_shortcode, $final_cta_heading, $final
             </div>
             
             <div class="sppm-cta-buttons">
-                <?php if (!empty($buy_now_shortcode)): ?>
+                <?php if ($buy_now_shortcode): ?>
                     <?php echo do_shortcode($buy_now_shortcode); ?>
                 <?php elseif (!empty($plugin_price)): ?>
                     <button class="sppm-btn sppm-btn-primary">Buy Now - $<?php echo esc_html($plugin_price); ?></button>
@@ -472,7 +472,7 @@ function render_final_cta_section($buy_now_shortcode, $final_cta_heading, $final
                     render_why_choose_section($why_choose_items, $why_choose_heading, $why_choose_icon);
                     break;
                 case 'about':
-                    render_about_section($about_description, $about_heading, $about_icon);
+                    render_about_section($about_section, $about_heading, $about_icon);
                     break;
                 case 'final_cta':
                     render_final_cta_section($buy_now_shortcode, $final_cta_heading, $final_cta_icon, $cta_title, $cta_subtitle, $plugin_price, $demo_link);
