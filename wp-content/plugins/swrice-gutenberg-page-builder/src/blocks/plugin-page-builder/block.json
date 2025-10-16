@@ -1,0 +1,285 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "swrice/plugin-page-builder",
+	"version": "1.0.0",
+	"title": "Plugin Page Builder",
+	"category": "swrice-blocks",
+	"icon": "admin-plugins",
+	"description": "Create professional plugin landing pages with customizable sections",
+	"example": {},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"textdomain": "swrice-gutenberg-page-builder",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"attributes": {
+		"pluginName": {
+			"type": "string",
+			"default": "My Awesome Plugin"
+		},
+		"heroSubtitle": {
+			"type": "string",
+			"default": "Transform your WordPress experience with our powerful plugin solution"
+		},
+		"pluginPrice": {
+			"type": "string",
+			"default": "49"
+		},
+		"pluginOriginalPrice": {
+			"type": "string",
+			"default": "99"
+		},
+		"buyNowShortcode": {
+			"type": "string",
+			"default": ""
+		},
+		"demoLink": {
+			"type": "string",
+			"default": "#"
+		},
+		"heroImageId": {
+			"type": "number",
+			"default": 0
+		},
+		"heroImageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"heroImageAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"rating": {
+			"type": "number",
+			"default": 5
+		},
+		"ratingCount": {
+			"type": "string",
+			"default": "5.0"
+		},
+		"sectionOrder": {
+			"type": "array",
+			"default": [
+				"problem",
+				"solution", 
+				"how_it_works",
+				"features",
+				"testimonials",
+				"faq",
+				"bonuses",
+				"guarantee",
+				"why_choose",
+				"about",
+				"final_cta"
+			]
+		},
+		"sectionEnabled": {
+			"type": "object",
+			"default": {
+				"problem": true,
+				"solution": true,
+				"how_it_works": true,
+				"features": true,
+				"testimonials": true,
+				"faq": true,
+				"bonuses": true,
+				"guarantee": true,
+				"why_choose": true,
+				"about": true,
+				"final_cta": true
+			}
+		},
+		"problemHeading": {
+			"type": "string",
+			"default": "The Problem"
+		},
+		"problemIcon": {
+			"type": "string",
+			"default": "⚠️"
+		},
+		"problemItems": {
+			"type": "array",
+			"default": [
+				{
+					"icon": "😤",
+					"title": "Frustrating Limitations",
+					"description": "Current solutions don't meet your needs"
+				},
+				{
+					"icon": "⏰",
+					"title": "Time Consuming",
+					"description": "Manual processes waste valuable time"
+				}
+			]
+		},
+		"solutionHeading": {
+			"type": "string",
+			"default": "The Solution"
+		},
+		"solutionIcon": {
+			"type": "string",
+			"default": "✅"
+		},
+		"solutionDescription": {
+			"type": "string",
+			"default": "Our plugin provides the perfect solution to all your problems with an intuitive interface and powerful features."
+		},
+		"howItWorksHeading": {
+			"type": "string",
+			"default": "How It Works"
+		},
+		"howItWorksIcon": {
+			"type": "string",
+			"default": "🔧"
+		},
+		"stepsItems": {
+			"type": "array",
+			"default": [
+				{
+					"title": "Install & Activate",
+					"description": "Download and activate the plugin in seconds"
+				},
+				{
+					"title": "Configure Settings",
+					"description": "Set up your preferences with our easy wizard"
+				},
+				{
+					"title": "Start Using",
+					"description": "Begin enjoying all the powerful features immediately"
+				}
+			]
+		},
+		"featuresHeading": {
+			"type": "string",
+			"default": "Features"
+		},
+		"featuresIcon": {
+			"type": "string",
+			"default": "⭐"
+		},
+		"featureItems": {
+			"type": "array",
+			"default": [
+				{
+					"icon": "🚀",
+					"title": "Lightning Fast",
+					"description": "Optimized for speed and performance"
+				},
+				{
+					"icon": "🔒",
+					"title": "Secure",
+					"description": "Built with security best practices"
+				}
+			]
+		},
+		"testimonialsHeading": {
+			"type": "string",
+			"default": "What Our Customers Say"
+		},
+		"testimonialsIcon": {
+			"type": "string",
+			"default": "💬"
+		},
+		"testimonialItems": {
+			"type": "array",
+			"default": [
+				{
+					"quote": "This plugin changed everything for my business!",
+					"author": "John Doe",
+					"rating": 5,
+					"company": "Tech Solutions Inc."
+				}
+			]
+		},
+		"faqHeading": {
+			"type": "string",
+			"default": "Frequently Asked Questions"
+		},
+		"faqIcon": {
+			"type": "string",
+			"default": "❓"
+		},
+		"faqItems": {
+			"type": "array",
+			"default": [
+				{
+					"question": "How easy is it to set up?",
+					"answer": "Very easy! Just install, activate, and follow our setup wizard."
+				}
+			]
+		},
+		"bonusesHeading": {
+			"type": "string",
+			"default": "Exclusive Bonuses"
+		},
+		"bonusesIcon": {
+			"type": "string",
+			"default": "🎁"
+		},
+		"bonusItems": {
+			"type": "array",
+			"default": [
+				{
+					"icon": "📚",
+					"title": "Complete Guide",
+					"description": "Step-by-step setup and usage guide",
+					"value": "29"
+				}
+			]
+		},
+		"guaranteeHeading": {
+			"type": "string",
+			"default": "Money Back Guarantee"
+		},
+		"guaranteeIcon": {
+			"type": "string",
+			"default": "🛡️"
+		},
+		"guaranteeText": {
+			"type": "string",
+			"default": "We're so confident you'll love our plugin that we offer a 30-day money-back guarantee."
+		},
+		"whyChooseHeading": {
+			"type": "string",
+			"default": "Why Choose Us"
+		},
+		"whyChooseIcon": {
+			"type": "string",
+			"default": "🏆"
+		},
+		"whyChooseItems": {
+			"type": "array",
+			"default": [
+				{
+					"icon": "👥",
+					"title": "Expert Support",
+					"description": "Get help from our experienced team"
+				}
+			]
+		},
+		"aboutHeading": {
+			"type": "string",
+			"default": "About"
+		},
+		"aboutIcon": {
+			"type": "string",
+			"default": "ℹ️"
+		},
+		"aboutDescription": {
+			"type": "string",
+			"default": "We are passionate developers committed to creating the best WordPress plugins for our community."
+		},
+		"ctaTitle": {
+			"type": "string",
+			"default": "Ready to Get Started?"
+		},
+		"ctaSubtitle": {
+			"type": "string",
+			"default": "Join thousands of satisfied customers today!"
+		}
+	}
+}
