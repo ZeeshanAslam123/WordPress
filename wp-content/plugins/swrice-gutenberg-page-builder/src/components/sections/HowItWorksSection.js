@@ -25,12 +25,19 @@ const HOW_IT_WORKS_ICON_OPTIONS = [
 
 const STEP_ICON_OPTIONS = [
 	{ label: 'No Icon', value: '' },
+<<<<<<< HEAD
 	{ label: '1️⃣ One', value: '1️⃣' },
 	{ label: '2️⃣ Two', value: '2️⃣' },
 	{ label: '3️⃣ Three', value: '3️⃣' },
 	{ label: '4️⃣ Four', value: '4️⃣' },
 	{ label: '5️⃣ Five', value: '5️⃣' },
 	{ label: '📝 Memo', value: '📝' },
+=======
+	{ label: '1️⃣ Step 1', value: '1️⃣' },
+	{ label: '2️⃣ Step 2', value: '2️⃣' },
+	{ label: '3️⃣ Step 3', value: '3️⃣' },
+	{ label: '📝 Note', value: '📝' },
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 	{ label: '⚙️ Gear', value: '⚙️' },
 	{ label: '🚀 Rocket', value: '🚀' }
 ];
@@ -46,7 +53,11 @@ export default function HowItWorksSection({ attributes, setAttributes, isInspect
 		const newItems = [...stepsItems, {
 			icon: '📝',
 			title: 'New Step',
+<<<<<<< HEAD
 			description: 'Describe the step here'
+=======
+			description: 'Describe this step'
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 		}];
 		setAttributes({ stepsItems: newItems });
 	};
@@ -83,14 +94,22 @@ export default function HowItWorksSection({ attributes, setAttributes, isInspect
 				
 				<div className="sgpb-repeater-field">
 					<div className="sgpb-repeater-header">
+<<<<<<< HEAD
 						<strong>{__('Step Items', 'swrice-gutenberg-page-builder')}</strong>
+=======
+						<strong>{__('Steps', 'swrice-gutenberg-page-builder')}</strong>
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 						<Button
 							icon={plus}
 							variant="secondary"
 							size="small"
 							onClick={addStepItem}
 						>
+<<<<<<< HEAD
 							{__('Add Item', 'swrice-gutenberg-page-builder')}
+=======
+							{__('Add Step', 'swrice-gutenberg-page-builder')}
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 						</Button>
 					</div>
 					
@@ -142,12 +161,22 @@ export default function HowItWorksSection({ attributes, setAttributes, isInspect
 				</h2>
 			</div>
 			
+<<<<<<< HEAD
 			<div className="sppm-steps-grid">
 				{stepsItems.map((item, index) => (
 					<div key={index} className="sppm-step-card">
 						<div className="sppm-step-number">{index + 1}</div>
 						{item.icon && <div className="sppm-step-icon">{item.icon}</div>}
 						<h3 className="sppm-step-title">{item.title}</h3>
+=======
+			<div className="sppm-steps-container">
+				{stepsItems.map((item, index) => (
+					<div key={index} className="sppm-step-item">
+						<div className="sppm-step-header">
+							{item.icon && <div className="sppm-step-icon">{item.icon}</div>}
+							<h3 className="sppm-step-title">{item.title}</h3>
+						</div>
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 						<p className="sppm-step-desc">{item.description}</p>
 					</div>
 				))}

@@ -17,7 +17,11 @@ import { plus, trash } from '@wordpress/icons';
  */
 const TESTIMONIALS_ICON_OPTIONS = [
 	{ label: 'No Icon', value: '' },
+<<<<<<< HEAD
 	{ label: '💬 Speech Balloon', value: '💬' },
+=======
+	{ label: '💬 Speech Bubble', value: '💬' },
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 	{ label: '⭐ Star', value: '⭐' },
 	{ label: '👥 People', value: '👥' },
 	{ label: '🗣️ Speaking', value: '🗣️' },
@@ -34,9 +38,15 @@ export default function TestimonialsSection({ attributes, setAttributes, isInspe
 	const addTestimonialItem = () => {
 		const newItems = [...testimonialItems, {
 			name: 'Customer Name',
+<<<<<<< HEAD
 			role: 'Job Title',
 			company: 'Company Name',
 			content: 'This is an amazing product! It has helped us tremendously.',
+=======
+			role: 'Position',
+			company: 'Company Name',
+			content: 'This is an amazing testimonial about the product.',
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 			rating: 5,
 			avatar: ''
 		}];
@@ -56,11 +66,14 @@ export default function TestimonialsSection({ attributes, setAttributes, isInspe
 		setAttributes({ testimonialItems: newItems });
 	};
 
+<<<<<<< HEAD
 	// Helper function to render stars
 	const renderStars = (rating) => {
 		return '★'.repeat(rating) + '☆'.repeat(5 - rating);
 	};
 
+=======
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 	// Inspector controls
 	if (isInspector) {
 		return (
@@ -80,14 +93,22 @@ export default function TestimonialsSection({ attributes, setAttributes, isInspe
 				
 				<div className="sgpb-repeater-field">
 					<div className="sgpb-repeater-header">
+<<<<<<< HEAD
 						<strong>{__('Testimonial Items', 'swrice-gutenberg-page-builder')}</strong>
+=======
+						<strong>{__('Testimonials', 'swrice-gutenberg-page-builder')}</strong>
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 						<Button
 							icon={plus}
 							variant="secondary"
 							size="small"
 							onClick={addTestimonialItem}
 						>
+<<<<<<< HEAD
 							{__('Add Item', 'swrice-gutenberg-page-builder')}
+=======
+							{__('Add Testimonial', 'swrice-gutenberg-page-builder')}
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 						</Button>
 					</div>
 					
@@ -104,12 +125,20 @@ export default function TestimonialsSection({ attributes, setAttributes, isInspe
 								/>
 							</div>
 							<TextControl
+<<<<<<< HEAD
 								label={__('Customer Name', 'swrice-gutenberg-page-builder')}
+=======
+								label={__('Name', 'swrice-gutenberg-page-builder')}
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 								value={item.name}
 								onChange={(value) => updateTestimonialItem(index, 'name', value)}
 							/>
 							<TextControl
+<<<<<<< HEAD
 								label={__('Job Title', 'swrice-gutenberg-page-builder')}
+=======
+								label={__('Role/Position', 'swrice-gutenberg-page-builder')}
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 								value={item.role}
 								onChange={(value) => updateTestimonialItem(index, 'role', value)}
 							/>
@@ -130,12 +159,16 @@ export default function TestimonialsSection({ attributes, setAttributes, isInspe
 								onChange={(value) => updateTestimonialItem(index, 'rating', value)}
 								min={1}
 								max={5}
+<<<<<<< HEAD
 							/>
 							<TextControl
 								label={__('Avatar URL (Optional)', 'swrice-gutenberg-page-builder')}
 								value={item.avatar}
 								onChange={(value) => updateTestimonialItem(index, 'avatar', value)}
 								type="url"
+=======
+								step={1}
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 							/>
 						</div>
 					))}
@@ -163,6 +196,7 @@ export default function TestimonialsSection({ attributes, setAttributes, isInspe
 							<p>"{item.content}"</p>
 						</div>
 						<div className="sppm-testimonial-author">
+<<<<<<< HEAD
 							{item.avatar && (
 								<img src={item.avatar} alt={item.name} className="sppm-testimonial-avatar" />
 							)}
@@ -172,6 +206,16 @@ export default function TestimonialsSection({ attributes, setAttributes, isInspe
 								<div className="sppm-testimonial-rating">
 									{renderStars(item.rating)}
 								</div>
+=======
+							<div className="sppm-testimonial-info">
+								<h4 className="sppm-testimonial-name">{item.name}</h4>
+								<p className="sppm-testimonial-role">{item.role} at {item.company}</p>
+							</div>
+							<div className="sppm-testimonial-rating">
+								{[...Array(item.rating)].map((_, i) => (
+									<span key={i} className="sppm-star">⭐</span>
+								))}
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 							</div>
 						</div>
 					</div>

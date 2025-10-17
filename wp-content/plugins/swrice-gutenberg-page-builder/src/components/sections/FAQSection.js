@@ -19,7 +19,11 @@ const FAQ_ICON_OPTIONS = [
 	{ label: '❓ Question Mark', value: '❓' },
 	{ label: '❔ White Question Mark', value: '❔' },
 	{ label: '🤔 Thinking Face', value: '🤔' },
+<<<<<<< HEAD
 	{ label: '💭 Thought Balloon', value: '💭' },
+=======
+	{ label: '💭 Thought Bubble', value: '💭' },
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 	{ label: '📋 Clipboard', value: '📋' }
 ];
 
@@ -77,7 +81,11 @@ export default function FAQSection({ attributes, setAttributes, isInspector = fa
 							size="small"
 							onClick={addFaqItem}
 						>
+<<<<<<< HEAD
 							{__('Add Item', 'swrice-gutenberg-page-builder')}
+=======
+							{__('Add FAQ', 'swrice-gutenberg-page-builder')}
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 						</Button>
 					</div>
 					
@@ -123,7 +131,11 @@ export default function FAQSection({ attributes, setAttributes, isInspector = fa
 				</h2>
 			</div>
 			
+<<<<<<< HEAD
 			<div className="sppm-faq-list">
+=======
+			<div className="sppm-faq-container">
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 				{faqItems.map((item, index) => (
 					<div key={index} className="sppm-faq-item">
 						<h3 className="sppm-faq-question">{item.question}</h3>

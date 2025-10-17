@@ -17,7 +17,11 @@ import { plus, trash } from '@wordpress/icons';
 const BONUSES_ICON_OPTIONS = [
 	{ label: 'No Icon', value: '' },
 	{ label: '🎁 Gift', value: '🎁' },
+<<<<<<< HEAD
 	{ label: '🎉 Party Popper', value: '🎉' },
+=======
+	{ label: '🎉 Party', value: '🎉' },
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 	{ label: '💎 Diamond', value: '💎' },
 	{ label: '⭐ Star', value: '⭐' },
 	{ label: '🏆 Trophy', value: '🏆' }
@@ -27,8 +31,13 @@ const BONUS_ITEM_ICON_OPTIONS = [
 	{ label: 'No Icon', value: '' },
 	{ label: '🎁 Gift', value: '🎁' },
 	{ label: '📚 Books', value: '📚' },
+<<<<<<< HEAD
 	{ label: '🎥 Movie Camera', value: '🎥' },
 	{ label: '📋 Clipboard', value: '📋' },
+=======
+	{ label: '🎥 Video', value: '🎥' },
+	{ label: '📋 Guide', value: '📋' },
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 	{ label: '💎 Diamond', value: '💎' },
 	{ label: '⭐ Star', value: '⭐' }
 ];
@@ -44,8 +53,13 @@ export default function BonusesSection({ attributes, setAttributes, isInspector 
 		const newItems = [...bonusItems, {
 			icon: '🎁',
 			title: 'New Bonus',
+<<<<<<< HEAD
 			description: 'Describe the bonus here',
 			value: '99'
+=======
+			description: 'Description of this bonus',
+			value: '29'
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 		}];
 		setAttributes({ bonusItems: newItems });
 	};
@@ -89,7 +103,11 @@ export default function BonusesSection({ attributes, setAttributes, isInspector 
 							size="small"
 							onClick={addBonusItem}
 						>
+<<<<<<< HEAD
 							{__('Add Item', 'swrice-gutenberg-page-builder')}
+=======
+							{__('Add Bonus', 'swrice-gutenberg-page-builder')}
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 						</Button>
 					</div>
 					
@@ -153,7 +171,11 @@ export default function BonusesSection({ attributes, setAttributes, isInspector 
 						<div className="sppm-bonus-header">
 							{item.icon && <div className="sppm-bonus-icon">{item.icon}</div>}
 							<h3 className="sppm-bonus-title">{item.title}</h3>
+<<<<<<< HEAD
 							{item.value && <div className="sppm-bonus-value">${item.value} Value</div>}
+=======
+							<div className="sppm-bonus-value">${item.value} Value</div>
+>>>>>>> ab840280dcf794a970ee055d22939490f494fb0d
 						</div>
 						<p className="sppm-bonus-desc">{item.description}</p>
 					</div>
