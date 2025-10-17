@@ -69,12 +69,21 @@ class SwriceGutenbergPageBuilder {
             return;
         }
         
-        // Register the main plugin page builder block using direct method
+        // Register block script first
+        wp_register_script(
+            'swrice-plugin-page-builder-block',
+            SGPB_PLUGIN_URL . 'assets/js/block.js',
+            array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components'),
+            SGPB_VERSION,
+            true
+        );
+        
+        // Register the main plugin page builder block
         register_block_type('swrice/plugin-page-builder', array(
-            'editor_script' => 'swrice-gutenberg-page-builder-editor',
-            'editor_style'  => 'swrice-gutenberg-page-builder-editor',
-            'style'         => 'swrice-gutenberg-page-builder-frontend',
-            'attributes'    => array(
+            'title' => __('Plugin Page Builder', 'swrice-gutenberg-page-builder'),
+            'editor_script' => 'swrice-plugin-page-builder-block',
+            'render_callback' => array($this, 'render_plugin_page_builder'),
+            'attributes' => array(
                 'pluginName' => array(
                     'type' => 'string',
                     'default' => 'My Awesome Plugin'
@@ -100,6 +109,30 @@ class SwriceGutenbergPageBuilder {
     }
     
     /**
+     * Render callback for the block
+     */
+    public function render_plugin_page_builder($attributes) {
+        ob_start();
+        
+        // Extract attributes
+        $plugin_name = isset($attributes['pluginName']) ? $attributes['pluginName'] : 'My Awesome Plugin';
+        $hero_subtitle = isset($attributes['heroSubtitle']) ? $attributes['heroSubtitle'] : 'Transform your WordPress experience';
+        $plugin_price = isset($attributes['pluginPrice']) ? $attributes['pluginPrice'] : '49';
+        $rating = isset($attributes['rating']) ? $attributes['rating'] : 5;
+        $rating_count = isset($attributes['ratingCount']) ? $attributes['ratingCount'] : '5.0';
+        
+        // Simple output for now
+        echo '<div class="swrice-plugin-page-builder">';
+        echo '<h1>' . esc_html($plugin_name) . '</h1>';
+        echo '<p>' . esc_html($hero_subtitle) . '</p>';
+        echo '<div class="price">$' . esc_html($plugin_price) . '</div>';
+        echo '<div class="rating">Rating: ' . esc_html($rating_count) . '/5</div>';
+        echo '</div>';
+        
+        return ob_get_clean();
+    }
+    
+    /**
      * Add custom block category
      */
     public function add_block_categories($categories, $post) {
@@ -116,38 +149,12 @@ class SwriceGutenbergPageBuilder {
     }
     
     /**
-     * Enqueue block editor assets
+     * Enqueue block editor assets (simplified)
      */
     public function enqueue_block_editor_assets() {
-        // Block editor script
-        $asset_file = include(SGPB_PLUGIN_DIR . 'build/index.asset.php');
-        
-        wp_enqueue_script(
-            'swrice-gutenberg-page-builder-editor',
-            SGPB_PLUGIN_URL . 'build/index.js',
-            $asset_file['dependencies'],
-            $asset_file['version'],
-            true
-        );
-        
-        // Block editor styles
-        wp_enqueue_style(
-            'swrice-gutenberg-page-builder-editor',
-            SGPB_PLUGIN_URL . 'assets/css/editor.css',
-            array('wp-edit-blocks'),
-            SGPB_VERSION
-        );
-        
-        // Localize script for translations and settings
-        wp_localize_script(
-            'swrice-gutenberg-page-builder-editor',
-            'sgpbSettings',
-            array(
-                'pluginUrl' => SGPB_PLUGIN_URL,
-                'version' => SGPB_VERSION,
-                'nonce' => wp_create_nonce('sgpb_nonce'),
-            )
-        );
+        // The script is already registered in register_blocks()
+        // Just enqueue it here
+        wp_enqueue_script('swrice-plugin-page-builder-block');
     }
     
     /**
