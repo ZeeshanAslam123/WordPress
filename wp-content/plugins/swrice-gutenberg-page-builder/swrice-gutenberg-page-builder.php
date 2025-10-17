@@ -71,15 +71,6 @@ class SwriceGutenbergPageBuilder {
         
         // Register the main plugin page builder block
         register_block_type(SGPB_PLUGIN_DIR . 'build');
-        
-        // Also try direct registration as fallback
-        if (!wp_block_type_registry()->is_registered('swrice/plugin-page-builder')) {
-            register_block_type('swrice/plugin-page-builder', array(
-                'editor_script' => 'swrice-gutenberg-page-builder-editor',
-                'editor_style'  => 'swrice-gutenberg-page-builder-editor',
-                'style'         => 'swrice-gutenberg-page-builder-frontend',
-            ));
-        }
     }
     
     /**
