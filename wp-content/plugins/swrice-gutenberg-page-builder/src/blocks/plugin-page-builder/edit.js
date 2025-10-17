@@ -25,6 +25,140 @@ import { useState } from '@wordpress/element';
  */
 import HeroSection from '../../components/sections/HeroSection';
 import SectionManager from '../../components/SectionManager';
+
+/**
+ * Icon options for different sections - matching original plugin exactly
+ */
+const ICON_OPTIONS = {
+	problem: [
+		{ label: 'No Icon', value: '' },
+		{ label: '😤 Frustrated Face', value: '😤' },
+		{ label: '🚫 Prohibited', value: '🚫' },
+		{ label: '⚠️ Warning', value: '⚠️' },
+		{ label: '💸 Money Loss', value: '💸' },
+		{ label: '📉 Declining', value: '📉' }
+	],
+	problemItems: [
+		{ label: 'No Icon', value: '' },
+		{ label: '🚫 Prohibited', value: '🚫' },
+		{ label: '📱 Mobile', value: '📱' },
+		{ label: '⏰ Time', value: '⏰' },
+		{ label: '💸 Money Loss', value: '💸' },
+		{ label: '😤 Frustrated', value: '😤' },
+		{ label: '📉 Declining', value: '📉' }
+	],
+	solution: [
+		{ label: 'No Icon', value: '' },
+		{ label: '✨ Sparkles', value: '✨' },
+		{ label: '🚀 Rocket', value: '🚀' },
+		{ label: '💡 Light Bulb', value: '💡' },
+		{ label: '🎯 Target', value: '🎯' },
+		{ label: '⚡ Lightning', value: '⚡' }
+	],
+	howItWorks: [
+		{ label: 'No Icon', value: '' },
+		{ label: '🛠️ Tools', value: '🛠️' },
+		{ label: '⚙️ Gear', value: '⚙️' },
+		{ label: '📋 Clipboard', value: '📋' },
+		{ label: '🎯 Target', value: '🎯' }
+	],
+	features: [
+		{ label: 'No Icon', value: '' },
+		{ label: '🔥 Fire', value: '🔥' },
+		{ label: '⚡ Lightning', value: '⚡' },
+		{ label: '🚀 Rocket', value: '🚀' },
+		{ label: '✨ Sparkles', value: '✨' },
+		{ label: '🎯 Target', value: '🎯' },
+		{ label: '💎 Diamond', value: '💎' }
+	],
+	featureItems: [
+		{ label: 'No Icon', value: '' },
+		{ label: '✅ Check Mark', value: '✅' },
+		{ label: '🎯 Target', value: '🎯' },
+		{ label: '⚡ Lightning', value: '⚡' },
+		{ label: '🚀 Rocket', value: '🚀' },
+		{ label: '💎 Diamond', value: '💎' },
+		{ label: '🔧 Wrench', value: '🔧' },
+		{ label: '📱 Mobile', value: '📱' },
+		{ label: '🎨 Art', value: '🎨' }
+	],
+	testimonials: [
+		{ label: 'No Icon', value: '' },
+		{ label: '⭐ Star', value: '⭐' },
+		{ label: '💬 Speech Bubble', value: '💬' },
+		{ label: '👥 People', value: '👥' },
+		{ label: '🗣️ Speaking', value: '🗣️' },
+		{ label: '💯 Hundred', value: '💯' }
+	],
+	faq: [
+		{ label: 'No Icon', value: '' },
+		{ label: '❓ Question', value: '❓' },
+		{ label: '💡 Light Bulb', value: '💡' },
+		{ label: '🤔 Thinking', value: '🤔' },
+		{ label: '📋 Clipboard', value: '📋' },
+		{ label: '💬 Speech Bubble', value: '💬' }
+	],
+	bonuses: [
+		{ label: 'No Icon', value: '' },
+		{ label: '🎁 Gift', value: '🎁' },
+		{ label: '💎 Diamond', value: '💎' },
+		{ label: '🏆 Trophy', value: '🏆' },
+		{ label: '⚡ Lightning', value: '⚡' },
+		{ label: '✨ Sparkles', value: '✨' }
+	],
+	bonusItems: [
+		{ label: 'No Icon', value: '' },
+		{ label: '📚 Books', value: '📚' },
+		{ label: '🎨 Art', value: '🎨' },
+		{ label: '⚡ Lightning', value: '⚡' },
+		{ label: '🎁 Gift', value: '🎁' },
+		{ label: '💎 Diamond', value: '💎' },
+		{ label: '🏆 Trophy', value: '🏆' }
+	],
+	guarantee: [
+		{ label: 'No Icon', value: '' },
+		{ label: '🛡️ Shield', value: '🛡️' },
+		{ label: '💯 Hundred', value: '💯' },
+		{ label: '✅ Check Mark', value: '✅' },
+		{ label: '🔒 Lock', value: '🔒' },
+		{ label: '💎 Diamond', value: '💎' }
+	],
+	whyChoose: [
+		{ label: 'No Icon', value: '' },
+		{ label: '🏆 Trophy', value: '🏆' },
+		{ label: '⭐ Star', value: '⭐' },
+		{ label: '💎 Diamond', value: '💎' },
+		{ label: '🚀 Rocket', value: '🚀' },
+		{ label: '✨ Sparkles', value: '✨' }
+	],
+	whyChooseItems: [
+		{ label: 'No Icon', value: '' },
+		{ label: '✅ Check Mark', value: '✅' },
+		{ label: '🎯 Target', value: '🎯' },
+		{ label: '⚡ Lightning', value: '⚡' },
+		{ label: '🚀 Rocket', value: '🚀' },
+		{ label: '💎 Diamond', value: '💎' },
+		{ label: '🏆 Trophy', value: '🏆' },
+		{ label: '🔧 Wrench', value: '🔧' },
+		{ label: '📱 Mobile', value: '📱' }
+	],
+	about: [
+		{ label: 'No Icon', value: '' },
+		{ label: 'ℹ️ Information', value: 'ℹ️' },
+		{ label: '👥 People', value: '👥' },
+		{ label: '🏢 Building', value: '🏢' },
+		{ label: '💼 Briefcase', value: '💼' },
+		{ label: '🌟 Star', value: '🌟' }
+	],
+	finalCta: [
+		{ label: 'No Icon', value: '' },
+		{ label: '🚀 Rocket', value: '🚀' },
+		{ label: '✨ Sparkles', value: '✨' },
+		{ label: '🎯 Target', value: '🎯' },
+		{ label: '💎 Diamond', value: '💎' },
+		{ label: '🔥 Fire', value: '🔥' }
+	]
+};
 import ProblemSection from '../../components/sections/ProblemSection';
 import SolutionSection from '../../components/sections/SolutionSection';
 import HowItWorksSection from '../../components/sections/HowItWorksSection';
@@ -88,7 +222,9 @@ export default function Edit({ attributes, setAttributes }) {
 		aboutIcon,
 		aboutDescription,
 		ctaTitle,
-		ctaSubtitle
+		ctaSubtitle,
+		finalCtaHeading,
+		finalCtaIcon
 	} = attributes;
 
 	const [activeTab, setActiveTab] = useState('hero');

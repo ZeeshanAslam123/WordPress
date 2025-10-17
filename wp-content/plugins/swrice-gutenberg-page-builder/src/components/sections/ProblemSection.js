@@ -6,9 +6,32 @@ import {
 	PanelBody, 
 	TextControl, 
 	TextareaControl,
+	SelectControl,
 	Button
 } from '@wordpress/components';
 import { plus, trash } from '@wordpress/icons';
+
+/**
+ * Icon options for Problem Section - matching original plugin exactly
+ */
+const PROBLEM_ICON_OPTIONS = [
+	{ label: 'No Icon', value: '' },
+	{ label: '😤 Frustrated Face', value: '😤' },
+	{ label: '🚫 Prohibited', value: '🚫' },
+	{ label: '⚠️ Warning', value: '⚠️' },
+	{ label: '💸 Money Loss', value: '💸' },
+	{ label: '📉 Declining', value: '📉' }
+];
+
+const PROBLEM_ITEM_ICON_OPTIONS = [
+	{ label: 'No Icon', value: '' },
+	{ label: '🚫 Prohibited', value: '🚫' },
+	{ label: '📱 Mobile', value: '📱' },
+	{ label: '⏰ Time', value: '⏰' },
+	{ label: '💸 Money Loss', value: '💸' },
+	{ label: '😤 Frustrated', value: '😤' },
+	{ label: '📉 Declining', value: '📉' }
+];
 
 /**
  * Problem Section Component
@@ -48,11 +71,12 @@ export default function ProblemSection({ attributes, setAttributes, isInspector 
 					value={problemHeading}
 					onChange={(value) => setAttributes({ problemHeading: value })}
 				/>
-				<TextControl
+				<SelectControl
 					label={__('Section Icon', 'swrice-gutenberg-page-builder')}
 					value={problemIcon}
+					options={PROBLEM_ICON_OPTIONS}
 					onChange={(value) => setAttributes({ problemIcon: value })}
-					help={__('Enter an emoji or icon', 'swrice-gutenberg-page-builder')}
+					help={__('Choose an icon for this section', 'swrice-gutenberg-page-builder')}
 				/>
 				
 				<div className="sgpb-repeater-field">
@@ -80,9 +104,10 @@ export default function ProblemSection({ attributes, setAttributes, isInspector 
 									onClick={() => removeProblemItem(index)}
 								/>
 							</div>
-							<TextControl
+							<SelectControl
 								label={__('Icon', 'swrice-gutenberg-page-builder')}
 								value={item.icon}
+								options={PROBLEM_ITEM_ICON_OPTIONS}
 								onChange={(value) => updateProblemItem(index, 'icon', value)}
 							/>
 							<TextControl

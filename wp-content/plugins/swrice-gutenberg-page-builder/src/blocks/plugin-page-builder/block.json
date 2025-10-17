@@ -280,6 +280,14 @@
 		"ctaSubtitle": {
 			"type": "string",
 			"default": "Join thousands of satisfied customers today!"
+		},
+		"finalCtaHeading": {
+			"type": "string",
+			"default": "Ready to Get Started?"
+		},
+		"finalCtaIcon": {
+			"type": "string",
+			"default": "🚀"
 		}
 	}
 }

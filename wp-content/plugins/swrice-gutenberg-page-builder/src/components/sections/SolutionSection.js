@@ -2,7 +2,19 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { PanelBody, TextControl, TextareaControl } from '@wordpress/components';
+import { PanelBody, TextControl, TextareaControl, SelectControl } from '@wordpress/components';
+
+/**
+ * Icon options for Solution Section - matching original plugin exactly
+ */
+const SOLUTION_ICON_OPTIONS = [
+	{ label: 'No Icon', value: '' },
+	{ label: '✨ Sparkles', value: '✨' },
+	{ label: '🚀 Rocket', value: '🚀' },
+	{ label: '💡 Light Bulb', value: '💡' },
+	{ label: '🎯 Target', value: '🎯' },
+	{ label: '⚡ Lightning', value: '⚡' }
+];
 
 /**
  * Solution Section Component
@@ -19,10 +31,12 @@ export default function SolutionSection({ attributes, setAttributes, isInspector
 					value={solutionHeading}
 					onChange={(value) => setAttributes({ solutionHeading: value })}
 				/>
-				<TextControl
+				<SelectControl
 					label={__('Section Icon', 'swrice-gutenberg-page-builder')}
 					value={solutionIcon}
+					options={SOLUTION_ICON_OPTIONS}
 					onChange={(value) => setAttributes({ solutionIcon: value })}
+					help={__('Choose an icon for this section', 'swrice-gutenberg-page-builder')}
 				/>
 				<TextareaControl
 					label={__('Description', 'swrice-gutenberg-page-builder')}
