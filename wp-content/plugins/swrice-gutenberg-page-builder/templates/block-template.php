@@ -65,16 +65,19 @@ $final_cta_heading = isset($attributes['finalCtaHeading']) ? $attributes['finalC
 $final_cta_icon = isset($attributes['finalCtaIcon']) ? $attributes['finalCtaIcon'] : '';
 
 // Function to render stars for ratings
-function render_stars($rating) {
-    $stars = '';
-    for ($i = 1; $i <= 5; $i++) {
-        $stars .= $i <= $rating ? '⭐' : '☆';
+if (!function_exists('render_stars')) {
+    function render_stars($rating) {
+        $stars = '';
+        for ($i = 1; $i <= 5; $i++) {
+            $stars .= $i <= $rating ? '⭐' : '☆';
+        }
+        return $stars;
     }
-    return $stars;
 }
 
 // Section rendering functions (copied from original plugin)
-function render_problem_section($problem_items, $problem_heading, $problem_icon) {
+if (!function_exists('render_problem_section')) {
+    function render_problem_section($problem_items, $problem_heading, $problem_icon) {
     if (empty($problem_items) || !is_array($problem_items)) return;
     ?>
     <section class="sppm-section sppm-problem-section">
@@ -100,9 +103,11 @@ function render_problem_section($problem_items, $problem_heading, $problem_icon)
         </div>
     </section>
     <?php
+    }
 }
 
-function render_solution_section($solution_heading, $solution_description, $solution_icon) {
+if (!function_exists('render_solution_section')) {
+    function render_solution_section($solution_heading, $solution_description, $solution_icon) {
     if (empty($solution_heading) && empty($solution_description)) return;
     ?>
     <section class="sppm-section sppm-solution-section">
@@ -118,9 +123,11 @@ function render_solution_section($solution_heading, $solution_description, $solu
         </div>
     </section>
     <?php
+    }
 }
 
-function render_how_it_works_section($steps_items, $how_it_works_heading, $how_it_works_icon) {
+if (!function_exists('render_how_it_works_section')) {
+    function render_how_it_works_section($steps_items, $how_it_works_heading, $how_it_works_icon) {
     if (empty($steps_items) || !is_array($steps_items)) return;
     ?>
     <section class="sppm-section sppm-how-it-works-section">
@@ -144,9 +151,11 @@ function render_how_it_works_section($steps_items, $how_it_works_heading, $how_i
         </div>
     </section>
     <?php
+    }
 }
 
-function render_features_section($feature_items, $features_heading, $features_icon) {
+if (!function_exists('render_features_section')) {
+    function render_features_section($feature_items, $features_heading, $features_icon) {
     if (empty($feature_items) || !is_array($feature_items)) return;
     ?>
     <section class="sppm-section sppm-features-section">
@@ -176,9 +185,11 @@ function render_features_section($feature_items, $features_heading, $features_ic
         </div>
     </section>
     <?php
+    }
 }
 
-function render_testimonials_section($testimonial_items, $testimonials_heading, $testimonials_icon) {
+if (!function_exists('render_testimonials_section')) {
+    function render_testimonials_section($testimonial_items, $testimonials_heading, $testimonials_icon) {
     if (empty($testimonial_items) || !is_array($testimonial_items)) return;
     ?>
     <section class="sppm-section sppm-testimonials-section">
@@ -205,9 +216,11 @@ function render_testimonials_section($testimonial_items, $testimonials_heading, 
         </div>
     </section>
     <?php
+    }
 }
 
-function render_faq_section($faq_items, $faq_heading, $faq_icon) {
+if (!function_exists('render_faq_section')) {
+    function render_faq_section($faq_items, $faq_heading, $faq_icon) {
     if (empty($faq_items) || !is_array($faq_items)) return;
     ?>
     <section class="sppm-section sppm-faq-section">
@@ -231,9 +244,11 @@ function render_faq_section($faq_items, $faq_heading, $faq_icon) {
         </div>
     </section>
     <?php
+    }
 }
 
-function render_bonuses_section($bonus_items, $bonuses_heading, $bonuses_icon) {
+if (!function_exists('render_bonuses_section')) {
+    function render_bonuses_section($bonus_items, $bonuses_heading, $bonuses_icon) {
     if (empty($bonus_items) || !is_array($bonus_items)) return;
     ?>
     <section class="sppm-section sppm-bonuses-section">
@@ -260,9 +275,11 @@ function render_bonuses_section($bonus_items, $bonuses_heading, $bonuses_icon) {
         </div>
     </section>
     <?php
+    }
 }
 
-function render_guarantee_section($guarantee_text, $guarantee_heading, $guarantee_icon, $guarantee_points = array()) {
+if (!function_exists('render_guarantee_section')) {
+    function render_guarantee_section($guarantee_text, $guarantee_heading, $guarantee_icon, $guarantee_points = array()) {
     if (empty($guarantee_text) && empty($guarantee_heading)) return;
     ?>
     <section class="sppm-section sppm-guarantee-section">
@@ -289,9 +306,11 @@ function render_guarantee_section($guarantee_text, $guarantee_heading, $guarante
         </div>
     </section>
     <?php
+    }
 }
 
-function render_why_choose_section($why_choose_items, $why_choose_heading, $why_choose_icon) {
+if (!function_exists('render_why_choose_section')) {
+    function render_why_choose_section($why_choose_items, $why_choose_heading, $why_choose_icon) {
     if (empty($why_choose_items) || !is_array($why_choose_items)) return;
     ?>
     <section class="sppm-section sppm-why-choose-section">
@@ -315,9 +334,11 @@ function render_why_choose_section($why_choose_items, $why_choose_heading, $why_
         </div>
     </section>
     <?php
+    }
 }
 
-function render_about_section($about_description, $about_heading, $about_icon) {
+if (!function_exists('render_about_section')) {
+    function render_about_section($about_description, $about_heading, $about_icon) {
     if (empty($about_description) && empty($about_heading)) return;
     ?>
     <section class="sppm-section sppm-about-section">
@@ -333,9 +354,11 @@ function render_about_section($about_description, $about_heading, $about_icon) {
         </div>
     </section>
     <?php
+    }
 }
 
-function render_final_cta_section($cta_title, $cta_subtitle, $final_cta_heading, $final_cta_icon, $buy_now_shortcode) {
+if (!function_exists('render_final_cta_section')) {
+    function render_final_cta_section($cta_title, $cta_subtitle, $final_cta_heading, $final_cta_icon, $buy_now_shortcode) {
     if (empty($cta_title) && empty($final_cta_heading)) return;
     ?>
     <section class="sppm-section sppm-final-cta-section">
@@ -358,6 +381,7 @@ function render_final_cta_section($cta_title, $cta_subtitle, $final_cta_heading,
         </div>
     </section>
     <?php
+    }
 }
 ?>
 
