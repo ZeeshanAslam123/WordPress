@@ -8,12 +8,113 @@ const { createElement, Fragment } = wp.element;
 const { 
     TextControl, 
     TextareaControl, 
+    SelectControl,
     PanelBody, 
     Button,
     MediaUpload,
     MediaUploadCheck
 } = wp.components;
 const { InspectorControls } = wp.blockEditor;
+
+// Icon options for different sections
+const PROBLEM_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '😤 Frustrated Face', value: '😤' },
+    { label: '🚫 Prohibited', value: '🚫' },
+    { label: '⚠️ Warning', value: '⚠️' },
+    { label: '💸 Money Loss', value: '💸' },
+    { label: '📉 Declining', value: '📉' }
+];
+
+const SOLUTION_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '✨ Sparkles', value: '✨' },
+    { label: '🚀 Rocket', value: '🚀' },
+    { label: '💡 Light Bulb', value: '💡' },
+    { label: '🎯 Target', value: '🎯' },
+    { label: '⚡ Lightning', value: '⚡' }
+];
+
+const HOW_IT_WORKS_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '🔧 Wrench', value: '🔧' },
+    { label: '⚙️ Gear', value: '⚙️' },
+    { label: '🛠️ Tools', value: '🛠️' },
+    { label: '📋 Clipboard', value: '📋' },
+    { label: '🎯 Target', value: '🎯' }
+];
+
+const FEATURES_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '⭐ Star', value: '⭐' },
+    { label: '🌟 Glowing Star', value: '🌟' },
+    { label: '✨ Sparkles', value: '✨' },
+    { label: '🎯 Target', value: '🎯' },
+    { label: '🚀 Rocket', value: '🚀' }
+];
+
+const TESTIMONIALS_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '💬 Speech Bubble', value: '💬' },
+    { label: '🗣️ Speaking', value: '🗣️' },
+    { label: '💭 Thought Bubble', value: '💭' },
+    { label: '📢 Megaphone', value: '📢' },
+    { label: '⭐ Star', value: '⭐' }
+];
+
+const FAQ_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '❓ Question Mark', value: '❓' },
+    { label: '❔ White Question Mark', value: '❔' },
+    { label: '🤔 Thinking Face', value: '🤔' },
+    { label: '💭 Thought Bubble', value: '💭' },
+    { label: '📋 Clipboard', value: '📋' }
+];
+
+const BONUSES_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '🎁 Gift', value: '🎁' },
+    { label: '🎉 Party', value: '🎉' },
+    { label: '💎 Diamond', value: '💎' },
+    { label: '🏆 Trophy', value: '🏆' },
+    { label: '⭐ Star', value: '⭐' }
+];
+
+const GUARANTEE_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '✅ Check Mark', value: '✅' },
+    { label: '🛡️ Shield', value: '🛡️' },
+    { label: '🔒 Lock', value: '🔒' },
+    { label: '💯 Hundred', value: '💯' },
+    { label: '🎯 Target', value: '🎯' }
+];
+
+const WHY_CHOOSE_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '🏆 Trophy', value: '🏆' },
+    { label: '⭐ Star', value: '⭐' },
+    { label: '💎 Diamond', value: '💎' },
+    { label: '🎯 Target', value: '🎯' },
+    { label: '🚀 Rocket', value: '🚀' }
+];
+
+const ABOUT_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '👥 People', value: '👥' },
+    { label: '🏢 Building', value: '🏢' },
+    { label: '📖 Book', value: '📖' },
+    { label: '💼 Briefcase', value: '💼' },
+    { label: '🌟 Star', value: '🌟' }
+];
+
+const FINAL_CTA_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '🚀 Rocket', value: '🚀' },
+    { label: '✨ Sparkles', value: '✨' },
+    { label: '🎯 Target', value: '🎯' },
+    { label: '💎 Diamond', value: '💎' },
+    { label: '🔥 Fire', value: '🔥' }
+];
 
 // Repeater Field Component
 const RepeaterField = ({ items, onChange, fields, addButtonText = 'Add Item' }) => {
@@ -292,11 +393,12 @@ registerBlockType('swrice/problem-section', {
                         value: getAttr('problemHeading'),
                         onChange: (val) => setAttributes({ problemHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('problemIcon'),
+                        options: PROBLEM_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ problemIcon: val }),
-                        placeholder: '⚠️'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(RepeaterField, {
                         items: getAttr('problemItems', []),
@@ -364,11 +466,12 @@ registerBlockType('swrice/solution-section', {
                         value: getAttr('solutionHeading'),
                         onChange: (val) => setAttributes({ solutionHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('solutionIcon'),
+                        options: SOLUTION_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ solutionIcon: val }),
-                        placeholder: '✅'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(TextareaControl, {
                         label: 'Solution Description',
@@ -441,11 +544,12 @@ registerBlockType('swrice/features-section', {
                         value: getAttr('featuresHeading'),
                         onChange: (val) => setAttributes({ featuresHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('featuresIcon'),
+                        options: FEATURES_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ featuresIcon: val }),
-                        placeholder: '🚀'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(RepeaterField, {
                         items: getAttr('featureItems', []),
@@ -521,11 +625,12 @@ registerBlockType('swrice/faq-section', {
                         value: getAttr('faqHeading'),
                         onChange: (val) => setAttributes({ faqHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('faqIcon'),
+                        options: FAQ_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ faqIcon: val }),
-                        placeholder: '❓'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(RepeaterField, {
                         items: getAttr('faqItems', []),
@@ -600,11 +705,12 @@ registerBlockType('swrice/how-it-works-section', {
                         value: getAttr('howItWorksHeading'),
                         onChange: (val) => setAttributes({ howItWorksHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('howItWorksIcon'),
+                        options: HOW_IT_WORKS_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ howItWorksIcon: val }),
-                        placeholder: '⚙️'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(RepeaterField, {
                         items: getAttr('stepsItems', []),
@@ -681,11 +787,12 @@ registerBlockType('swrice/testimonials-section', {
                         value: getAttr('testimonialsHeading'),
                         onChange: (val) => setAttributes({ testimonialsHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('testimonialsIcon'),
+                        options: TESTIMONIALS_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ testimonialsIcon: val }),
-                        placeholder: '💬'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(RepeaterField, {
                         items: getAttr('testimonialItems', []),
@@ -764,11 +871,12 @@ registerBlockType('swrice/bonuses-section', {
                         value: getAttr('bonusesHeading'),
                         onChange: (val) => setAttributes({ bonusesHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('bonusesIcon'),
+                        options: BONUSES_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ bonusesIcon: val }),
-                        placeholder: '🎁'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(RepeaterField, {
                         items: getAttr('bonusItems', []),
@@ -845,11 +953,12 @@ registerBlockType('swrice/guarantee-section', {
                         value: getAttr('guaranteeHeading'),
                         onChange: (val) => setAttributes({ guaranteeHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('guaranteeIcon'),
+                        options: GUARANTEE_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ guaranteeIcon: val }),
-                        placeholder: '🛡️'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(TextareaControl, {
                         label: 'Guarantee Text',
@@ -933,11 +1042,12 @@ registerBlockType('swrice/why-choose-section', {
                         value: getAttr('whyChooseHeading'),
                         onChange: (val) => setAttributes({ whyChooseHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('whyChooseIcon'),
+                        options: WHY_CHOOSE_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ whyChooseIcon: val }),
-                        placeholder: '⭐'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(RepeaterField, {
                         items: getAttr('whyChooseItems', []),
@@ -1005,11 +1115,12 @@ registerBlockType('swrice/about-section', {
                         value: getAttr('aboutHeading'),
                         onChange: (val) => setAttributes({ aboutHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('aboutIcon'),
+                        options: ABOUT_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ aboutIcon: val }),
-                        placeholder: 'ℹ️'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(TextareaControl, {
                         label: 'About Description',
@@ -1075,11 +1186,12 @@ registerBlockType('swrice/final-cta-section', {
                         value: getAttr('finalCtaHeading'),
                         onChange: (val) => setAttributes({ finalCtaHeading: val })
                     }),
-                    createElement(TextControl, {
+                    createElement(SelectControl, {
                         label: 'Section Icon',
                         value: getAttr('finalCtaIcon'),
+                        options: FINAL_CTA_ICON_OPTIONS,
                         onChange: (val) => setAttributes({ finalCtaIcon: val }),
-                        placeholder: '🚀'
+                        help: 'Choose an icon for this section'
                     }),
                     createElement(TextControl, {
                         label: 'CTA Title',
