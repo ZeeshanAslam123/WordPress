@@ -10,12 +10,14 @@ $hero_subtitle = isset($attributes['heroSubtitle']) ? $attributes['heroSubtitle'
 $plugin_price = isset($attributes['pluginPrice']) ? $attributes['pluginPrice'] : '29';
 $plugin_original_price = isset($attributes['pluginOriginalPrice']) ? $attributes['pluginOriginalPrice'] : '49';
 $buy_now_shortcode = isset($attributes['buyNowShortcode']) ? $attributes['buyNowShortcode'] : '';
-$demo_link = isset($attributes['demoLink']) ? $attributes['demoLink'] : '#';
+$demo_link = isset($attributes['demoLink']) ? $attributes['demoLink'] : '';
 $hero_image = isset($attributes['heroImageUrl']) ? $attributes['heroImageUrl'] : '';
 ?>
 
 <!-- HERO SECTION - EXACT MATCH WITH ORIGINAL -->
-<section class="sppm-hero">
+<div class="sppm-plugin-page">
+    <div class="sppm-container">
+        <section class="sppm-hero">
     <div class="sppm-hero-left">
         <div class="sppm-logo-row">
             <div class="sppm-logo-mark">
@@ -65,3 +67,5 @@ $hero_image = isset($attributes['heroImageUrl']) ? $attributes['heroImageUrl'] :
         <?php endif; ?>
     </div>
 </section>
+    </div>
+</div>
