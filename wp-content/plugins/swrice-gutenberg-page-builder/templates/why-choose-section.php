@@ -1,6 +1,6 @@
 <?php
 /**
- * Why Choose Section Template
+ * Why Choose Section Template - EXACT MATCH with Original Plugin
  */
 
 if (!defined('ABSPATH')) exit;
@@ -13,36 +13,22 @@ if (empty($why_choose_items) || !is_array($why_choose_items)) return;
 ?>
 
 <section class="sppm-section sppm-why-choose-section">
-    <div class="sppm-container">
-        <div class="sppm-section-header">
-            <h2 class="sppm-section-title">
-                <?php if (!empty($why_choose_icon)): ?>
-                    <span class="sppm-section-icon"><?php echo esc_html($why_choose_icon); ?></span>
-                <?php endif; ?>
-                <?php echo esc_html($why_choose_heading); ?>
-            </h2>
+    <div class="sppm-section-header">
+        <h2 class="sppm-section-title">
+            <?php if ($why_choose_icon): ?><span class="sppm-section-icon"><?php echo $why_choose_icon; ?></span><?php endif; ?>
+            <?php echo esc_html($why_choose_heading); ?>
+        </h2>
+    </div>
+    
+    <div class="sppm-why-choose-grid">
+        <?php foreach ($why_choose_items as $benefit): ?>
+        <div class="sppm-benefit-card">
+            <?php if (!empty($benefit['icon'])): ?>
+            <div class="sppm-benefit-icon"><?php echo $benefit['icon']; ?></div>
+            <?php endif; ?>
+            <h3 class="sppm-benefit-title"><?php echo esc_html($benefit['title']); ?></h3>
+            <p class="sppm-benefit-desc"><?php echo esc_html($benefit['description']); ?></p>
         </div>
-        
-        <div class="sppm-why-choose-grid">
-            <?php foreach ($why_choose_items as $item): ?>
-                <?php if (!empty($item['title']) || !empty($item['description'])): ?>
-                    <div class="sppm-why-choose-item">
-                        <?php if (!empty($item['icon'])): ?>
-                            <div class="sppm-why-choose-icon">
-                                <?php echo esc_html($item['icon']); ?>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <?php if (!empty($item['title'])): ?>
-                            <h3 class="sppm-why-choose-title"><?php echo esc_html($item['title']); ?></h3>
-                        <?php endif; ?>
-                        
-                        <?php if (!empty($item['description'])): ?>
-                            <p class="sppm-why-choose-description"><?php echo esc_html($item['description']); ?></p>
-                        <?php endif; ?>
-                    </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
+        <?php endforeach; ?>
     </div>
 </section>

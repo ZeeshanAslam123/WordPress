@@ -1,6 +1,6 @@
 <?php
 /**
- * Testimonials Section Template
+ * Testimonials Section Template - EXACT MATCH with Original Plugin
  */
 
 if (!defined('ABSPATH')) exit;
@@ -24,44 +24,25 @@ if (empty($testimonial_items) || !is_array($testimonial_items)) return;
 ?>
 
 <section class="sppm-section sppm-testimonials-section">
-    <div class="sppm-container">
-        <div class="sppm-section-header">
-            <h2 class="sppm-section-title">
-                <?php if (!empty($testimonials_icon)): ?>
-                    <span class="sppm-section-icon"><?php echo esc_html($testimonials_icon); ?></span>
-                <?php endif; ?>
-                <?php echo esc_html($testimonials_heading); ?>
-            </h2>
+    <div class="sppm-section-header">
+        <h2 class="sppm-section-title">
+            <?php if ($testimonials_icon): ?><span class="sppm-section-icon"><?php echo $testimonials_icon; ?></span><?php endif; ?>
+            <?php echo esc_html($testimonials_heading); ?>
+        </h2>
+    </div>
+    
+    <div class="sppm-testimonials-grid">
+        <?php foreach ($testimonial_items as $testimonial): ?>
+        <div class="sppm-testimonial-card">
+            <div class="sppm-testimonial-rating">
+                <?php echo render_stars(intval($testimonial['rating'])); ?>
+            </div>
+            <div class="sppm-testimonial-content">"<?php echo esc_html($testimonial['content']); ?>"</div>
+            <div class="sppm-testimonial-author">
+                <strong><?php echo esc_html($testimonial['name']); ?></strong>
+                <span><?php echo esc_html($testimonial['title']); ?></span>
+            </div>
         </div>
-        
-        <div class="sppm-testimonials-grid">
-            <?php foreach ($testimonial_items as $item): ?>
-                <?php if (!empty($item['name']) && !empty($item['content'])): ?>
-                    <div class="sppm-testimonial-item">
-                        <?php if (!empty($item['content'])): ?>
-                            <div class="sppm-testimonial-content">
-                                <p>"<?php echo esc_html($item['content']); ?>"</p>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <div class="sppm-testimonial-author">
-                            <?php if (!empty($item['name'])): ?>
-                                <h4 class="sppm-testimonial-name"><?php echo esc_html($item['name']); ?></h4>
-                            <?php endif; ?>
-                            
-                            <?php if (!empty($item['title'])): ?>
-                                <p class="sppm-testimonial-title"><?php echo esc_html($item['title']); ?></p>
-                            <?php endif; ?>
-                            
-                            <?php if (!empty($item['rating'])): ?>
-                                <div class="sppm-testimonial-rating">
-                                    <?php echo render_stars(intval($item['rating'])); ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
+        <?php endforeach; ?>
     </div>
 </section>

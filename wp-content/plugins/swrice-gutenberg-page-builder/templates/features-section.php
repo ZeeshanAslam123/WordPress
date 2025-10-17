@@ -1,6 +1,6 @@
 <?php
 /**
- * Features Section Template
+ * Features Section Template - EXACT MATCH with Original Plugin
  */
 
 if (!defined('ABSPATH')) exit;
@@ -13,36 +13,28 @@ if (empty($feature_items) || !is_array($feature_items)) return;
 ?>
 
 <section class="sppm-section sppm-features-section">
-    <div class="sppm-container">
-        <div class="sppm-section-header">
-            <h2 class="sppm-section-title">
-                <?php if (!empty($features_icon)): ?>
-                    <span class="sppm-section-icon"><?php echo esc_html($features_icon); ?></span>
-                <?php endif; ?>
-                <?php echo esc_html($features_heading); ?>
-            </h2>
-        </div>
-        
-        <div class="sppm-features-grid">
-            <?php foreach ($feature_items as $item): ?>
-                <?php if (!empty($item['title']) || !empty($item['description'])): ?>
-                    <div class="sppm-feature-item">
-                        <?php if (!empty($item['icon'])): ?>
-                            <div class="sppm-feature-icon">
-                                <?php echo esc_html($item['icon']); ?>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <?php if (!empty($item['title'])): ?>
-                            <h3 class="sppm-feature-title"><?php echo esc_html($item['title']); ?></h3>
-                        <?php endif; ?>
-                        
-                        <?php if (!empty($item['description'])): ?>
-                            <p class="sppm-feature-description"><?php echo esc_html($item['description']); ?></p>
-                        <?php endif; ?>
-                    </div>
-                <?php endif; ?>
+    <div class="sppm-section-header">
+        <h2 class="sppm-section-title">
+            <?php if ($features_icon): ?><span class="sppm-section-icon"><?php echo $features_icon; ?></span><?php endif; ?>
+            <?php echo esc_html($features_heading); ?>
+        </h2>
+    </div>
+    
+    <div class="sppm-features-grid">
+        <?php if (is_array($feature_items) && !empty($feature_items)): ?>
+            <?php foreach ($feature_items as $feature): ?>
+            <div class="sppm-feature-card">
+                <div class="sppm-feature-card-header">
+                    <?php if (!empty($feature['icon'])): ?>
+                    <div class="sppm-feature-icon"><?php echo $feature['icon']; ?></div>
+                    <?php endif; ?>
+                    <h3 class="sppm-feature-title"><?php echo esc_html($feature['title']); ?></h3>
+                </div>
+                <div class="sppm-feature-card-body">
+                    <p class="sppm-feature-desc"><?php echo esc_html($feature['description']); ?></p>
+                </div>
+            </div>
             <?php endforeach; ?>
-        </div>
+        <?php endif; ?>
     </div>
 </section>
