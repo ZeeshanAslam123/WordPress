@@ -1,0 +1,178 @@
+/**
+ * Swrice Gutenberg Page Builder - Editor CSS
+ * Styles for the block editor interface
+ */
+
+/* Editor-specific styles */
+.sgpb-plugin-page-editor {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    background: #f9f9f9;
+}
+
+.sgpb-plugin-page-editor .sppm-plugin-page {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Section Manager Styles */
+.sgpb-section-manager {
+    margin: 16px 0;
+}
+
+.sgpb-section-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.sgpb-section-item {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: move;
+    transition: all 0.2s ease;
+}
+
+.sgpb-section-item:hover {
+    border-color: #007cba;
+    box-shadow: 0 2px 8px rgba(0,124,186,0.1);
+}
+
+.sgpb-section-item.disabled {
+    opacity: 0.6;
+    background: #f5f5f5;
+}
+
+.sgpb-section-item .components-card__body {
+    padding: 12px 16px;
+}
+
+/* Repeater Field Styles */
+.sgpb-repeater-field {
+    margin: 16px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 16px;
+    background: #f9f9f9;
+}
+
+.sgpb-repeater-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.sgpb-repeater-item {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.sgpb-repeater-item:last-child {
+    margin-bottom: 0;
+}
+
+.sgpb-repeater-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Shortcode Preview */
+.sgpb-shortcode-preview {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: monospace;
+    font-size: 12px;
+    color: #666;
+}
+
+.sgpb-shortcode-preview code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+}
+
+/* Editor-specific button styles */
+.sgpb-plugin-page-editor .sppm-btn {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.sgpb-plugin-page-editor .sppm-btn:hover {
+    transform: none;
+}
+
+/* Editor preview adjustments */
+.sgpb-plugin-page-editor .sppm-hero {
+    min-height: 300px;
+}
+
+.sgpb-plugin-page-editor .sppm-hero-title {
+    font-size: 32px;
+}
+
+.sgpb-plugin-page-editor .sppm-section {
+    margin-top: 24px;
+    padding: 20px 0;
+}
+
+.sgpb-plugin-page-editor .sppm-section-title {
+    font-size: 24px;
+}
+
+/* Inspector Controls Styling */
+.components-panel__body .sgpb-repeater-field {
+    margin: 12px 0;
+    padding: 12px;
+}
+
+.components-panel__body .sgpb-repeater-item {
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.components-panel__body .sgpb-repeater-header {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+}
+
+/* Responsive adjustments for editor */
+@media (max-width: 782px) {
+    .sgpb-plugin-page-editor {
+        padding: 16px;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-hero {
+        flex-direction: column;
+        min-height: auto;
+        padding: 16px;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-hero-left,
+    .sgpb-plugin-page-editor .sppm-hero-right {
+        width: 100%;
+    }
+    
+    .sgpb-section-item .components-flex {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
