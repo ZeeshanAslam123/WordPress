@@ -996,6 +996,22 @@
     z-index: 2;
 }
 
+.sppm-final-cta .sppm-cta-heading {
+    flex-shrink: 0;
+    text-align: left;
+}
+
+.sppm-final-cta .sppm-cta-heading .sppm-section-title {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .sppm-final-cta .sppm-cta-content {
     margin-bottom: 0;
     text-align: left;

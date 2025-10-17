@@ -62,13 +62,16 @@ export default function FinalCTASection({ attributes, setAttributes, isInspector
 	return (
 		<section className="sppm-section sppm-final-cta">
 			<div className="sppm-cta">
-				<div className="sppm-cta-content">
-					{finalCtaHeading && (
+				{finalCtaHeading && (
+					<div className="sppm-cta-heading">
 						<h2 className="sppm-section-title">
 							{finalCtaIcon && <span className="sppm-section-icon">{finalCtaIcon}</span>}
 							{finalCtaHeading}
 						</h2>
-					)}
+					</div>
+				)}
+				
+				<div className="sppm-cta-content">
 					{ctaTitle && <h3 className="sppm-cta-title">{ctaTitle}</h3>}
 					{ctaSubtitle && <p className="sppm-cta-subtitle">{ctaSubtitle}</p>}
 				</div>

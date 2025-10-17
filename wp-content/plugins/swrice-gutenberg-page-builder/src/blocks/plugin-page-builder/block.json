@@ -140,14 +140,17 @@
 			"type": "array",
 			"default": [
 				{
+					"icon": "1️⃣",
 					"title": "Install & Activate",
 					"description": "Download and activate the plugin in seconds"
 				},
 				{
+					"icon": "2️⃣",
 					"title": "Configure Settings",
 					"description": "Set up your preferences with our easy wizard"
 				},
 				{
+					"icon": "3️⃣",
 					"title": "Start Using",
 					"description": "Begin enjoying all the powerful features immediately"
 				}
@@ -188,10 +191,12 @@
 			"type": "array",
 			"default": [
 				{
-					"quote": "This plugin changed everything for my business!",
-					"author": "John Doe",
+					"name": "John Doe",
+					"role": "CEO",
+					"company": "Tech Solutions Inc.",
+					"content": "This plugin changed everything for my business!",
 					"rating": 5,
-					"company": "Tech Solutions Inc."
+					"avatar": ""
 				}
 			]
 		},
@@ -269,7 +274,7 @@
 			"type": "string",
 			"default": "ℹ️"
 		},
-		"aboutDescription": {
+		"aboutText": {
 			"type": "string",
 			"default": "We are passionate developers committed to creating the best WordPress plugins for our community."
 		},
