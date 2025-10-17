@@ -91,8 +91,14 @@ class Swrice_Gutenberg_Page_Builder {
         $this->register_hero_block();
         $this->register_problem_block();
         $this->register_solution_block();
+        $this->register_how_it_works_block();
         $this->register_features_block();
+        $this->register_testimonials_block();
         $this->register_faq_block();
+        $this->register_bonuses_block();
+        $this->register_guarantee_block();
+        $this->register_why_choose_block();
+        $this->register_about_block();
         $this->register_final_cta_block();
     }
     
@@ -203,6 +209,141 @@ class Swrice_Gutenberg_Page_Builder {
     }
     
     /**
+     * Register How It Works Section Block
+     */
+    public function register_how_it_works_block() {
+        register_block_type('swrice/how-it-works-section', array(
+            'editor_script' => 'swrice-plugin-page-builder-blocks',
+            'render_callback' => array($this, 'render_how_it_works_section'),
+            'attributes' => array(
+                'howItWorksHeading' => array('type' => 'string', 'default' => 'How It Works'),
+                'howItWorksIcon' => array('type' => 'string', 'default' => '⚙️'),
+                'stepsItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'title' => 'Step 1',
+                            'description' => 'Description of the step'
+                        )
+                    )
+                )
+            )
+        ));
+    }
+    
+    /**
+     * Register Testimonials Section Block
+     */
+    public function register_testimonials_block() {
+        register_block_type('swrice/testimonials-section', array(
+            'editor_script' => 'swrice-plugin-page-builder-blocks',
+            'render_callback' => array($this, 'render_testimonials_section'),
+            'attributes' => array(
+                'testimonialsHeading' => array('type' => 'string', 'default' => 'Testimonials'),
+                'testimonialsIcon' => array('type' => 'string', 'default' => '💬'),
+                'testimonialItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'name' => 'John Doe',
+                            'title' => 'CEO, Company',
+                            'content' => 'This plugin is amazing!',
+                            'rating' => '5'
+                        )
+                    )
+                )
+            )
+        ));
+    }
+    
+    /**
+     * Register Bonuses Section Block
+     */
+    public function register_bonuses_block() {
+        register_block_type('swrice/bonuses-section', array(
+            'editor_script' => 'swrice-plugin-page-builder-blocks',
+            'render_callback' => array($this, 'render_bonuses_section'),
+            'attributes' => array(
+                'bonusesHeading' => array('type' => 'string', 'default' => 'Bonuses'),
+                'bonusesIcon' => array('type' => 'string', 'default' => '🎁'),
+                'bonusItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'title' => 'Bonus 1',
+                            'description' => 'Description of the bonus',
+                            'value' => '$50',
+                            'icon' => '🎁'
+                        )
+                    )
+                )
+            )
+        ));
+    }
+    
+    /**
+     * Register Guarantee Section Block
+     */
+    public function register_guarantee_block() {
+        register_block_type('swrice/guarantee-section', array(
+            'editor_script' => 'swrice-plugin-page-builder-blocks',
+            'render_callback' => array($this, 'render_guarantee_section'),
+            'attributes' => array(
+                'guaranteeHeading' => array('type' => 'string', 'default' => 'Guarantee'),
+                'guaranteeIcon' => array('type' => 'string', 'default' => '🛡️'),
+                'guaranteeText' => array('type' => 'string', 'default' => 'We offer a 30-day money back guarantee.'),
+                'guaranteePoints' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'point' => '30-day money back guarantee'
+                        )
+                    )
+                )
+            )
+        ));
+    }
+    
+    /**
+     * Register Why Choose Section Block
+     */
+    public function register_why_choose_block() {
+        register_block_type('swrice/why-choose-section', array(
+            'editor_script' => 'swrice-plugin-page-builder-blocks',
+            'render_callback' => array($this, 'render_why_choose_section'),
+            'attributes' => array(
+                'whyChooseHeading' => array('type' => 'string', 'default' => 'Why Choose Us'),
+                'whyChooseIcon' => array('type' => 'string', 'default' => '⭐'),
+                'whyChooseItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'title' => 'Reason 1',
+                            'description' => 'Why you should choose us',
+                            'icon' => '⭐'
+                        )
+                    )
+                )
+            )
+        ));
+    }
+    
+    /**
+     * Register About Section Block
+     */
+    public function register_about_block() {
+        register_block_type('swrice/about-section', array(
+            'editor_script' => 'swrice-plugin-page-builder-blocks',
+            'render_callback' => array($this, 'render_about_section'),
+            'attributes' => array(
+                'aboutHeading' => array('type' => 'string', 'default' => 'About'),
+                'aboutIcon' => array('type' => 'string', 'default' => 'ℹ️'),
+                'aboutDescription' => array('type' => 'string', 'default' => 'Learn more about our company and mission.')
+            )
+        ));
+    }
+
+    /**
      * Register Final CTA Section Block
      */
     public function register_final_cta_block() {
@@ -250,6 +391,42 @@ class Swrice_Gutenberg_Page_Builder {
         return ob_get_clean();
     }
     
+    public function render_how_it_works_section($attributes) {
+        ob_start();
+        include SGPB_PLUGIN_DIR . 'templates/how-it-works-section.php';
+        return ob_get_clean();
+    }
+    
+    public function render_testimonials_section($attributes) {
+        ob_start();
+        include SGPB_PLUGIN_DIR . 'templates/testimonials-section.php';
+        return ob_get_clean();
+    }
+    
+    public function render_bonuses_section($attributes) {
+        ob_start();
+        include SGPB_PLUGIN_DIR . 'templates/bonuses-section.php';
+        return ob_get_clean();
+    }
+    
+    public function render_guarantee_section($attributes) {
+        ob_start();
+        include SGPB_PLUGIN_DIR . 'templates/guarantee-section.php';
+        return ob_get_clean();
+    }
+    
+    public function render_why_choose_section($attributes) {
+        ob_start();
+        include SGPB_PLUGIN_DIR . 'templates/why-choose-section.php';
+        return ob_get_clean();
+    }
+    
+    public function render_about_section($attributes) {
+        ob_start();
+        include SGPB_PLUGIN_DIR . 'templates/about-section.php';
+        return ob_get_clean();
+    }
+
     public function render_final_cta_section($attributes) {
         ob_start();
         include SGPB_PLUGIN_DIR . 'templates/final-cta-section.php';

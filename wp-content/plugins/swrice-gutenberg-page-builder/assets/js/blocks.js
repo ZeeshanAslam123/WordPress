@@ -152,41 +152,51 @@ registerBlockType('swrice/hero-section', {
                     })
                 ),
                 createElement(PanelBody, { title: 'Hero Image', initialOpen: false },
-                    createElement(MediaUploadCheck, null,
-                        createElement(MediaUpload, {
-                            onSelect: (media) => {
-                                setAttributes({ 
-                                    heroImageId: media.id,
-                                    heroImageUrl: media.url 
-                                });
-                            },
-                            allowedTypes: ['image'],
-                            value: getAttr('heroImageId'),
-                            render: ({ open }) => {
-                                if (getAttr('heroImageUrl')) {
-                                    return createElement('div', null,
-                                        createElement('img', { 
-                                            src: getAttr('heroImageUrl'), 
-                                            style: { maxWidth: '100%', height: 'auto', marginBottom: '10px' }
-                                        }),
-                                        createElement(Button, {
-                                            onClick: open,
-                                            isPrimary: true,
-                                            style: { marginRight: '10px' }
-                                        }, 'Change Image'),
-                                        createElement(Button, {
-                                            onClick: () => setAttributes({ heroImageId: 0, heroImageUrl: '' }),
-                                            isDestructive: true
-                                        }, 'Remove')
-                                    );
-                                } else {
-                                    return createElement(Button, {
-                                        onClick: open,
-                                        isPrimary: true
-                                    }, 'Select Hero Image');
+                    createElement(TextControl, {
+                        label: 'Hero Image URL',
+                        value: getAttr('heroImageUrl'),
+                        onChange: (val) => setAttributes({ heroImageUrl: val }),
+                        placeholder: 'https://example.com/image.jpg',
+                        help: 'Enter the URL of your hero image or use the media library button below'
+                    }),
+                    createElement('div', { style: { marginTop: '10px' } },
+                        createElement(Button, {
+                            isPrimary: true,
+                            onClick: () => {
+                                // Simple media frame approach
+                                if (typeof wp !== 'undefined' && wp.media) {
+                                    const frame = wp.media({
+                                        title: 'Select Hero Image',
+                                        button: { text: 'Use Image' },
+                                        multiple: false,
+                                        library: { type: 'image' }
+                                    });
+                                    
+                                    frame.on('select', () => {
+                                        const attachment = frame.state().get('selection').first().toJSON();
+                                        setAttributes({ 
+                                            heroImageId: attachment.id,
+                                            heroImageUrl: attachment.url 
+                                        });
+                                    });
+                                    
+                                    frame.open();
                                 }
                             }
-                        })
+                        }, 'Select from Media Library')
+                    ),
+                    getAttr('heroImageUrl') && createElement('div', { style: { marginTop: '10px' } },
+                        createElement('img', { 
+                            src: getAttr('heroImageUrl'), 
+                            style: { maxWidth: '100%', height: 'auto', border: '1px solid #ddd', borderRadius: '4px' }
+                        }),
+                        createElement('div', { style: { marginTop: '5px' } },
+                            createElement(Button, {
+                                isDestructive: true,
+                                isSmall: true,
+                                onClick: () => setAttributes({ heroImageId: 0, heroImageUrl: '' })
+                            }, 'Remove Image')
+                        )
                     )
                 )
             ),
@@ -560,8 +570,486 @@ registerBlockType('swrice/faq-section', {
     save: () => null
 });
 
-// Add more blocks following the same pattern...
-// For brevity, I'll add a few more key ones
+// How It Works Section Block
+registerBlockType('swrice/how-it-works-section', {
+    title: 'How It Works Section',
+    icon: '⚙️',
+    category: 'swrice-blocks',
+    attributes: {
+        howItWorksHeading: { type: 'string', default: 'How It Works' },
+        howItWorksIcon: { type: 'string', default: '⚙️' },
+        stepsItems: { 
+            type: 'array', 
+            default: [
+                {
+                    title: 'Step 1',
+                    description: 'Description of the step'
+                }
+            ]
+        }
+    },
+    edit: (props) => {
+        const { attributes, setAttributes } = props;
+        const getAttr = (key, fallback = '') => attributes[key] || fallback;
+
+        return createElement(Fragment, null,
+            createElement(InspectorControls, null,
+                createElement(PanelBody, { title: 'How It Works Settings', initialOpen: true },
+                    createElement(TextControl, {
+                        label: 'Section Heading',
+                        value: getAttr('howItWorksHeading'),
+                        onChange: (val) => setAttributes({ howItWorksHeading: val })
+                    }),
+                    createElement(TextControl, {
+                        label: 'Section Icon',
+                        value: getAttr('howItWorksIcon'),
+                        onChange: (val) => setAttributes({ howItWorksIcon: val }),
+                        placeholder: '⚙️'
+                    }),
+                    createElement(RepeaterField, {
+                        items: getAttr('stepsItems', []),
+                        onChange: (items) => setAttributes({ stepsItems: items }),
+                        fields: [
+                            { key: 'title', label: 'Step Title', type: 'text' },
+                            { key: 'description', label: 'Step Description', type: 'textarea' }
+                        ],
+                        addButtonText: 'Add Step'
+                    })
+                )
+            ),
+            
+            // Block Preview
+            createElement('div', { 
+                className: 'swrice-how-it-works-preview',
+                style: {
+                    background: '#f8f9fa',
+                    border: '1px solid #dee2e6',
+                    padding: '20px',
+                    borderRadius: '8px'
+                }
+            },
+                createElement('h3', { 
+                    style: { 
+                        margin: '0 0 15px 0',
+                        color: '#495057',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                    } 
+                }, 
+                    createElement('span', null, getAttr('howItWorksIcon')),
+                    getAttr('howItWorksHeading', 'How It Works')
+                ),
+                createElement('div', { style: { color: '#495057' } },
+                    `${getAttr('stepsItems', []).length} step(s) configured. Configure in the sidebar.`
+                )
+            )
+        );
+    },
+    save: () => null
+});
+
+// Testimonials Section Block
+registerBlockType('swrice/testimonials-section', {
+    title: 'Testimonials Section',
+    icon: '💬',
+    category: 'swrice-blocks',
+    attributes: {
+        testimonialsHeading: { type: 'string', default: 'Testimonials' },
+        testimonialsIcon: { type: 'string', default: '💬' },
+        testimonialItems: { 
+            type: 'array', 
+            default: [
+                {
+                    name: 'John Doe',
+                    title: 'CEO, Company',
+                    content: 'This plugin is amazing!',
+                    rating: '5'
+                }
+            ]
+        }
+    },
+    edit: (props) => {
+        const { attributes, setAttributes } = props;
+        const getAttr = (key, fallback = '') => attributes[key] || fallback;
+
+        return createElement(Fragment, null,
+            createElement(InspectorControls, null,
+                createElement(PanelBody, { title: 'Testimonials Settings', initialOpen: true },
+                    createElement(TextControl, {
+                        label: 'Section Heading',
+                        value: getAttr('testimonialsHeading'),
+                        onChange: (val) => setAttributes({ testimonialsHeading: val })
+                    }),
+                    createElement(TextControl, {
+                        label: 'Section Icon',
+                        value: getAttr('testimonialsIcon'),
+                        onChange: (val) => setAttributes({ testimonialsIcon: val }),
+                        placeholder: '💬'
+                    }),
+                    createElement(RepeaterField, {
+                        items: getAttr('testimonialItems', []),
+                        onChange: (items) => setAttributes({ testimonialItems: items }),
+                        fields: [
+                            { key: 'name', label: 'Customer Name', type: 'text' },
+                            { key: 'title', label: 'Customer Title', type: 'text' },
+                            { key: 'content', label: 'Testimonial Content', type: 'textarea' },
+                            { key: 'rating', label: 'Rating (1-5)', type: 'text', placeholder: '5' }
+                        ],
+                        addButtonText: 'Add Testimonial'
+                    })
+                )
+            ),
+            
+            // Block Preview
+            createElement('div', { 
+                className: 'swrice-testimonials-preview',
+                style: {
+                    background: '#e8f5e8',
+                    border: '1px solid #c3e6cb',
+                    padding: '20px',
+                    borderRadius: '8px'
+                }
+            },
+                createElement('h3', { 
+                    style: { 
+                        margin: '0 0 15px 0',
+                        color: '#155724',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                    } 
+                }, 
+                    createElement('span', null, getAttr('testimonialsIcon')),
+                    getAttr('testimonialsHeading', 'Testimonials')
+                ),
+                createElement('div', { style: { color: '#155724' } },
+                    `${getAttr('testimonialItems', []).length} testimonial(s) configured. Configure in the sidebar.`
+                )
+            )
+        );
+    },
+    save: () => null
+});
+
+// Bonuses Section Block
+registerBlockType('swrice/bonuses-section', {
+    title: 'Bonuses Section',
+    icon: '🎁',
+    category: 'swrice-blocks',
+    attributes: {
+        bonusesHeading: { type: 'string', default: 'Bonuses' },
+        bonusesIcon: { type: 'string', default: '🎁' },
+        bonusItems: { 
+            type: 'array', 
+            default: [
+                {
+                    title: 'Bonus 1',
+                    description: 'Description of the bonus',
+                    value: '$50',
+                    icon: '🎁'
+                }
+            ]
+        }
+    },
+    edit: (props) => {
+        const { attributes, setAttributes } = props;
+        const getAttr = (key, fallback = '') => attributes[key] || fallback;
+
+        return createElement(Fragment, null,
+            createElement(InspectorControls, null,
+                createElement(PanelBody, { title: 'Bonuses Settings', initialOpen: true },
+                    createElement(TextControl, {
+                        label: 'Section Heading',
+                        value: getAttr('bonusesHeading'),
+                        onChange: (val) => setAttributes({ bonusesHeading: val })
+                    }),
+                    createElement(TextControl, {
+                        label: 'Section Icon',
+                        value: getAttr('bonusesIcon'),
+                        onChange: (val) => setAttributes({ bonusesIcon: val }),
+                        placeholder: '🎁'
+                    }),
+                    createElement(RepeaterField, {
+                        items: getAttr('bonusItems', []),
+                        onChange: (items) => setAttributes({ bonusItems: items }),
+                        fields: [
+                            { key: 'title', label: 'Bonus Title', type: 'text' },
+                            { key: 'description', label: 'Bonus Description', type: 'textarea' },
+                            { key: 'value', label: 'Bonus Value', type: 'text', placeholder: '$50' },
+                            { key: 'icon', label: 'Icon', type: 'text', placeholder: '🎁' }
+                        ],
+                        addButtonText: 'Add Bonus'
+                    })
+                )
+            ),
+            
+            // Block Preview
+            createElement('div', { 
+                className: 'swrice-bonuses-preview',
+                style: {
+                    background: '#fff3cd',
+                    border: '1px solid #ffeaa7',
+                    padding: '20px',
+                    borderRadius: '8px'
+                }
+            },
+                createElement('h3', { 
+                    style: { 
+                        margin: '0 0 15px 0',
+                        color: '#856404',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                    } 
+                }, 
+                    createElement('span', null, getAttr('bonusesIcon')),
+                    getAttr('bonusesHeading', 'Bonuses')
+                ),
+                createElement('div', { style: { color: '#856404' } },
+                    `${getAttr('bonusItems', []).length} bonus(es) configured. Configure in the sidebar.`
+                )
+            )
+        );
+    },
+    save: () => null
+});
+
+// Guarantee Section Block
+registerBlockType('swrice/guarantee-section', {
+    title: 'Guarantee Section',
+    icon: '🛡️',
+    category: 'swrice-blocks',
+    attributes: {
+        guaranteeHeading: { type: 'string', default: 'Guarantee' },
+        guaranteeIcon: { type: 'string', default: '🛡️' },
+        guaranteeText: { type: 'string', default: 'We offer a 30-day money back guarantee.' },
+        guaranteePoints: { 
+            type: 'array', 
+            default: [
+                {
+                    point: '30-day money back guarantee'
+                }
+            ]
+        }
+    },
+    edit: (props) => {
+        const { attributes, setAttributes } = props;
+        const getAttr = (key, fallback = '') => attributes[key] || fallback;
+
+        return createElement(Fragment, null,
+            createElement(InspectorControls, null,
+                createElement(PanelBody, { title: 'Guarantee Settings', initialOpen: true },
+                    createElement(TextControl, {
+                        label: 'Section Heading',
+                        value: getAttr('guaranteeHeading'),
+                        onChange: (val) => setAttributes({ guaranteeHeading: val })
+                    }),
+                    createElement(TextControl, {
+                        label: 'Section Icon',
+                        value: getAttr('guaranteeIcon'),
+                        onChange: (val) => setAttributes({ guaranteeIcon: val }),
+                        placeholder: '🛡️'
+                    }),
+                    createElement(TextareaControl, {
+                        label: 'Guarantee Text',
+                        value: getAttr('guaranteeText'),
+                        onChange: (val) => setAttributes({ guaranteeText: val }),
+                        rows: 3
+                    }),
+                    createElement(RepeaterField, {
+                        items: getAttr('guaranteePoints', []),
+                        onChange: (items) => setAttributes({ guaranteePoints: items }),
+                        fields: [
+                            { key: 'point', label: 'Guarantee Point', type: 'text' }
+                        ],
+                        addButtonText: 'Add Guarantee Point'
+                    })
+                )
+            ),
+            
+            // Block Preview
+            createElement('div', { 
+                className: 'swrice-guarantee-preview',
+                style: {
+                    background: '#d1ecf1',
+                    border: '1px solid #bee5eb',
+                    padding: '20px',
+                    borderRadius: '8px'
+                }
+            },
+                createElement('h3', { 
+                    style: { 
+                        margin: '0 0 15px 0',
+                        color: '#0c5460',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                    } 
+                }, 
+                    createElement('span', null, getAttr('guaranteeIcon')),
+                    getAttr('guaranteeHeading', 'Guarantee')
+                ),
+                createElement('p', { style: { color: '#0c5460', margin: '0 0 10px 0' } },
+                    getAttr('guaranteeText') || 'Configure your guarantee text in the sidebar.'
+                ),
+                createElement('div', { style: { color: '#0c5460' } },
+                    `${getAttr('guaranteePoints', []).length} guarantee point(s) configured.`
+                )
+            )
+        );
+    },
+    save: () => null
+});
+
+// Why Choose Section Block
+registerBlockType('swrice/why-choose-section', {
+    title: 'Why Choose Section',
+    icon: '⭐',
+    category: 'swrice-blocks',
+    attributes: {
+        whyChooseHeading: { type: 'string', default: 'Why Choose Us' },
+        whyChooseIcon: { type: 'string', default: '⭐' },
+        whyChooseItems: { 
+            type: 'array', 
+            default: [
+                {
+                    title: 'Reason 1',
+                    description: 'Why you should choose us',
+                    icon: '⭐'
+                }
+            ]
+        }
+    },
+    edit: (props) => {
+        const { attributes, setAttributes } = props;
+        const getAttr = (key, fallback = '') => attributes[key] || fallback;
+
+        return createElement(Fragment, null,
+            createElement(InspectorControls, null,
+                createElement(PanelBody, { title: 'Why Choose Settings', initialOpen: true },
+                    createElement(TextControl, {
+                        label: 'Section Heading',
+                        value: getAttr('whyChooseHeading'),
+                        onChange: (val) => setAttributes({ whyChooseHeading: val })
+                    }),
+                    createElement(TextControl, {
+                        label: 'Section Icon',
+                        value: getAttr('whyChooseIcon'),
+                        onChange: (val) => setAttributes({ whyChooseIcon: val }),
+                        placeholder: '⭐'
+                    }),
+                    createElement(RepeaterField, {
+                        items: getAttr('whyChooseItems', []),
+                        onChange: (items) => setAttributes({ whyChooseItems: items }),
+                        fields: [
+                            { key: 'title', label: 'Reason Title', type: 'text' },
+                            { key: 'description', label: 'Reason Description', type: 'textarea' },
+                            { key: 'icon', label: 'Icon', type: 'text', placeholder: '⭐' }
+                        ],
+                        addButtonText: 'Add Reason'
+                    })
+                )
+            ),
+            
+            // Block Preview
+            createElement('div', { 
+                className: 'swrice-why-choose-preview',
+                style: {
+                    background: '#ffeaa7',
+                    border: '1px solid #fdcb6e',
+                    padding: '20px',
+                    borderRadius: '8px'
+                }
+            },
+                createElement('h3', { 
+                    style: { 
+                        margin: '0 0 15px 0',
+                        color: '#8b6914',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                    } 
+                }, 
+                    createElement('span', null, getAttr('whyChooseIcon')),
+                    getAttr('whyChooseHeading', 'Why Choose Us')
+                ),
+                createElement('div', { style: { color: '#8b6914' } },
+                    `${getAttr('whyChooseItems', []).length} reason(s) configured. Configure in the sidebar.`
+                )
+            )
+        );
+    },
+    save: () => null
+});
+
+// About Section Block
+registerBlockType('swrice/about-section', {
+    title: 'About Section',
+    icon: 'ℹ️',
+    category: 'swrice-blocks',
+    attributes: {
+        aboutHeading: { type: 'string', default: 'About' },
+        aboutIcon: { type: 'string', default: 'ℹ️' },
+        aboutDescription: { type: 'string', default: 'Learn more about our company and mission.' }
+    },
+    edit: (props) => {
+        const { attributes, setAttributes } = props;
+        const getAttr = (key, fallback = '') => attributes[key] || fallback;
+
+        return createElement(Fragment, null,
+            createElement(InspectorControls, null,
+                createElement(PanelBody, { title: 'About Section Settings', initialOpen: true },
+                    createElement(TextControl, {
+                        label: 'Section Heading',
+                        value: getAttr('aboutHeading'),
+                        onChange: (val) => setAttributes({ aboutHeading: val })
+                    }),
+                    createElement(TextControl, {
+                        label: 'Section Icon',
+                        value: getAttr('aboutIcon'),
+                        onChange: (val) => setAttributes({ aboutIcon: val }),
+                        placeholder: 'ℹ️'
+                    }),
+                    createElement(TextareaControl, {
+                        label: 'About Description',
+                        value: getAttr('aboutDescription'),
+                        onChange: (val) => setAttributes({ aboutDescription: val }),
+                        rows: 4
+                    })
+                )
+            ),
+            
+            // Block Preview
+            createElement('div', { 
+                className: 'swrice-about-preview',
+                style: {
+                    background: '#e2e3e5',
+                    border: '1px solid #d6d8db',
+                    padding: '20px',
+                    borderRadius: '8px'
+                }
+            },
+                createElement('h3', { 
+                    style: { 
+                        margin: '0 0 15px 0',
+                        color: '#383d41',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                    } 
+                }, 
+                    createElement('span', null, getAttr('aboutIcon')),
+                    getAttr('aboutHeading', 'About')
+                ),
+                createElement('p', { style: { color: '#383d41', margin: 0 } },
+                    getAttr('aboutDescription') || 'Configure your about description in the sidebar.'
+                )
+            )
+        );
+    },
+    save: () => null
+});
 
 // Final CTA Section Block
 registerBlockType('swrice/final-cta-section', {
