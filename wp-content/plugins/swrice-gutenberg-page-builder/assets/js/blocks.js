@@ -1172,7 +1172,9 @@ registerBlockType('swrice/final-cta-section', {
         finalCtaIcon: { type: 'string', default: '🚀' },
         ctaTitle: { type: 'string', default: 'Get Started Today' },
         ctaSubtitle: { type: 'string', default: 'Join thousands of satisfied customers' },
-        buyNowShortcode: { type: 'string', default: '' }
+        buyNowShortcode: { type: 'string', default: '' },
+        demoLink: { type: 'string', default: '' },
+        pluginPrice: { type: 'string', default: '29' }
     },
     edit: (props) => {
         const { attributes, setAttributes } = props;
@@ -1209,6 +1211,14 @@ registerBlockType('swrice/final-cta-section', {
                         onChange: (val) => setAttributes({ buyNowShortcode: val }),
                         help: 'Paste your payment processor shortcode here',
                         rows: 3
+                    }),
+                    createElement(TextControl, {
+                        label: 'Demo Link URL',
+                        value: getAttr('demoLink'),
+                        onChange: (val) => setAttributes({ demoLink: val }),
+                        type: 'url',
+                        placeholder: 'https://example.com/demo',
+                        help: 'Enter a URL for the Live Demo button. Leave empty to hide the demo button.'
                     })
                 )
             ),

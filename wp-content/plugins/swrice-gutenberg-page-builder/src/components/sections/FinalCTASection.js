@@ -52,6 +52,14 @@ export default function FinalCTASection({ attributes, setAttributes, isInspector
 					rows={3}
 					placeholder={__('Join thousands of satisfied customers and transform your website today.', 'swrice-gutenberg-page-builder')}
 				/>
+				<TextControl
+					label={__('Demo Link URL', 'swrice-gutenberg-page-builder')}
+					value={demoLink}
+					onChange={(value) => setAttributes({ demoLink: value })}
+					type="url"
+					placeholder={__('https://example.com/demo', 'swrice-gutenberg-page-builder')}
+					help={__('Enter a URL for the Live Demo button. Leave empty to hide the demo button.', 'swrice-gutenberg-page-builder')}
+				/>
 			</PanelBody>
 		);
 	}

@@ -355,7 +355,9 @@ class Swrice_Gutenberg_Page_Builder {
                 'finalCtaIcon' => array('type' => 'string', 'default' => '🚀'),
                 'ctaTitle' => array('type' => 'string', 'default' => 'Get Started Today'),
                 'ctaSubtitle' => array('type' => 'string', 'default' => 'Join thousands of satisfied customers'),
-                'buyNowShortcode' => array('type' => 'string', 'default' => '')
+                'buyNowShortcode' => array('type' => 'string', 'default' => ''),
+                'demoLink' => array('type' => 'string', 'default' => ''),
+                'pluginPrice' => array('type' => 'string', 'default' => '29')
             )
         ));
     }
