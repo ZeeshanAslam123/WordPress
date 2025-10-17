@@ -69,8 +69,34 @@ class SwriceGutenbergPageBuilder {
             return;
         }
         
-        // Register the main plugin page builder block
-        register_block_type(SGPB_PLUGIN_DIR . 'build');
+        // Register the main plugin page builder block using direct method
+        register_block_type('swrice/plugin-page-builder', array(
+            'editor_script' => 'swrice-gutenberg-page-builder-editor',
+            'editor_style'  => 'swrice-gutenberg-page-builder-editor',
+            'style'         => 'swrice-gutenberg-page-builder-frontend',
+            'attributes'    => array(
+                'pluginName' => array(
+                    'type' => 'string',
+                    'default' => 'My Awesome Plugin'
+                ),
+                'heroSubtitle' => array(
+                    'type' => 'string',
+                    'default' => 'Transform your WordPress experience with our powerful plugin solution'
+                ),
+                'pluginPrice' => array(
+                    'type' => 'string',
+                    'default' => '49'
+                ),
+                'rating' => array(
+                    'type' => 'number',
+                    'default' => 5
+                ),
+                'ratingCount' => array(
+                    'type' => 'string',
+                    'default' => '5.0'
+                )
+            )
+        ));
     }
     
     /**
@@ -100,7 +126,8 @@ class SwriceGutenbergPageBuilder {
             'swrice-gutenberg-page-builder-editor',
             SGPB_PLUGIN_URL . 'build/index.js',
             $asset_file['dependencies'],
-            $asset_file['version']
+            $asset_file['version'],
+            true
         );
         
         // Block editor styles

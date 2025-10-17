@@ -1,6 +1,15 @@
 /**
  * WordPress dependencies
  */
+(function() {
+    'use strict';
+    
+    // Ensure wp.blocks is available
+    if (typeof wp === 'undefined' || typeof wp.blocks === 'undefined') {
+        console.error('WordPress blocks not available');
+        return;
+    }
+
 const { registerBlockType } = wp.blocks;
 const { __ } = wp.i18n;
 const { 
@@ -548,6 +557,7 @@ function Save({ attributes }) {
 /**
  * Register the block
  */
+console.log('Registering Swrice Plugin Page Builder block...');
 registerBlockType('swrice/plugin-page-builder', {
 	title: __('Plugin Page Builder', 'swrice-gutenberg-page-builder'),
 	description: __('Create professional plugin landing pages with customizable sections', 'swrice-gutenberg-page-builder'),
@@ -662,3 +672,5 @@ registerBlockType('swrice/plugin-page-builder', {
 	edit: Edit,
 	save: Save
 });
+
+})(); // End IIFE
