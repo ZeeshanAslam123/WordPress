@@ -13,10 +13,6 @@ namespace StellarWP\Learndash\Stripe\Billing;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property string $status The meter event adjustment's status.
  * @property string $type Specifies whether to cancel a single event or a range of events for a time period.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class MeterEventAdjustment extends \StellarWP\Learndash\Stripe\ApiResource
 {

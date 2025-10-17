@@ -24,10 +24,6 @@ namespace StellarWP\Learndash\Stripe\Reporting;
  * @property null|\StellarWP\Learndash\Stripe\File $result The file object representing the result of the report run (populated when <code>status=succeeded</code>).
  * @property string $status Status of this report run. This will be <code>pending</code> when the run is initially created. When the run finishes, this will be set to <code>succeeded</code> and the <code>result</code> field will be populated. Rarely, we may encounter an error, at which point this will be set to <code>failed</code> and the <code>error</code> field will be populated.
  * @property null|int $succeeded_at Timestamp at which this run successfully finished (populated when <code>status=succeeded</code>). Measured in seconds since the Unix epoch.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class ReportRun extends \StellarWP\Learndash\Stripe\ApiResource
 {

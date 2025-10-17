@@ -35,10 +35,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property string $type Type of the token: <code>account</code>, <code>bank_account</code>, <code>card</code>, or <code>pii</code>.
  * @property bool $used Determines if you have already used this token (you can only use tokens once).
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Token extends ApiResource
 {

@@ -3490,3 +3490,22 @@ div.wpforms-container-full .wpforms-form .wpforms-field-credit-card-expiration s
   border-width: 1px 0;
   border-radius: 0;
 }
+
+.sticky-header .pm-ui-dialog,
+.sticky-header .wedevs-pm-wrap .pm-menu-wrap nav.vertical {
+  z-index: 601;
+}
+.sticky-header #pm-add-user-wrap .add-user-pop,
+.sticky-header .pm-header-menu-wrap .more-menu-wrap .child-menu-wrap,
+.sticky-header .pm-task-list-wrap .list-content-body .content .list-action-btn-wrap .new-list-btn .list-form,
+.sticky-header .pm-kanboard .kbc-kanboard .list-search-menu {
+  z-index: 603;
+}
+.sticky-header .pm-popover,
+.sticky-header .pm-popper.popper {
+  z-index: 604;
+}
+
+.wedevs-pm-wrap table.fixed {
+  position: static;
+}

@@ -79,16 +79,16 @@ function learndash_get_course_id( $id = null, $bypass_cb = false ) {
 		}
 
 		if ( ( isset( $_GET['course_id'] ) ) && ( ! empty( $_GET['course_id'] ) ) ) {
-			return intval( $_GET['course_id'] );
+			return absint( $_GET['course_id'] );
 		} elseif ( ( isset( $_GET['course'] ) ) && ( ! empty( $_GET['course'] ) ) ) {
-			return intval( $_GET['course'] );
+			return absint( $_GET['course'] );
 		} elseif ( ( isset( $_POST['course_id'] ) ) && ( ! empty( $_POST['course_id'] ) ) ) {
-			return intval( $_POST['course_id'] );
+			return absint( $_POST['course_id'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- legacy code.
 		} elseif ( ( isset( $_POST['course'] ) ) && ( ! empty( $_POST['course'] ) ) ) {
-			return intval( $_POST['course'] );
+			return absint( $_POST['course'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- legacy code.
 		} elseif ( ( isset( $_GET['post'] ) ) && ( ! empty( $_GET['post'] ) ) ) {
-			if ( get_post_type( intval( $_GET['post'] ) ) == 'sfwd-courses' ) {
-				return intval( $_GET['post'] );
+			if ( get_post_type( absint( $_GET['post'] ) ) == 'sfwd-courses' ) {
+				return absint( $_GET['post'] );
 			}
 		}
 	}
@@ -332,29 +332,56 @@ function learndash_set_course_prerequisite( $course_id = 0, $course_pre = array(
 }
 
 /**
- * Checks whether the prerequisites are enabled for a course.
+ * Checks whether the course prerequisites requirement for enrollment setting is enabled for a course.
  *
  * @since 2.4.0
+ * @since 4.20.2 Add support for the new requirements_for_enrollment setting key.
  *
  * @param int $course_id The ID of the course.
  *
- * @return boolean Returns true if the prerequisites are enabled otherwise false.
+ * @return boolean Returns true if the course prerequisites requirement for enrollment setting is enabled, otherwise false.
  */
 function learndash_get_course_prerequisite_enabled( $course_id ) {
-	$course_pre_enabled = false;
-
-	$course_id = learndash_get_course_id( $course_id );
-	if ( ! empty( $course_id ) ) {
-		$course_pre_enabled = learndash_get_setting( $course_id, 'course_prerequisite_enabled' );
-		if ( 'on' === $course_pre_enabled ) {
-			$course_pre_courses = learndash_get_setting( $course_id, 'course_prerequisite' );
-			if ( ( is_array( $course_pre_courses ) ) && ( ! empty( $course_pre_courses ) ) ) {
-				$course_pre_enabled = true;
-			}
-		}
+	if ( empty( $course_id ) ) {
+		return false;
 	}
 
-	return $course_pre_enabled;
+	$course_id = learndash_get_course_id( $course_id );
+
+	if ( ! is_int( $course_id ) ) {
+		return false;
+	}
+
+	/**
+	 * We need to check if the course prerequisites setting is not empty. If the course prerequisite requirement for enrollment
+	 * setting is enabled, we also need to make sure that the courses for prerequisite setting is not empty.
+	 */
+
+	$course_pre_courses = learndash_get_setting( $course_id, 'course_prerequisite' );
+
+	if (
+		! is_array( $course_pre_courses )
+		|| empty( $course_pre_courses )
+	) {
+		return false;
+	}
+
+	// New setting key to check if the course prerequisites setting is enabled.
+	$requirements_for_enrollment = learndash_get_setting( $course_id, 'requirements_for_enrollment' );
+
+	if ( $requirements_for_enrollment === 'course_prerequisite_enabled' ) {
+		return true;
+	}
+
+	// Legacy setting key to check if the course prerequisites setting is enabled.
+	$course_pre_enabled = learndash_get_setting( $course_id, 'course_prerequisite_enabled' );
+
+	// We need to check the legacy key, the old setting key still might being used even after upgrading to LD core v4.20.0+.
+	if ( $course_pre_enabled === 'on' ) {
+		return true;
+	}
+
+	return false;
 }
 
 /**
@@ -387,7 +414,7 @@ function learndash_set_course_prerequisite_enabled( $course_id, $enabled = true 
  *
  * @param int $post_id The ID of the course.
  *
- * @return string The compare value for the prerequisite. Value can be 'ALL' or 'ANY' by default.
+ * @return 'ANY'|'ALL' The compare value for the prerequisite. Value can be 'ALL' or 'ANY' by default.
  */
 function learndash_get_course_prerequisite_compare( $post_id ) {
 
@@ -406,84 +433,102 @@ function learndash_get_course_prerequisite_compare( $post_id ) {
 }
 
 /**
- * Checks if the course points are enabled for a course.
+ * Checks if the course points requirement for enrollment setting is enabled for a course.
  *
  * @since 2.4.0
+ * @since 4.20.2 Add support for the new requirements_for_enrollment setting key.
  *
  * @param int $post_id Optional. The course ID. Default 0.
  *
- * @return bool Returns true if the course points are enabled otherwise false.
+ * @return bool Returns true if the course points requirement for enrollment setting is enabled, otherwise false.
  */
 function learndash_get_course_points_enabled( $post_id = 0 ) {
-	$course_points_enabled = false;
-
-	if ( ! empty( $post_id ) ) {
-		$course_id = learndash_get_course_id( $post_id );
-		if ( ! empty( $course_id ) ) {
-			$course_points_enabled = learndash_get_setting( $course_id, 'course_points_enabled' );
-			if ( 'on' === $course_points_enabled ) {
-				$course_points_enabled = true;
-			}
-		}
+	if ( empty( $post_id ) ) {
+		return false;
 	}
 
-	return $course_points_enabled;
+	$course_id = learndash_get_course_id( $post_id );
+
+	if ( ! is_int( $course_id ) ) {
+		return false;
+	}
+
+	// New setting key to check if the course points setting is enabled.
+	$requirements_for_enrollment = learndash_get_setting( $course_id, 'requirements_for_enrollment' );
+
+	if ( $requirements_for_enrollment === 'course_points_enabled' ) {
+		return true;
+	}
+
+	// Legacy setting key to check if the course points setting is enabled.
+	$course_points_enabled = learndash_get_setting( $course_id, 'course_points_enabled' );
+
+	// We check the legacy key because the old setting key still might being used even after upgrading to LD core v4.20.0+.
+	if ( $course_points_enabled === 'on' ) {
+		return true;
+	}
+
+	return false;
 }
 
 /**
- * Gets the course points for a given course ID.
+ * Retrieves the course completion points setting of a course.
  *
  * @since 2.4.0
+ * @since 4.20.2 The value is no longer dependent on the course points requirement for enrollment setting.
  *
  * @param int $post_id  Optional. Course Step or Course post ID. Default 0.
  * @param int $decimals Optional. Number of decimal places to round. Default 1.
  *
- * @return int|false Returns false if the course points are disabled otherwise returns course points.
+ * @return float|false Course completion points of a course if it exists, false otherwise.
  */
 function learndash_get_course_points( $post_id = 0, $decimals = 1 ) {
-	$course_points = false;
-
-	if ( ! empty( $post_id ) ) {
-		$course_id = learndash_get_course_id( $post_id );
-		if ( ! empty( $course_id ) ) {
-			if ( learndash_get_course_points_enabled( $course_id ) ) {
-				$course_points = 0;
-
-				$course_points = learndash_get_setting( $course_id, 'course_points' );
-				if ( ! empty( $course_points ) ) {
-					$course_points = learndash_format_course_points( $course_points, $decimals );
-				}
-			}
-		}
+	if ( empty( $post_id ) ) {
+		return false;
 	}
 
-	return $course_points;
+	$course_id = learndash_get_course_id( $post_id );
+
+	if ( empty( $course_id ) ) {
+		return false;
+	}
+
+	$course_points = learndash_get_setting( $course_id, 'course_points' );
+
+	if ( empty( $course_points ) ) {
+		return false;
+	}
+
+	return learndash_format_course_points( $course_points, $decimals );
 }
 
 /**
- * Gets the course points access for a given course ID.
+ * Retrieves the course points required to access a course.
+ *
+ * The value returned from this function is dependent on the course points requirement for enrollment setting. The requirement for enrollment setting must be set to "Course Points".
  *
  * @since 2.4.0
  *
  * @param int $post_id Optional. The ID of the course. Default 0.
  *
- * @return int|false Returns false if the course points are disabled otherwise returns course points.
+ * @return float|false Required course points to access a course, false otherwise.
  */
 function learndash_get_course_points_access( $post_id = 0 ) {
-	$course_points_access = false;
-
-	if ( ! empty( $post_id ) ) {
-		$course_id = learndash_get_course_id( $post_id );
-		if ( ! empty( $course_id ) ) {
-			if ( learndash_get_course_points_enabled( $course_id ) ) {
-				$course_points_access = 0;
-
-				$course_points_access = learndash_format_course_points( learndash_get_setting( $course_id, 'course_points_access' ) );
-			}
-		}
+	if ( empty( $post_id ) ) {
+		return false;
 	}
 
-	return $course_points_access;
+	$course_id = learndash_get_course_id( $post_id );
+
+	if ( empty( $course_id ) ) {
+		return false;
+	}
+
+	if ( ! learndash_get_course_points_enabled( $course_id ) ) {
+		return false;
+	}
+
+	return learndash_format_course_points( learndash_get_setting( $course_id, 'course_points_access' ) );
 }
 
 /**

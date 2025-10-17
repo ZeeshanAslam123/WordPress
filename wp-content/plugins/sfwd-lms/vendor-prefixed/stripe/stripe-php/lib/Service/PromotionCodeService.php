@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -24,7 +20,7 @@ class PromotionCodeService extends \StellarWP\Learndash\Stripe\Service\AbstractS
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\PromotionCode>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\PromotionCode>
      */
     public function all($params = null, $opts = null)
     {

@@ -23,7 +23,13 @@ use LearnDash\Core\Template\Template;
 
 	<div class="ld-virtual-instructor-chatbox__heading-wrapper">
 		<h1 class="ld-virtual-instructor-chatbox__heading">
-			<?php esc_html_e( 'Chat with a virtual instructor', 'learndash' ); ?>
+			<?php
+			printf(
+				// translators: placeholder: virtual Instructor.
+				esc_html_x( 'Chat with a %s', 'placeholder: virtual instructor', 'learndash' ),
+				esc_html( LearnDash_Custom_Label::get_label( 'virtual_instructor' ) )
+			);
+			?>
 		</h1>
 
 		<h2 class="ld-virtual-instructor-chatbox__subheading">

@@ -12,10 +12,6 @@ namespace StellarWP\Learndash\Stripe\Service\TestHelpers\Treasury;
  * @property OutboundTransferService $outboundTransfers
  * @property ReceivedCreditService $receivedCredits
  * @property ReceivedDebitService $receivedDebits
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class TreasuryServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

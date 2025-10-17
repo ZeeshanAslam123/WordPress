@@ -3,10 +3,6 @@
  * Exception for 412 Precondition Failed responses
  *
  * @package Requests\Exceptions
- *
- * @license ISC
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 
 namespace StellarWP\Learndash\WpOrg\Requests\Exception\Http;

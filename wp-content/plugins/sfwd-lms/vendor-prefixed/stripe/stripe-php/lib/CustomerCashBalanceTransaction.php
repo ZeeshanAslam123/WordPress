@@ -25,10 +25,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $transferred_to_balance
  * @property string $type The type of the cash balance transaction. New types may be added in future. See <a href="https://stripe.com/docs/payments/customer-balance#types">Customer Balance</a> to learn more about these types.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $unapplied_from_payment
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class CustomerCashBalanceTransaction extends ApiResource
 {

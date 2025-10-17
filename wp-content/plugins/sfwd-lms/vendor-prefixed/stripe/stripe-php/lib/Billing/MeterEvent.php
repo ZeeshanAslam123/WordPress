@@ -15,10 +15,6 @@ namespace StellarWP\Learndash\Stripe\Billing;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property \StellarWP\Learndash\Stripe\StripeObject $payload The payload of the event.
  * @property int $timestamp The timestamp passed in when creating the event. Measured in seconds since the Unix epoch.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class MeterEvent extends \StellarWP\Learndash\Stripe\ApiResource
 {

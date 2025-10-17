@@ -54,10 +54,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|int $trial_end If the subscription has a trial, the end of that trial.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $trial_settings Settings related to subscription trials.
  * @property null|int $trial_start If the subscription has a trial, the beginning of that trial.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Subscription extends ApiResource
 {
@@ -163,7 +159,7 @@ class Subscription extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\SearchResult<\Stripe\Subscription> the subscription search results
+     * @return \StellarWP\Learndash\Stripe\SearchResult<\StellarWP\Learndash\Stripe\Subscription> the subscription search results
      */
     public static function search($params = null, $opts = null)
     {

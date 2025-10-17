@@ -245,10 +245,37 @@ if ( ( ! class_exists( 'LD_REST_Posts_Controller_V2' ) ) && ( class_exists( 'WP_
 
 			if ( ! empty( $methods_singular ) ) {
 				$methods_singular['schema'] = array( $this, 'get_public_item_schema' );
+
+				$post_type_object = get_post_type_object( $this->post_type );
+				$post_type_label  = _x( 'Post', 'Fallback post type label', 'learndash' );
+
+				if ( $post_type_object ) {
+					$post_type_label = $post_type_object->labels->singular_name;
+				}
+
 				register_rest_route(
 					$this->namespace,
 					'/' . $this->rest_base . '/(?P<id>[\d]+)',
-					$methods_singular
+					array_merge(
+						[
+							'args' => [
+								'id' => array(
+									'description' => sprintf(
+										// translators: placeholder: Post type singular name.
+										esc_html_x(
+											'%s ID',
+											'placeholder: Post type singular name',
+											'learndash'
+										),
+										$post_type_label
+									),
+									'required'    => true,
+									'type'        => 'integer',
+								),
+							],
+						],
+						$methods_singular
+					)
 				);
 			}
 		}
@@ -554,16 +581,18 @@ if ( ( ! class_exists( 'LD_REST_Posts_Controller_V2' ) ) && ( class_exists( 'WP_
 								$field_value = learndash_get_setting( $ld_post, $field_set['settings_field']['name'] );
 							}
 						}
-						if ( ( isset( $field_set['settings_field']['args']['validate_callback'] ) ) && ( ! empty( $field_set['settings_field']['args']['validate_callback'] ) ) && ( is_callable( $field_set['settings_field']['args']['validate_callback'] ) ) ) {
-							$validate_args['field'] = $field_set['settings_field']['args'];
-							$field_value            = call_user_func( $field_set['settings_field']['args']['validate_callback'], $field_value, $field_name, $validate_args );
 
-							$field_instance = LearnDash_Settings_Fields::get_field_instance( $field_set['settings_field']['args']['type'] );
-							if ( ( $field_instance ) && ( 'LearnDash_Settings_Fields' === get_parent_class( $field_instance ) ) ) {
-								$field_value = $field_instance->field_value_to_rest_value( $field_value, $field_name, $validate_args, $request );
-							}
-						} else {
-							$field_value = $field_value;
+						$field_args = [
+							'field' => $field_set['settings_field']['args'] ?? [],
+						];
+
+						$field_instance = LearnDash_Settings_Fields::get_field_instance( $field_set['settings_field']['args']['type'] ?? '' );
+
+						if (
+							$field_instance
+							&& get_parent_class( $field_instance ) === 'LearnDash_Settings_Fields'
+						) {
+							$field_value = $field_instance->field_value_to_rest_value( $field_value, $field_name, $field_args, $request );
 						}
 					}
 					return $field_value;

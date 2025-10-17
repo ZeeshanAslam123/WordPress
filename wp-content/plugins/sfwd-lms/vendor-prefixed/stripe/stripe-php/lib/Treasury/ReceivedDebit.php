@@ -23,9 +23,6 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $reversal_details Details describing when a ReceivedDebit might be reversed.
  * @property string $status Status of the ReceivedDebit. ReceivedDebits are created with a status of either <code>succeeded</code> (approved) or <code>failed</code> (declined). The failure reason can be found under the <code>failure_code</code>.
  * @property null|string|\StellarWP\Learndash\Stripe\Treasury\Transaction $transaction The Transaction associated with this object.
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class ReceivedDebit extends \StellarWP\Learndash\Stripe\ApiResource
 {

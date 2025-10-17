@@ -30,10 +30,6 @@ namespace StellarWP\Learndash\Stripe\Climate;
  * @property string|\StellarWP\Learndash\Stripe\Climate\Product $product Unique ID for the Climate <code>Product</code> this order is purchasing.
  * @property null|int $product_substituted_at Time at which the order's product was substituted for a different product. Measured in seconds since the Unix epoch.
  * @property string $status The current status of this order.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Order extends \StellarWP\Learndash\Stripe\ApiResource
 {

@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service\Radar;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -26,7 +22,7 @@ class ValueListItemService extends \StellarWP\Learndash\Stripe\Service\AbstractS
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Radar\ValueListItem>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Radar\ValueListItem>
      */
     public function all($params = null, $opts = null)
     {

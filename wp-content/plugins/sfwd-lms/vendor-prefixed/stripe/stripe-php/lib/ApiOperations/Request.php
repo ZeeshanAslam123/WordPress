@@ -1,10 +1,4 @@
 <?php
-/**
- * @license MIT
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
 
 namespace StellarWP\Learndash\Stripe\ApiOperations;
 
@@ -25,7 +19,7 @@ trait Request
         if ($params && !\is_array($params)) {
             $message = 'You must pass an array as the first argument to Stripe API '
                 . 'method calls.  (HINT: an example call to create a charge '
-                . "would be: \"StellarWP\Learndash\Stripe\\Charge::create(['amount' => 100, "
+                . "would be: \"StellarWP\\Learndash\\Stripe\\Charge::create(['amount' => 100, "
                 . "'currency' => 'usd', 'source' => 'tok_1234'])\")";
 
             throw new \StellarWP\Learndash\Stripe\Exception\InvalidArgumentException($message);

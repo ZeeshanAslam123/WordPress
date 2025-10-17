@@ -9,10 +9,6 @@ namespace StellarWP\Learndash\Stripe\Service\Entitlements;
  *
  * @property ActiveEntitlementService $activeEntitlements
  * @property FeatureService $features
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class EntitlementsServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

@@ -28,9 +28,6 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property string $status Current status of the OutboundTransfer: <code>processing</code>, <code>failed</code>, <code>canceled</code>, <code>posted</code>, <code>returned</code>. An OutboundTransfer is <code>processing</code> if it has been created and is pending. The status changes to <code>posted</code> once the OutboundTransfer has been &quot;confirmed&quot; and funds have left the account, or to <code>failed</code> or <code>canceled</code>. If an OutboundTransfer fails to arrive at its destination, its status will change to <code>returned</code>.
  * @property \StellarWP\Learndash\Stripe\StripeObject $status_transitions
  * @property string|\StellarWP\Learndash\Stripe\Treasury\Transaction $transaction The Transaction associated with this object.
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class OutboundTransfer extends \StellarWP\Learndash\Stripe\ApiResource
 {

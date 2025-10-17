@@ -267,25 +267,58 @@ class WpProQuiz_Model_Question extends WpProQuiz_Model_Model {
 		return $this;
 	}
 
+	/**
+	 * Returns Answer Data for the Question Model.
+	 * TODO: Refactor to enforce return types.
+	 *
+	 * @since 1.2.6
+	 * @since 4.17.0 Added a default return for the Essay/Open Answer type.
+	 *
+	 * @param bool $serialize Whether to serialize the returned data. Defaults to false.
+	 *
+	 * @return WpProQuiz_Model_AnswerTypes[]|string|null|mixed
+	 *      - Array of Answer Models (optionally serialized)
+	 *      - null if there is an issue unserializing saved Answer Data
+	 *      - If an empty string is saved to the Question as Answer Data in the Database,
+	 *      serialized null (`N;`) will be returned when $serialize is true.
+	 *      - Note: An empty array (optionally serialized) is normally returned rather than null. This is because
+	 *      normally an empty array is what is saved in the database as Answer Data by default.
+	 *      - mixed is to satisfy static analysis
+	 */
 	public function getAnswerData( $serialize = false ) {
 		global $wpdb;
 
-		if ( ! is_null( $this->_answerData ) ) {
-			if ( ! is_array( $this->_answerData ) ) {
-				$answerData = @maybe_unserialize( $this->_answerData );
-				if ( false === $answerData ) {
-					$answerData = learndash_recount_serialized_bytes( $this->_answerData );
-					if ( false !== $answerData ) {
-						$answerData = @maybe_unserialize( $answerData );
-						if ( false === $answerData ) {
+		if ( ! is_null( $this->_answerData ) ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Existing property name.
+			if ( ! is_array( $this->_answerData ) ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Existing property name.
+				$answer_data = @maybe_unserialize( $this->_answerData ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Existing property name.
+				if ( false === $answer_data ) {
+					$answer_data = learndash_recount_serialized_bytes( $this->_answerData );  // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Existing property name.
+					if ( false !== $answer_data ) {
+						$answer_data = @maybe_unserialize( $answer_data );
+						if ( false === $answer_data ) {
 							return null;
 						}
 					}
+				} elseif (
+					is_array( $answer_data )
+					&& empty( $answer_data )
+					&& $this->getAnswerType() === 'essay'
+				) {
+					/**
+					 * If an Essay/Open Answer question was created without Answer Data,
+					 * populate it with the expected defaults.
+					 */
+					$answer_model = new WpProQuiz_Model_AnswerTypes();
+					$answer_model->setGraded( true );
+					$answer_model->setGradedType( 'text' );
+					$answer_model->setGradingProgression( 'not-graded-none' );
+
+					$answer_data[] = $answer_model;
 				}
 
-				if ( ( ! empty( $answerData ) ) && ( is_array( $answerData ) ) ) {
+				if ( ( ! empty( $answer_data ) ) && ( is_array( $answer_data ) ) ) {
 					$changes = false;
-					foreach ( $answerData as $a_idx => $answer ) {
+					foreach ( $answer_data as $a_idx => $answer ) {
 						if ( ! is_a( $answer, 'WpProQuiz_Model_AnswerTypes' ) ) {
 
 							$answer_model = learndash_cast_WpProQuiz_Model_AnswerTypes( $answer, 'WpProQuiz_Model_AnswerTypes' );
@@ -294,15 +327,15 @@ class WpProQuiz_Model_Question extends WpProQuiz_Model_Model {
 								continue;
 							}
 
-							$changes              = true;
-							$answerData[ $a_idx ] = $answer_model;
+							$changes               = true;
+							$answer_data[ $a_idx ] = $answer_model;
 						}
 					}
 					if ( true === $changes ) {
 						$wpdb->update(
 							LDLMS_DB::get_table_name( 'quiz_question' ),
 							array(
-								'answer_data' => serialize( $answerData ),
+								'answer_data' => serialize( $answer_data ),
 							),
 							array(
 								'id' => $this->_id,
@@ -312,14 +345,14 @@ class WpProQuiz_Model_Question extends WpProQuiz_Model_Model {
 						);
 					}
 				}
-				$this->_answerData = $answerData;
+				$this->_answerData = $answer_data;  // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Existing property name.
 			}
 		}
 
 		if ( $serialize ) {
-			return @serialize( $this->_answerData );
+			return @serialize( $this->_answerData );  // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Existing property name.
 		} else {
-			return $this->_answerData;
+			return $this->_answerData;  // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Existing property name.
 		}
 	}
 

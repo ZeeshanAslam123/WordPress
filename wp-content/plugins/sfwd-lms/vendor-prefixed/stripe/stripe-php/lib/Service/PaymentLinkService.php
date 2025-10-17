@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -24,7 +20,7 @@ class PaymentLinkService extends \StellarWP\Learndash\Stripe\Service\AbstractSer
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\PaymentLink>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\PaymentLink>
      */
     public function all($params = null, $opts = null)
     {
@@ -43,7 +39,7 @@ class PaymentLinkService extends \StellarWP\Learndash\Stripe\Service\AbstractSer
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\LineItem>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\LineItem>
      */
     public function allLineItems($id, $params = null, $opts = null)
     {

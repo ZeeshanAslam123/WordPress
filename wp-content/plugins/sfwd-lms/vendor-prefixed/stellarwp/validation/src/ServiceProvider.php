@@ -1,10 +1,4 @@
 <?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
 
 declare(strict_types=1);
 
@@ -34,7 +28,10 @@ use StellarWP\Learndash\StellarWP\Validation\Rules\Size;
 
 class ServiceProvider
 {
-    private $validationRules = [
+    /**
+     * @var array<class-string>
+     */
+    private array $validationRules = [
         Required::class,
         Min::class,
         Max::class,
@@ -61,7 +58,7 @@ class ServiceProvider
     /**
      * Registers the validation rules registrar with the container
      */
-    public function register()
+    public function register(): void
     {
         Config::getServiceContainer()->singleton(ValidationRulesRegistrar::class, function () {
             $register = new ValidationRulesRegistrar();

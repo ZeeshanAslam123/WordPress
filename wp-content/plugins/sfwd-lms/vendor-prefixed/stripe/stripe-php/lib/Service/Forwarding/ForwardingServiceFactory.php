@@ -8,10 +8,6 @@ namespace StellarWP\Learndash\Stripe\Service\Forwarding;
  * Service factory class for API resources in the Forwarding namespace.
  *
  * @property RequestService $requests
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class ForwardingServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

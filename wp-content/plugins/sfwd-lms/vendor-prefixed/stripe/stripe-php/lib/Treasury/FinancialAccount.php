@@ -24,10 +24,6 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property string $status The enum specifying what state the account is in.
  * @property \StellarWP\Learndash\Stripe\StripeObject $status_details
  * @property string[] $supported_currencies The currencies the FinancialAccount can hold a balance in. Three-letter <a href="https://www.iso.org/iso-4217-currency-codes.html">ISO currency code</a>, in lowercase.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class FinancialAccount extends \StellarWP\Learndash\Stripe\ApiResource
 {

@@ -31,10 +31,6 @@ namespace StellarWP\Learndash\Stripe\Issuing;
  * @property string $status Whether authorizations can be approved on this card. May be blocked from activating cards depending on past-due Cardholder requirements. Defaults to <code>inactive</code>.
  * @property string $type The type of the card.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $wallets Information relating to digital wallets (like Apple Pay and Google Pay).
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Card extends \StellarWP\Learndash\Stripe\ApiResource
 {

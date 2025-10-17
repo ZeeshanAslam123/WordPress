@@ -12,10 +12,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property \StellarWP\Learndash\Stripe\StripeObject $period
  * @property string $subscription_item The ID of the subscription item this summary is describing.
  * @property int $total_usage The total usage within this usage period.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class UsageRecordSummary extends ApiResource
 {

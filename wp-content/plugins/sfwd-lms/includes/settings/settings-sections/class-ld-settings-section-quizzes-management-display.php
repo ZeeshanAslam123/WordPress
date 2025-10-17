@@ -350,8 +350,14 @@ if ( ( class_exists( 'LearnDash_Settings_Section' ) ) && ( ! class_exists( 'Lear
 			$time_formats_off_state_text = sprintf(
 				// translators: placeholder: Date preview, Time preview, Date format string, Time format string.
 				esc_html_x( 'Default format: %1$s %2$s  %3$s %4$s ', '', 'learndash' ),
-				date_i18n( get_option( 'date_format' ) ),
-				date_i18n( get_option( 'time_format' ) ),
+				learndash_adjust_date_time_display(
+					time(),
+					Cast::to_string( get_option( 'date_format' ) )
+				),
+				learndash_adjust_date_time_display(
+					time(),
+					Cast::to_string( get_option( 'time_format' ) )
+				),
 				'<code>' . get_option( 'date_format' ) . '</code>',
 				'<code>' . get_option( 'time_format' ) . '</code>'
 			);
@@ -408,12 +414,12 @@ if ( ( class_exists( 'LearnDash_Settings_Section' ) ) && ( ! class_exists( 'Lear
 
 			if ( ! empty( $date_time_formats ) ) {
 				$options = array(
-					$wp_date_time_format => '<span class="date-time-text format-i18n">' . date_i18n( $wp_date_time_format ) . '</span><code>' . $wp_date_format . ' ' . $wp_time_format . '</code> - ' . __( 'WordPress default', 'learndash' ),
+					$wp_date_time_format => '<span class="date-time-text format-i18n">' . learndash_adjust_date_time_display( time(), $wp_date_time_format ) . '</span><code>' . $wp_date_format . ' ' . $wp_time_format . '</code> - ' . __( 'WordPress default', 'learndash' ),
 				);
 
 				foreach ( $date_time_formats as $format ) {
 					if ( ! isset( $options[ $format ] ) ) {
-						$options[ $format ] = '<span class="date-time-text format-i18n">' . date_i18n( $format ) . '</span><code>' . $format . '</code>';
+						$options[ $format ] = '<span class="date-time-text format-i18n">' . learndash_adjust_date_time_display( time(), $format ) . '</span><code>' . $format . '</code>';
 					}
 				}
 			}

@@ -28,7 +28,7 @@ namespace StellarWP\Learndash\Stripe;
  * @property string $customer_creation Configuration for Customer creation during checkout.
  * @property null|string $inactive_message The custom message to be displayed to a customer when a payment link is no longer active.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $invoice_creation Configuration for creating invoice for payment mode payment links.
- * @property null|\StellarWP\Learndash\Stripe\Collection<\Stripe\LineItem> $line_items The line items representing what is being sold.
+ * @property null|\StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\LineItem> $line_items The line items representing what is being sold.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property \StellarWP\Learndash\Stripe\StripeObject $metadata Set of <a href="https://stripe.com/docs/api/metadata">key-value pairs</a> that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
  * @property null|string|\StellarWP\Learndash\Stripe\Account $on_behalf_of The account on behalf of which to charge. See the <a href="https://support.stripe.com/questions/sending-invoices-on-behalf-of-connected-accounts">Connect documentation</a> for details.
@@ -44,10 +44,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property \StellarWP\Learndash\Stripe\StripeObject $tax_id_collection
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $transfer_data The account (if any) the payments will be attributed to for tax reporting, and where funds from each payment will be transferred to.
  * @property string $url The public URL that can be shared with customers.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class PaymentLink extends ApiResource
 {
@@ -79,7 +75,7 @@ class PaymentLink extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\LineItem> list of line items
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\LineItem> list of line items
      */
     public static function allLineItems($id, $params = null, $opts = null)
     {

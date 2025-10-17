@@ -97,7 +97,7 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 					'buddyboss_theme_refresh_ld_course_enrolled_users_total',
 				], 9999, 4 );
 
-				add_action( 'ld_group_postdata_updated', [
+				add_action( 'save_post_groups', [
 					$this,
 					'buddyboss_theme_refresh_ld_group_enrolled_users_total',
 				], 9999, 1 );
@@ -420,16 +420,18 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 			}
 			if ( function_exists( 'is_plugin_active' ) && is_plugin_active( 'learndash-course-grid/learndash_course_grid.php' ) ) {
 
+				$view = bb_theme_get_directory_layout_preference( 'ld-course' );
+
 				$html    .= '<div class="bb-courses-directory">
 							<div id="bb-course-list-grid-filters" class="bb-secondary-list-tabs flex align-items-center">
-								<div class="grid-filters push-right" data-object="">
-								    <a href="#" class="layout-view layout-grid-view active bp-tooltip"  data-view="grid" data-bp-tooltip-pos="up"
-								       data-bp-tooltip="' . esc_html__( 'Grid View', 'buddyboss-theme' ) . '">
+								<div class="grid-filters push-right" data-view="ld-course">
+								    <a href="#" class="layout-view layout-grid-view ' . ( ! empty( $view ) && $view === 'grid' ? 'active' : '' ) . ' bp-tooltip" data-view="grid" data-bp-tooltip-pos="up"
+								       data-bp-tooltip="' . esc_html__( 'Grid View', 'buddyboss-theme' ) . '" aria-label="' . esc_attr__( 'Grid View', 'buddyboss-theme' ) . '">
 								        <i class="bb-icon-l bb-icon-grid-large" aria-hidden="true"></i>
 								    </a>
 
-								    <a href="#" class="layout-view layout-list-view bp-tooltip" data-view="list" data-bp-tooltip-pos="up"
-								       data-bp-tooltip=" ' . esc_html__( 'List View', 'buddyboss-theme' ) . '">
+								    <a href="#" class="layout-view layout-list-view ' . ( ! empty( $view ) && $view === 'list' ? 'active' : '' ) . ' bp-tooltip" data-view="list" data-bp-tooltip-pos="up"
+								       data-bp-tooltip=" ' . esc_html__( 'List View', 'buddyboss-theme' ) . '" aria-label="' . esc_attr__( 'List View', 'buddyboss-theme' ) . '">
 								        <i class="bb-icon-l bb-icon-bars" aria-hidden="true"></i>
 								    </a>
 								</div>
@@ -747,7 +749,7 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 				$atts['orderby'] = $_GET['orderby'];
 			}
 
-			if ( ! empty( $_GET['order'] ) ) {
+			if ( ! empty( $_GET['order'] ) && is_string( $_GET['order'] ) ) {
 				$atts['order'] = strtoupper( $_GET['order'] );
 			}
 
@@ -888,8 +890,6 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 		 * @return type
 		 */
 		public function prepare_course_archive_page_query( $query ) {
-			remove_action( 'parse_query', [ $this, 'prepare_course_archive_page_query' ] );
-
 			if ( ! is_user_logged_in() ) {
 				return;
 			}
@@ -945,26 +945,10 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 				'my-courses' => 0,
 			];
 
-			add_action( 'pre_get_posts', [ $this, 'filter_query_ajax_get_courses' ], 999 );
-			add_action( 'pre_get_posts', [ $this, 'filter_query_ajax_do_all_courses_counts' ], 9999 );
-
-			$args = [
-				'post_type'   => 'sfwd-courses',
-				'post_status' => 'publish',
-			];
-
-			if ( current_user_can( 'manage_options' ) ) {
-				$args['post_status'] = [ 'publish', 'private' ];
-			}
-
-			$all_query     = new \WP_Query( $args );
-			$return['all'] = $all_query->found_posts;
+			$return['all'] = $this->get_all_courses_count();
 
 			if ( is_user_logged_in() ) {
-				add_action( 'pre_get_posts', [ $this, 'filter_query_ajax_get_courses' ], 999 );
-				add_action( 'pre_get_posts', [ $this, 'filter_query_ajax_do_personal_courses_counts' ], 9999 );
-				$my_query             = new \WP_Query( $args );
-				$return['my-courses'] = $my_query->found_posts;
+				$return['my-courses'] = $this->get_my_courses_count();
 			}
 
 			return $return;
@@ -1034,9 +1018,6 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 		 */
 		public function get_all_courses_count() {
 
-			// Added hook so on page load of course archive page shows course count correctly when filters applied to courses.
-			add_action( 'pre_get_posts', array( $this, 'filter_query_ajax_get_courses' ), 999 );
-
 			$args = [
 				'post_type'   => 'sfwd-courses',
 				'post_status' => 'publish',
@@ -1046,9 +1027,19 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 				$args['post_status'] = [ 'publish', 'private' ];
 			}
 
-			$courses = new \WP_Query( $args );
+			$tax_query = $this->bb_learndash_get_learndash_taxonomy();
+			if ( ! empty( $tax_query ) ) {
+				$args['tax_query'] = $tax_query;
+			}
 
-			remove_action( 'pre_get_posts', array( $this, 'filter_query_ajax_get_courses' ), 999 );
+			if ( ! empty( $_GET["filter-instructors"] ) && 'all' != $_GET['filter-instructors'] ) {
+				$author_by = $this->bb_learndash_get_filterby_instructors();
+				if ( ! empty( $author_by ) ) {
+					$args['author'] = $author_by;
+				}
+			}
+
+			$courses = new \WP_Query( $args );
 
 			return ! empty( $courses->found_posts ) ? $courses->found_posts : 0;
 		}
@@ -1065,12 +1056,24 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 				return 0;
 			}
 
-			// Added hook so on page load of course archive page shows course count correctly when filters applied to courses.
-			add_action( 'pre_get_posts', array( $this, 'filter_query_ajax_get_courses' ), 999 );
+			$course_args = array(
+				'post_status' => 'publish',
+			);
 
-			$course_args = array();
 			if ( ! empty( $tax_query ) ) {
 				$course_args['tax_query'] = $tax_query;
+			} else {
+				$tax_query = $this->bb_learndash_get_learndash_taxonomy();
+				if ( ! empty( $tax_query ) ) {
+					$course_args['tax_query'] = $tax_query;
+				}
+			}
+
+			if ( ! empty( $_GET["filter-instructors"] ) && 'all' != $_GET['filter-instructors'] ) {
+				$author_by = $this->bb_learndash_get_filterby_instructors();
+				if ( ! empty( $author_by ) ) {
+					$course_args['author'] = $author_by;
+				}
 			}
 
 			/**
@@ -1083,8 +1086,6 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 			 */
 
 			$course_ids = ld_get_mycourses( $user_id, $course_args );
-
-			remove_action( 'pre_get_posts', array( $this, 'filter_query_ajax_get_courses' ), 999 );
 
 			return empty( $course_ids ) ? 0 : count( $course_ids );
 		}
@@ -1185,56 +1186,7 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 				$tax_query = [];
 			}
 
-			// Query Depend on theme setting
-			if ( ! empty( $_GET[ "filter-categories" ] ) && 'all' != $_GET['filter-categories'] ) {
-				$archive_category_taxonomy = buddyboss_theme_get_option( 'learndash_course_index_categories_filter_taxonomy' );
-				if ( empty( $archive_category_taxonomy ) ) {
-					$archive_category_taxonomy = 'ld_course_category';
-				}
-
-				$tax_query[] = array(
-					'taxonomy'         => $archive_category_taxonomy,
-					'field'            => 'slug',
-					'terms'            => explode( ',', $_GET["filter-categories"] ),
-					'include_children' => false,
-				);
-			}
-
-			if ( ! empty( $_GET["filter-block-categories"] ) || ! empty( $_GET["filter-block-tags"] ) ) {
-				$tax_blog_query = array(
-					'relation' => 'AND',
-				);
-
-				/**
-				 * Without interact with theme setting. Filter course by course categories
-				 * Used by Elementor widgets like Course grid
-				 */
-				if ( ! empty( $_GET["filter-block-categories"] ) ) {
-					$tax_blog_query[] = array(
-						'taxonomy'         => self::LMS_CATEGORY_SLUG,
-						'field'            => 'id',
-						'terms'            => wp_parse_id_list( $_GET["filter-block-categories"] ),
-						'include_children' => false,
-					);
-
-				}
-
-				/**
-				 * Without interact with theme setting. Filter course by course tags
-				 * Used by Elementor widgets like Course grid
-				 */
-				if ( ! empty( $_GET["filter-block-tags"] ) ) {
-					$tax_blog_query[] = array(
-						'taxonomy'         => self::LMS_TAG_SLUG,
-						'field'            => 'id',
-						'terms'            => wp_parse_id_list( $_GET["filter-block-tags"] ),
-						'include_children' => false,
-					);
-
-				}
-
-				$tax_query[] = $tax_blog_query;
-			}
+			$tax_query = $this->bb_learndash_get_learndash_taxonomy( $tax_query );
 
 			if ( ! empty( $tax_query ) ) {
 				$query->set('tax_query' , $tax_query );
@@ -1296,11 +1248,7 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 
 		protected function _archive_filterby_instructors( $query ) {
 			if ( ! empty( $_GET["filter-instructors"] ) && 'all' != $_GET['filter-instructors'] ) {
-				$authors = $_GET["filter-instructors"];
-				if ( is_array( $authors ) ) {
-					$authors = implode( ',', $authors );
-				}
-
+				$authors = $this->bb_learndash_get_filterby_instructors();
 				$query->set( 'author', $authors );
 			} elseif ( isset( $query->query_vars['author__in'] ) ) {
 				// unset author if it was set by instructor plugin.
@@ -2434,7 +2382,7 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 
 			$activity_table = \LDLMS_DB::get_table_name( 'user_activity' );
 
-			return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$activity_table} WHERE user_id = %d AND activity_type = %s AND activity_completed = %d ORDER BY activity_updated DESC LIMIT %d", get_current_user_id(), 'course', 0, $limit ) );
+			return $wpdb->get_results( $wpdb->prepare( "SELECT ua.* FROM {$activity_table} ua INNER JOIN {$wpdb->posts} p ON ua.course_id = p.ID WHERE ua.user_id = %d AND ua.activity_type = %s AND ua.activity_completed = %d AND p.post_status = 'publish' ORDER BY ua.activity_updated DESC LIMIT %d", get_current_user_id(), 'course', 0, $limit ) );
 		}
 
 		/**
@@ -2445,18 +2393,22 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 		 * @return false|mixed
 		 */
 		public function active_lesson( $course ) {
-			global $wpdb;
 
-			$activity_table = \LDLMS_DB::get_table_name( 'user_activity' );
+			if (
+				function_exists( 'learndash_get_course_steps' ) &&
+				function_exists( 'learndash_user_progress_is_step_complete' )
+			) {
 
-			return $wpdb->get_var( $wpdb->prepare(
-				"SELECT post_id FROM {$activity_table} WHERE user_id = %d AND course_id = %d AND activity_type != %s AND activity_status = %d ORDER BY activity_updated DESC LIMIT %d",
-				get_current_user_id(),
-				$course,
-				'course',
-				0,
-				1
-			) );
+				// Get all course steps.
+				$course_steps = learndash_get_course_steps( $course, array( 'sfwd-lessons' ) );
+				foreach( $course_steps as $step_id ) {
+					if ( ! learndash_user_progress_is_step_complete( get_current_user_id(), $course, $step_id ) ) {
+						return $step_id;
+					}
+				}
+			}
+
+			return false;
 		}
 
 		/**
@@ -2647,6 +2599,93 @@ if ( ! class_exists( '\BuddyBossTheme\LearndashHelper' ) ) {
 			}
 
 			return $step_material_select;
+		}
+
+		/**
+		 * Retrieves the selected instructors for filtering in LearnDash.
+		 * This function checks the 'filter-instructors' query parameter in the URL
+		 * and returns a string of comma-separated instructor IDs or an empty string.
+		 * If no instructors are selected or if 'all' is selected, an empty string is returned.
+		 *
+		 * @since 2.5.40
+		 *
+		 * @return string Comma-separated string of selected instructor IDs,
+		 *                or an empty string if no instructors are selected.
+		 */
+		public function bb_learndash_get_filterby_instructors() {
+			$authors = $_GET["filter-instructors"];
+			if ( is_array( $authors ) ) {
+				$authors = implode( ',', $authors );
+			}
+
+			return $authors;
+		}
+
+		/**
+		 * Retrieves the LearnDash taxonomy parameters for filtering.
+		 * This function checks the 'filter-categories', 'filter-block-categories', and 'filter-block-tags'
+		 * query parameters in the URL and constructs a tax_query array accordingly.
+		 * The resulting tax_query is suitable for filtering LearnDash content based on categories and tags.
+		 *
+		 * @since 2.5.40
+		 *
+		 * @param array $tax_query Optional. Existing tax_query array to extend.
+		 *
+		 * @return array The extended tax_query array for LearnDash content filtering.
+		 */
+		public function bb_learndash_get_learndash_taxonomy( $tax_query = array() ) {
+			// Query Depend on theme setting
+			if ( ! empty( $_GET[ "filter-categories" ] ) && 'all' != $_GET['filter-categories'] ) {
+				$archive_category_taxonomy = buddyboss_theme_get_option( 'learndash_course_index_categories_filter_taxonomy' );
+				if ( empty( $archive_category_taxonomy ) ) {
+					$archive_category_taxonomy = 'ld_course_category';
+				}
+
+				$tax_query[] = array(
+					'taxonomy'         => $archive_category_taxonomy,
+					'field'            => 'slug',
+					'terms'            => explode( ',', $_GET["filter-categories"] ),
+					'include_children' => false,
+				);
+			}
+
+			if ( ! empty( $_GET["filter-block-categories"] ) || ! empty( $_GET["filter-block-tags"] ) ) {
+				$tax_blog_query = array(
+					'relation' => 'AND',
+				);
+
+				/**
+				 * Without interact with theme setting. Filter course by course categories
+				 * Used by Elementor widgets like Course grid
+				 */
+				if ( ! empty( $_GET["filter-block-categories"] ) ) {
+					$tax_blog_query[] = array(
+						'taxonomy'         => self::LMS_CATEGORY_SLUG,
+						'field'            => 'id',
+						'terms'            => wp_parse_id_list( $_GET["filter-block-categories"] ),
+						'include_children' => false,
+					);
+
+				}
+
+				/**
+				 * Without interact with theme setting. Filter course by course tags
+				 * Used by Elementor widgets like Course grid
+				 */
+				if ( ! empty( $_GET["filter-block-tags"] ) ) {
+					$tax_blog_query[] = array(
+						'taxonomy'         => self::LMS_TAG_SLUG,
+						'field'            => 'id',
+						'terms'            => wp_parse_id_list( $_GET["filter-block-tags"] ),
+						'include_children' => false,
+					);
+
+				}
+
+				$tax_query[] = $tax_blog_query;
+			}
+
+			return $tax_query;
 		}
 	}
 }

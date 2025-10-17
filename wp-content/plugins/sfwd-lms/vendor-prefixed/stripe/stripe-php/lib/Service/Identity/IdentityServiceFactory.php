@@ -9,10 +9,6 @@ namespace StellarWP\Learndash\Stripe\Service\Identity;
  *
  * @property VerificationReportService $verificationReports
  * @property VerificationSessionService $verificationSessions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class IdentityServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

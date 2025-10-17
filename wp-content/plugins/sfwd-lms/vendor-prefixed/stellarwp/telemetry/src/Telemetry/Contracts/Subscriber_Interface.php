@@ -3,10 +3,6 @@
  * The API implemented by all subscribers.
  *
  * @package StellarWP\Learndash\StellarWP\Telemetry\Contracts
- *
- * @license GPL-2.0-or-later
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 
 namespace StellarWP\Learndash\StellarWP\Telemetry\Contracts;
@@ -24,5 +20,4 @@ interface Subscriber_Interface {
 	 * @return void
 	 */
 	public function register();
-
 }

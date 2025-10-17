@@ -358,12 +358,11 @@ if ( ! class_exists( 'Learndash_Admin_Post_Edit' ) ) {
 				// Add Metabox and hook for saving post metabox.
 				add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ), 30, 2 );
 
-				if ( ! empty( $_GET['currentTab'] ) ) {
-					wp_add_inline_style(
-						'learndash-admin-style',
-						'body:not([data-active-tab="post-body-content"]) #post-body-content { display: none }'
-					);
-				}
+				// Hide the content editor if we are not on the content tab.
+				wp_add_inline_style(
+					'learndash-admin-style',
+					'body:not([data-active-tab="post-body-content"]) .edit-post-visual-editor { display: none }'
+				);
 			}
 		}
 

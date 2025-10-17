@@ -14,10 +14,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property int $created Time at which the object was created. Measured in seconds since the Unix epoch.
  * @property int $expires_at The timestamp at which this account link will expire.
  * @property string $url The URL for the account link.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class AccountLink extends ApiResource
 {

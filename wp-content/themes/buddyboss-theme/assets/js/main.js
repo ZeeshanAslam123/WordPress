@@ -6,10 +6,10 @@
 		init: function () {
 			this.add_Class();
 			this.header_search();
-			this.header_notifications();
 			this.Menu();
 			this.inputStyles();
 			this.sidePanel();
+			this.headerAside();
 			this.bbMasonry();
 			// this.bbSlider();
 			this.stickySidebars();
@@ -230,7 +230,7 @@
 			var $width = 150;
 			// $( '#primary-menu' ).BossSocialMenu( $width );
 			$( '#activity-sub-nav' ).BossSocialMenu( 90 );
-			$( '#object-nav > ul' ).BossSocialMenu( 35 );
+			$( '#object-nav:not(.vertical) > ul' ).BossSocialMenu( 90 );
 			$( '.bb-footer ul.footer-menu' ).BossSocialMenu( 90 );
 			$( '.bp-navs ul.component-navigation:not(.search-nav)' ).BossSocialMenu( 35 );
 			$( '.bb-profile-grid.bb-grid .bp-navs.user-subnav ul.subnav' ).BossSocialMenu( 90 );
@@ -247,7 +247,8 @@
 				'.more-button',
 				function ( e ) {
 					e.preventDefault();
-					$( this ).toggleClass( 'active' ).next().toggleClass( 'active' );
+					$( this ).toggleClass( 'active open' ).next().toggleClass( 'active open' );
+					$( 'body' ).toggleClass( 'nav_more_option_open' );
 				}
 			);
 
@@ -276,8 +277,14 @@
 			$( document ).click(
 				function ( e ) {
 					var container = $( '.more-button, .sub-menu' );
-					if ( !container.is( e.target ) && container.has( e.target ).length === 0 ) {
-						$( '.more-button' ).removeClass( 'active' ).next().removeClass( 'active' );
+					if ( ! container.is( e.target ) && container.has( e.target ).length === 0 ) {
+						$( '.more-button' ).removeClass( 'active open' ).next().removeClass( 'active open' );
+						$( 'body' ).removeClass( 'nav_more_option_open' );
+					}
+
+					if ( $( e.target ).hasClass( 'bb_more_dropdown__title' ) || $( e.target ).closest( '.bb_more_dropdown__title' ).length > 0 ) {
+						$( '.more-button' ).removeClass( 'active open' ).next().removeClass( 'active open' );
+						$( 'body' ).removeClass( 'nav_more_option_open' );
 					}
 				}
 			);
@@ -497,66 +504,8 @@
 			);
 		},
 
-		header_notifications: function () {
-			if ( $( '#header-notifications-dropdown-elem' ).length ) {
-				setTimeout(
-					function () {
-						$( '#header-notifications-dropdown-elem ul.notification-list' ).html( '<p class="bb-header-loader"><i class="bb-icon-loader animate-spin"></i></p>' );
-						$.get(
-							ajaxurl,
-							{ action: 'buddyboss_theme_get_header_notifications' },
-							function ( response, status, e ) {
-								if ( response.success && typeof response.data !== 'undefined' && typeof response.data.contents !== 'undefined' && $( '#header-notifications-dropdown-elem ul.notification-list' ).length ) {
-									$( '#header-notifications-dropdown-elem ul.notification-list' ).html( response.data.contents );
-									if ( typeof response.data.total_notifications !== 'undefined' && response.data.total_notifications > 0 ) {
-										$( '.notification-header .mark-read-all' ).fadeIn();
-									} else {
-										$( '.notification-header .mark-read-all' ).fadeOut();
-									}
-								}
-							}
-						);
-					},
-					3000
-				);
-			}
-			if ( $( '#header-messages-dropdown-elem' ).length ) {
-				setTimeout(
-					function () {
-						$( '#header-messages-dropdown-elem ul.notification-list' ).html( '<p class="bb-header-loader"><i class="bb-icon-loader animate-spin"></i></p>' );
-						$.get(
-							ajaxurl,
-							{ action: 'buddyboss_theme_get_header_unread_messages' },
-							function ( response, status, e ) {
-								if ( response.success && typeof response.data !== 'undefined' && typeof response.data.contents !== 'undefined' && $( '#header-messages-dropdown-elem ul.notification-list' ).length ) {
-									$( '#header-messages-dropdown-elem ul.notification-list' ).html( response.data.contents );
-								}
-							}
-						);
-					},
-					3000
-				);
-			}
-		},
-
 		sidePanel: function () {
 			var status = '';
-
-			// BuddyPanel Menu li height
-			function buddyPanelMenuHeight() {
-				if ( $( '.buddypanel .side-panel-menu' ).length ) {
-					$( '.buddypanel .side-panel-menu li:not(.bb-menu-section) > a' ).each(
-						function () {
-							var buddyPanelMenuHeight = $( this ).outerHeight();
-							if( buddyPanelMenuHeight !== $( this ).parent().outerHeight() ){
-								$( this ).parent().css( 'min-height', buddyPanelMenuHeight );
-							}
-						}
-					);
-				}
-			}
-
-			buddyPanelMenuHeight();
 
 			$( '.bb-toggle-panel' ).on(
 				'click',
@@ -624,6 +573,9 @@
 			);
 
 			function sidePanelHeight() {
+				if ( $( 'body' ).hasClass( 'bb-buddypanel' ) && $( 'body' ).hasClass( 'header-style-5' ) ) {
+					$( '.buddypanel' ).css( 'height', $( 'html' ).height() - $( '.site-header' ).height() - $( '#wpadminbar' ).height() + 'px' );
+				}
 				if ( $( 'body' ).hasClass( 'buddypanel-header' ) || $( 'body' ).hasClass( 'buddypanel-logo' ) ) {
 					if ( $( '.buddypanel .site-branding' ).length ) {
 						var bbPanelBranding = $( '.buddypanel .site-branding' ).outerHeight();
@@ -714,42 +666,13 @@
 				buddyPanelScroll();
 			});
 
-			// Add class wrapper if absent
-			$( '.sub-menu-inner > li' ).each(
-				function () {
-					if ( $( this ).find( '.ab-sub-wrapper' ).length !== 0 ) {
-						$( this ).addClass( 'parent' );
-						$( this ).find( '.ab-sub-wrapper' ).addClass( 'wrapper' );
-					}
-				}
-			);
-
-			// whenever we hover over a menu item that has a submenu
-			$( '.user-wrap li.parent, .user-wrap .menu-item-has-children' ).on(
-				'mouseover',
-				function () {
-					var $menuItem = $( this ),
-						$submenuWrapper = $( '> .wrapper', $menuItem );
-
-					// grab the menu item's position relative to its positioned parent
-					var menuItemPos = $menuItem.position();
-
-					// place the submenu in the correct position relevant to the menu item
-					$submenuWrapper.css(
-						{
-							top: menuItemPos.top
-						}
-					);
-				}
-			);
-
-			function setCookie ( key, value, expires, path, domain ) {
+			function setCookie( key, value, expires, path, domain ) {
 				var cookie = key + '=' + escape( value ) + ';';
 
 				if ( expires ) {
-					// If it's a date
+					// If it's a date.
 					if ( expires instanceof Date ) {
-						// If it isn't a valid date
+						// If it isn't a valid date.
 						if ( isNaN( expires.getTime() ) ) {
 							expires = new Date();
 						}
@@ -768,6 +691,85 @@
 
 				document.cookie = cookie;
 			}
+		},
+
+		headerAside: function () {
+			// Add class wrapper if absent
+			$( '.sub-menu-inner > li' ).each(
+				function () {
+					if ( $( this ).find( '.ab-sub-wrapper' ).length !== 0 ) {
+						$( this ).addClass( 'parent' );
+						$( this ).find( '.ab-sub-wrapper' ).addClass( 'wrapper' );
+					}
+				}
+			);
+
+			// set submenu max height.
+			function subMenuHeight() {
+				$( '.user-wrap .menu-item-has-children' ).each(
+					function () {
+						var $menuItem = $( this ),
+							$submenuWrapper = $( '> .wrapper > .bb-sub-menu', $menuItem ),
+							$wrapper = $menuItem.closest( '.wrapper' );
+
+						var relativePos = $menuItem.position();
+						var wrapperPos = $wrapper.position();
+						var menuItemPos = relativePos.top + wrapperPos.top;
+
+						var maxSubMenuHeight = jQuery( window ).height() - menuItemPos - 120;
+
+						$submenuWrapper.css(
+							{
+								'max-height': maxSubMenuHeight + 'px'
+							}
+						);
+					}
+				);
+
+				$( '.user-wrap .menupop.parent' ).each(
+					function () {
+						var $menuItem = $( this ),
+							$submenuWrapper = $( '> .ab-sub-wrapper > .ab-submenu', $menuItem );
+
+						var menuItemPos = $menuItem.position();
+
+						var maxSubMenuHeight = jQuery( window ).height() - menuItemPos.top - 120;
+
+						$submenuWrapper.css(
+							{
+								'max-height': maxSubMenuHeight + 'px'
+							}
+						);
+					}
+				);
+			}
+
+			subMenuHeight();
+
+			$( window ).resize( function(){
+				subMenuHeight();
+			});
+
+			// whenever we hover over a menu item that has a submenu
+			$( '.user-wrap li.parent, .user-wrap .menu-item-has-children' ).on(
+				'mouseover',
+				function () {
+					var $menuItem = $( this ),
+						$submenuWrapper = $( '> .wrapper', $menuItem );
+
+					// grab the menu item's position relative to its positioned parent
+					var menuItemPos = $menuItem.position();
+
+					// place the submenu in the correct position relevant to the menu item
+					$submenuWrapper.css(
+						{
+							top: menuItemPos.top
+						}
+					);
+
+					subMenuHeight();
+				}
+			);
 		},
 
 		DropdownToggle: function () {
@@ -793,6 +795,12 @@
 						$( '.bb-reply-actions-dropdown' ).removeClass( 'open' );
 						$( 'a.bs-dropdown-link.bb-reply-actions-button' ).removeClass( 'active' ).closest( 'li' ).removeClass( 'dropdown-open' );
 					}
+
+					if ( $( e.target ).hasClass( 'bb_more_dropdown__title' ) || $( e.target ).closest( '.bb_more_dropdown__title' ).length > 0 ) {
+						$( '.bb-reply-actions-dropdown' ).removeClass( 'open' );
+						$( 'a.bs-dropdown-link.bb-reply-actions-button' ).removeClass( 'active' ).closest( 'li' ).removeClass( 'dropdown-open' );
+					}
+
 					if ( ! forumMoreAction.is( e.target ) && forumMoreAction.has( e.target ).length === 0) {
 						$( '.forum_single_action_wrap.is_visible' ).removeClass( 'is_visible' );
 					}
@@ -1059,8 +1067,10 @@
 
 			$( '.jssocials-share-link' ).each(
 				function () {
+					var shareLabel = $( this ).find( '.jssocials-share-label' ).text();
 					$( this ).attr( 'data-balloon-pos', 'right' );
-					$( this ).attr( 'data-balloon', $( this ).find( '.jssocials-share-label' ).html() );
+					$( this ).attr( 'data-balloon', shareLabel );
+					$( this ).attr( 'aria-label', shareLabel );
 				}
 			);
 
@@ -1184,15 +1194,17 @@
 			}
 
 			function runSlickRelated() {
+				var isRTL = $( 'html' ).attr( 'dir' ) === 'rtl';
 				var slickRelated = {
 					infinite: false,
 					slidesToShow: 2,
 					slidesToScroll: 2,
 					adaptiveHeight: true,
 					arrows: true,
-					prevArrow: '<a class="bb-slide-prev"><i class="bb-icon-l bb-icon-angle-right"></i></a>',
-					nextArrow: '<a class="bb-slide-next"><i class="bb-icon-l bb-icon-angle-right"></i></a>',
+					prevArrow: isRTL ? '<a class="bb-slide-next"><i class="bb-icon-l bb-icon-angle-left"></i></a>' : '<a class="bb-slide-prev"><i class="bb-icon-l bb-icon-angle-right"></i></a>',
+					nextArrow: isRTL ? '<a class="bb-slide-prev"><i class="bb-icon-l bb-icon-angle-left"></i></a>' : '<a class="bb-slide-next"><i class="bb-icon-l bb-icon-angle-right"></i></a>',
 					appendArrows: '.post-related-posts h3',
+					rtl: isRTL,
 					responsive: [
 						{
 							breakpoint: $break,
@@ -1865,54 +1877,73 @@
 						editor = window.forums_medium_topic_editor[ editor_key ];
 					}
 
-					if (
-						(
-							$topicForm.find( '#bbp_media' ).length > 0
-							&& $topicForm.find( '#bbp_document' ).length <= 0
-							&& $topicForm.find( '#bbp_video' ).length <= 0
-							&& $topicForm.find( '#bbp_media_gif' ).length > 0
-							&& $topicForm.find( '#bbp_media' ).val() == ''
-							&& $topicForm.find( '#bbp_media_gif' ).val() == ''
-						)
-						|| (
-							$topicForm.find( '#bbp_document' ).length > 0
-							&& $topicForm.find( '#bbp_media' ).length <= 0
-							&& $topicForm.find( '#bbp_video' ).length <= 0
-							&& $topicForm.find( '#bbp_media_gif' ).length > 0
-							&& $topicForm.find( '#bbp_document' ).val() == ''
-							&& $topicForm.find( '#bbp_media_gif' ).val() == ''
-						)
-						|| (
-							$topicForm.find( '#bbp_video' ).length > 0
-							&& $topicForm.find( '#bbp_media' ).length <= 0
-							&& $topicForm.find( '#bbp_document' ).length <= 0
-							&& $topicForm.find( '#bbp_media_gif' ).length > 0
-							&& $topicForm.find( '#bbp_video' ).val() == ''
-							&& $topicForm.find( '#bbp_media_gif' ).val() == ''
-						)
-						|| (
-							$topicForm.find( '#bbp_document' ).length > 0
-							&& $topicForm.find( '#bbp_media_gif' ).length <= 0
-							&& $topicForm.find( '#bbp_document' ).val() == ''
-						)
-						|| (
-							$topicForm.find( '#bbp_media' ).length > 0
-							&& $topicForm.find( '#bbp_media_gif' ).length <= 0
-							&& $topicForm.find( '#bbp_media' ).val() == ''
-						)
-						|| (
-							$topicForm.find( '#bbp_video' ).length > 0
-							&& $topicForm.find( '#bbp_media_gif' ).length <= 0
-							&& $topicForm.find( '#bbp_video' ).val() == ''
-						)
-						|| (
-							$topicForm.find( '#bbp_media_gif' ).length > 0
-							&& $topicForm.find( '#bbp_media' ).length <= 0
-							&& $topicForm.find( '#bbp_document' ).length <= 0
-							&& $topicForm.find( '#bbp_video' ).length <= 0
-							&& $topicForm.find( '#bbp_media_gif' ).val() == ''
-						)
-					) {
+					// Check if GIF support is enabled (GIF button exists and is not disabled)
+					var gif_support_enabled = $topicForm.find( '#forums-gif-button' ).length > 0 && ! $topicForm.find( '#forums-gif-button' ).parents( '.post-elements-buttons-item' ).hasClass( 'disable' );
+
+					var condition1 = (
+						$topicForm.find( '#bbp_media' ).length > 0
+						&& $topicForm.find( '#bbp_document' ).length <= 0
+						&& $topicForm.find( '#bbp_video' ).length <= 0
+						&& gif_support_enabled
+						&& $topicForm.find( '#bbp_media_gif' ).length > 0
+						&& '' == $topicForm.find( '#bbp_media' ).val()
+						&& '' == $topicForm.find( '#bbp_media_gif' ).val()
+					);
+					
+					var condition2 = (
+						$topicForm.find( '#bbp_document' ).length > 0
+						&& $topicForm.find( '#bbp_media' ).length <= 0
+						&& $topicForm.find( '#bbp_video' ).length <= 0
+						&& gif_support_enabled
+						&& $topicForm.find( '#bbp_media_gif' ).length > 0
+						&& '' == $topicForm.find( '#bbp_document' ).val()
+						&& '' == $topicForm.find( '#bbp_media_gif' ).val()
+					);
+					
+					var condition3 = (
+						$topicForm.find( '#bbp_video' ).length > 0
+						&& $topicForm.find( '#bbp_media' ).length <= 0
+						&& $topicForm.find( '#bbp_document' ).length <= 0
+						&& gif_support_enabled
+						&& $topicForm.find( '#bbp_media_gif' ).length > 0
+						&& '' == $topicForm.find( '#bbp_video' ).val()
+						&& '' == $topicForm.find( '#bbp_media_gif' ).val()
+					);
+					
+					var condition4 = (
+						$topicForm.find( '#bbp_document' ).length > 0
+						&& ! gif_support_enabled
+						&& ( '' == $topicForm.find( '#bbp_document' ).val() || '[]' == $topicForm.find( '#bbp_document' ).val() )
+						&& '' == $topicForm.find( '#bbp_media' ).val()
+						&& '' == $topicForm.find( '#bbp_video' ).val()
+					);
+					
+					var condition5 = (
+						$topicForm.find( '#bbp_media' ).length > 0
+						&& ! gif_support_enabled
+						&& ( '' == $topicForm.find( '#bbp_media' ).val() || '[]' == $topicForm.find( '#bbp_media' ).val() )
+						&& '' == $topicForm.find( '#bbp_document' ).val()
+						&& '' == $topicForm.find( '#bbp_video' ).val()
+					);
+					
+					var condition6 = (
+						$topicForm.find( '#bbp_video' ).length > 0
+						&& ! gif_support_enabled
+						&& ( '' == $topicForm.find( '#bbp_video' ).val() || '[]' == $topicForm.find( '#bbp_video' ).val() )
+						&& '' == $topicForm.find( '#bbp_media' ).val()
+						&& '' == $topicForm.find( '#bbp_document' ).val()
+					);
+					
+					var condition7 = (
+						gif_support_enabled
+						&& $topicForm.find( '#bbp_media_gif' ).length > 0
+						&& $topicForm.find( '#bbp_media' ).length <= 0
+						&& $topicForm.find( '#bbp_document' ).length <= 0
+						&& $topicForm.find( '#bbp_video' ).length <= 0
+						&& '' == $topicForm.find( '#bbp_media_gif' ).val()
+					);
+					
+					if ( condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 ) {
 						media_valid = false;
 					}
 
@@ -2539,6 +2570,35 @@
 		}, 200 );
 	});
 
+	function StickyBuddyPanel () {
+		var scrollTop      = $( window ).scrollTop();
+		var adminBarHeight = $( '#wpadminbar' ).height();
+		var headerHeight   = $( '.site-header' ).height();
+		var scrollAmount   = ( adminBarHeight + headerHeight ) - scrollTop;
+		if ( scrollAmount > adminBarHeight ) {
+			$( '.buddypanel' ).css( 'top', scrollAmount + 'px' );
+			$( '.buddypanel' ).css( 'height', $( 'html' ).height() - $( '.site-header' ).height() - $( '#wpadminbar' ).height() + 'px' );
+		} else {
+			$( '.buddypanel' ).css( 'top', adminBarHeight + 'px' );
+			$( '.buddypanel' ).css( 'height', '100%');
+		}
+	}
+
+	if ( $( 'body' ).hasClass( 'header-style-5' ) && ! $( 'body' ).hasClass( 'sticky-header' ) ) {
+
+		$( window ).on( 'scroll', function () {
+			StickyBuddyPanel();
+		} );
+
+		$( window ).on( 'resize', function () {
+			StickyBuddyPanel();
+		} );
+
+		$( window ).on( 'load', function () {
+			StickyBuddyPanel();
+		} );
+	}
+
 })( jQuery );
 
 /**
@@ -2592,6 +2652,13 @@ setTimeout(
 					top: menuItemPos.top
 				}
 			);
+			
+			jQuery( 'body' ).addClass( 'bb-submenu-isactive' );
 		}
+	);
+
+	jQuery( document ).on( 'mouseleave', '#site-navigation #navbar-collapse #navbar-extend .menu-item-has-children, #site-navigation #primary-menu .ab-submenu .menu-item-has-children', function () {
+		jQuery( 'body' ).removeClass( 'bb-submenu-isactive' );
+	}
 	);
 }, 500);

@@ -24,7 +24,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.2.0
  */
 function learndash_register_essay_post_type() {
-
 	$labels = array(
 		'name'                     => esc_html_x( 'Submitted Essays', 'Post Type General Name', 'learndash' ),
 		'singular_name'            => esc_html_x( 'Submitted Essay', 'Post Type Singular Name', 'learndash' ),
@@ -58,6 +57,7 @@ function learndash_register_essay_post_type() {
 		'edit_others_essays'  => 'edit_others_essays',
 		'publish_essays'      => 'publish_essays',
 		'read_private_essays' => 'read_private_essays',
+		'create_posts'        => 'do_not_allow', // Remove the "Add New" button from the admin bar.
 	);
 
 	if ( learndash_is_admin_user() ) {
@@ -114,7 +114,6 @@ add_action( 'init', 'learndash_register_essay_post_type' );
 function learndash_add_essay_caps() {
 	$admin_role = get_role( 'administrator' );
 	if ( ( $admin_role ) && ( $admin_role instanceof WP_Role ) ) {
-
 		$cap = $admin_role->has_cap( 'delete_others_essays' );
 		if ( empty( $cap ) ) {
 			$admin_role->add_cap( 'edit_essays' );
@@ -168,7 +167,6 @@ function learndash_map_metacap_essays( $caps, $cap, $user_id, $args = array() ) 
 
 	/* If editing, deleting, or reading a essays, get the post and post type object. */
 	if ( 'edit_essay' == $cap || 'delete_essay' == $cap || 'read_essay' == $cap ) {
-
 		// Ensure $args is valid.
 		if ( ( ! is_array( $args ) ) || ( ! isset( $args[0] ) ) ) {
 			return $caps;
@@ -266,7 +264,6 @@ add_action( 'init', 'learndash_register_essay_post_status' );
  * @since 2.2.1
  */
 function learndash_essay_permissions() {
-
 	if ( is_singular( learndash_get_post_type_slug( 'essay' ) ) ) {
 		$can_view_file = false;
 
@@ -617,7 +614,6 @@ function learndash_update_quiz_data( $quiz_id, $question_id, $updated_scoring, $
 
 	// We need to find the user meta quiz to matches the essay being scored.
 	foreach ( $users_quiz_data as $quiz_key => $quiz_data ) {
-
 		// We check for a match on the quiz time from the essay postmeta first.
 		// If the essay_quiz_time is not empty and does NOT match then continue.
 		if ( ( absint( $essay_quiz_time ) ) && ( isset( $quiz_data['time'] ) ) && ( absint( $essay_quiz_time ) !== absint( $quiz_data['time'] ) ) ) {
@@ -640,8 +636,14 @@ function learndash_update_quiz_data( $quiz_id, $question_id, $updated_scoring, $
 		// update total points.
 		$users_quiz_data[ $quiz_key ]['points'] = $users_quiz_data[ $quiz_key ]['points'] + $updated_scoring['points_awarded_difference'];
 
+		$total_points_setting = isset( $users_quiz_data[ $quiz_key ]['total_points'] )
+			? Cast::to_float( $users_quiz_data[ $quiz_key ]['total_points'] )
+			: 0.00;
+
 		// update total score percentage.
-		$updated_percentage                         = ( $users_quiz_data[ $quiz_key ]['points'] / $users_quiz_data[ $quiz_key ]['total_points'] ) * 100;
+		$updated_percentage                         = $total_points_setting > 0
+			? ( $users_quiz_data[ $quiz_key ]['points'] / $total_points_setting ) * 100
+			: 100;
 		$users_quiz_data[ $quiz_key ]['percentage'] = round( $updated_percentage, 2 );
 
 		// update passing score.
@@ -658,6 +660,21 @@ function learndash_update_quiz_data( $quiz_id, $question_id, $updated_scoring, $
 	if ( ! empty( $affected_quiz_keys ) ) {
 		foreach ( $affected_quiz_keys as $quiz_key ) {
 			if ( isset( $users_quiz_data[ $quiz_key ] ) ) {
+				$quiz_id = isset( $users_quiz_data[ $quiz_key ]['quiz'] )
+					? Cast::to_int( $users_quiz_data[ $quiz_key ]['quiz'] )
+					: 0;
+
+				$course_id = isset( $users_quiz_data[ $quiz_key ]['course'] )
+					? Cast::to_int( $users_quiz_data[ $quiz_key ]['course'] )
+					: Cast::to_int( learndash_get_course_id( $essay->ID ) );
+
+				// If the quiz ID is invalid, we can't process the step completion.
+				// This is a safety check to prevent warnings, but it should never happen.
+
+				if ( $quiz_id <= 0 ) {
+					continue;
+				}
+
 				$send_quiz_completed = true;
 
 				if ( ( isset( $users_quiz_data[ $quiz_key ]['has_graded'] ) ) && ( true === $users_quiz_data[ $quiz_key ]['has_graded'] ) ) {
@@ -669,17 +686,24 @@ function learndash_update_quiz_data( $quiz_id, $question_id, $updated_scoring, $
 						}
 					}
 				}
-				if ( true === $send_quiz_completed ) {
-					if ( isset( $users_quiz_data[ $quiz_key ]['course'] ) ) {
-						$course_id = intval( $users_quiz_data[ $quiz_key ]['course'] );
-					} else {
-						$course_id = learndash_get_course_id( $essay->ID );
-					}
 
-					// This may add an additional try to the user's quiz attempts.
-					// This is intentional, unfortunately.
-					// See 'learndash_process_user_course_progress_update' function and LEARNDASH-7533.
-					learndash_process_mark_complete( $essay->post_author, $users_quiz_data[ $quiz_key ]['quiz'], false, $course_id );
+				// Check if the quiz has not been completed. We may have all the questions graded, but the user doesn't have enough points to pass.
+
+				if (
+					$send_quiz_completed
+					&& learndash_is_quiz_notcomplete(
+						Cast::to_int( $essay->post_author ),
+						[ $quiz_id => 1 ],
+						false,
+						$course_id
+					)
+				) {
+					$send_quiz_completed = false;
+				}
+
+				if ( $send_quiz_completed ) {
+					// Process the course step completion.
+					learndash_process_mark_complete( $essay->post_author, $quiz_id, false, $course_id );
 
 					/** This action is documented in includes/ld-users.php */
 					do_action( 'learndash_quiz_completed', $users_quiz_data[ $quiz_key ], get_user_by( 'ID', $essay->post_author ) );
@@ -709,7 +733,6 @@ function learndash_update_quiz_data( $quiz_id, $question_id, $updated_scoring, $
  */
 function learndash_update_quiz_activity( $user_id = 0, $quiz_data = array() ) {
 	if ( ( ! empty( $user_id ) ) && ( ! empty( $quiz_data ) ) ) {
-
 		$quiz_data_meta = $quiz_data;
 
 		// Remove many fields that we either don't need or are duplicate of the main table columns.
@@ -836,7 +859,6 @@ function learndash_update_quiz_statistics( $quiz_id, $question_id, $updated_quiz
  * Runs checks for needing information, or will die and send an error back to browser
  */
 function learndash_upload_essay() {
-
 	if ( ! isset( $_POST['nonce'] ) || ! isset( $_POST['question_id'] ) || ! isset( $_FILES['essayUpload'] ) ) {
 		wp_send_json_error();
 		die();
@@ -856,7 +878,6 @@ function learndash_upload_essay() {
 		wp_send_json_error();
 		die( 'Security check' );
 	} else {
-
 		if ( ! is_user_logged_in() ) {
 			/**
 			 * Filters whether to allow essay upload or not if the user is not logged in.
@@ -901,10 +922,8 @@ add_action( 'wp_ajax_nopriv_learndash_upload_essay', 'learndash_upload_essay' );
  */
 function learndash_essay_fileupload_process( $uploadfiles, $question_id ) {
 	if ( is_array( $uploadfiles ) ) {
-
 		// look only for uploaded files.
 		if ( 0 == $uploadfiles['error'] ) {
-
 			$file_tmp = $uploadfiles['tmp_name'];
 
 			// clean filename.
@@ -977,7 +996,7 @@ function learndash_essay_fileupload_process( $uploadfiles, $question_id ) {
 			$i = 0;
 
 			while ( file_exists( $upload_dir_path . DIRECTORY_SEPARATOR . $filename ) ) {
-				$i++;
+				++$i;
 				$filename = $file_title . '_' . $i . '.' . $file_ext;
 			}
 
@@ -1030,7 +1049,6 @@ function learndash_essay_fileupload_process( $uploadfiles, $question_id ) {
  * @param int $post_id Post ID.
  */
 function learndash_before_delete_essay( $post_id ) {
-
 	if ( ( ! empty( $post_id ) ) && ( 'sfwd-essays' == get_post_type( $post_id ) ) ) {
 		$file_path = get_post_meta( $post_id, 'upload', true );
 		if ( ! empty( $file_path ) ) {
@@ -1073,7 +1091,6 @@ function learndash_quiz_submitted_update_essay( $quizdata, $user ) {
 						if ( isset( $graded_data['post_id'] ) ) {
 							$essay_post_id = absint( $graded_data['post_id'] );
 							if ( ! empty( $essay_post_id ) ) {
-
 								// Update the Essay post_status.
 								if ( isset( $graded_data['status'] ) ) {
 									$essay_post = array(
@@ -1147,22 +1164,38 @@ function learndash_get_user_quiz_entry_for_essay( $essay_post_id = 0, $user_id =
  * @return string Empty string if no file, otherwise the URL to download the file.
  */
 function learndash_quiz_essay_get_download_url( int $post_id ): string {
-	$file_name = Cast::to_string(
+	$download_url = '';
+	$file_name    = Cast::to_string(
 		get_post_meta( $post_id, 'upload', true )
 	);
 
-	if ( empty( $file_name ) ) {
-		return '';
-	}
-
-	// Since LD version 4.10.3 we've changed the path ID and added the learndash_version meta.
-	$file_path_id = get_post_meta( $post_id, 'learndash_version', true )
+	if ( ! empty( $file_name ) ) {
+		// Since LD version 4.10.3 we've changed the path ID and added the learndash_version meta.
+		$file_path_id = get_post_meta( $post_id, 'learndash_version', true )
 		? 'uploads_learndash_essays'
 		: 'uploads_essays';
 
-	try {
-		return File_Download_Handler::get_download_url( $file_path_id, basename( $file_name ) );
-	} catch ( Exception $e ) {
-		return '';
+		try {
+			$download_url = File_Download_Handler::get_download_url( $file_path_id, basename( $file_name ) );
+		} catch ( Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch -- Ignore.
+		}
 	}
+
+	/**
+	 * Filters the returned essay download URL.
+	 *
+	 * @since 4.19.0
+	 *
+	 * @param string $download_url The URL to download the essay file.
+	 * @param int    $post_id      Essay Post ID.
+	 * @param string $file_name    Essay file name.
+	 *
+	 * @return string The URL to download the essay file.
+	 */
+	return apply_filters(
+		'learndash_quiz_essay_get_download_url',
+		$download_url,
+		$post_id,
+		$file_name
+	);
 }

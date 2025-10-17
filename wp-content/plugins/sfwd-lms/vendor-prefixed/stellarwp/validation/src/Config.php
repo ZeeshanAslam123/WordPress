@@ -1,10 +1,4 @@
 <?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
 
 declare(strict_types=1);
 
@@ -54,7 +48,7 @@ class Config
      *
      * @param ContainerInterface $container
      */
-    public static function setServiceContainer($container)
+    public static function setServiceContainer($container): void
     {
         self::$container = $container;
     }
@@ -80,7 +74,7 @@ class Config
     /**
      * @since 1.0.0
      */
-    public static function setHookPrefix(string $prefix)
+    public static function setHookPrefix(string $prefix): void
     {
         self::$hookPrefix = $prefix;
     }
@@ -88,6 +82,7 @@ class Config
     /**
      * @since 1.0.0
      *
+     * @return never
      * @throws ValidationExceptionInterface
      */
     public static function throwValidationException()
@@ -110,7 +105,7 @@ class Config
      *
      * @param class-string<ValidationException> $validationExceptionClass
      */
-    public static function setValidationExceptionClass(string $validationExceptionClass)
+    public static function setValidationExceptionClass(string $validationExceptionClass): void
     {
         if (!is_a($validationExceptionClass, ValidationExceptionInterface::class, true)) {
             throw new RuntimeException(
@@ -124,6 +119,7 @@ class Config
     /**
      * @since 1.0.0
      *
+     * @return never
      * @throws InvalidArgumentException
      */
     public static function throwInvalidArgumentException()
@@ -146,7 +142,7 @@ class Config
      *
      * @param class-string<InvalidArgumentException> $invalidArgumentExceptionClass
      */
-    public static function setInvalidArgumentExceptionClass(string $invalidArgumentExceptionClass)
+    public static function setInvalidArgumentExceptionClass(string $invalidArgumentExceptionClass): void
     {
         if (!is_a($invalidArgumentExceptionClass, InvalidArgumentException::class, true)) {
             throw new RuntimeException(
@@ -168,7 +164,7 @@ class Config
             return;
         }
 
-        if (empty(self::$container)) {
+        if (self::$container === null) {
             throw new RuntimeException('A service container must be set before initializing the library');
         }
 

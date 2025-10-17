@@ -8,10 +8,6 @@ namespace StellarWP\Learndash\Stripe\Service\Apps;
  * Service factory class for API resources in the Apps namespace.
  *
  * @property SecretService $secrets
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class AppsServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

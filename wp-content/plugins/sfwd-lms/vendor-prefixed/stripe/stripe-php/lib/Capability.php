@@ -17,10 +17,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|int $requested_at Time at which the capability was requested. Measured in seconds since the Unix epoch.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $requirements
  * @property string $status The status of the capability. Can be <code>active</code>, <code>inactive</code>, <code>pending</code>, or <code>unrequested</code>.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Capability extends ApiResource
 {

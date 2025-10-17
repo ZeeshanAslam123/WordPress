@@ -21,6 +21,33 @@ use LearnDash\Core\Template\Dashboards\Widgets\Widgets;
  */
 class Section {
 	/**
+	 * Large screen size descriptor.
+	 *
+	 * @since 4.17.0
+	 *
+	 * @var string
+	 */
+	public static string $screen_large = 'lg';
+
+	/**
+	 * Medium screen size descriptor.
+	 *
+	 * @since 4.17.0
+	 *
+	 * @var string
+	 */
+	public static string $screen_medium = 'md';
+
+	/**
+	 * Small screen size descriptor.
+	 *
+	 * @since 4.17.0
+	 *
+	 * @var string
+	 */
+	public static string $screen_small = 'sm';
+
+	/**
 	 * The maximum number of columns in a section.
 	 *
 	 * @since 4.9.0
@@ -69,10 +96,20 @@ class Section {
 	 * Size. Default is max column size (full width).
 	 *
 	 * @since 4.9.0
+	 * @deprecated 4.17.0 Interact with $column_sizes via get_size() and set_size() instead.
 	 *
 	 * @var int
 	 */
 	protected $size;
+
+	/**
+	 * Section size per-screen size.
+	 *
+	 * @since 4.17.0
+	 *
+	 * @var array<string,int>
+	 */
+	private array $column_sizes = [];
 
 	/**
 	 * Constructor.
@@ -82,7 +119,6 @@ class Section {
 	public function __construct() {
 		$this->sections = new Sections();
 		$this->widgets  = new Widgets();
-		$this->size     = $this->max_columns;
 	}
 
 	/**
@@ -308,25 +344,42 @@ class Section {
 	 * Returns the size of the section.
 	 *
 	 * @since 4.9.0
+	 * @since 4.17.0 Added the $screen_size parameter.
+	 *
+	 * @param string $screen_size Screen size. Defaults to 'lg'.
 	 *
 	 * @return int
 	 */
-	public function get_size(): int {
-		return $this->size;
+	public function get_size( string $screen_size = '' ): int {
+		if ( empty( $screen_size ) ) {
+			$screen_size = self::$screen_large;
+		}
+
+		if ( empty( $this->column_sizes[ $screen_size ] ) ) {
+			return $this->max_columns;
+		}
+
+		return $this->column_sizes[ $screen_size ];
 	}
 
 	/**
 	 * Sets the size of the section.
 	 *
 	 * @since 4.9.0
+	 * @since 4.17.0 Added the $screen_size parameter.
 	 *
-	 * @param int $size Size.
+	 * @param int    $size Size.
+	 * @param string $screen_size Screen size. Defaults to 'lg'.
 	 *
 	 * @throws InvalidArgumentException If the size is greater than the column number.
 	 *
 	 * @return self
 	 */
-	public function set_size( int $size ): self {
+	public function set_size( int $size, string $screen_size = '' ): self {
+		if ( empty( $screen_size ) ) {
+			$screen_size = self::$screen_large;
+		}
+
 		if ( $size < 1 ) {
 			throw new InvalidArgumentException( 'The size cannot be less than 1.' );
 		}
@@ -337,8 +390,52 @@ class Section {
 			);
 		}
 
-		$this->size = $size;
+		$valid_screen_sizes = $this->get_valid_screen_sizes();
+
+		if (
+			! in_array(
+				$screen_size,
+				$valid_screen_sizes,
+				true
+			)
+		) {
+			throw new InvalidArgumentException(
+				sprintf(
+					'An invalid screen size was provided. One of the following are expected: %s.',
+					esc_html( implode( ', ', $valid_screen_sizes ) )
+				)
+			);
+		}
+
+		$this->column_sizes[ $screen_size ] = $size;
 
 		return $this;
+	}
+
+	/**
+	 * Returns a list of valid screen size descriptors.
+	 *
+	 * @since 4.17.0
+	 *
+	 * @return string[]
+	 */
+	protected function get_valid_screen_sizes(): array {
+		/**
+		 * Filters the list of valid screen size descriptors.
+		 *
+		 * @since 4.17.0
+		 *
+		 * @param string[] $screen_sizes Valid screen size descriptors.
+		 *
+		 * @return string[]
+		 */
+		return apply_filters(
+			'learndash_dashboard_section_valid_screen_sizes',
+			[
+				self::$screen_large,
+				self::$screen_medium,
+				self::$screen_small,
+			]
+		);
 	}
 }

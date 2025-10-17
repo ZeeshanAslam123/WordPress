@@ -16,6 +16,15 @@ namespace LearnDash\Core\Modules\Experiments;
  */
 class Experiments {
 	/**
+	 * The handle for the action items javascript.
+	 *
+	 * @since 4.15.2
+	 *
+	 * @var string
+	 */
+	private const JS_ACTION_ITEMS_HANDLE = 'learndash-experiments-action-items';
+
+	/**
 	 * Contains the list of enabled experiment instances.
 	 *
 	 * @since 4.13.0
@@ -66,6 +75,25 @@ class Experiments {
 	 */
 	public function get_experiments(): array {
 		return $this->experiments;
+	}
+
+	/**
+	 * Enqueues admin scripts.
+	 *
+	 * @since 4.15.2
+	 *
+	 * @return void
+	 */
+	public function enqueue_admin_scripts(): void {
+		wp_register_script(
+			self::JS_ACTION_ITEMS_HANDLE,
+			LEARNDASH_LMS_PLUGIN_URL . 'src/assets/dist/js/admin/modules/experiments/action-items.js',
+			[ 'jquery' ],
+			LEARNDASH_SCRIPT_VERSION_TOKEN,
+			true
+		);
+
+		wp_enqueue_script( self::JS_ACTION_ITEMS_HANDLE );
 	}
 
 	/**

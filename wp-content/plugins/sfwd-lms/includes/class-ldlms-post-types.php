@@ -139,7 +139,7 @@ if ( ! class_exists( 'LDLMS_Post_Types' ) ) {
 		 * @param string $return_type       Used to designate the returned value. String or array.
 		 * @param string $quote_char        Wrap the return values in quote character. Only for return_type 'string'.
 		 *
-		 * @return array|string Post type slugs array or string. See `$return_type` parameter.
+		 * @return ($return_type is "string" ? string : array) Post type slugs array or string. See `$return_type` parameter.
 		 */
 		public static function get_post_types( $post_type_section = 'all', $return_type = 'array', $quote_char = '' ) {
 			$post_types_return = array();

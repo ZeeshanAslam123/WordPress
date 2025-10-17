@@ -118,7 +118,106 @@ if ( ( ! class_exists( 'LD_REST_Courses_Steps_Controller_V2' ) ) && ( class_exis
 						'methods'             => WP_REST_Server::EDITABLE,
 						'callback'            => array( $this, 'update_course_steps' ),
 						'permission_callback' => array( $this, 'update_course_steps_permissions_check' ),
-						'args'                => $this->get_collection_params(),
+						'args'                => [
+							'sfwd-lessons' => [
+								'description'          => sprintf(
+									// translators: %1$s: singular course label. %2$s: plural lesson label. %3$s: plural topics label. %4$s: plural quizzes label. %5$s: singular lesson label.
+									__( '%1$s %2$s structure with %3$s and %4$s. Keys must be valid %5$s post IDs.', 'learndash' ),
+									learndash_get_custom_label( 'course' ),
+									learndash_get_custom_label_lower( 'lessons' ),
+									learndash_get_custom_label_lower( 'topics' ),
+									learndash_get_custom_label_lower( 'quizzes' ),
+									learndash_get_custom_label_lower( 'lesson' )
+								),
+								'type'                 => 'object',
+								'required'             => false,
+								'additionalProperties' => [
+									'description' => sprintf(
+										// translators: %s: singular lesson label.
+										__( '%s post ID (e.g., "123")', 'learndash' ),
+										learndash_get_custom_label( 'lesson' )
+									),
+									'type'        => 'object',
+									'properties'  => [
+										'sfwd-topic' => [
+											'description' => sprintf(
+												// translators: %1$s: singular topic label. %2$s: singular lesson label. %3$s: singular topic label.
+												__( '%1$s within this %2$s. Keys must be valid %3$s post IDs.', 'learndash' ),
+												learndash_get_custom_label( 'topic' ),
+												learndash_get_custom_label_lower( 'lesson' ),
+												learndash_get_custom_label_lower( 'topic' )
+											),
+											'type'        => 'object',
+											'additionalProperties' => [
+												'description' => sprintf(
+													// translators: %s: singular topic label.
+													__( '%s post ID (e.g., "123")', 'learndash' ),
+													learndash_get_custom_label( 'topic' )
+												),
+												'type' => 'object',
+												'properties' => [
+													'sfwd-quiz' => [
+														'description' => sprintf(
+															// translators: %1$s: singular quiz label. %2$s: singular topic label.
+															__( '%1$s within this %2$s. Keys must be valid %3$s post IDs.', 'learndash' ),
+															learndash_get_custom_label( 'quiz' ),
+															learndash_get_custom_label_lower( 'topic' ),
+															learndash_get_custom_label_lower( 'quiz' )
+														),
+														'type'       => 'object',
+														'additionalProperties' => [
+															'description' => sprintf(
+																// translators: %s: singular quiz label.
+																__( '%s post ID (e.g., "123")', 'learndash' ),
+																learndash_get_custom_label( 'quiz' )
+															),
+															'type' => 'object',
+														],
+													],
+												],
+											],
+										],
+										'sfwd-quiz'  => [
+											'description' => sprintf(
+												// translators: %1$s: plural quiz label. %2$s: singular lesson label. %3$s: singular quiz label.
+												__( '%1$s directly within this %2$s. Keys must be valid %3$s post IDs.', 'learndash' ),
+												learndash_get_custom_label( 'quizzes' ),
+												learndash_get_custom_label_lower( 'lesson' ),
+												learndash_get_custom_label_lower( 'quiz' )
+											),
+											'type'        => 'object',
+											'additionalProperties' => [
+												'description' => sprintf(
+													// translators: %s: singular quiz label.
+													__( '%s post ID (e.g., "123")', 'learndash' ),
+													learndash_get_custom_label( 'quiz' )
+												),
+												'type' => 'object',
+											],
+										],
+									],
+								],
+							],
+							'sfwd-quiz'    => [
+								'description'          => sprintf(
+									// translators: %1$s: singular course label. %2$s: plural quiz label. %3$s: singular quiz label.
+									__( '%1$s %2$s structure. Keys must be valid %3$s post IDs.', 'learndash' ),
+									learndash_get_custom_label( 'course' ),
+									learndash_get_custom_label_lower( 'quizzes' ),
+									learndash_get_custom_label( 'quiz' )
+								),
+								'type'                 => 'object',
+								'required'             => false,
+								'additionalProperties' => [
+									'description' => sprintf(
+										// translators: %s: singular quiz label.
+										__( '%s post ID (e.g., "123")', 'learndash' ),
+										learndash_get_custom_label( 'quiz' )
+									),
+									'type'        => 'object',
+								],
+							],
+						],
 					),
 					'schema' => array( $this, 'get_public_item_schema' ),
 				)

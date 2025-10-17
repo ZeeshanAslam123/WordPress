@@ -74,6 +74,15 @@ class Template {
 	private $is_admin;
 
 	/**
+	 * Breakpoint pointer for the current template.
+	 *
+	 * @since 4.16.0
+	 *
+	 * @var string
+	 */
+	private $breakpoint_pointer;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 4.6.0
@@ -117,6 +126,32 @@ class Template {
 	}
 
 	/**
+	 * Gets a breakpoint pointer.
+	 *
+	 * @since 4.16.0
+	 *
+	 * @return string
+	 */
+	public function get_breakpoint_pointer(): string {
+		if ( empty( $this->breakpoint_pointer ) ) {
+			$this->breakpoint_pointer = Breakpoints::get_pointer();
+		}
+
+		return $this->breakpoint_pointer;
+	}
+
+	/**
+	 * Gets the template breakpoints JSON.
+	 *
+	 * @since 4.16.0
+	 *
+	 * @return string
+	 */
+	public function get_breakpoints_json(): string {
+		return (string) json_encode( [ 'breakpoints' => Breakpoints::get() ] );
+	}
+
+	/**
 	 * Gets the template content.
 	 *
 	 * @since 4.6.0
@@ -125,6 +160,17 @@ class Template {
 	 */
 	public function get_content(): string {
 		return $this->get_template_output( false, false );
+	}
+
+	/**
+	 * Gets the template context.
+	 *
+	 * @since 4.16.0
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function get_context(): array {
+		return $this->args;
 	}
 
 	/**
@@ -456,6 +502,20 @@ class Template {
 			$this->current_rendering_args,
 			$this
 		);
+	}
+
+	/**
+	 * Update a rendering arg in the current template hierarchy so that it cascades down.
+	 *
+	 * @since 4.16.0
+	 *
+	 * @param string $arg_name  Argument name.
+	 * @param mixed  $arg_value Argument value.
+	 *
+	 * @return void
+	 */
+	public function update_arg( string $arg_name, $arg_value ): void {
+		$this->current_rendering_args[ $arg_name ] = $arg_value;
 	}
 
 	/**

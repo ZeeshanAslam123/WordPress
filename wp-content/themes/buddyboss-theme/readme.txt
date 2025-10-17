@@ -1,8 +1,8 @@
 === BuddyBoss Theme ===
 Contributors: BuddyBoss
 Requires at least: 4.9.1
-Tested up to: 6.4.2
-Version: 2.5.20
+Tested up to: 6.8.1
+Version: 2.14.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -18,6 +18,361 @@ BuddyBoss Theme is a community theme for the BuddyBoss Platform.
 4. Upload the file 'buddyboss-theme-child.zip'
 
 == Changelog ==
+
+= 2.14.4 =
+* Bug: Core - Fixed an issue where theme updates were not being received
+
+= 2.14.3 =
+* Bug: Core - Fixed the issue with license controller initialization
+
+= 2.14.2 =
+* Bug: Core - Fixed the theme installation issue
+
+= 2.14.1 =
+* Bug: Core - Fixed the license rate limit error and proper error handling
+
+= 2.14.0 =
+* New Feature! Core - Implemented a new licensing system for BuddyBoss plugins and theme
+
+= 2.13.1 =
+* Bug: LearnDash - Fixed BuddyBoss Theme compatibility with LearnDash Modern UI templates to ensure lessons, topics, and courses display correctly
+
+= 2.13.0 =
+* New Feature! Activity - Added Featured Image above post content in activity and group posts, making feeds more visual and engaging
+* New Feature! Activity - Added support for Post Titles and H3/H4 text formatting in activity feeds, helping communities stay organized and posts easier to read
+
+= 2.12.0 =
+* Bug: Core - Fixed an issue where SEO plugin breadcrumbs were displayed on the homepage
+* Bug: LifterLMS - Resolved pagination UI issues in course listings caused by ReadyLaunch
+* Bug: WooCommerce - Updated WooCommerce template files in Theme to remove outdated template file notice
+
+= 2.11.0 =
+* Bug: Styling - Fixed alignment, spacing, and text clipping issues in Buddypanel sub-menus and sections
+
+= 2.10.0 =
+* Bug: Core -  Fixed accessibility issues across Platform and Theme for improved usability
+* Bug: Core - Fixed PHP 8.4 warnings and removed extra database queries for better stability and performance
+* Bug: LearnDash - Fixed the LearnDash Profile block not collapsing on mobile small screens
+* Bug: LifterLMS - Fixed the extra menu icon showing on the LifterLMS Dashboard page in mobile view
+* Bug: Styling - Resolved UI issues across all WC Vendors plugin pages to ensure full compatibility with the BuddyBoss Theme
+* Bug: WooCommerce - Fixed WooCommerce checkout form colors not applying theme options
+
+= 2.9.20 =
+* Bug: Core - Fixed a fatal error that occurred on the Themes and Plugins pages when activating the BuddyPress plugin while the BuddyBoss theme was active
+* Bug: Core - Fixed broken cross (X) icon UI in tag selectors across multiple screens, ensuring proper display even with the Modern Events Calendar plugin active
+* Bug: Core - Fixed critical accessibility issues, including missing labels and empty anchor tags
+* Bug: Forums - Fixed an issue where lead discussion content was missing on single discussion pages, ensuring compatibility with WP 6.8+ query changes.
+* Bug: Forums - Fixed issue where discussions couldn't be posted with only a title and media when GIFs were disabled in forum settings
+* Bug: LearnDash - Fixed LearnDash button styling issue where "Mark Complete" and similar buttons were not inheriting primary button colors from BuddyBoss theme options
+* Bug: Login - Fixed checkbox layout issue on the login page caused by conflict between BuddyBoss "Private Website" setting and Wordfence 2FA functionality
+* Bug: Login - Fixed layout issue where Cloudflare Turnstile was partially hidden and misaligned on the BuddyBoss custom login page
+* Bug: Menus - Fixed issue where unread notification/message counts were not displayed in second-level profile dropdown menus when a custom menu location was assigned
+* Bug: Messages - Added support for URL embed preview in messaging
+* Bug: The Event Calendar - Fixed layout issues on Events Calendar pages where featured images and calendar styles were breaking the page display
+
+= 2.9.10 =
+* Bug: LifterLMS - Fixed an issue where the LifterLMS sidebar (lesson list) in focus mode did not scroll independently from the main content
+* Bug: LifterLMS - Fixed missing tooltips for locked lessons in the LifterLMS syllabus when using the BuddyBoss theme
+
+= 2.9.00 =
+* Bug: Header - Fixed issue where the top row of member cards was partially hidden under the sticky header after pagination in the Members directory
+* Bug: WooCommerce - Resolved outdated WooCommerce template notice and fixed show/hide password icons to align with theme styling
+
+= 2.8.91 =
+* Bug: Elementor - Fixed an issue where "Save as Template" in Elementor failed when Cloud Templates feature was active
+
+= 2.8.90 =
+* Bug: Core - Fixed incorrect URL in the Manual Connect section on the License Keys admin page
+
+= 2.8.80 =
+* Bug: Notifications - Fixed an issue where user hover info was not displaying in notifications after sending a connection request
+
+= 2.8.70 =
+* New Feature! – Added Activity Topics for categorizing and filtering posts in activity feeds and groups
+* Bug: Styling - Fixed an issue where Stripe card fields inherited the content background color on the checkout page
+
+= 2.8.60 =
+* Bug: LifterLMS - Fixed issue with LifterLMS "Write a Review" feature preventing reviews from being saved
+
+= 2.8.51 =
+* Bug: Groups - Fixed an issue where regular group post activity headers incorrectly displayed post content instead of showing only basic activity details
+
+= 2.8.50 =
+* Bug: Core - Fixed Vulnerability issues
+* Bug: Zoom - Fixed an issue where the Meeting and Webinar pages were broken when the Group navigation menu was set to vertical
+
+= 2.8.41 =
+* Bug: Core - UX Improvements for “Full Header” Option
+
+= 2.8.40 =
+* Enhancement: Core - Added a new full-width header style that appears above the Buddy Panel
+* Bug: Learndash - Fixed a UI issue with the Course and Material tabs
+
+= 2.8.30 =
+* Bug: Core - Resolved an issue where font styles in the typography settings were not being applied correctly
+* Bug: Learndash - Resolved an error occurring on the course sidebar with LearnDash plugin version 4.21.0
+* Bug: Learndash - Resolved an issue where the search bar in the LearnDash Profile Gutenberg block was not working after the latest LearnDash update
+
+= 2.8.20 =
+* Bug: Activity - Improved the Activity Filter by hiding the dropdown when only one option is available, displaying it as a label instead
+* Bug: Core - Updated “Select2” and “jQuery Validation” libraries in the latest BuddyBoss Plugin/Theme to ensure compatibility and improved functionality
+
+= 2.8.10 =
+* Enhancement: Activity - Added hover pop-ups for improved interaction—hovering over a user's avatar now displays a user pop-up, and hovering over a group link in the feed shows a group pop-up
+* Enhancement: Activity - Enhanced the user experience with improved activity sorting and filtering functionality
+* Bug: Activity - Fixed an issue where "Pin to Feed" and "Turn off commenting" options were missing from the activity more menu after the latest update
+* Bug: Activity - Resolved a count alignment issue in the Activity Directory on mobile view
+* Bug: Core - Resolved UI issues with error notices on the account settings screen when using Theme Style v1.0
+* Bug: LifterLMS - Resolved multiple UI and styling issues related to LifterLMS for a more consistent and polished user experience
+
+= 2.8.01 =
+* Bug: Activity - Fixed an issue where "Pin to Feed" and "Turn off commenting" options were missing from the activity more menu after the latest update
+
+= 2.8.00 =
+* Enhancement: WPML - Added compatibility to ensure related posts are displayed in the same language as the current post.
+* Enhancement: Added new settings to allow admins to enable or disable member and group counts on the Members and Groups directory pages
+* Bug: Core - Fixed an error that occurred when changing the domain on a live site or migrating the live site to staging
+* Bug: Event Calendar Pro - Fixed an issue where maps were not displaying on the Events page
+* Bug: Elementor - Fixed an issue where the edit and delete activity options were not working in the Elementor Activity widget
+* Bug: Groups - Fixed an issue where the "Create a Group" button displayed the wrong background colour on hover
+* Bug: Tutor LMS - Fixed a side area UI issue on Tutor LMS Single Bundle pages
+* Bug: Lifter LMS - Fixed a translation issue with the Lifter LMS
+* Bug: Tutor LMS - Fixed a broken header issue on Tutor LMS Single Bundle pages for Course Bundles
+
+= 2.7.91 =
+* Bug: Learndash - Fixed an issue where the expand/toggle option for lessons and other elements was not working after the latest LearnDash update
+
+= 2.7.90 =
+* Bug: WooCommerce - Updated WooCommerce templates
+
+= 2.7.80 =
+* Bug: Core - Fixed an issue where the hover effect was inconsistent across different displays
+* Bug: Translations - Fixed a bug causing “PHP Notice” in the debug log after WordPress 6.7 and 6.7.1 updates
+
+= 2.7.70 =
+* Bug: Core - Fixed color functionality and spacing issues in the WordPress Customizer when using a default theme
+* Bug: Forum - Fixed an issue where the forum description with HTML <br> tags was not displaying properly in the backend
+
+= 2.7.60 =
+* Bug: Activity - Fixed the Activity Graph UI issue with the “More Options” dropdown in media elements
+* Bug: Blog - Fixed an issue by changing the blog comments form’s h2 tags to div tags for improved structure
+* Bug: Core - Fixed a hover effect UI issue for the “View as/Back to Admin” button on the Connection Request tab
+* Bug: Courses - Fixed an alignment issue with the loading icon on the course directory page for LifterLMS and LearnDash
+* Bug: Learndash - Fixed an issue where BuddyBoss templates were unavailable when the LearnDash plugin was deactivated
+* Bug: Learndash - Fixed the layout issue of the “Pick Where You Left Off” widget on the dashboard page
+* Bug: Members - Fixed a UI issue with the “More Options” dropdown on the Member Listing page
+* Bug: Messages - Fixed an issue with extra spacing in the “More Options” menu on the messaging page in mobile view
+* Bug: Styling - Fixed an issue where the box style for icon file export displayed incorrectly when the icon style was set to filled
+* Bug: Styling - The last element of the title bar menu was being partially hidden under the Buddy bar when the buddy bar was expanded
+* Bug: WooCommerce - Fixed an issue by updating WooCommerce templates for compatibility with the BuddyBoss Theme
+
+= 2.7.51 =
+* Bug: LearnDash - Fixed an issue where the Forced Lesson Timer setting in LearnDash was not working on both the web and app
+
+= 2.7.50 =
+* Bug: Activity - Fixed a UI issue in the “More Options” dropdown for documents in the Activity Feed
+* Bug: Activity - Fixed a UI issue with the line graph for threaded level comments on iOS devices
+* Bug: Activity - Fixed an issue where a bar appeared on the left side when hovering over the ellipsis on media files in threaded comments, excluding the first-level thread
+* Bug: Core - Fixed an issue where the BuddyBoss Logout menu in the profile dropdown was not working in the backend
+* Bug: Elementor - Fixed an issue where the Elementor Course Grid displayed a total course count that included courses in draft status
+* Bug: Elementor - Resolved BuddyBoss theme compatibility issue with the latest Elementor, fixing the deprecated function error
+* Bug: Forum - Fixed a border display issue on replies after reporting a forum discussion as spam
+* Bug: GamiPress - Fixed an alignment issue with the GamiPress widget in the widgets section
+* Bug: Learndash -  Fixed an issue where the LearnDash logo in focus mode did not display correctly when Header Style 3 was set
+* Bug: Profiles - Fixed alignment issue for the cover photo button on the profile in mobile view
+* Bug: Profiles - Fixed an issue where activity profile thumbnail sizes were inconsistent with other activity profile images
+* Bug: WooCommerce - Fixed the Checkout block style to align with the BuddyBoss Theme
+
+= 2.7.40 =
+* Enhancement: Core - Updated all “View Tutorial” links across the platform to open in a new tab
+
+= 2.7.30 =
+* New Feature: Social login compatibility for Apple, Google, Linkedin, Facebook & X
+* Enhancement: LifterLMS - Updated BuddyBoss styling for compatibility with LifterLMS 7.8 Student Dashboard layout changes
+
+= 2.7.21 =
+* Bug: Core - Resolved compatibility issues with the BuddyBoss login page logo and customizer on WordPress 6.7
+
+= 2.7.20 =
+* Bug: Header - Fixed a UI issue with the sticky header in WP Project Manager
+* Bug: LifterLMS - Fixed a UI issue on lesson pages
+* Bug: Styling - Fixed a UI issue in the Product tab on the Instructor dashboard from the Instructor Role Plugin
+* Bug: WooCommerce - Fixed UI issues on the Checkout page, improving the appearance of the card field
+* Bug: WooCommerce - Fixed WooCommerce plugin issue showing outdated templates in BuddyBoss Theme
+
+= 2.7.10 =
+* Enhancement: LifterLMS - Enhanced Elementor Dashboard Template for improved compatibility with LifterLMS
+* Bug: Elementor - Fixed styling/UI issue with the Elementor Group widget when Flexbox is activated
+
+= 2.7.00 =
+* Bug: Activity - Resolved UI issues related to link previews when used Polls
+* Bug: Courses - Resolved the auto-scroll issue on the Courses list page
+
+= 2.6.90 =
+* Enhancement: Coding Standards - Fixed all warnings and errors for PHP versions 7.3 to 8.3
+* Enhancement: Core - Improved BuddyBoss License Validation System
+* Bug: Courses - Fixed the issue where reloading pagination on the Course tab within the Group page resulted in a 404 error
+* Bug: Learndash - Fixed PHP warnings
+* Bug: Messages - Fixed the issue where the messaging UI in mobile view displayed a drag option, causing incorrect display
+* Bug: Styling - Resolved UI issues in the Mutual Connection tab
+
+= 2.6.80 =
+* New Feature! - In this update we have introduced Polls. Polls is a highly requested feature that allows Admins and group Owners & Moderators make use use of Polls either in the main activity feed or group activity feed.
+
+= 2.6.70 =
+* Bug: Core - The fatal error has now been resolved when deleting the active_plugins from the Database
+
+= 2.6.60 =
+* Bug: Activity - Activity replies had broken graphs in nested replies
+* Bug: Core - The BuddyBoss Theme Options screen displayed UI issues after translating the file with Poedit
+* Bug: Core - Turn off the notification icon on a single post page with the attached media file was not aligning correctly
+* Bug: Core - Updated the Twitter icon with the X icon for the floating social share
+* Bug: Forums - The Discard Draft button had no hover effect in Forum discussions and replies
+* Bug: GIF picker was being cut off in mobile view for activity feed pages
+* Bug: Stying - Updated outdated template versions of BuddyBoss Theme with Paid Membership Pro
+* Bug: Styling - BuddyPanel was glitching on load when icon sizes were increased
+* Bug: Styling - Design issues updated in the Single Group page when the Group Avatar and Cover image was disabled
+* Bug: Styling - Profile page sub navigation options dropdown had spacing issues in Theme 1.0
+* Bug: WooCommerce - Outdated Woocommerce templates now updated
+
+= 2.6.50 =
+* Enhancement: Styling - We have updated to show a modal instead of dropdown for ellipsis in responsive view across the network
+* Bug: Activity - Multilevel activity replies graph is now displayed for betting viewing in the mobile view
+* Bug: Activity - Text wrapping for link previews in the activity feed was breaking words to move to the next line instead of moving a whole word t the next line for a more readable experience
+* Bug: Activity - The large space above a Gif post has now been reduced for better post styling
+* Bug: Core - Member profile tabs were not clickable on mobile devices
+* Bug: Core - Updated syntax in the invite-anyone.php file
+* Bug: Elementor - The delete and edit action buttons for activity comments and replies in the Elementor BuddyBoss Activity widget can now be enabled/disabled
+* Bug: LearnDash - Course locked tooltip text was not displayed properly when a user tried to visit a locked course
+* Bug: Styling - Adjusting the widget size was not working correctly
+* Bug: Styling - Discussion tab left margin UI issue is fixed
+* Bug: Styling - Removed the extra spacing after Group Visibility from the Group cards
+* Bug: Styling - Updated the border radius display on reply lists for forum discussions
+* Bug: WooCommerce - The WooCommerce template was showing outdated templates when using the BuddyBoss Theme
+
+= 2.6.40 =
+* Bug: Core - Updated the meta tags in the Buddyboss theme to fix accessibility issues
+* Bug: Core - Aria-labels added to Search, Messages, Notifications and Cart so that screen readers can read more accurately
+* Bug: Blog - Related blog posts was showing a data base error
+
+= 2.6.30 =
+* Bug: Email Invites - Users can now send multiple invites multiple times to a single email address
+* Bug: Styling - Removed the vertical grey line showing on the GIF picker box
+* Bug: Styling - Updated the Likes count text on Mobile/Tablet devices UI for improved viewing
+
+= 2.6.20 =
+* Bug: Blog - When using the shortcode for profile or group type, the grid did not fill the container fully
+* Bug: LearnDash - Course Progress did not update on the frontend if changed in the backend
+* Bug: LearnDash - The default LearnDash colors were affecting the LearnDash course page content and was displaying different colors set from BuddyBoss Theme instead
+* Bug: Styling - The select box on the Quiz settings from LearnDash was displaying as large size
+* Bug: Translations - When Switching Language using TranslatePress was affecting the display tabs on both Group and User Profile Pages
+* Bug: TutorLMS - The product cart was not functioning correctly when using WooCommerce with TutorLMS
+
+= 2.6.11 =
+* Bug: Performance - When page load is set to 1 this caused the members page in groups to stop loading
+
+= 2.6.10 =
+* Enhancement: Core - Buddyboss default posts description have all been checked and updated to show correct information in the post
+* Bug: Activity - The reactions displayed on the mobile view were overlapping on the displayed screen
+* Bug: Blog - Related post slider on single blog page was not working if language was using left-to-right language such as Arabic
+* Bug: Core - The console error is now fixed when viewing a user profile from the WP dashboard
+* Bug: Core - When resetting your password, on the second confirmation password entry the eye icon to view the password was hidden
+* Bug: Elementor - The color set on the WordPress menu using the Elementor editor was not being applied on the BuddyBoss Theme
+* Bug: Elementor - The profile dropdown redirected to the user profile page when using the page transition and pre-loader from the Elementor plugin
+* Bug: Groups - The group navigation menus are now working in mobile responsive view when the group cover image is disabled, and the Header style is set to centered
+* Bug: Styling - Blockquote style is now showing in the message even if the Forum component is deactivated
+* Bug: Styling - List/Grid view button was overlapping the comment button in the blog post
+* Bug: Styling - Medium editor toolbar and media buttons overlap in forum discussions
+* Bug: Styling - Removed the gap showing on the graph from the nested comment thread
+* Bug: Styling - The add to cart/view cart button displayed a shadow when the focus state was enabled
+* Bug: Styling - The spacing from the uploaded image or document on the activity post page was not perfectly even
+* Bug: Theme options - Some Custom Typography font choices were not displaying correctly in the preview screen
+* Bug: WooCommerce -Deleting a Product from cart would close the cart dropdown automatically
+* Bug: Zoom - The Zoom setup screen toggle pass/secret buttons inside input fields display borders were causing UI issues
+
+= 2.6.00 =
+* New Feature! Admins and Groups organizers and moderators now have the ability to use scheduling posts
+* Bug: Core - 'Get post' query was being called for all frontend and backend pages, now is only being called for required screens only
+* Bug: Core - Defender Pro was showing the BuddyBoss theme as malware
+* Bug: Styling - Improved the UI to handle some inconsistencies for the activity comment forms when viewing in mobile web view
+* Bug: Styling - The background and text color on the Calendar widget was not applied on the frontend
+* Bug: Styling - While on Theme 2.0, the loading style of the Group invite and canceling a pending group invite was not using the proper styling
+* Bug: TutorLMS - The coupon code button was not working properly when purchasing TutorLMS paid courses
+* Bug: WooCommerce - WooCommerce templates were showing outdated when using BuddyBoss plugin and theme
+
+= 2.5.90 =
+* Enhancement: Groups - The group feed displays the group avatar and the users avatar overlayed we have removed the group avatar from posts within said groups
+* Bug: Activity - Elementor Activity feed widget would not allow the upload of gif images
+* Bug: Elementor - The Course Activity widget for LifterLMS was not working correctly
+* Bug: Forums - Shortcode [bbp-forum-form] was not loading properly when we put it inside the Text Editor element in Elementor
+* Bug: Menus - Long Profile Sub Menus were being hidden due to an error showing not scrollable
+* Bug: Styling - The username UI breaks in the activity widgets when we have a long name or profile types
+* Bug: Styling - Threading graph lines removed after 3 threading levels deep
+
+= 2.5.81 =
+* Enhancement: Activity - Made small UI adjustments to the new activity pop-up modal
+
+= 2.5.80 =
+* Bug: Core - Duplicated pagination displayed when page break block was being used in lesson/topic/quiz pages
+* Bug: Core - Removed the update_option query from running on the frontend
+* bug: learnDash - Course reviews plugin was breaking the learnDash course page layout
+* Bug: Styling - Menu and buttons would show a box shadow around the button when hovering over
+* Bug: Styling - TikTok link preview would not show the full embed preview
+* Bug: Styling - UI breaks were found when viewing profile or group pages on the mobile website if the profile group menu settings were set to vertical
+* Bug: WooCommerce - Incompatibility issue when page contained the [woocommerce_checkout] shortcode, page would constantly refresh
+
+= 2.5.71 =
+* Bug: Core - Mark all as read link was not showing instantly when opening the Notification dropdown
+
+= 2.5.70 =
+* New Feature! - Close comments allows post authors and admins to turn of commenting on any specific post which gives users and admins another great way to maintain control and moderation
+* New Feature! - To make the activity feed more streamlined we have introduced the View more comments and View more replies which will allow users to expand the threads they are interested in rather than showing the full expanded user interactions
+* New Feature! - We have updated our Activity feed design to now open selected posts into its own modal which provides a more focused experience for users when interacting with posts
+* New Feature! - Users now have the ability to Turn off Notifications on specific posts they have interacted with that they no longer have interest in
+* Enhancement: Performance - Converted the current phase loading approach with a single request by default to improve performance
+* Bug: Core - When the BuddyBoss theme, Learndash plugin, and POST SMTP plugin were activated, the email log page of the POST SMTP plugin gave a fatal error
+* Bug: LearnDash - Switching from grid to list view from the LearnDash course grid using the LearnDash Course List block was showing a JS error
+* Bug: LearnDash - When shortcode [ld_course_list] was used in the lesson or Learndash groups page it would break the page
+* Bug: Styling - A black border was appearing on the compose messaging area
+* Bug: Styling - The duplicate ellipses from the Elementor Header has now been updated showing only one ellipses
+
+= 2.5.60 =
+* Bug: Core - Addressed conflicts with using Beaver Builder standard v2.8.0.3 with Buddyboss theme
+* Bug: Core - WPML language switcher icon/text added to menus on a multilingual website using LearnDash will now display and work correctly
+* Bug: LearnDash - Learndash Quiz shortcode was not being supported within the BuddyBoss theme and was breaking the single posts page UI
+* Bug: WooCommerce - Removed the notice of the outdated templates when using the WooCommerce plugin with BuddyBoss Theme
+
+= 2.5.51 =
+* Bug: Core - When disabling the Group component in BuddyBoss settings, when then visiting the photos tab in the user profile, this was causing a fatal error
+
+= 2.5.50 =
+* New Feature! - We now officially support Google reCAPTCHA, this is a great feature to help mitigate risk of bot and spam accounts being created and login in to your site
+* Enhancement: Core - Remove Google Font API Key dependency
+* Bug: Core - Fatal error was showing when visiting the membership account page
+
+
+= 2.5.40 =
+* New Feature! - The Profile Avatar User Initials is a new setting to allow site owners to set the default user avatar to use display name initials with different background colors. We have also added this feature to group avatars.
+* Enhancement: Core - Code refactoring to improve performance within the Activity Feed with object caching support
+* Enhancement: Core - Updated Redux Framework
+* Enhancement: Groups - Added a search option within Manage Group - Members page to search members easier
+* Enhancement: LearnDash - The sidebar on LearnDash courses content plus icon logic when completing course content has been updated with LearnDash version 4.10.2
+* Bug: Custom Development - A deprecated error was showing when updating or creating new LearnDash groups while social group integration was enabled
+* Bug: LearnDash - Course counter in the Course List page was not displaying accurately
+
+= 2.5.30 =
+* Bug: Core - The admin email confirmation page was displaying UI issues for buttons when changing WP language to Deutsch
+* Bug: Elementor - Draft courses, lessons and topics were showing in the Course Activity widget within Elementor
+* Bug: Elementor - Images added on the Dashboard Grid block within Elementor were showing blurry lower quality images
+* Bug: Elementor - Switching the view for the directory layout would not save the logic in the elementor widget for LearnDash and LifterLMS course Grid
+* Bug: Forums - In mobile view users were unable to view the edit and reply options for discussions on comments
+* Bug: Forums - URL link embedded into a forum page would not show
+* Bug: LifterLMS - Navigation buttons had UI issues for lessons with long titles
+* Bug: Styling - Notification settings tabs under the user Account Settings page did not display correctly
+* Bug: Styling - The Buddypanel overlaped the single post pages floating social share
+
+= 2.5.21 =
+* Hotfix: When adding 'woocommerce_checkout' shortcode in Elementor’s editor widget the checkout widget UI looked broken on the front end
 
 = 2.5.20 =
 * Bug: Core - When switching languages in WordPress some words were not translated from backend to frontend due to translation path issues

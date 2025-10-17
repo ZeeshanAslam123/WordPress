@@ -2,7 +2,7 @@
 /**
  * LearnDash Admin Import Handler.
  *
- * @since   4.3.0
+ * @since 4.3.0
  *
  * @package LearnDash
  */

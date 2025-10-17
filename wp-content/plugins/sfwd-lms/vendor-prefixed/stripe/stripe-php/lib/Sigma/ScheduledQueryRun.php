@@ -21,10 +21,6 @@ namespace StellarWP\Learndash\Stripe\Sigma;
  * @property string $sql SQL for the query.
  * @property string $status The query's execution status, which will be <code>completed</code> for successful runs, and <code>canceled</code>, <code>failed</code>, or <code>timed_out</code> otherwise.
  * @property string $title Title of the query.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class ScheduledQueryRun extends \StellarWP\Learndash\Stripe\ApiResource
 {

@@ -14,7 +14,7 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property int $created Time at which the object was created. Measured in seconds since the Unix epoch.
  * @property string $currency Three-letter <a href="https://www.iso.org/iso-4217-currency-codes.html">ISO currency code</a>, in lowercase. Must be a <a href="https://stripe.com/docs/currencies">supported currency</a>.
  * @property string $description An arbitrary string attached to the object. Often useful for displaying to users.
- * @property null|\StellarWP\Learndash\Stripe\Collection<\Stripe\Treasury\TransactionEntry> $entries A list of TransactionEntries that are part of this Transaction. This cannot be expanded in any list endpoints.
+ * @property null|\StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Treasury\TransactionEntry> $entries A list of TransactionEntries that are part of this Transaction. This cannot be expanded in any list endpoints.
  * @property string $financial_account The FinancialAccount associated with this object.
  * @property null|string $flow ID of the flow that created the Transaction.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $flow_details Details of the flow that created the Transaction.
@@ -22,10 +22,6 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property string $status Status of the Transaction.
  * @property \StellarWP\Learndash\Stripe\StripeObject $status_transitions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Transaction extends \StellarWP\Learndash\Stripe\ApiResource
 {

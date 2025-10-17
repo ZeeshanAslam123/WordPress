@@ -33,10 +33,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|string $unit_label A label that represents units of this product. When set, this will be included in customers' receipts, invoices, Checkout, and the customer portal.
  * @property int $updated Time at which the object was last updated. Measured in seconds since the Unix epoch.
  * @property null|string $url A URL of a publicly-accessible webpage for this product.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Product extends ApiResource
 {
@@ -59,7 +55,7 @@ class Product extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\SearchResult<\Stripe\Product> the product search results
+     * @return \StellarWP\Learndash\Stripe\SearchResult<\StellarWP\Learndash\Stripe\Product> the product search results
      */
     public static function search($params = null, $opts = null)
     {
@@ -77,7 +73,7 @@ class Product extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\ProductFeature> the list of product features
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\ProductFeature> the list of product features
      */
     public static function allFeatures($id, $params = null, $opts = null)
     {

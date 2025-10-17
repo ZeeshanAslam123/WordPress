@@ -26,10 +26,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|string $setup_intent ID of the SetupIntent that this ConfirmationToken was used to confirm, or null if this ConfirmationToken has not yet been used.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $shipping Shipping information collected on this ConfirmationToken.
  * @property bool $use_stripe_sdk Indicates whether the Stripe SDK is used to handle confirmation flow. Defaults to <code>true</code> on ConfirmationToken.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class ConfirmationToken extends ApiResource
 {

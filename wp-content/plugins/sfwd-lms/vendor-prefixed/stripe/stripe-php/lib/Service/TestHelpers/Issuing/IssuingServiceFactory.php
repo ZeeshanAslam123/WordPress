@@ -11,10 +11,6 @@ namespace StellarWP\Learndash\Stripe\Service\TestHelpers\Issuing;
  * @property CardService $cards
  * @property PersonalizationDesignService $personalizationDesigns
  * @property TransactionService $transactions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class IssuingServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

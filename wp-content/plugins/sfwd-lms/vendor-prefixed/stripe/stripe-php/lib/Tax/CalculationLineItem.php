@@ -16,10 +16,6 @@ namespace StellarWP\Learndash\Stripe\Tax;
  * @property string $tax_behavior Specifies whether the <code>amount</code> includes taxes. If <code>tax_behavior=inclusive</code>, then the amount includes taxes.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject[] $tax_breakdown Detailed account of taxes relevant to this line item.
  * @property string $tax_code The <a href="https://stripe.com/docs/tax/tax-categories">tax code</a> ID used for this resource.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class CalculationLineItem extends \StellarWP\Learndash\Stripe\ApiResource
 {

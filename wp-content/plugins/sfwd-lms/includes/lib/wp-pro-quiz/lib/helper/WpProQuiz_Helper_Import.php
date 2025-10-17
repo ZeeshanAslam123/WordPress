@@ -340,12 +340,10 @@ class WpProQuiz_Helper_Import {
 					if ( ! empty( $question_post_id ) ) {
 						$this->import_questions_old_to_new_ids[ $old_question_post_id ] = $question_post_id;
 
-						update_post_meta( $question_post_id, 'points', $question->getPoints() );
-						update_post_meta( $question_post_id, 'question_type', $question->getAnswerType() );
-						update_post_meta( $question_post_id, 'question_pro_id', absint( $question->getId() ) );
+						learndash_proquiz_sync_question_fields( $question_post_id, $question->getId() );
 
 						learndash_update_setting( $question_post_id, 'quiz', $quiz_post_id );
-						add_post_meta( $question_post_id, 'ld_quiz_id', $quiz_post_id );
+						learndash_update_setting( $question_post_id, 'ld_quiz_id', $quiz_post_id );
 
 						$quiz_questions[ $question_post_id ] = absint( $question->getId() );
 					}

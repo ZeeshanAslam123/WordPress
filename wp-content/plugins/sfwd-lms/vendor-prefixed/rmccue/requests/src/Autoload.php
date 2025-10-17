@@ -1,17 +1,13 @@
 <?php
 /**
- * Autoloader for Learndash_Core_Requests for PHP.
+ * Autoloader for Requests for PHP.
  *
  * Include this file if you'd like to avoid having to create your own autoloader.
  *
- * @package Learndash_Core_Requests
+ * @package Requests
  * @since   2.0.0
  *
  * @codeCoverageIgnore
- *
- * @license ISC
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 
 namespace StellarWP\Learndash\WpOrg\Requests;

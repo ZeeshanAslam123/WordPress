@@ -62,7 +62,7 @@ if ( ! empty( $lessons ) || ! empty( $quizzes ) ) :
 	 */
 	?>
 
-	<div class="234234234234 <?php echo esc_attr( $table_class ); ?>" id="<?php echo esc_attr( 'ld-item-list-' . $course_id ); ?>" data-ld-expand-id="<?php echo esc_attr( 'ld-item-list-' . $course_id ); ?>" data-ld-expand-list="true">
+	<div class="<?php echo esc_attr( $table_class ); ?>" id="<?php echo esc_attr( 'ld-item-list-' . $course_id ); ?>" data-ld-expand-id="<?php echo esc_attr( 'ld-item-list-' . $course_id ); ?>" data-ld-expand-list="true">
 		<?php
 		/**
 		 * Fires before the course listing.

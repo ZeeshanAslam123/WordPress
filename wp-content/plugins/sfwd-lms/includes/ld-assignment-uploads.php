@@ -195,6 +195,7 @@ function learndash_get_user_assignments( $post_id, $user_id, $course_id = 0, str
  * @since 2.1.0
  * @since 4.10.3 Assignments have a learndash_version meta field to help distinguish between old and new assignments.
  *            Added the `$file_uploaded_name` parameter.
+ * @since 4.24.0 Added the `uploaded_file_name` meta field. The assignment post titles are based on the originally uploaded file names only now, they used to be "Assignment {filename}".
  *
  * @param int    $post_id            Post ID.
  * @param string $fname              Assignment file name.
@@ -235,17 +236,18 @@ function learndash_upload_assignment_init( $post_id, $fname, string $file_upload
 	// Once we have a chance to refactor the whole assignment upload process, we should change it.
 
 	$assignment_meta = array(
-		'file_name'         => $fname,
-		'file_link'         => $dest,
-		'user_name'         => $username,
-		'disp_name'         => $display_name, // cspell:disable-line.
-		'file_path'         => rawurlencode( $file_path . $fname ),
-		'user_id'           => $current_user->ID,
-		'lesson_id'         => $post->ID,
-		'course_id'         => $course_id,
-		'lesson_title'      => $post->post_title,
-		'lesson_type'       => $post->post_type,
-		'learndash_version' => LEARNDASH_VERSION,
+		'course_id'          => $course_id,
+		'disp_name'          => $display_name,                         // cspell:disable-line.
+		'file_link'          => $dest,
+		'file_name'          => $fname,
+		'file_path'          => rawurlencode( $file_path . $fname ),
+		'learndash_version'  => LEARNDASH_VERSION,
+		'lesson_id'          => $post->ID,
+		'lesson_title'       => $post->post_title,
+		'lesson_type'        => $post->post_type,
+		'uploaded_file_name' => $file_uploaded_name, // Added in v4.24.0.
+		'user_id'            => $current_user->ID,
+		'user_name'          => $username,
 	);
 
 	$points_enabled = learndash_get_setting( $post, 'lesson_assignment_points_enabled' );
@@ -255,11 +257,7 @@ function learndash_upload_assignment_init( $post_id, $fname, string $file_upload
 	}
 
 	$assignment = array(
-		'post_title'   => sprintf(
-			// translators: placeholder: assignment file title.
-			__( 'Assignment %s', 'learndash' ),
-			sanitize_text_field( $file_uploaded_name )
-		),
+		'post_title'   => $file_uploaded_name,
 		'post_type'    => learndash_get_post_type_slug( 'assignment' ),
 		'post_status'  => 'publish',
 		'post_content' => '', // The content is added dynamically.
@@ -421,6 +419,8 @@ function learndash_fileupload_process( $uploadfiles, $post_id ) {
 
 				$file_tmp = $uploadfiles['tmp_name'][ $key ];
 
+				$original_uploaded_filename = sanitize_text_field( $uploadfiles['name'][ $key ] );
+
 				// clean filename.
 				$filename = learndash_clean_filename( $uploadfiles['name'][ $key ] );
 
@@ -511,7 +511,7 @@ function learndash_fileupload_process( $uploadfiles, $post_id ) {
 				/**
 				 * Add upload meta to database
 				 */
-				learndash_upload_assignment_init( $post_id, $filename, $file_uploaded_name );
+				learndash_upload_assignment_init( $post_id, $filename, $original_uploaded_filename );
 
 				$file_desc             = array();
 				$file_desc['filename'] = $filename;
@@ -526,6 +526,7 @@ function learndash_fileupload_process( $uploadfiles, $post_id ) {
 
 /**
  * Returns whether a lesson/topic supports assignment uploads.
+ * Warning: It's a candidate for deprecation, use `Has_Assignments::supports_assignments()` instead.
  *
  * @since 2.1.0
  *
@@ -663,6 +664,7 @@ function learndash_assignment_mark_approved( $assignment_id ) {
 
 /**
  * Gets assignments approval status.
+ * Warning: It's a candidate for deprecation, use `Assignment::is_approved()` instead.
  *
  * @since 2.1.0
  *
@@ -853,6 +855,7 @@ function learndash_register_assignment_upload_type() {
 			'delete_post'            => 'delete_assignment',
 			'edit_published_posts'   => 'edit_published_assignments',
 			'delete_published_posts' => 'delete_published_assignments',
+			'create_posts'           => 'do_not_allow', // Remove the "Add New" button from the admin bar.
 		),
 		'map_meta_cap'          => true,
 	);
@@ -1044,6 +1047,8 @@ function learndash_get_assignment_points_awarded( $assignment_id ) {
 /**
  * Checks if the points are enabled for the assignment.
  *
+ * Warning: This function is a candidate for deprecation. Use `Has_Assignments::has_assignment_points_enabled()` instead.
+ *
  * @param int|WP_Post $assignment The assignment `WP_Post` object or ID.
  *
  * @return boolean Returns true if the points are enabled otherwise false.
@@ -1068,38 +1073,48 @@ function learndash_assignment_is_points_enabled( $assignment ) {
 /**
  * Converts the file size shorthand to bytes.
  *
+ * @since 2.5.0
+ * @since 4.24.0 Better support for 32bit systems.
+ *
  * @param int|string $val Optional. Shorthand notation for file size like 1024M. Default 0.
  *
  * @return int Returns the bytes after converting from shorthand.
  */
 function learndash_return_bytes_from_shorthand( $val = 0 ) {
-
-	$units = array(
-		'KB' => 1,
-		'MB' => 2,
-		'GB' => 3,
-		'K'  => 1,
-		'M'  => 2,
-		'G'  => 3,
-		'B'  => 0,
-	);
-
-	if ( ! empty( $val ) ) {
-		$val = trim( $val );
-
-		foreach ( $units as $unit_notation => $unit_multiplier ) {
-			$val_unit = substr( $val, -( strlen( $unit_notation ) ) );
-			if ( strtoupper( $val_unit ) == $unit_notation ) {
-				$val_number = substr( $val, 0, strlen( $val ) - strlen( $unit_notation ) );
-
-				$val_bytes = $val_number * pow( 1024, $unit_multiplier );
-
-				return $val_bytes;
-			}
-		}
+	if ( is_numeric( $val ) ) {
+		// Pure numeric input, assume it's already bytes.
+		return Cast::to_int( (float) $val > PHP_INT_MAX ? PHP_INT_MAX : $val );
 	}
 
-	return $val;
+	if (
+		is_string( $val )
+		&& preg_match( '/([\d\.]+)\s*([kmg]?b?)/i', $val, $matches ) // cspell:disable-line -- Regex.
+	) {
+		$units = [
+			'K' => 1,
+			'M' => 2,
+			'G' => 3,
+			'B' => 0,
+		];
+
+		$number = (float) $matches[1];
+		$unit   = strtoupper( $matches[2] );
+
+		// Normalize common shorthand (e.g., 'KB' vs 'K').
+		$unit  = str_replace(
+			[ 'KB', 'MB', 'GB' ],
+			[ 'K', 'M', 'G' ],
+			$unit
+		);
+		$power = $units[ $unit ] ?? 0;
+
+		$bytes = $number * pow( 1024, $power );
+
+		return Cast::to_int( (float) $bytes > PHP_INT_MAX ? PHP_INT_MAX : $bytes );
+	}
+
+	// Fallback: best-effort cast.
+	return Cast::to_int( (float) $val > PHP_INT_MAX ? PHP_INT_MAX : $val );
 }
 
 /**
@@ -1246,6 +1261,7 @@ function learndash_assignment_list_approved( array $assignment_ids, int $step_id
 
 /**
  * Returns the URL to download the assignment file.
+ * Warning: It's a candidate for deprecation, use `Assignment::get_download_url()` instead.
  *
  * @since 4.10.3
  *
@@ -1254,22 +1270,38 @@ function learndash_assignment_list_approved( array $assignment_ids, int $step_id
  * @return string
  */
 function learndash_assignment_get_download_url( int $post_id ): string {
-	$file_name = Cast::to_string(
+	$download_url = '';
+	$file_name    = Cast::to_string(
 		get_post_meta( $post_id, 'file_name', true )
 	);
 
-	if ( empty( $file_name ) ) {
-		return '';
-	}
-
-	// Since LD version 4.10.3 we've changed the path ID and added the learndash_version meta.
-	$file_path_id = get_post_meta( $post_id, 'learndash_version', true )
+	if ( ! empty( $file_name ) ) {
+		// Since LD version 4.10.3 we've changed the path ID and added the learndash_version meta.
+		$file_path_id = get_post_meta( $post_id, 'learndash_version', true )
 		? 'uploads_learndash_assignments'
 		: 'uploads_assignments';
 
-	try {
-		return File_Download_Handler::get_download_url( $file_path_id, $file_name );
-	} catch ( Exception $e ) {
-		return '';
+		try {
+			$download_url = File_Download_Handler::get_download_url( $file_path_id, $file_name );
+		} catch ( Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch -- Ignore.
+		}
 	}
+
+	/**
+	 * Filters the returned assignment download URL.
+	 *
+	 * @since 4.19.0
+	 *
+	 * @param string $download_url The URL to download the assignment file.
+	 * @param int    $post_id      Assignment Post ID.
+	 * @param string $file_name    Assignment file name.
+	 *
+	 * @return string The URL to download the essay file.
+	 */
+	return apply_filters(
+		'learndash_assignment_get_download_url',
+		$download_url,
+		$post_id,
+		$file_name
+	);
 }

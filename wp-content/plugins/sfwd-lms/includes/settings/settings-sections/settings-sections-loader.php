@@ -50,12 +50,14 @@ require_once __DIR__ . '/class-ld-settings-section-groups-membership.php';
 
 // Settings General tab.
 require_once __DIR__ . '/class-ld-settings-section-courses-themes.php';
+require_once __DIR__ . '/class-ld-settings-section-general-appearance.php';
 require_once __DIR__ . '/class-ld-settings-section-general-per-page.php';
 require_once __DIR__ . '/class-ld-settings-section-general-admin-user.php';
 
 // Registration.
 require_once __DIR__ . '/class-ld-settings-section-registration-fields.php';
 require_once __DIR__ . '/class-ld-settings-section-registration-pages.php';
+require_once __DIR__ . '/class-ld-settings-section-terms-pages.php';
 
 // Emails.
 require_once __DIR__ . '/class-ld-settings-section-emails-list.php';
@@ -72,6 +74,7 @@ require_once __DIR__ . '/class-ld-settings-section-payments-list.php';
 require_once __DIR__ . '/class-ld-settings-section-payments-defaults.php';
 
 // Payments sub-sections.
+require_once __DIR__ . '/settings-sections-payments/class-ld-settings-section-paypal-checkout.php';
 require_once __DIR__ . '/settings-sections-payments/class-ld-settings-section-paypal.php';
 require_once __DIR__ . '/settings-sections-payments/class-ld-settings-section-stripe-connect.php';
 require_once __DIR__ . '/settings-sections-payments/class-ld-settings-section-razorpay.php';

@@ -10,6 +10,7 @@
 namespace LearnDash\Core\Modules\AI\Virtual_Instructor\Settings;
 
 use LDLMS_Post_Types;
+use LearnDash_Custom_Label;
 use LearnDash_Settings_Metabox;
 use WP_Post;
 
@@ -81,7 +82,11 @@ class Post_Metabox extends LearnDash_Settings_Metabox {
 
 		$this->settings_section_label = esc_html__( 'Settings', 'learndash' );
 
-		$this->settings_section_description = __( 'Individual virtual instructor settings. These settings will take precedence over global settings.', 'learndash' );
+		$this->settings_section_description = sprintf(
+			// translators: placeholder: virtual instructor.
+			esc_html_x( 'Individual %s settings. These settings will take precedence over global settings.', 'placeholder: virtual instructor', 'learndash' ),
+			LearnDash_Custom_Label::get_label( 'virtual_instructor' )
+		);
 
 		add_filter(
 			'learndash_metabox_save_fields_' . $this->settings_metabox_key,
@@ -183,7 +188,11 @@ class Post_Metabox extends LearnDash_Settings_Metabox {
 				'type'              => 'media-upload',
 				'value'             => $this->setting_option_values['avatar_id'],
 				'default'           => $this->setting_option_values['avatar_id'],
-				'help_text'         => __( 'Upload an image to be used as the instructor avatar.', 'learndash' ),
+				'help_text'         => sprintf(
+					// translators: placeholder: virtual instructor.
+					esc_html_x( 'Upload an image to be used as the %s avatar.', 'placeholder: virtual instructor', 'learndash' ),
+					LearnDash_Custom_Label::get_label( 'virtual_instructor' )
+				),
 				'rest'              => [
 					'show_in_rest' => false,
 					'rest_args'    => [],
@@ -197,7 +206,11 @@ class Post_Metabox extends LearnDash_Settings_Metabox {
 				'label'       => __( 'Custom Instruction', 'learndash' ),
 				'type'        => 'textarea',
 				'value'       => $this->setting_option_values['custom_instruction'],
-				'help_text'   => __( 'Enter a custom instruction for the virtual instructor.', 'learndash' ),
+				'help_text'   => sprintf(
+					// translators: placeholder: virtual instructor.
+					esc_html_x( 'Enter a custom instruction for the %s.', 'placeholder: virtual instructor', 'learndash' ),
+					LearnDash_Custom_Label::get_label( 'virtual_instructor' )
+				),
 				'placeholder' => __( 'E.g. Don\'t give the students direct answer. Instead give them the clue and hints to find their own answer.', 'learndash' ),
 				'rest'        => [
 					'show_in_rest' => false,
@@ -243,9 +256,10 @@ class Post_Metabox extends LearnDash_Settings_Metabox {
 					'data-select2-query-data'  => $select_course_query_data_json,
 				],
 				'help_text'      => sprintf(
-					// Translators: placeholder: courses.
-					esc_html_x( 'Select specific %s the instructor will be used for.', 'placeholder: courses', 'learndash' ),
-					learndash_get_custom_label_lower( 'courses' )
+					// Translators: placeholder: courses, virtual instructor.
+					esc_html_x( 'Select specific %1$s the %2$s will be used for.', 'placeholder: courses, virtual instructor', 'learndash' ),
+					LearnDash_Custom_Label::get_label( 'courses' ),
+					LearnDash_Custom_Label::get_label( 'virtual_instructor' )
 				),
 				'parent_setting' => 'apply_to_all_courses',
 				'rest'           => [
@@ -291,9 +305,10 @@ class Post_Metabox extends LearnDash_Settings_Metabox {
 					'data-select2-query-data'  => $select_group_query_data_json,
 				],
 				'help_text'      => sprintf(
-					// Translators: placeholder: groups.
-					esc_html_x( 'Select specific %s the instructor will be used for.', 'placeholder: groups', 'learndash' ),
-					learndash_get_custom_label_lower( 'groups' )
+					// Translators: placeholder: groups, virtual instructor.
+					esc_html_x( 'Select specific %1$s the %2$s will be used for.', 'placeholder: groups, virtual instructor', 'learndash' ),
+					LearnDash_Custom_Label::get_label( 'groups' ),
+					LearnDash_Custom_Label::get_label( 'virtual_instructor' )
 				),
 				'parent_setting' => 'apply_to_all_groups',
 				'rest'           => [
@@ -321,7 +336,11 @@ class Post_Metabox extends LearnDash_Settings_Metabox {
 				'label'          => __( 'Banned Words', 'learndash' ),
 				'type'           => 'textarea',
 				'value'          => $this->setting_option_values['banned_words'],
-				'help_text'      => __( 'Enter a comma separated list of banned words to be used in this virtual instructor.', 'learndash' ),
+				'help_text'      => sprintf(
+					// translators: placeholder: virtual instructor.
+					esc_html_x( 'Enter a comma separated list of banned words to be used in this %s.', 'placeholder: virtual instructor', 'learndash' ),
+					LearnDash_Custom_Label::get_label( 'virtual_instructor' )
+				),
 				'parent_setting' => 'override_banned_words',
 				'rest'           => [
 					'show_in_rest' => false,
@@ -348,7 +367,11 @@ class Post_Metabox extends LearnDash_Settings_Metabox {
 				'label'          => __( 'Error Message', 'learndash' ),
 				'type'           => 'textarea',
 				'value'          => $this->setting_option_values['error_message'],
-				'help_text'      => __( 'Enter a custom message when a user uses a banned word in this virtual instructor.', 'learndash' ),
+				'help_text'      => sprintf(
+					// translators: placeholder: virtual instructor.
+					esc_html_x( 'Enter a custom message when a user uses a banned word in this %s.', 'placeholder: virtual instructor', 'learndash' ),
+					LearnDash_Custom_Label::get_label( 'virtual_instructor' )
+				),
 				'parent_setting' => 'override_error_message',
 				'rest'           => [
 					'show_in_rest' => false,

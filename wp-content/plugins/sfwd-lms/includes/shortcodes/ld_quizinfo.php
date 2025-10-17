@@ -213,7 +213,10 @@ function learndash_quizinfo( $attr = array(), $content = '', $shortcode_slug = '
 										if ( isset( $form_data[ $field_id ] ) ) {
 											$selected_quizinfo[ $show ] = $quiz_form_element->getValue( $form_data[ $field_id ] );
 											if ( WpProQuiz_Model_Form::FORM_TYPE_DATE === $quiz_form_element->getType() ) {
-												$selected_quizinfo[ $show ] = date_i18n( $format, strtotime( $selected_quizinfo[ $show ] ) );
+												$selected_quizinfo[ $show ] = learndash_adjust_date_time_display(
+													strtotime( $selected_quizinfo[ $show ] ),
+													$format
+												);
 											}
 										}
 									}

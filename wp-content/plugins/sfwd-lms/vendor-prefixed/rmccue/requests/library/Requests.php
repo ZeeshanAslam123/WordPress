@@ -1,18 +1,14 @@
 <?php
 /**
- * Learndash_Core_Requests for PHP
+ * Requests for PHP
  *
- * Inspired by Learndash_Core_Requests for Python.
+ * Inspired by Requests for Python.
  *
  * Based on concepts from SimplePie_File, RequestCore and WP_Http.
  *
- * @package Learndash_Core_Requests
+ * @package Requests
  *
  * @deprecated 2.0.0
- *
- * @license ISC
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 
 /*
@@ -23,7 +19,7 @@
 if (!defined('REQUESTS_SILENCE_PSR0_DEPRECATIONS') || REQUESTS_SILENCE_PSR0_DEPRECATIONS !== true) {
 	// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
 	trigger_error(
-		'The PSR-0 `Requests_...` class names in the Learndash_Core_Requests library are deprecated.'
+		'The PSR-0 `Requests_...` class names in the Requests library are deprecated.'
 		. ' Switch to the PSR-4 `WpOrg\Requests\...` class names at your earliest convenience.',
 		E_USER_DEPRECATED
 	);
@@ -34,24 +30,24 @@ if (!defined('REQUESTS_SILENCE_PSR0_DEPRECATIONS') || REQUESTS_SILENCE_PSR0_DEPR
 	}
 }
 
-require_once dirname(__DIR__) . '/src/Learndash_Core_Requests.php';
+require_once dirname(__DIR__) . '/src/Requests.php';
 
 /**
- * Learndash_Core_Requests for PHP
+ * Requests for PHP
  *
- * Inspired by Learndash_Core_Requests for Python.
+ * Inspired by Requests for Python.
  *
  * Based on concepts from SimplePie_File, RequestCore and WP_Http.
  *
- * @package Learndash_Core_Requests
+ * @package Requests
  *
  * @deprecated 2.0.0 Use `WpOrg\Requests\Requests` instead for the actual functionality and
  *                   use `WpOrg\Requests\Autoload` for the autoloading.
  */
-class Learndash_Core_Requests extends StellarWP\Learndash\WpOrg\Requests\Requests {
+class Requests extends StellarWP\Learndash\WpOrg\Requests\Requests {
 
 	/**
-	 * Deprecated autoloader for Learndash_Core_Requests.
+	 * Deprecated autoloader for Requests.
 	 *
 	 * @deprecated 2.0.0 Use the `WpOrg\Requests\Autoload::load()` method instead.
 	 *

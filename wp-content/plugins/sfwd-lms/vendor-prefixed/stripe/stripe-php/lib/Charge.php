@@ -47,7 +47,7 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|string $receipt_number This is the transaction number that appears on email receipts sent for this charge. This attribute will be <code>null</code> until a receipt has been sent.
  * @property null|string $receipt_url This is the URL to view the receipt for this charge. The receipt is kept up-to-date to the latest state of the charge, including any refunds. If the charge is for an Invoice, the receipt will be stylized as an Invoice receipt.
  * @property bool $refunded Whether the charge has been fully refunded. If the charge is only partially refunded, this attribute will still be false.
- * @property null|\StellarWP\Learndash\Stripe\Collection<\Stripe\Refund> $refunds A list of refunds that have been applied to the charge.
+ * @property null|\StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Refund> $refunds A list of refunds that have been applied to the charge.
  * @property null|string|\StellarWP\Learndash\Stripe\Review $review ID of the review associated with this charge if one exists.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $shipping Shipping information for the charge.
  * @property null|\StellarWP\Learndash\Stripe\Account|\StellarWP\Learndash\Stripe\BankAccount|\StellarWP\Learndash\Stripe\Card|\StellarWP\Learndash\Stripe\Source $source This is a legacy field that will be removed in the future. It contains the Source, Card, or BankAccount object used for the charge. For details about the payment method used for this charge, refer to <code>payment_method</code> or <code>payment_method_details</code> instead.
@@ -58,10 +58,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|string|\StellarWP\Learndash\Stripe\Transfer $transfer ID of the transfer to the <code>destination</code> account (only applicable if the charge was created using the <code>destination</code> parameter).
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $transfer_data An optional dictionary including the account to automatically transfer to as part of a destination charge. <a href="https://stripe.com/docs/connect/destination-charges">See the Connect documentation</a> for details.
  * @property null|string $transfer_group A string that identifies this transaction as part of a group. See the <a href="https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-options">Connect documentation</a> for details.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Charge extends ApiResource
 {
@@ -154,7 +150,7 @@ class Charge extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\SearchResult<\Stripe\Charge> the charge search results
+     * @return \StellarWP\Learndash\Stripe\SearchResult<\StellarWP\Learndash\Stripe\Charge> the charge search results
      */
     public static function search($params = null, $opts = null)
     {
@@ -172,7 +168,7 @@ class Charge extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Refund> the list of refunds
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Refund> the list of refunds
      */
     public static function allRefunds($id, $params = null, $opts = null)
     {

@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -25,7 +21,7 @@ class SubscriptionService extends \StellarWP\Learndash\Stripe\Service\AbstractSe
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Subscription>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Subscription>
      */
     public function all($params = null, $opts = null)
     {
@@ -157,7 +153,7 @@ class SubscriptionService extends \StellarWP\Learndash\Stripe\Service\AbstractSe
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\SearchResult<\Stripe\Subscription>
+     * @return \StellarWP\Learndash\Stripe\SearchResult<\StellarWP\Learndash\Stripe\Subscription>
      */
     public function search($params = null, $opts = null)
     {

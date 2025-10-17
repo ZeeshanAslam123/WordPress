@@ -23,10 +23,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|int $unit_amount The cost of each unit of product being credited.
  * @property null|string $unit_amount_decimal Same as <code>unit_amount</code>, but contains a decimal value with at most 12 decimal places.
  * @property null|string $unit_amount_excluding_tax The amount in cents (or local equivalent) representing the unit amount being credited for this line item, excluding all tax and discounts.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class CreditNoteLineItem extends ApiResource
 {

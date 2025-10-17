@@ -28,15 +28,11 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|string|\StellarWP\Learndash\Stripe\Charge $destination_payment If the destination is a Stripe account, this will be the ID of the payment that the destination account received for the transfer.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property \StellarWP\Learndash\Stripe\StripeObject $metadata Set of <a href="https://stripe.com/docs/api/metadata">key-value pairs</a> that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
- * @property \StellarWP\Learndash\Stripe\Collection<\Stripe\TransferReversal> $reversals A list of reversals that have been applied to the transfer.
+ * @property \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\TransferReversal> $reversals A list of reversals that have been applied to the transfer.
  * @property bool $reversed Whether the transfer has been fully reversed. If the transfer is only partially reversed, this attribute will still be false.
  * @property null|string|\StellarWP\Learndash\Stripe\Charge $source_transaction ID of the charge or payment that was used to fund the transfer. If null, the transfer was funded from the available balance.
  * @property null|string $source_type The source balance this transfer came from. One of <code>card</code>, <code>fpx</code>, or <code>bank_account</code>.
  * @property null|string $transfer_group A string that identifies this transaction as part of a group. See the <a href="https://stripe.com/docs/connect/separate-charges-and-transfers#transfer-options">Connect documentation</a> for details.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Transfer extends ApiResource
 {
@@ -61,7 +57,7 @@ class Transfer extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\TransferReversal> the list of transfer reversals
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\TransferReversal> the list of transfer reversals
      */
     public static function allReversals($id, $params = null, $opts = null)
     {

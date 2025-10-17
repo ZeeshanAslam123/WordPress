@@ -1,16 +1,12 @@
 <?php
 /**
- * Learndash_Core_Requests for PHP
+ * Requests for PHP
  *
- * Inspired by Learndash_Core_Requests for Python.
+ * Inspired by Requests for Python.
  *
  * Based on concepts from SimplePie_File, RequestCore and WP_Http.
  *
- * @package Learndash_Core_Requests
- *
- * @license ISC
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * @package Requests
  */
 
 namespace StellarWP\Learndash\WpOrg\Requests;
@@ -152,7 +148,7 @@ class Requests {
 	 *
 	 * @var string
 	 */
-	const VERSION = '2.0.11';
+	const VERSION = '2.0.15';
 
 	/**
 	 * Selected transport name
@@ -411,7 +407,7 @@ class Requests {
 	 *    {@see \WpOrg\Requests\Requests::getTransport()}
 	 *    (string|\StellarWP\Learndash\WpOrg\Requests\Transport, default: {@see \WpOrg\Requests\Requests::getTransport()})
 	 * - `hooks`: Hooks handler.
-	 *    (\StellarWP\Learndash\WpOrg\Requests\HookManager, default: new StellarWP\Learndash\WpOrg\Requests\Hooks())
+	 *    (\StellarWP\Learndash\WpOrg\Requests\HookManager, default: new \StellarWP\Learndash\WpOrg\Requests\Hooks())
 	 * - `verify`: Should we verify SSL certificates? Allows passing in a custom
 	 *    certificate file as a string. (Using true uses the system-wide root
 	 *    certificate store instead, but this may have different behaviour

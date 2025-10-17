@@ -52,7 +52,9 @@ if ( ! function_exists( 'buddyboss_theme_update' ) ) {
 
 	}
 
-	add_action( 'after_setup_theme', 'buddyboss_theme_update' );
+	if ( is_admin() ) {
+		add_action( 'after_setup_theme', 'buddyboss_theme_update' );
+	}
 }
 
 /**

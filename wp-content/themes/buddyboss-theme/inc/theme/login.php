@@ -155,10 +155,10 @@ function buddyboss_login_scripts() {
 			jQuery( '#lostpasswordform label[for="user_login"]' ).attr( 'id', 'user_label_lost' );
 
 			var $label_user_login = jQuery( 'label#user_label' );
-			$label_user_login.html( $label_user_login.find( 'input' ) );
+			$label_user_login.html( '<span class="screen-reader-text">' + $label_user_login.text() + '</span>' );
 
 			var $label_user_pass = jQuery( 'label#pass_label' );
-			$label_user_pass.html( $label_user_pass.find( 'input' ) );
+			$label_user_pass.html( '<span class="screen-reader-text">' + $label_user_pass.text() + '</span>' );
 
 			var $label_user_register = jQuery( 'label#user_label_register' );
 			$label_user_register.html( $label_user_register.find( 'input' ) );
@@ -167,7 +167,7 @@ function buddyboss_login_scripts() {
 			$label_email_register.html( $label_email_register.find( 'input' ) );
 
 			var $label_user_lost = jQuery( 'label#user_label_lost' );
-			$label_user_lost.html( $label_user_lost.find( 'input' ) );
+			$label_user_lost.html( '<span class="screen-reader-text">' + $label_user_lost.text() + '</span>' );
 
 			var loginform_user_login = '<?php esc_html_e( 'Email Address', 'buddyboss-theme' ); ?>';
 			var loginform_user_pass = '<?php esc_html_e( 'Password', 'buddyboss-theme' ); ?>';
@@ -313,8 +313,7 @@ function buddyboss_login_scripts() {
 			var loginHeight = function() {
 
 				jQuery( 'body.login.login-split-page #login' ).each(function() {
-					var languageSwitch = jQuery( '.language-switcher').length > 0 ? jQuery( '.language-switcher').height() : 0;
-					var $loginH = jQuery( 'body.login.login-split-page #login' ).height() + languageSwitch;
+					var $loginH = jQuery( 'body.login.login-split-page #login' ).height();
 					var $winH = jQuery( window ).height();
 
 					if ( $loginH > $winH ) {
@@ -328,14 +327,29 @@ function buddyboss_login_scripts() {
 
 			// Re-position WP Language Switcher below Login Form
 			var langSwitchPosition = function() {
-				if( jQuery( 'body' ).hasClass( 'login-split-page' ) && jQuery( '.language-switcher').length  ) {
-					var LoginOffset =  jQuery( '#login' ).offset().top > 0 ? jQuery( '#login' ).offset().top : 0;
-					var loginBlockHeight = jQuery( '#login' ).height() + LoginOffset + 15;
-					jQuery( '.language-switcher' ).css( 'top', loginBlockHeight + 'px' );
-				}
+				var languageSwitch = jQuery( '.language-switcher' );
+				jQuery( 'body.login.login-split-page #login' ).append( languageSwitch );
 			}
 
 			langSwitchPosition();
+
+			var resetTogglePw = function() {
+
+				jQuery( document ).on( 'click', '.button-reset-hide-pw', function ( e ) {
+					var $this = jQuery( this );
+					var $input = $this.closest( '.user-bs-pass2-wrap' ).find( 'input#bs-pass2' );
+					var $icon = $this.find( 'i' );
+					
+					if ( $input.prop( 'type' ) === 'password' ) {
+						$input.prop( 'type', 'text' );
+						$icon.addClass( 'bb-icon-eye-slash' ).removeClass( 'bb-icon-eye' );
+					} else {
+						$input.prop( 'type', 'password' );
+						$icon.addClass( 'bb-icon-eye' ).removeClass( 'bb-icon-eye-slash' );
+					}
+				} );
+			};
+			resetTogglePw();
 
 			if( jQuery( '#login .bs-cs-login-logo' ).length ) {
 				jQuery( '.bs-cs-login-logo' ).load( function() {
@@ -646,7 +660,8 @@ if ( ! function_exists( 'login_custom_head' ) ) {
 
 		if ( ! empty( $rx_logoimg['url'] ) ) {
 			?>
-			.login h1 a {
+			.login h1 a,
+			.login .wp-login-logo a {
 			background-image: url(<?php echo $rx_logoimg['url']; ?>);
 			background-size: contain;
 			<?php
@@ -745,6 +760,9 @@ function buddyboss_theme_login_load() {
             <p><label for="bs-pass2"><?php esc_html_e( 'Retype new password', 'buddyboss-theme' ) ?></label></p>
             <input type="password" name="bs-pass2" id="bs-pass2" class="input"
                    size="20" value="" autocomplete="off" />
+						<button type="button" class="button button-secondary wp-hide-pw hide-if-no-js button-reset-hide-pw" data-toggle="0" aria-label="Show password">
+							<i class="bb-icon-l bb-icon-eye"></i>
+					</button>
         </div> <?php
 		} );
 

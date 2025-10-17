@@ -208,37 +208,6 @@ class WpProQuiz_Model_QuestionMapper extends WpProQuiz_Model_Mapper {
 			$this->setPreviousId( $question->getId(), $question_previous_id );
 		}
 
-		if ( ( true === learndash_is_data_upgrade_quiz_questions_updated() ) && ( LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Quizzes_Builder', 'enabled' ) !== 'yes' ) ) {
-			$question_post_id = learndash_get_question_post_by_pro_id( $question->getId() );
-			if ( empty( $question_post_id ) ) {
-				// We load fresh from DB. Don't use the $question object as it is not up to date.
-				$question_pro = $this->fetchById( $question->getId() );
-
-				if (
-					$question_pro
-					&& $question_pro instanceof WpProQuiz_Model_Question
-				) {
-					$question_insert_post                 = array();
-					$question_insert_post['post_type']    = learndash_get_post_type_slug( 'question' );
-					$question_insert_post['post_status']  = 'publish';
-					$question_insert_post['post_title']   = $question_pro->getTitle();
-					$question_insert_post['post_content'] = $question_pro->getQuestion();
-					$question_insert_post['menu_order']   = absint( $question_pro->getSort() );
-
-					$question_insert_post    = wp_slash( $question_insert_post );
-					$question_insert_post_id = wp_insert_post( $question_insert_post );
-					if ( false !== $question_insert_post_id ) {
-						$quiz_pro_id  = $question_pro->getQuizId();
-						$quiz_pro_id  = absint( $quiz_pro_id );
-						$quiz_post_id = learndash_get_quiz_id_by_pro_quiz_id( $quiz_pro_id );
-						learndash_update_setting( $question_insert_post_id, 'quiz', $quiz_post_id );
-						learndash_proquiz_sync_question_fields( $question_insert_post_id, $question_pro );
-						learndash_set_question_quizzes_dirty( $question_insert_post_id );
-					}
-				}
-			}
-		}
-
 		return $question;
 	}
 
@@ -331,7 +300,8 @@ class WpProQuiz_Model_QuestionMapper extends WpProQuiz_Model_Mapper {
 				$quiz_post_id = $quiz->getPostId();
 			}
 		} else {
-			$quiz_post_id = learndash_get_question_post_by_pro_id( $quiz_id );
+			$quiz_post_id = learndash_get_quiz_id_by_pro_quiz_id( $quiz_id );
+
 			if ( empty( $quiz_post_id ) ) {
 				if ( ( isset( $_GET['post'] ) ) && ( ! empty( $_GET['post'] ) ) ) {
 					$quiz_post_id = learndash_get_quiz_id( absint( $_GET['post'] ) );

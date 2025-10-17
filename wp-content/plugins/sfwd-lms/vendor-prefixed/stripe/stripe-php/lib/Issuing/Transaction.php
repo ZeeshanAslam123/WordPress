@@ -33,10 +33,6 @@ namespace StellarWP\Learndash\Stripe\Issuing;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $treasury <a href="https://stripe.com/docs/api/treasury">Treasury</a> details related to this transaction if it was created on a [FinancialAccount](/docs/api/treasury/financial_accounts
  * @property string $type The nature of the transaction.
  * @property null|string $wallet The digital wallet used for this transaction. One of <code>apple_pay</code>, <code>google_pay</code>, or <code>samsung_pay</code>.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Transaction extends \StellarWP\Learndash\Stripe\ApiResource
 {

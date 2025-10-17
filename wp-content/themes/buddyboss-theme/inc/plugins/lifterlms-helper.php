@@ -1969,7 +1969,7 @@ if ( ! class_exists( '\BuddyBossTheme\LifterLMSHelper' ) ) {
                         <h5 style="color:red; display:none" id="review_text_error">
 							<?php _e( 'Review Text is required.', 'buddyboss-theme' ); ?>
                         </h5>
-						<?php wp_nonce_field( 'submit_review', 'submit_review_nonce_code' ); ?>
+						<?php wp_nonce_field( 'llms-review', 'llms_review_nonce' ); ?>
                         <input name="action" value="submit_review" type="hidden">
                         <input name="post_ID" value="<?php echo get_the_ID(); ?>" type="hidden" id="post_ID">
                         <span class="review_leave">
@@ -2103,19 +2103,29 @@ if ( ! class_exists( '\BuddyBossTheme\LifterLMSHelper' ) ) {
 		public function active_lesson( $course ) {
 			$student = new LLMS_Student();
 			$course  = new LLMS_Course( $course );
-			$lessons = array_reverse( $course->get_lessons( 'ids' ) );
 
-			foreach ( $lessons as $key => $lesson ) {
-				if ( $student->is_complete( $lesson, 'lesson' ) ) {
-					if ( isset( $lessons[ $key + 1 ] ) ) {
-						return $lessons[ $key + 1 ]; // next element
-					}
+			if ( ! $course || ! is_a( $course, 'LLMS_Post_Model' ) ) {
+				return false;
+			}
 
-					return $lesson;
+			if ( in_array( $course->get( 'type' ), array( 'lesson', 'quiz' ) ) ) {
+				$course = llms_get_post_parent_course( $course->get( 'id' ) );
+				if ( ! $course ) {
+					return false;
 				}
 			}
 
-			return ! empty( $lessons[0] ) ? $lessons[0] : false;
+			if ( ! $student || ! llms_is_user_enrolled( $student->get_id(), $course->get( 'id' ) ) ) {
+				return false;
+			}
+
+			$progress = (int) $student->get_progress( $course->get( 'id' ), 'course' );
+			$lesson   = false;
+			if ( 100 !== $progress ) {
+				$lesson = $student->get_next_lesson( $course->get( 'id' ) );
+			}
+
+			return ! empty( $lesson ) ? $lesson : false;
 		}
 
 		/** Return the lessons ids of given course id.

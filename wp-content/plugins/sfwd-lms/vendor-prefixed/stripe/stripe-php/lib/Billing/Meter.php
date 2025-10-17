@@ -20,10 +20,6 @@ namespace StellarWP\Learndash\Stripe\Billing;
  * @property \StellarWP\Learndash\Stripe\StripeObject $status_transitions
  * @property int $updated Time at which the object was last updated. Measured in seconds since the Unix epoch.
  * @property \StellarWP\Learndash\Stripe\StripeObject $value_settings
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Meter extends \StellarWP\Learndash\Stripe\ApiResource
 {
@@ -84,7 +80,7 @@ class Meter extends \StellarWP\Learndash\Stripe\ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Billing\MeterEventSummary> the list of meter event summaries
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Billing\MeterEventSummary> the list of meter event summaries
      */
     public static function allEventSummaries($id, $params = null, $opts = null)
     {

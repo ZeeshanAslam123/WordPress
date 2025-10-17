@@ -129,8 +129,10 @@ if (
 
 			// First sale notice.
 			if (
-				! Notices\Dismisser::is_dismissed( self::NOTICE_FIRST_SALE )
-				&& ! $backups_enabled
+				! $backups_enabled
+				&& ! Notices\Dismisser::is_dismissed( self::NOTICE_FIRST_SALE )
+				&& Notices\Dismisser::is_dismissed( self::NOTICE_FIRST_COURSE )
+				&& time() > strtotime( '+24 hours', Notices\Dismisser::get_dismissed_time( self::NOTICE_FIRST_COURSE ) )
 			) {
 				$transactions_count = learndash_get_total_post_count( 'sfwd-transactions' );
 
@@ -161,15 +163,38 @@ if (
 
 			// X students notice.
 			if (
-				! Notices\Dismisser::is_dismissed( self::NOTICE_X_STUDENTS )
-				&& ! $backups_enabled
+				! $backups_enabled
+				&& ! Notices\Dismisser::is_dismissed( self::NOTICE_X_STUDENTS )
+				&& Notices\Dismisser::is_dismissed( self::NOTICE_FIRST_SALE )
+				&& time() > strtotime( '+24 hours', Notices\Dismisser::get_dismissed_time( self::NOTICE_FIRST_SALE ) )
 			) {
-				$students_enrolled_count = learndash_students_enrolled_count();
+				$has_open_courses = count( learndash_get_open_courses() ) > 0;
+
+				$args = [
+					'role__not_in' => 'administrator',
+				];
+
+				if ( ! $has_open_courses ) {
+					$args['meta_query'] = [
+						[
+							'key'         => 'learndash_course_[0-9]+_enrolled_at',
+							'compare_key' => 'REGEXP',
+						],
+					];
+				}
+
+				$students_enrolled_count = learndash_students_enrolled_count( $args );
 
 				if ( $students_enrolled_count > 0 ) {
 					$message = sprintf(
-						// translators: 1: Number of students, 2: Solid Backups link.
-						__( 'You now have %1$d students on your site! Don&rsquo;t forget to %2$s your website to preserve your hard work and data.', 'learndash' ),
+						// Translators: 1: Number of students, 2: Solid Backups link.
+						_nx(
+							'You now have %1$d student on your site! Don&rsquo;t forget to %2$s your website to preserve your hard work and data.',
+							'You now have %1$d students on your site! Don&rsquo;t forget to %2$s your website to preserve your hard work and data.',
+							$students_enrolled_count,
+							'The number of students on the site. Singular or plural.',
+							'learndash'
+						),
 						$students_enrolled_count,
 						'<a href="https://solidwp.com/learndash-backups?utm_source=learndash&utm_medium=in-product&utm_campaign=learndash-in-product-cross-sell" target="_blank">' . esc_html__( 'back up', 'learndash' ) . '</a>'
 					);
@@ -194,8 +219,8 @@ if (
 
 			// First course notice.
 			if (
-				! Notices\Dismisser::is_dismissed( self::NOTICE_FIRST_COURSE )
-				&& ! $backups_enabled
+				! $backups_enabled
+				&& ! Notices\Dismisser::is_dismissed( self::NOTICE_FIRST_COURSE )
 			) {
 				$courses_count = learndash_get_total_post_count( 'sfwd-courses' );
 

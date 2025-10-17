@@ -10,10 +10,6 @@ namespace StellarWP\Learndash\Stripe\Service\Billing;
  * @property MeterEventAdjustmentService $meterEventAdjustments
  * @property MeterEventService $meterEvents
  * @property MeterService $meters
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class BillingServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

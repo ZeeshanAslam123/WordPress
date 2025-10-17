@@ -20,10 +20,6 @@ namespace StellarWP\Learndash\Stripe\Issuing;
  * @property \StellarWP\Learndash\Stripe\StripeObject $preferences
  * @property \StellarWP\Learndash\Stripe\StripeObject $rejection_reasons
  * @property string $status Whether this personalization design can be used to create cards.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class PersonalizationDesign extends \StellarWP\Learndash\Stripe\ApiResource
 {

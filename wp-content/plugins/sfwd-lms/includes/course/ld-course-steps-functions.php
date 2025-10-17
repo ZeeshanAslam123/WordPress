@@ -135,7 +135,7 @@ function learndash_course_get_completed_steps( $user_id = 0, $course_id = 0, $co
  * @param integer $course_id Course ID.
  * @param array   $query_args Array of query args to filter the query.
  *
- * @return array of Sections.
+ * @return object{order: int, ID: int, post_title: string, type: string, steps: int[]}[] Sections.
  */
 function learndash_course_get_sections( $course_id = 0, $query_args = array() ) {
 	$sections = array();
@@ -278,6 +278,7 @@ function learndash_course_get_steps_count( $course_id = 0 ) {
 
 /**
  * Gets the parent step IDs for a step in a course.
+ * It returns the parent steps in the order of the hierarchy: from the top parent to the immediate parent.
  *
  * @since 2.5.0
  *

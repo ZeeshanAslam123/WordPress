@@ -67,13 +67,23 @@ class Mapper extends Base_Mapper {
 							->set_size( 5 )
 							->set_title( __( 'Total Numbers', 'learndash' ) )
 							->set_hint(
-								__(
-									'<b>Total numbers for the course.</b><br/><br/>
-									<b>Lifetime sales</b> are the total amount of money earned from the course, considering all the course transactions in the current currency.<br/>
-									It considers the course price, the trial price (if any), and coupons.<br/>
-									It does not consider potential refunds and recurring payments as they are not processed in LearnDash.<br/><br/>
-									<b>Enrolled students</b> are the total number of students who have enrolled in the course, including those who have access via group.',
-									'learndash'
+								sprintf(
+									// Translators: %1$s: Course label, %2$s: Course label, %3$s: Orders label, %4$s: Course label, %5$s: Course label, %6$s: Course label, %7$s: Group label.
+									__(
+										'<b>Total numbers for the %1$s.</b><br/><br/>
+										<b>Lifetime sales</b> are the total amount of money earned from the %2$s, considering all the %3$s for the %4$s in the current currency.<br/>
+										It considers the %5$s price, the trial price (if any), and coupons.<br/>
+										It does not consider potential refunds and recurring payments as they are not processed in LearnDash.<br/><br/>
+										<b>Enrolled students</b> are the total number of students who have enrolled in the %6$s, including those who have access via %7$s.',
+										'learndash'
+									),
+									learndash_get_custom_label_lower( 'course' ),
+									learndash_get_custom_label_lower( 'course' ),
+									learndash_get_custom_label_lower( 'orders' ),
+									learndash_get_custom_label_lower( 'course' ),
+									learndash_get_custom_label_lower( 'course' ),
+									learndash_get_custom_label_lower( 'course' ),
+									learndash_get_custom_label_lower( 'group' )
 								)
 							)
 							->add_widget( $lifetime_sales )

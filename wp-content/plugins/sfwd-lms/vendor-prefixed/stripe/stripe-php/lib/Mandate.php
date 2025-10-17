@@ -18,10 +18,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $single_use
  * @property string $status The mandate status indicates whether or not you can use it to initiate a payment.
  * @property string $type The type of the mandate.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Mandate extends ApiResource
 {

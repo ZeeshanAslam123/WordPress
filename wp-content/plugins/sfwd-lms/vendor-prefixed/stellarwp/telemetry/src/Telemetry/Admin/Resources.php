@@ -5,10 +5,6 @@
  * @since 1.0.0
  *
  * @package StellarWP\Telemetry
- *
- * @license GPL-2.0-or-later
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 
 namespace StellarWP\Learndash\StellarWP\Telemetry\Admin;
@@ -134,5 +130,4 @@ class Resources {
 	public static function get_asset_path(): string {
 		return plugin_dir_url( dirname( __DIR__ ) );
 	}
-
 }

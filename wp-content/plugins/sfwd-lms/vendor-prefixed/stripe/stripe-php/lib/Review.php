@@ -24,10 +24,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|string|\StellarWP\Learndash\Stripe\PaymentIntent $payment_intent The PaymentIntent ID associated with this review, if one exists.
  * @property string $reason The reason the review is currently open or closed. One of <code>rule</code>, <code>manual</code>, <code>approved</code>, <code>refunded</code>, <code>refunded_as_fraud</code>, <code>disputed</code>, or <code>redacted</code>.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $session Information related to the browsing session of the user who initiated the payment.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Review extends ApiResource
 {

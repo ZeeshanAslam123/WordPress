@@ -15,7 +15,7 @@ namespace StellarWP\Learndash\Stripe\Tax;
  * @property string $currency Three-letter <a href="https://www.iso.org/iso-4217-currency-codes.html">ISO currency code</a>, in lowercase. Must be a <a href="https://stripe.com/docs/currencies">supported currency</a>.
  * @property null|string $customer The ID of an existing <a href="https://stripe.com/docs/api/customers/object">Customer</a> used for the resource.
  * @property \StellarWP\Learndash\Stripe\StripeObject $customer_details
- * @property null|\StellarWP\Learndash\Stripe\Collection<\Stripe\Tax\TransactionLineItem> $line_items The tax collected or refunded, by line item.
+ * @property null|\StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Tax\TransactionLineItem> $line_items The tax collected or refunded, by line item.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $metadata Set of <a href="https://stripe.com/docs/api/metadata">key-value pairs</a> that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
  * @property string $reference A custom unique identifier, such as 'myOrder_123'.
@@ -23,10 +23,6 @@ namespace StellarWP\Learndash\Stripe\Tax;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $shipping_cost The shipping cost details for the transaction.
  * @property int $tax_date Timestamp of date at which the tax rules and rates in effect applies for the calculation.
  * @property string $type If <code>reversal</code>, this transaction reverses an earlier transaction.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Transaction extends \StellarWP\Learndash\Stripe\ApiResource
 {
@@ -80,7 +76,7 @@ class Transaction extends \StellarWP\Learndash\Stripe\ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Tax\TransactionLineItem> list of transaction line items
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Tax\TransactionLineItem> list of transaction line items
      */
     public static function allLineItems($id, $params = null, $opts = null)
     {

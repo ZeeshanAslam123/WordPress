@@ -30,10 +30,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|\StellarWP\Learndash\Stripe\TaxRate[] $tax_rates The tax rates which apply to the line item.
  * @property string $type A string identifying the type of the source of this line item, either an <code>invoiceitem</code> or a <code>subscription</code>.
  * @property null|string $unit_amount_excluding_tax The amount in cents (or local equivalent) representing the unit amount for this line item, excluding all tax and discounts.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class InvoiceLineItem extends ApiResource
 {

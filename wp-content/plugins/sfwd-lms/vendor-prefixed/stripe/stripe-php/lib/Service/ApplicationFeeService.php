@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -25,7 +21,7 @@ class ApplicationFeeService extends \StellarWP\Learndash\Stripe\Service\Abstract
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\ApplicationFee>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\ApplicationFee>
      */
     public function all($params = null, $opts = null)
     {
@@ -45,7 +41,7 @@ class ApplicationFeeService extends \StellarWP\Learndash\Stripe\Service\Abstract
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\ApplicationFeeRefund>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\ApplicationFeeRefund>
      */
     public function allRefunds($parentId, $params = null, $opts = null)
     {

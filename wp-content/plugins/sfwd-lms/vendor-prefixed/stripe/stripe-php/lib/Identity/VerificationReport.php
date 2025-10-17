@@ -31,10 +31,6 @@ namespace StellarWP\Learndash\Stripe\Identity;
  * @property string $type Type of report.
  * @property null|string $verification_flow The configuration token of a Verification Flow from the dashboard.
  * @property null|string $verification_session ID of the VerificationSession that created this report.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class VerificationReport extends \StellarWP\Learndash\Stripe\ApiResource
 {

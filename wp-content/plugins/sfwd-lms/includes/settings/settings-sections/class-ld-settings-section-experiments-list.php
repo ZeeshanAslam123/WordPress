@@ -8,6 +8,7 @@
  */
 
 use LearnDash\Core\App;
+use LearnDash\Core\Modules\Experiments\Action_Item;
 use LearnDash\Core\Modules\Experiments\Experiments;
 use StellarWP\Learndash\lucatume\DI52\ContainerException;
 
@@ -80,9 +81,9 @@ if (
 						''   => '',
 						'on' => '',
 					],
-					// Kind of a hack, so we can use this field to grab the url.
+					// Kind of a hack, so we can use this field to grab the action items.
 					'attrs'            => [
-						'url' => $experiment->get_url(),
+						'action_items' => $experiment->get_action_items(),
 					],
 				];
 			}
@@ -148,29 +149,56 @@ if (
 						</tr>
 					<?php else : ?>
 						<?php foreach ( $this->setting_option_fields as $field ) : ?>
+							<?php
+							$label        = $field['label'] ?? '';
+							$help_text    = $field['help_text'] ?? '';
+							$action_items = $field['attrs']['action_items'] ?? [];
+							?>
 							<tr>
 								<td class="col-name-experiment-enabled">
-									<?php call_user_func( $field['display_callback'], $field ); ?>
+									<?php
+									if (
+										isset( $field['display_callback'] )
+										&& is_callable( $field['display_callback'] )
+									) {
+										call_user_func( $field['display_callback'], $field );
+									}
+									?>
 								</td>
 
 								<td class="col-name-experiment-title col-valign-middle">
-									<?php echo esc_html( $field['label'] ); ?>
+									<?php echo esc_html( $label ); ?>
 								</td>
 
 								<td class="col-name-experiment-description col-valign-middle">
-									<?php echo esc_html( $field['help_text'] ); ?>
+									<?php echo esc_html( $help_text ); ?>
 								</td>
 
 								<td class="col-name-manage col-valign-middle">
-									<?php if ( ! empty( $field['attrs'] ) && ! empty( $field['attrs']['url'] ) ) : ?>
-										<a
-											class="button alignright"
-											href="<?php echo esc_url( $field['attrs']['url'] ); ?>"
-											target="_blank"
-										>
-											<?php esc_html_e( 'Give Feedback', 'learndash' ); ?>
-										</a>
-									<?php endif; ?>
+									<button class="button-action-items button button-secondary">
+										<span class="icon dashicons dashicons-ellipsis"></span>
+									</button>
+
+									<ul class="action-items action-items--closed">
+										<?php foreach ( $action_items as $action_item ) : ?>
+											<?php
+											if (
+												! $action_item instanceof Action_Item
+												|| ! $action_item->is_enabled()
+											) {
+												continue;
+											}
+
+											$target = $action_item->is_external() ? 'target="_blank"' : '';
+											?>
+
+											<li class="action-item">
+												<a href="<?php echo esc_url( $action_item->get_url() ); ?>" <?php echo esc_attr( $target ); ?>>
+													<?php echo esc_html( $action_item->get_label() ); ?>
+												</a>
+											</li>
+										<?php endforeach; ?>
+									</ul>
 								</td>
 							</tr>
 						<?php endforeach; ?>

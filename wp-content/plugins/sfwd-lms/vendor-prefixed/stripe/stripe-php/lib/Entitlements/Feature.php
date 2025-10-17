@@ -15,10 +15,6 @@ namespace StellarWP\Learndash\Stripe\Entitlements;
  * @property string $lookup_key A unique key you provide as your own system identifier. This may be up to 80 characters.
  * @property \StellarWP\Learndash\Stripe\StripeObject $metadata Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
  * @property string $name The feature's name, for your own purpose, not meant to be displayable to the customer.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Feature extends \StellarWP\Learndash\Stripe\ApiResource
 {

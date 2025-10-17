@@ -24,10 +24,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property string $source The ID of the source this transaction is attached to.
  * @property string $status The status of the transaction, one of <code>succeeded</code>, <code>pending</code>, or <code>failed</code>.
  * @property string $type The type of source this transaction is attached to.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class SourceTransaction extends ApiResource
 {

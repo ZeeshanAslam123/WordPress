@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service\Identity;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -24,7 +20,7 @@ class VerificationReportService extends \StellarWP\Learndash\Stripe\Service\Abst
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Identity\VerificationReport>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Identity\VerificationReport>
      */
     public function all($params = null, $opts = null)
     {

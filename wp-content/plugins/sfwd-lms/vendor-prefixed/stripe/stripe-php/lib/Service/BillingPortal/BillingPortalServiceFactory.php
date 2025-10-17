@@ -9,10 +9,6 @@ namespace StellarWP\Learndash\Stripe\Service\BillingPortal;
  *
  * @property ConfigurationService $configurations
  * @property SessionService $sessions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class BillingPortalServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

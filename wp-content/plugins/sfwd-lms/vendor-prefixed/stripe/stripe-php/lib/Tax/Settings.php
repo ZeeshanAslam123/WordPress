@@ -15,10 +15,6 @@ namespace StellarWP\Learndash\Stripe\Tax;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property string $status The <code>active</code> status indicates you have all required settings to calculate tax. A status can transition out of <code>active</code> when new required settings are introduced.
  * @property \StellarWP\Learndash\Stripe\StripeObject $status_details
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Settings extends \StellarWP\Learndash\Stripe\SingletonApiResource
 {

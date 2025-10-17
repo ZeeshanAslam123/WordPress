@@ -17,10 +17,6 @@ namespace StellarWP\Learndash\Stripe\TestHelpers;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property null|string $name The custom name supplied at creation.
  * @property string $status The status of the Test Clock.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class TestClock extends \StellarWP\Learndash\Stripe\ApiResource
 {

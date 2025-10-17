@@ -45,7 +45,7 @@ namespace StellarWP\Learndash\Stripe\Checkout;
  * @property int $expires_at The timestamp at which the Checkout Session will expire.
  * @property null|string|\StellarWP\Learndash\Stripe\Invoice $invoice ID of the invoice created by the Checkout Session, if it exists.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $invoice_creation Details on the state of invoice creation for the Checkout Session.
- * @property null|\StellarWP\Learndash\Stripe\Collection<\Stripe\LineItem> $line_items The line items purchased by the customer.
+ * @property null|\StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\LineItem> $line_items The line items purchased by the customer.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property null|string $locale The IETF language tag of the locale Checkout is displayed in. If blank or <code>auto</code>, the browser's locale is used.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $metadata Set of <a href="https://stripe.com/docs/api/metadata">key-value pairs</a> that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
@@ -74,10 +74,6 @@ namespace StellarWP\Learndash\Stripe\Checkout;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $total_details Tax and discount details for the computed total amount.
  * @property null|string $ui_mode The UI mode of the Session. Defaults to <code>hosted</code>.
  * @property null|string $url The URL to the Checkout Session. Redirect customers to this URL to take them to Checkout. If you’re using <a href="https://stripe.com/docs/payments/checkout/custom-domains">Custom Domains</a>, the URL will use your subdomain. Otherwise, it’ll use <code>checkout.stripe.com.</code> This value is only present when the session is active.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Session extends \StellarWP\Learndash\Stripe\ApiResource
 {
@@ -144,7 +140,7 @@ class Session extends \StellarWP\Learndash\Stripe\ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\LineItem> list of line items
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\LineItem> list of line items
      */
     public static function allLineItems($id, $params = null, $opts = null)
     {

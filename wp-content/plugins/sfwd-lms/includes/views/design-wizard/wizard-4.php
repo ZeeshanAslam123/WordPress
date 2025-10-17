@@ -1,11 +1,13 @@
 <?php
 /**
- * Page 4 of setup wizard template file
+ * Setup wizard step 4.
  *
- * @package LearnDash_Design_Wizard
+ * @version 4.18.0
  *
- * @var array<string, mixed> $template_details
- * @var LearnDash_Design_Wizard $design_wizard
+ * @var array<string, mixed>    $template_details Template details.
+ * @var LearnDash_Design_Wizard $design_wizard    Design wizard object.
+ *
+ * @package LearnDash\Core
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="header">
 		<div class="logo">
             <?php // phpcs:ignore Generic.Files.LineLength.TooLong?>
-			<img src="<?php echo esc_url( \LEARNDASH_LMS_PLUGIN_URL . '/assets/images/learndash.svg' ); ?>" alt="LearnDash" >
+			<img src="<?php echo esc_url( LEARNDASH_LMS_PLUGIN_URL . 'assets/images/learndash.svg' ); ?>" alt="LearnDash" >
 		</div>
 		<div class="exit">
 			<span class="text"><?php esc_html_e( 'Exit to Setup', 'learndash' ); ?></span> <img
-				src="<?php echo esc_url( \LEARNDASH_LMS_PLUGIN_URL . '/assets/images/design-wizard/svg/exit.svg' ); ?>"
+				src="<?php echo esc_url( LEARNDASH_LMS_PLUGIN_URL . '/assets/images/design-wizard/svg/exit.svg' ); ?>"
 			>
 		</div>
 	</div>
@@ -38,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="back">
 			<img
 				class="icon"
-				src="<?php echo esc_url( \LEARNDASH_LMS_PLUGIN_URL . '/assets/images/design-wizard/svg/back.svg' ); ?>"
+				src="<?php echo esc_url( LEARNDASH_LMS_PLUGIN_URL . '/assets/images/design-wizard/svg/back.svg' ); ?>"
 			> <span class="text"><?php esc_html_e( 'Back', 'learndash' ); ?></span>
 		</div>
 		<div class="steps">

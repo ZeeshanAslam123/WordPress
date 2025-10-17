@@ -16,6 +16,7 @@ use LearnDash\Core\Models\Virtual_Instructor;
 use LearnDash\Core\Modules\AI\Virtual_Instructor\AJAX\Process_Setup_Wizard;
 use LearnDash\Core\Modules\AJAX\Search_Posts;
 use Learndash_Admin_Menus_Tabs;
+use LearnDash_Custom_Label;
 use LearnDash_Settings_Section_AI_Integrations;
 use WP_Post;
 use WP_Role;
@@ -56,8 +57,11 @@ class Admin {
 	 * @return array<string, array<string, mixed>> Returned LearnDash custom post types args to be registered.
 	 */
 	public function register_post_type( array $post_args ): array {
+		$label_singular = LearnDash_Custom_Label::get_label( 'virtual_instructor' );
+		$label_plural   = LearnDash_Custom_Label::get_label( 'virtual_instructors' );
+
 		$post_args[ $this->post_type ] = [
-			'plugin_name'        => __( 'Virtual Instructor', 'learndash' ),
+			'plugin_name'        => $label_singular,
 			'slug_name'          => $this->post_type,
 			'post_type'          => $this->post_type,
 			'template_redirect'  => false,
@@ -69,26 +73,40 @@ class Admin {
 					'title',
 				],
 				'labels'              => [
-					'name'                     => __( 'Virtual Instructors', 'learndash' ),
-					'singular_name'            => __( 'Virtual Instructor', 'learndash' ),
-					'add_new'                  => __( 'Add New', 'learndash' ),
-					'add_new_item'             => __( 'Add New Virtual Instructor', 'learndash' ),
-					'edit_item'                => __( 'Edit Virtual Instructor', 'learndash' ),
-					'new_item'                 => __( 'New Virtual Instructor', 'learndash' ),
-					'all_items'                => __( 'Virtual Instructors', 'learndash' ),
-					'view_item'                => __( 'View Virtual Instructor', 'learndash' ),
-					'view_items'               => __( 'View Virtual Instructors', 'learndash' ),
-					'search_items'             => __( 'Search Virtual Instructors', 'learndash' ),
-					'not_found'                => __( 'No Virtual Instructor found', 'learndash' ),
-					'not_found_in_trash'       => __( 'No Virtual Instructor found in Trash', 'learndash' ),
+					'name'                     => $label_plural,
+					'singular_name'            => $label_singular,
+					'add_new'                  => esc_html_x( 'Add New', 'Add New Virtual Instructor Label', 'learndash' ),
+					// translators: placeholder: Virtual Instructor.
+					'add_new_item'             => sprintf( esc_html_x( 'Add New %s', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
+					// translators: placeholder: Virtual Instructor.
+					'edit_item'                => sprintf( esc_html_x( 'Edit %s', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
+					// translators: placeholder: Virtual Instructor.
+					'new_item'                 => sprintf( esc_html_x( 'New %s', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
+					'all_items'                => $label_plural,
+					// translators: placeholder: Virtual Instructor.
+					'view_item'                => sprintf( esc_html_x( 'View %s', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
+					// translators: placeholder: Virtual Instructors.
+					'view_items'               => sprintf( esc_html_x( 'View %s', 'placeholder: Virtual Instructors', 'learndash' ), $label_plural ),
+					// translators: placeholder: Virtual Instructors.
+					'search_items'             => sprintf( esc_html_x( 'Search %s', 'placeholder: Virtual Instructors', 'learndash' ), $label_plural ),
+					// translators: placeholder: Virtual Instructors.
+					'not_found'                => sprintf( esc_html_x( 'No %s found', 'placeholder: Virtual Instructors', 'learndash' ), $label_plural ),
+					// translators: placeholder: Virtual Instructor.
+					'not_found_in_trash'       => sprintf( esc_html_x( 'No %s found in Trash', 'placeholder: Virtual Instructor', 'learndash' ), $label_plural ),
 					'parent_item_colon'        => '',
-					'menu_name'                => __( 'Virtual Instructors', 'learndash' ),
-					'item_published'           => __( 'Virtual Instructor Created', 'learndash' ),
-					'item_published_privately' => __( 'Virtual Instructor Created Privately', 'learndash' ),
-					'item_reverted_to_draft'   => __( 'Virtual Instructor Reverted to Draft', 'learndash' ),
-					'item_scheduled'           => __( 'Virtual Instructor Scheduled', 'learndash' ),
-					'item_updated'             => __( 'Virtual Instructor Updated', 'learndash' ),
-					'item_trashed'             => __( 'Virtual Instructor trashed.', 'learndash' ),
+					'menu_name'                => $label_plural,
+					// translators: placeholder: Virtual Instructor.
+					'item_published'           => sprintf( esc_html_x( '%s Published', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
+					// translators: placeholder: Virtual Instructor.
+					'item_published_privately' => sprintf( esc_html_x( '%s Published Privately', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
+					// translators: placeholder: Virtual Instructor.
+					'item_reverted_to_draft'   => sprintf( esc_html_x( '%s Reverted to Draft', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
+					// translators: placeholder: Virtual Instructor.
+					'item_scheduled'           => sprintf( esc_html_x( '%s Scheduled', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
+					// translators: placeholder: Virtual Instructor.
+					'item_updated'             => sprintf( esc_html_x( '%s Updated', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
+					// translators: placeholder: Virtual Instructor.
+					'item_trashed'             => sprintf( esc_html_x( '%s Trashed', 'placeholder: Virtual Instructor', 'learndash' ), $label_singular ),
 				],
 				'capability_type'     => 'virtual_instructor',
 				'capabilities'        => $this->get_user_capabilities_map(),
@@ -97,7 +115,11 @@ class Admin {
 				'exclude_from_search' => true,
 				'show_in_rest'        => false,
 			],
-			'options_page_title' => __( 'Virtual Instructor Settings', 'learndash' ),
+			'options_page_title' => sprintf(
+				// translators: placeholder: Virtual Instructor.
+				esc_html_x( '%s Settings', 'placeholder: virtual instructor', 'learndash' ),
+				LearnDash_Custom_Label::get_label( 'virtual_instructor' )
+			),
 			'fields'             => [],
 			'default_options'    => [],
 		];
@@ -125,19 +147,96 @@ class Admin {
 			return $bulk_messages;
 		}
 
+		$singular_label = LearnDash_Custom_Label::get_label( 'virtual_instructor' );
+		$plural_label   = LearnDash_Custom_Label::get_label( 'virtual_instructors' );
+
 		$bulk_messages['post'] = [
-			/* translators: %s: Number of virtual instructors. */
-			'updated'   => _n( '%s virtual instructor updated.', '%s virtual instructors updated.', $bulk_counts['updated'], 'learndash' ),
-			'locked'    => ( 1 === $bulk_counts['locked'] )
-				? __( '1 virtual instructor not updated, somebody is editing it.', 'learndash' )
-				/* translators: %s: Number of virtual instructors. */
-				: _n( '%s virtual instructor not updated, somebody is editing it.', '%s virtual instructors not updated, somebody is editing them.', $bulk_counts['locked'], 'learndash' ),
-			/* translators: %s: Number of virtual instructors. */
-			'deleted'   => _n( '%s virtual instructor permanently deleted.', '%s virtual instructors permanently deleted.', $bulk_counts['deleted'], 'learndash' ),
-			/* translators: %s: Number of virtual instructors. */
-			'trashed'   => _n( '%s virtual instructor moved to the Trash.', '%s virtual instructors moved to the Trash.', $bulk_counts['trashed'], 'learndash' ),
-			/* translators: %s: Number of virtual instructors. */
-			'untrashed' => _n( '%s virtual instructor restored from the Trash.', '%s virtual instructors restored from the Trash.', $bulk_counts['untrashed'], 'learndash' ),
+			'updated' => sprintf(
+				// translators: placeholders: %1$s: Number of virtual instructors, %2$s: Custom label for virtual instructor(s).
+				_n(
+					'%1$s %2$s updated.',
+					'%1$s %2$s updated.',
+					$bulk_counts['updated'],
+					'learndash'
+				),
+				$bulk_counts['updated'],
+				_n(
+					$singular_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralSingle -- Translation is handled by LearnDash_Custom_Label::get_label().
+					$plural_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralPlural -- Translation is handled by LearnDash_Custom_Label::get_label().
+					$bulk_counts['updated'],
+					'learndash'
+				)
+			),
+			'locked' => ( 1 === $bulk_counts['locked'] )
+				? sprintf(
+					// translators: placeholder: %s: Custom label for virtual instructor.
+					__( '1 %s not updated, somebody is editing it.', 'learndash' ),
+					$singular_label
+				)
+				: sprintf(
+					// translators: placeholders: %1$s: Number of virtual instructors, %2$s: Custom label for virtual instructor(s).
+					_n(
+						'%1$s %2$s not updated, somebody is editing it.',
+						'%1$s %2$s not updated, somebody is editing them.',
+						$bulk_counts['locked'],
+						'learndash'
+					),
+					$bulk_counts['locked'],
+					_n(
+						$singular_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralSingle -- Translation is handled by LearnDash_Custom_Label::get_label().
+						$plural_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralPlural -- Translation is handled by LearnDash_Custom_Label::get_label().
+						$bulk_counts['locked'],
+						'learndash'
+					)
+				),
+			'deleted' => sprintf(
+				// translators: placeholders: %1$s: Number of virtual instructors, %2$s: Custom label for virtual instructor(s).
+				_n(
+					'%1$s %2$s permanently deleted.',
+					'%1$s %2$s permanently deleted.',
+					$bulk_counts['deleted'],
+					'learndash'
+				),
+				$bulk_counts['deleted'],
+				_n(
+					$singular_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralSingle -- Translation is handled by LearnDash_Custom_Label::get_label().
+					$plural_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralPlural -- Translation is handled by LearnDash_Custom_Label::get_label().
+					$bulk_counts['deleted'],
+					'learndash'
+				)
+			),
+			'trashed' => sprintf(
+				// translators: placeholders: %1$s: Number of virtual instructors, %2$s: Custom label for virtual instructor(s).
+				_n(
+					'%1$s %2$s moved to the Trash.',
+					'%1$s %2$s moved to the Trash.',
+					$bulk_counts['trashed'],
+					'learndash'
+				),
+				$bulk_counts['trashed'],
+				_n(
+					$singular_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralSingle -- Translation is handled by LearnDash_Custom_Label::get_label().
+					$plural_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralPlural -- Translation is handled by LearnDash_Custom_Label::get_label().
+					$bulk_counts['trashed'],
+					'learndash'
+				)
+			),
+			'untrashed' => sprintf(
+				// translators: placeholders: %1$s: Number of virtual instructors, %2$s: Custom label for virtual instructor(s).
+				_n(
+					'%1$s %2$s restored from the Trash.',
+					'%1$s %2$s restored from the Trash.',
+					$bulk_counts['untrashed'],
+					'learndash'
+				),
+				$bulk_counts['untrashed'],
+				_n(
+					$singular_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralSingle -- Translation is handled by LearnDash_Custom_Label::get_label().
+					$plural_label, // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralPlural -- Translation is handled by LearnDash_Custom_Label::get_label().
+					$bulk_counts['untrashed'],
+					'learndash'
+				)
+			),
 		];
 
 		return $bulk_messages;
@@ -164,7 +263,7 @@ class Admin {
 
 		$new_submenu = [
 			$this->post_type => [
-				'name'  => __( 'Virtual Instructors', 'learndash' ),
+				'name'  => LearnDash_Custom_Label::get_label( 'virtual_instructors' ),
 				'cap'   => LEARNDASH_ADMIN_CAPABILITY_CHECK,
 				'link'  => 'edit.php?post_type=' . $this->post_type,
 				'class' => 'submenu-virtual-instructor',
@@ -199,7 +298,7 @@ class Admin {
 			'edit.php?post_type=' . $this->post_type,
 			[
 				'link' => 'edit.php?post_type=' . $this->post_type,
-				'name' => __( 'Virtual Instructors', 'learndash' ),
+				'name' => LearnDash_Custom_Label::get_label( 'virtual_instructors' ),
 				'id'   => 'edit-' . $this->post_type,
 				'cap'  => LEARNDASH_ADMIN_CAPABILITY_CHECK,
 			],
@@ -279,7 +378,11 @@ class Admin {
 			return $title;
 		}
 
-		return __( 'Add virtual instructor name', 'learndash' );
+		return sprintf(
+			// translators: placeholder: virtual instructor.
+			esc_html_x( 'Add %s name', 'placeholder: virtual instructor', 'learndash' ),
+			LearnDash_Custom_Label::get_label( 'virtual_instructor' )
+		);
 	}
 
 	/**

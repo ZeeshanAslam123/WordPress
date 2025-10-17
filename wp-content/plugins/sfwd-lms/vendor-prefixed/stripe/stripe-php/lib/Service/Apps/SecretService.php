@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service\Apps;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -24,7 +20,7 @@ class SecretService extends \StellarWP\Learndash\Stripe\Service\AbstractService
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Apps\Secret>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Apps\Secret>
      */
     public function all($params = null, $opts = null)
     {

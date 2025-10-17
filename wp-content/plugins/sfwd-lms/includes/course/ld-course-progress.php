@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Must meet requirements of course to mark the course as complete.
  *
  * @since 2.1.0
+ * @since 4.24.0 Added support for overriding the form action.
  *
  * @param WP_Post $post The `WP_Post` lesson or topic object.
  * @param array   $atts Optional. An array of attributes to mark course complete. Default empty array.
@@ -28,7 +29,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string HTML output to mark course complete
  */
 function learndash_mark_complete( $post, $atts = array() ) {
-
 	if ( ! is_user_logged_in() ) {
 		return '';
 	}
@@ -56,7 +56,6 @@ function learndash_mark_complete( $post, $atts = array() ) {
 	$course_id = learndash_get_course_id( $post->ID );
 
 	if ( ( learndash_lesson_progression_enabled() ) && ( ! $bypass_course_limits_admin_users ) ) {
-
 		if ( ! sfwd_lms_has_access( $course_id, $user_id ) ) {
 			return '';
 		}
@@ -183,6 +182,7 @@ function learndash_mark_complete( $post, $atts = array() ) {
 	$return          = '';
 	$button_disabled = '';
 	$time            = 0;
+	$time_cookie_key = '';
 	$time_value      = learndash_forced_lesson_time( $post );
 
 	if ( ! empty( $time_value ) ) {
@@ -190,7 +190,6 @@ function learndash_mark_complete( $post, $atts = array() ) {
 	}
 
 	if ( ( ! learndash_is_admin_user( $user_id ) ) || ( ! $bypass_course_limits_admin_users ) ) {
-
 		if ( ! empty( $time ) ) {
 			$time_cookie_key = learndash_forced_lesson_time_cookie_key( $post );
 			if ( ! empty( $time_cookie_key ) ) {
@@ -231,6 +230,12 @@ function learndash_mark_complete( $post, $atts = array() ) {
 	 */
 	$atts = apply_filters( 'learndash_mark_complete_form_atts', $atts, $post );
 
+	if ( isset( $atts['form']['action'] ) ) {
+		$form_action = ' action="' . esc_attr( $atts['form']['action'] ) . '" ';
+	} else {
+		$form_action = '';
+	}
+
 	if ( isset( $atts['form']['id'] ) ) {
 		$form_id = ' id="' . esc_attr( $atts['form']['id'] ) . '" ';
 	} else {
@@ -259,10 +264,35 @@ function learndash_mark_complete( $post, $atts = array() ) {
 					? LearnDash_Custom_Label::get_label( LearnDash_Custom_Label::$button_skip_event )
 					: LearnDash_Custom_Label::get_label( 'button_mark_complete' );
 
+	/**
+	 * Filters the HTML of the mark complete input button.
+	 *
+	 * @since 4.24.0
+	 *
+	 * @param string  $input_button_html The HTML of the mark complete input button.
+	 * @param WP_Post $post              WP_Post object being displayed.
+	 * @param string  $button_id         The HTML ID attribute of the button.
+	 * @param string  $button_class      The HTML class attribute of the button.
+	 * @param string  $button_disabled   The HTML disabled attribute of the button.
+	 * @param string  $button_label      The label of the button.
+	 *
+	 * @return string Returns the HTML of the mark complete input button.
+	 */
+	$input_button_html = apply_filters(
+		'learndash_mark_complete_input_button_html',
+		'<input type="submit" ' . $button_id . ' value="' . $button_label . '" ' . $button_class . ' ' . $button_disabled . '/>',
+		$post,
+		$button_id,
+		$button_class,
+		$button_disabled,
+		$button_label
+	);
+
 	$form_fields = '<input type="hidden" value="' . $post->ID . '" name="post" />
 				<input type="hidden" value="' . learndash_get_course_id( $post->ID ) . '" name="course_id" />
 				<input type="hidden" value="' . wp_create_nonce( 'sfwd_mark_complete_' . get_current_user_id() . '_' . $post->ID ) . '" name="sfwd_mark_complete" />
-				<input type="submit" ' . $button_id . ' value="' . $button_label . '" ' . $button_class . ' ' . $button_disabled . '/>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Method escapes output
+				' . $input_button_html . ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- It's the button HTML.
+
 	/**
 	 * Filters form fields to mark a course complete.
 	 *
@@ -273,7 +303,7 @@ function learndash_mark_complete( $post, $atts = array() ) {
 	 */
 	$form_fields = apply_filters( 'learndash_mark_complete_form_fields', $form_fields, $post );
 
-	$return .= '<form ' . $form_id . ' ' . $form_class . ' method="post" action="">' . $form_fields . '</form>';
+	$return .= '<form ' . $form_id . ' ' . $form_class . ' method="post" ' . $form_action . '>' . $form_fields . '</form>';
 
 	if ( ( ! learndash_is_admin_user( $user_id ) ) || ( ! $bypass_course_limits_admin_users ) ) {
 		if ( ! empty( $time ) ) {
@@ -289,7 +319,33 @@ function learndash_mark_complete( $post, $atts = array() ) {
 			}
 			$timer_class .= '" ';
 
-			$return .= '<span ' . $timer_id . ' ' . $timer_class . ' data-timer-seconds="' . $time . '" data-button="input.learndash_mark_complete_button" data-cookie-key="' . $time_cookie_key . '"></span>';
+			$timer_html = '<span ' . $timer_id . ' ' . $timer_class . ' data-timer-seconds="' . $time . '" data-button="form.sfwd-mark-complete .learndash_mark_complete_button" data-cookie-key="' . $time_cookie_key . '"></span>';
+
+			/**
+			 * Filters the HTML of the timer.
+			 *
+			 * @since 4.24.0
+			 *
+			 * @param string  $timer_html      The HTML of the timer.
+			 * @param WP_Post $post            WP_Post object being displayed.
+			 * @param string  $timer_id        The HTML ID attribute of the timer.
+			 * @param string  $timer_class     The HTML class attribute of the timer.
+			 * @param int     $time            The time in seconds.
+			 * @param string  $time_cookie_key The cookie key for the timer.
+			 *
+			 * @return string Returns the HTML of the timer.
+			 */
+			$timer_html = apply_filters(
+				'learndash_mark_complete_timer_html',
+				$timer_html,
+				$post,
+				$timer_id,
+				$timer_class,
+				$time,
+				$time_cookie_key
+			);
+
+			$return .= $timer_html;
 		}
 	}
 
@@ -309,8 +365,8 @@ function learndash_mark_complete( $post, $atts = array() ) {
  *
  * @since 2.1.0
  *
- * @param  int     $lesson_id            Lesson ID.
- * @param  boolean $mark_lesson_complete Optional. Whether to mark the lesson complete. Default false.
+ * @param int     $lesson_id            Lesson ID.
+ * @param boolean $mark_lesson_complete Optional. Whether to mark the lesson complete. Default false.
  *
  * @return boolean Returns true if the lesson is completed otherwise false.
  */
@@ -346,6 +402,7 @@ function learndash_lesson_topics_completed( $lesson_id, $mark_lesson_complete = 
  *
  * @since 2.1.0
  * @since 4.11.0 Removed the $post argument.
+ * @since 4.21.5. Updated to use the new 'Automatic Progression' setting.
  *
  * @return void
  */
@@ -412,12 +469,92 @@ function learndash_mark_complete_process() {
 		setcookie( 'learndash_timer_cookie_' . $timer_cookie_key, '', time() - 3600 );
 	}
 
-	learndash_safe_redirect(
-		learndash_course_get_step_completion_url( $post_id, $course_id, $user_id )
-	);
+	$is_automatic_progression_enabled = LearnDash_Settings_Section::get_section_setting(
+		'LearnDash_Settings_Courses_Management_Display',
+		'course_automatic_progression'
+	) === 'yes';
+
+	/**
+	 * Filters whether to redirect the user immediately after the step is completed.
+	 *
+	 * @since 4.21.4
+	 * @since 4.21.5. Changed the default value to true if automatic progression is enabled.
+	 *
+	 * @param boolean $redirect_immediately Whether to redirect the user immediately. True if automatic progression is enabled.
+	 *
+	 * @return boolean Returns true if the user should be redirected immediately, otherwise false.
+	 */
+	if ( apply_filters( 'learndash_step_completed_redirect_immediately', $is_automatic_progression_enabled ) ) {
+		// Redirect immediately to the step completion URL.
+
+		learndash_safe_redirect(
+			learndash_course_get_step_completion_url( $post_id, $course_id, $user_id )
+		);
+	} else {
+		// Set a transient to allow extra processing after the step is completed.
+
+		set_transient(
+			"learndash_step_completed_{$post_id}_{$course_id}_{$user_id}",
+			true,
+			/**
+			 * Filters the transient expiration time for the step completed transient.
+			 *
+			 * @since 4.21.4
+			 *
+			 * @param int     $expiration_time The transient expiration time. Default 10 minutes.
+			 * @param int     $post_id         The post ID.
+			 * @param int     $course_id       The course ID.
+			 * @param int     $user_id         The user ID.
+			 */
+			apply_filters(
+				'learndash_step_completed_transient_expiration_time',
+				10 * MINUTE_IN_SECONDS,
+				$post_id,
+				$course_id,
+				$user_id
+			)
+		);
+	}
 }
 
 add_action( 'wp', 'learndash_mark_complete_process' );
+
+/**
+ * Returns the step (Lesson or Topic) completed transient data when a step is completed by a user through the `learndash_mark_complete_process` function.
+ *
+ * It's a workaround to allow us to do some extra processing after the step is completed.
+ * This function only returns the data if the `learndash_step_completed` transient exists. By default, the transient expires in 10 minutes.
+ *
+ * Note this function does not work for quizzes, as they don't use the `learndash_mark_complete_process` function to complete the step.
+ *
+ * If you need the step completion data in another context, you can use the `learndash_course_get_step_completion_data` function.
+ *
+ * @since 4.21.3
+ *
+ * @param int $step_id   Step ID.
+ * @param int $course_id Course ID.
+ * @param int $user_id   User ID.
+ *
+ * @return array{
+ *     is_course_completed: bool,
+ *     is_course_completion_url: bool,
+ *     next_step_id: int,
+ *     next_step_url: string,
+ * }|false Returns the transient data or false if the transient does not exist.
+ */
+function learndash_get_step_completed_transient_data( $step_id, $course_id, $user_id ) {
+	$transient_key = "learndash_step_completed_{$step_id}_{$course_id}_{$user_id}";
+
+	// If the transient does not exist, return false.
+
+	if ( false === get_transient( $transient_key ) ) {
+		return false;
+	}
+
+	// Return the step completion data.
+
+	return learndash_course_get_step_completion_data( $step_id, $course_id, $user_id );
+}
 
 /**
  * Gets the course permalink.
@@ -429,7 +566,6 @@ add_action( 'wp', 'learndash_mark_complete_process' );
  * @return string The course permalink.
  */
 function learndash_get_course_url( $id = null ) {
-
 	if ( empty( $id ) ) {
 		$id = learndash_get_course_id();
 	}
@@ -517,7 +653,7 @@ function learndash_can_attempt_again( $user_id, $quiz_id ) {
 	if ( ! empty( $quiz_results ) ) {
 		foreach ( $quiz_results as $quiz ) {
 			if ( $quiz['quiz'] == $quiz_id ) {
-				$count++;
+				++$count;
 			}
 		}
 	}
@@ -534,7 +670,7 @@ function learndash_can_attempt_again( $user_id, $quiz_id ) {
  *
  * @since 3.4.0
  *
- * @param  WP_Post $post The `WP_Post` object of lesson or topic.
+ * @param WP_Post $post The `WP_Post` object of lesson or topic.
  *
  * @return int Returns 1 if the previous lesson or topic is completed otherwise 0.
  */
@@ -636,7 +772,6 @@ function learndash_process_mark_complete( $user_id = null, $postid = null, $only
 	}
 
 	if ( ! $onlycalculate ) {
-
 		/**
 		 * Filters whether to mark a process complete.
 		 *
@@ -752,7 +887,6 @@ function learndash_process_mark_complete( $user_id = null, $postid = null, $only
 
 	// If course is completed.
 	if ( ( $course_progress['completed'] >= $completed_old ) && ( $course_progress['completed'] >= $course_progress['total'] ) ) {
-
 		/**
 		 * Fires before the course is marked completed.
 		 *
@@ -848,7 +982,6 @@ function learndash_process_mark_complete( $user_id = null, $postid = null, $only
 
 	$return = false;
 	if ( ! empty( $lesson_completed ) ) {
-
 		/**
 		 * Fires after the lesson is marked completed.
 		 *
@@ -870,7 +1003,6 @@ function learndash_process_mark_complete( $user_id = null, $postid = null, $only
 	}
 
 	if ( ! empty( $topic_completed ) ) {
-
 		/**
 		 * Fires after the topic is marked completed.
 		 *
@@ -893,7 +1025,6 @@ function learndash_process_mark_complete( $user_id = null, $postid = null, $only
 	}
 
 	if ( true == $do_course_complete_action ) {
-
 		/**
 		 * Fires after the course is marked completed.
 		 *
@@ -1044,12 +1175,10 @@ function learndash_is_quiz_notcomplete( $user_id = null, $quizzes = null, $retur
 
 	if ( empty( $quizzes ) ) {
 		return 0;
-	} else {
-		if ( true == $return_incomplete_quiz_ids ) {
+	} elseif ( true == $return_incomplete_quiz_ids ) {
 			return $quizzes;
-		} else {
-			return 1;
-		}
+	} else {
+		return 1;
 	}
 }
 
@@ -1134,9 +1263,7 @@ function learndash_get_course_progress( $user_id = null, $postid = null, $course
 
 	if ( ! empty( $posts ) ) {
 		foreach ( $posts as $k => $post ) {
-
 			if ( $post instanceof WP_Post ) {
-
 				if ( ! empty( $completed_posts[ $post->ID ] ) ) {
 					$posts[ $k ]->completed = 1;
 				} else {
@@ -1275,12 +1402,10 @@ function learndash_is_topic_notcomplete( $user_id = null, $topics = array(), $co
 			}
 
 			if ( ! empty( $course_id ) ) {
-
 				$course_progress = learndash_user_get_course_progress( $user_id, $course_id, 'legacy' );
 
 				$lesson_id = learndash_course_get_single_parent_step( $course_id, $topic_id );
 				if ( ! empty( $lesson_id ) ) {
-
 					if ( ( isset( $course_progress['topics'] ) )
 						&& ( ! empty( $course_progress['topics'] ) )
 						&& ( isset( $course_progress['topics'][ $lesson_id ][ $topic_id ] ) )
@@ -1357,8 +1482,7 @@ function learndash_course_status( $course_id, $user_id = null, $return_slug = fa
 
 	if ( true === $return_slug ) {
 		return $course_status_slug;
-	} else {
-		if ( isset( $learndash_course_statuses[ $course_status_slug ] ) ) {
+	} elseif ( isset( $learndash_course_statuses[ $course_status_slug ] ) ) {
 			/**
 			 * Filters the current status of the course.
 			 *
@@ -1374,7 +1498,6 @@ function learndash_course_status( $course_id, $user_id = null, $return_slug = fa
 				$user_id,
 				isset( $course_progress ) ? $course_progress : array()
 			);
-		}
 	}
 
 	return $course_status_slug;
@@ -1433,7 +1556,6 @@ function learndash_course_status_label( $course_status_slug = '' ) {
  *                          parameter is set to true it may return `WP_Post` object for incomplete step.
  */
 function learndash_is_quiz_accessable( $user_id = null, $post = null, $return_incomplete = false, $course_id = 0 ) {
-
 	// Allow using the legacy function in case of issues with new logic.
 	if ( ( defined( 'LEARNDASH_IS_QUIZ_ACCESSABLE_LEGACY' ) && ( LEARNDASH_IS_QUIZ_ACCESSABLE_LEGACY === true ) ) ) {
 		return learndash_is_quiz_accessable_legacy( $user_id, $post, $course_id );
@@ -1552,7 +1674,6 @@ function learndash_is_quiz_accessable( $user_id = null, $post = null, $return_in
 				}
 
 				return 1;
-
 			} elseif ( learndash_get_post_type_slug( 'lesson' ) === $quiz_parent_post->post_type ) {
 				$quiz_parent_lesson_post = $quiz_parent_post;
 				$sibling_completed_steps = 0;
@@ -1744,7 +1865,6 @@ function learndash_can_complete_step( $user_id = 0, $step_id = 0, $course_id = 0
 				if ( ! empty( $step_timer_time ) ) {
 					$time_cookie_key = learndash_forced_lesson_time_cookie_key( $step_id );
 					if ( ! empty( $time_cookie_key ) ) {
-
 						/**
 						 * Note this is not a 100% check. We are only checking if the cookie
 						 * key exists and is zero. But this cookie could have been set from
@@ -1850,7 +1970,6 @@ function learndash_lesson_progression_enabled( $course_id = 0 ) {
  * @return int|string Returns lesson time if it exists otherwise 0.
  */
 function learndash_forced_lesson_time( $lesson_topic_post = '' ) {
-
 	if ( empty( $lesson_topic_post ) ) {
 		global $post;
 		$lesson_topic_post = $post;
@@ -1904,7 +2023,6 @@ function learndash_forced_lesson_time( $lesson_topic_post = '' ) {
  * @return string The cookie key value or empty string.
  */
 function learndash_forced_lesson_time_cookie_key( $lesson_topic_post = '' ) {
-
 	if ( empty( $lesson_topic_post ) ) {
 		global $post;
 		$lesson_topic_post = $post;
@@ -2205,7 +2323,6 @@ function learndash_process_mark_incomplete( $user_id = 0, $course_id = 0, $step_
 				$topic_id  = $course_step_parents[1];
 
 				if ( ( isset( $user_course_progress[ $course_id ]['topics'][ $lesson_id ][ $topic_id ] ) ) && ( true == $user_course_progress[ $course_id ]['topics'][ $lesson_id ][ $topic_id ] ) ) {
-
 					$user_course_progress[ $course_id ]['topics'][ $lesson_id ][ $topic_id ] = 0;
 					$user_course_progress[ $course_id ]['completed']                        -= 1;
 
@@ -2388,8 +2505,11 @@ function learndash_process_mark_incomplete( $user_id = 0, $course_id = 0, $step_
 		}
 	}
 
-	return update_user_meta( $user_id, '_sfwd-course_progress', $user_course_progress );
+	// Remove the related transient completion data.
 
+	delete_transient( "learndash_step_completed_{$step_id}_{$course_id}_{$user_id}" );
+
+	return update_user_meta( $user_id, '_sfwd-course_progress', $user_course_progress );
 }
 
 /**
@@ -2433,7 +2553,6 @@ function learndash_get_user_quiz_attempt( $user_id = 0, $args = array() ) {
  */
 function learndash_remove_user_quiz_attempt( $user_id = 0, $args = array() ) {
 	if ( ( ! empty( $user_id ) ) && ( ! empty( $args ) ) ) {
-
 		$changes      = false;
 		$user_quizzes = get_user_meta( $user_id, '_sfwd-quizzes', true );
 
@@ -2451,7 +2570,6 @@ function learndash_remove_user_quiz_attempt( $user_id = 0, $args = array() ) {
 				}
 
 				if ( true === $match_found ) {
-
 					/**
 					 * Fires before user single quiz attempt has been removed.
 					 *
@@ -2525,7 +2643,6 @@ function learndash_remove_user_quiz_attempt( $user_id = 0, $args = array() ) {
 				update_user_meta( $user_id, '_sfwd-quizzes', $user_quizzes );
 
 				if ( ! empty( $changed_user_quizzes ) ) {
-
 					/**
 					 * Fires after user all quiz attempts have been removed.
 					 *
@@ -2537,7 +2654,6 @@ function learndash_remove_user_quiz_attempt( $user_id = 0, $args = array() ) {
 					do_action( 'learndash_user_quiz_delete_all_after', $user_id, $changed_user_quizzes );
 
 					foreach ( $changed_user_quizzes as $user_quiz ) {
-
 						if ( ! learndash_is_quiz_complete( $user_id, $user_quiz['quiz'], $user_quiz['course'] ) ) {
 							learndash_process_mark_incomplete( $user_id, $user_quiz['course'], $user_quiz['quiz'], false );
 						}
@@ -2709,96 +2825,8 @@ add_action( 'wp', 'learndash_mark_incomplete_process' );
  * @return string
  */
 function learndash_course_get_step_completion_url( int $step_id, int $course_id, int $user_id ): string {
-	$redirect_url = '';
-
-	$course_completion_transient_key = 'learndash_course_completed_' . $course_id . '_' . $user_id;
-
-	if ( false !== get_transient( $course_completion_transient_key ) ) {
-		/**
-		 * Case 1:
-		 *
-		 * If we have the course completion transient, we should redirect to the completion page.
-		 */
-
-		delete_transient( $course_completion_transient_key ); // Delete, as we need to do it once.
-
-		$redirect_url = learndash_course_get_completion_url( $course_id );
-	} else {
-		$parent_step_id = learndash_course_get_single_parent_step( $course_id, $step_id );
-		$parent_step    = get_post( $parent_step_id );
-
-		$parent_step_is_completed = learndash_user_progress_is_step_complete( $user_id, $course_id, $parent_step_id );
-
-		// If the parent step is completed, evaluate the grandparent step.
-		// It happens when we have a quiz inside a topic. The topic (parent step) may not have any special requirements,
-		// but the lesson (grandparent step) may have.
-
-		if ( $parent_step_is_completed ) {
-			$parent_step_id = learndash_course_get_single_parent_step( $course_id, $parent_step_id );
-			$parent_step    = get_post( $parent_step_id );
-		}
-
-		// Case 2:
-		// If the parent step is not completed and requires a video, an assignment, or wait for a timer to be completed, and all the child steps are completed,
-		// redirect back to the parent step.
-		if (
-			$parent_step instanceof WP_Post
-			&& ! learndash_user_progress_is_step_complete( $user_id, $course_id, $parent_step_id )
-			&& (
-				learndash_course_steps_requires_watching_video_after_sub_steps( $parent_step_id )
-				|| learndash_lesson_hasassignments( $parent_step ) // cspell: disable-line .
-				|| learndash_forced_lesson_time( $parent_step_id )
-				|| learndash_course_steps_is_external( $parent_step_id )
-			)
-			&& empty( learndash_user_progression_get_incomplete_child_steps( $user_id, $course_id, $parent_step_id ) )
-		) {
-			// Redirect back to the parent step.
-			$redirect_url = learndash_get_step_permalink( $parent_step_id, $course_id );
-		} else {
-			$step = get_post( $step_id );
-
-			if (
-				$step instanceof WP_Post
-				&& (
-					learndash_course_steps_requires_watching_video_after_sub_steps( $step_id )
-					|| learndash_lesson_hasassignments( $step ) // cspell: disable-line .
-					|| learndash_forced_lesson_time( $step_id )
-					|| learndash_course_steps_is_external( $step_id )
-				)
-			) {
-				/**
-				 * Case 3:
-				 *
-				 * If the current step:
-				 * - requires watching a video after sub steps, or
-				 * - has assignments, or
-				 * - has a timer, or
-				 * - is external,
-				 * and all child steps are completed, redirect to the next incomplete step.
-				 */
-
-				// Get the next incomplete step (an incomplete step after the current step).
-				$next_step_id = learndash_user_progress_get_next_incomplete_step( $user_id, $course_id, $step_id );
-
-				if ( $next_step_id > 0 ) {
-					// Redirect to the next incomplete step.
-					$redirect_url = learndash_get_step_permalink( $next_step_id, $course_id );
-				}
-			}
-		}
-	}
-
-	// If there is no special case, redirect to the next step page or a course page.
-	if ( empty( $redirect_url ) ) {
-		// Default redirect: the next step page or a course page.
-		$redirect_url = learndash_next_post_link(
-			Cast::to_string( get_permalink( $course_id ) ),
-			true,
-			get_post( $step_id )
-		);
-	}
-
-	$redirect_url = Cast::to_string( $redirect_url );
+	$step_completion_data = learndash_course_get_step_completion_data( $step_id, $course_id, $user_id );
+	$redirect_url         = $step_completion_data['next_step_url'];
 
 	/**
 	 * Filters URL to redirect to after marking a step complete.
@@ -2829,4 +2857,148 @@ function learndash_course_get_step_completion_url( int $step_id, int $course_id,
 	 * @return string Redirect URL.
 	 */
 	return apply_filters( 'learndash_course_step_completion_url', $redirect_url, $step_id, $course_id );
+}
+
+/**
+ * Returns the step completion data when a step is completed by a user.
+ *
+ * @since 4.21.3
+ * @since 4.24.0. Added the `$should_preserve_transient` parameter and the `is_course_completion_url` key to the return value.
+ *
+ * @param int  $step_id                   Step post ID.
+ * @param int  $course_id                 Course ID.
+ * @param int  $user_id                   User ID.
+ * @param bool $should_preserve_transient If true, it will keep the transient data that affects the result, so it can be reused in the next call.
+ *
+ * @return array{
+ *     is_course_completed: bool,
+ *     is_course_completion_url: bool,
+ *     next_step_id: int,
+ *     next_step_url: string,
+ * }
+ */
+function learndash_course_get_step_completion_data(
+	int $step_id,
+	int $course_id,
+	int $user_id,
+	bool $should_preserve_transient = false
+): array {
+	$step_completion_data = [
+		'is_course_completed'      => false,
+		'is_course_completion_url' => false,
+		'next_step_id'             => 0,
+		'next_step_url'            => '',
+	];
+
+	$course_completion_transient_key = 'learndash_course_completed_' . $course_id . '_' . $user_id;
+
+	if ( false !== get_transient( $course_completion_transient_key ) ) {
+		/**
+		 * Case 1:
+		 *
+		 * If we have the course completion transient, the course is completed, and we should redirect to the completion page.
+		 */
+
+		if ( ! $should_preserve_transient ) {
+			delete_transient( $course_completion_transient_key ); // Delete, as we need to do it once.
+		}
+
+		$step_completion_data['is_course_completed']      = true;
+		$step_completion_data['is_course_completion_url'] = true;
+		$step_completion_data['next_step_url']            = learndash_course_get_completion_url( $course_id );
+	} else {
+		$parent_step_id = learndash_course_get_single_parent_step( $course_id, $step_id );
+		$parent_step    = get_post( $parent_step_id );
+
+		$parent_step_is_completed = learndash_user_progress_is_step_complete( $user_id, $course_id, $parent_step_id );
+
+		// If the parent step is completed, evaluate the grandparent step.
+		// It happens when we have a quiz inside a topic. The topic (parent step) may not have any special requirements,
+		// but the lesson (grandparent step) may have.
+
+		if ( $parent_step_is_completed ) {
+			$parent_step_id = learndash_course_get_single_parent_step( $course_id, $parent_step_id );
+			$parent_step    = get_post( $parent_step_id );
+		}
+
+		/**
+		 * Case 2:
+		 *
+		 * If the parent step is not completed and requires a video, an assignment, or wait for a timer to be completed, and all the child steps are completed,
+		 * redirect back to the parent step.
+		 */
+		if (
+			$parent_step instanceof WP_Post
+			&& ! learndash_user_progress_is_step_complete( $user_id, $course_id, $parent_step_id )
+			&& (
+				learndash_course_steps_requires_watching_video_after_sub_steps( $parent_step_id )
+				|| learndash_lesson_hasassignments( $parent_step ) // cspell: disable-line .
+				|| learndash_forced_lesson_time( $parent_step_id )
+				|| learndash_course_steps_is_external( $parent_step_id )
+			)
+			&& empty( learndash_user_progression_get_incomplete_child_steps( $user_id, $course_id, $parent_step_id ) )
+		) {
+			// Redirect back to the parent step.
+
+			$step_completion_data['next_step_url'] = learndash_get_step_permalink( $parent_step_id, $course_id );
+			$step_completion_data['next_step_id']  = $parent_step_id;
+		} else {
+			$step = get_post( $step_id );
+
+			if (
+				$step instanceof WP_Post
+				&& (
+					learndash_course_steps_requires_watching_video_after_sub_steps( $step_id )
+					|| learndash_lesson_hasassignments( $step ) // cspell: disable-line .
+					|| learndash_forced_lesson_time( $step_id )
+					|| learndash_course_steps_is_external( $step_id )
+				)
+			) {
+				/**
+				 * Case 3:
+				 *
+				 * If the current step:
+				 * - requires watching a video after sub steps, or
+				 * - has assignments, or
+				 * - has a timer, or
+				 * - is external,
+				 * and all child steps are completed, redirect to the next incomplete step.
+				 */
+
+				// Get the next incomplete step (an incomplete step after the current step).
+				$next_step_id = learndash_user_progress_get_next_incomplete_step( $user_id, $course_id, $step_id );
+
+				if ( $next_step_id > 0 ) {
+					// Redirect to the next incomplete step.
+
+					$step_completion_data['next_step_url'] = learndash_get_step_permalink( $next_step_id, $course_id );
+					$step_completion_data['next_step_id']  = $next_step_id;
+				}
+			}
+		}
+	}
+
+	// If there is no special case, redirect to the next step page or a course page.
+
+	if ( empty( $step_completion_data['next_step_url'] ) ) {
+		$next_step_id = Cast::to_int(
+			learndash_next_post_link(
+				'',
+				'id',
+				get_post( $step_id )
+			)
+		);
+
+		if ( $next_step_id > 0 ) {
+			$step_completion_data['next_step_url'] = learndash_get_step_permalink( $next_step_id, $course_id );
+			$step_completion_data['next_step_id']  = $next_step_id;
+		} else {
+			$step_completion_data['next_step_url'] = get_permalink( $course_id );
+			$step_completion_data['next_step_id']  = $course_id;
+		}
+
+		$step_completion_data['is_course_completed'] = learndash_course_completed( $user_id, $course_id );
+	}
+
+	return $step_completion_data;
 }

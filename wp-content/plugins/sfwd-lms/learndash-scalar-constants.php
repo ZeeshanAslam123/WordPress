@@ -475,10 +475,11 @@ if ( ! defined( 'LEARNDASH_LMS_DEFAULT_QUESTION_POINTS' ) ) {
 	 * Define LearnDash LMS - Set the default quiz question points.
 	 *
 	 * @since 2.1.6
+	 * @since 4.25.1 Changed from int to float.
 	 *
-	 * @var int $value Default is 1.
+	 * @var float $value Default is 1.0.
 	 */
-	define( 'LEARNDASH_LMS_DEFAULT_QUESTION_POINTS', 1 );
+	define( 'LEARNDASH_LMS_DEFAULT_QUESTION_POINTS', 1. );
 }
 
 if ( ! defined( 'LEARNDASH_LMS_DEFAULT_ANSWER_POINTS' ) ) {
@@ -859,7 +860,7 @@ if ( ! defined( 'LEARNDASH_DISABLE_TEMPLATE_CONTENT_OUTSIDE_LOOP' ) ) {
 if ( ! defined( 'LEARNDASH_TEMPLATE_CONTENT_METHOD' ) ) {
 	/**
 	 * Define LearnDash LMS - Controls the method the template content is rendered.
-	 * Supported by LD30 theme only.
+	 * Supported by LD30 theme only (classic variant only).
 	 *
 	 * @since 4.0.0
 	 *

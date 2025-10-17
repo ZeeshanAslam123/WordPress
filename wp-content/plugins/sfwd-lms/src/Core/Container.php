@@ -19,6 +19,13 @@ use StellarWP\Learndash\StellarWP\ContainerContract\ContainerInterface;
  * @since 4.5.0
  *
  * @method void register( $serviceProviderClass, ...$alias ) Registers a service provider implementation.
+ * @method void setVar( string $key, mixed $value ) Sets a variable in the container.
+ * @method mixed getVar( string $key, mixed|null $default ) Returns a variable stored in the container.
+ * @method mixed make( string $id ) Resolves a class or interface from the container.
+ * @method callable callback( string|object $id, string $method ) Returns a callback to a method.
+ * @method Container when( string $id ) Starts a conditional binding.
+ * @method Container needs( string $id ) Adds a dependency to a conditional binding.
+ * @method void give( mixed $implementation ) Sets a value to be returned when resolving an id.
  */
 class Container implements ContainerInterface {
 	/**

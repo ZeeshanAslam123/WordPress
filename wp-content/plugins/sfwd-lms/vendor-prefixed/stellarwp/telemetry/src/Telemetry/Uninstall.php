@@ -5,10 +5,6 @@
  * @since 1.0.0
  *
  * @package StellarWP\Telemetry
- *
- * @license GPL-2.0-or-later
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 
 namespace StellarWP\Learndash\StellarWP\Telemetry;
@@ -33,7 +29,7 @@ class Uninstall {
 	 *
 	 * @return void
 	 */
-	public static function run( string $stellar_slug ) {
+	public static function run( $stellar_slug ) {
 		$opt_in_status = new Status();
 
 		if ( $opt_in_status->plugin_exists( $stellar_slug ) ) {
@@ -60,8 +56,8 @@ class Uninstall {
 	public static function maybe_remove_optin_option() {
 		$optin = get_option( 'stellarwp_telemetry' );
 
-		// Bail if option has more than 'token' in the array.
-		if ( count( $optin ) > 1 ) {
+		// Bail if option is not set or has more than 'token' in the array.
+		if ( false === $optin || count( $optin ) > 1 ) {
 			return;
 		}
 

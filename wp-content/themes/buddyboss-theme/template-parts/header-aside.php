@@ -23,18 +23,18 @@ $is_lms_inner       = (
 		<?php
 		if ( $is_lms_inner ) :
 			?>
-			<a href="#" id="bb-toggle-theme">
+			<a href="#" id="bb-toggle-theme" aria-label="<?php esc_attr_e( 'Toggle theme', 'buddyboss-theme' ); ?>">
 				<span class="sfwd-dark-mode" data-balloon-pos="down" data-balloon="<?php esc_html_e( 'Dark Mode', 'buddyboss-theme' ); ?>"><i class="bb-icon-rl bb-icon-moon"></i></span>
 				<span class="sfwd-light-mode" data-balloon-pos="down" data-balloon="<?php esc_html_e( 'Light Mode', 'buddyboss-theme' ); ?>"><i class="bb-icon-l bb-icon-sun"></i></span>
 			</a>
-			<a href="#" class="header-maximize-link course-toggle-view" data-balloon-pos="down" data-balloon="<?php esc_html_e( 'Maximize', 'buddyboss-theme' ); ?>"><i class="bb-icon-l bb-icon-expand"></i></a>
-			<a href="#" class="header-minimize-link course-toggle-view" data-balloon-pos="down" data-balloon="<?php esc_html_e( 'Minimize', 'buddyboss-theme' ); ?>"><i class="bb-icon-l bb-icon-merge"></i></a>
+			<a href="#" class="header-maximize-link course-toggle-view" data-balloon-pos="down" data-balloon="<?php esc_attr_e( 'Maximize', 'buddyboss-theme' ); ?>" aria-label="<?php esc_attr_e( 'Maximize', 'buddyboss-theme' ); ?>"><i class="bb-icon-l bb-icon-expand"></i></a>
+			<a href="#" class="header-minimize-link course-toggle-view" data-balloon-pos="down" data-balloon="<?php esc_attr_e( 'Minimize', 'buddyboss-theme' ); ?>" aria-label="<?php esc_attr_e( 'Minimize', 'buddyboss-theme' ); ?>"><i class="bb-icon-l bb-icon-merge"></i></a>
 
 			<?php
 		elseif ( is_user_logged_in() ) :
 			if ( $show_search && 4 !== $header_style ) :
 				?>
-				<a href="#" class="header-search-link" data-balloon-pos="down" data-balloon="<?php esc_html_e( 'Search', 'buddyboss-theme' ); ?>"><i class="bb-icon-l bb-icon-search"></i></a>
+				<a href="#" class="header-search-link" data-balloon-pos="down" data-balloon="<?php esc_html_e( 'Search', 'buddyboss-theme' ); ?>" aria-label="<?php esc_html_e( 'Search', 'buddyboss-theme' ); ?>"><i class="bb-icon-l bb-icon-search"></i></a>
 				<span class="bb-separator"></span>
 				<?php
 			endif;
@@ -62,7 +62,7 @@ $is_lms_inner       = (
 					$display_name = function_exists( 'bp_core_get_user_displayname' ) ? bp_core_get_user_displayname( $current_user->ID ) : $current_user->display_name;
 					?>
 
-					<a class="user-link" href="<?php echo esc_url( $user_link ); ?>">
+					<a class="user-link" href="<?php echo esc_url( $user_link ); ?>" <?php echo bb_elementor_pro_disable_page_transition(); ?> aria-label="<?php echo esc_attr( $display_name ); ?>">
 						<?php
 						if ( 'name_and_avatar' === $profile_dropdown ) {
 							?>
@@ -77,7 +77,7 @@ $is_lms_inner       = (
 						<div class="wrapper">
 							<ul class="sub-menu-inner">
 								<li>
-									<a class="user-link" href="<?php echo esc_url( $user_link ); ?>">
+									<a class="user-link" href="<?php echo esc_url( $user_link ); ?>" <?php echo bb_elementor_pro_disable_page_transition(); ?> aria-label="<?php echo esc_attr( $display_name ); ?>">
 										<?php echo get_avatar( get_current_user_id(), 100 ); ?>
 										<span>
 											<span class="user-name"><?php echo esc_html( $display_name ); ?></span>
@@ -140,7 +140,7 @@ $is_lms_inner       = (
 			?>
 
 			<?php if ( $show_search && 4 !== $header_style && !$is_lms_inner ) : ?>
-				<a href="#" class="header-search-link" data-balloon-pos="down" data-balloon="<?php esc_attr_e( 'Search', 'buddyboss-theme' ); ?>"><i class="bb-icon-l bb-icon-search"></i></a>
+				<a href="#" class="header-search-link" data-balloon-pos="down" data-balloon="<?php esc_attr_e( 'Search', 'buddyboss-theme' ); ?>" aria-label="<?php esc_attr_e( 'Search', 'buddyboss-theme' ); ?>"><i class="bb-icon-l bb-icon-search"></i></a>
 				<span class="search-separator bb-separator"></span>
 				<?php
 			endif;

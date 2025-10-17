@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service\FinancialConnections;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -24,7 +20,7 @@ class AccountService extends \StellarWP\Learndash\Stripe\Service\AbstractService
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\FinancialConnections\Account>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\FinancialConnections\Account>
      */
     public function all($params = null, $opts = null)
     {
@@ -40,7 +36,7 @@ class AccountService extends \StellarWP\Learndash\Stripe\Service\AbstractService
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\FinancialConnections\AccountOwner>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\FinancialConnections\AccountOwner>
      */
     public function allOwners($id, $params = null, $opts = null)
     {

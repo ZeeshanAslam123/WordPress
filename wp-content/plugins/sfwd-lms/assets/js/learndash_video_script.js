@@ -1724,17 +1724,30 @@ function LearnDash_watchPlayersEnd() {
 
 function LearnDash_disable_assets(status) {
 	if (
-		jQuery('form.sfwd-mark-complete input.learndash_mark_complete_button')
+		jQuery('form.sfwd-mark-complete .learndash_mark_complete_button')
 			.length
 	) {
 		if (learndash_video_data.videos_hide_complete_button == true) {
 			jQuery(
-				'form.sfwd-mark-complete input.learndash_mark_complete_button'
+				'form.sfwd-mark-complete .learndash_mark_complete_button'
 			).hide();
 		} else {
 			jQuery(
-				'form.sfwd-mark-complete input.learndash_mark_complete_button'
+				'form.sfwd-mark-complete .learndash_mark_complete_button'
 			).attr('disabled', status);
+
+			// Show LD Modern tooltip if the button is disabled.
+
+			const tooltip_selector =
+				'.ld-navigation__progress-mark-complete .ld-tooltip__text';
+
+			if (jQuery(tooltip_selector).length) {
+				if (status) {
+					jQuery(tooltip_selector).show();
+				} else {
+					jQuery(tooltip_selector).hide();
+				}
+			}
 		}
 
 		// If we enabled the button 'status' is false and auto-complete is true then submit the form.
@@ -1753,7 +1766,7 @@ function LearnDash_disable_assets(status) {
 						var timer_html = jQuery(
 							learndash_video_data.videos_auto_complete_delay_message
 						).insertAfter(
-							'form.sfwd-mark-complete input.learndash_mark_complete_button'
+							'form.sfwd-mark-complete .learndash_mark_complete_button'
 						);
 					}
 
@@ -1780,16 +1793,25 @@ function LearnDash_disable_assets(status) {
 	}
 
 	if (learndash_video_data.videos_shown == 'BEFORE') {
+		const topicsListSelector = jQuery('.ld-accordion__header').length
+			? '.ld-accordion__header,.ld-accordion__content'
+			: '#learndash_lesson_topics_list';
+		const quizzesListSelector = jQuery('.ld-accordion__header').length
+			? '.ld-accordion__header,.ld-accordion__content'
+			: '#learndash_quizzes';
+
 		if (status == true) {
-			jQuery('#learndash_lesson_topics_list').hide();
-			jQuery('#learndash_quizzes').hide();
+			jQuery(topicsListSelector).hide();
+			jQuery(quizzesListSelector).hide();
 		} else {
-			jQuery('#learndash_lesson_topics_list').slideDown();
-			jQuery('#learndash_quizzes').slideDown();
+			jQuery(topicsListSelector).slideDown();
+			jQuery(quizzesListSelector).slideDown();
 		}
 	}
 
-	jQuery(document).trigger('learndash_video_disable_assets', [status]);
+	jQuery(document).ready(function () {
+		jQuery(document).trigger('learndash_video_disable_assets', [status]);
+	});
 }
 
 /**

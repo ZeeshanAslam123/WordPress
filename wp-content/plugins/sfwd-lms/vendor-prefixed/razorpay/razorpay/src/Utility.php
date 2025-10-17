@@ -1,10 +1,4 @@
 <?php
-/**
- * @license MIT
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
 
 namespace StellarWP\Learndash\Razorpay\Api;
 
@@ -74,6 +68,38 @@ class Utility
         {
             throw new Errors\SignatureVerificationError(
                 'Invalid signature passed');
+        }
+    }
+
+    public function generateOnboardingSignature($data, $secret){
+        $jsonStr = json_encode($data);
+        return $this->encrypt($jsonStr, $secret);
+    }
+    
+    private function encrypt($dataToEncrypt, $secret) {
+        try {
+            // Use the first 16 bytes of the secret as the key
+            $key = substr($secret, 0, 16);
+    
+            // Use the first 12 bytes of the key as IV
+            $iv = substr($key, 0, 12);
+    
+            // Encrypt the data using AES-128-GCM
+            $cipher = 'aes-128-gcm';
+            $tag = ''; // Authentication tag will be filled after encryption
+            $encryptedData = openssl_encrypt($dataToEncrypt, $cipher, $key, OPENSSL_RAW_DATA, $iv, $tag, '', 16);
+    
+            if ($encryptedData === false) {
+                throw new Exception('Encryption failed');
+            }
+    
+            // Concatenate encrypted data with the authentication tag
+            $finalData = $encryptedData . $tag;
+    
+            // Convert to hex string
+            return bin2hex($finalData);
+        } catch (Exception $e) {
+            throw new Exception('Encryption failed: ' . $e->getMessage());
         }
     }
 

@@ -10,10 +10,6 @@ namespace StellarWP\Learndash\Stripe\Service\Climate;
  * @property OrderService $orders
  * @property ProductService $products
  * @property SupplierService $suppliers
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class ClimateServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

@@ -269,9 +269,16 @@ class WpProQuiz_Controller_Question extends WpProQuiz_Controller_Controller {
 		exit;
 	}
 
+	/**
+	 * Saves the sort order of the questions.
+	 *
+	 * @since 1.2.8
+	 *
+	 * @return void
+	 */
 	public function saveSort() {
 		if ( ! current_user_can( 'wpProQuiz_edit_quiz' ) ) {
-			exit;
+			wp_die();
 		}
 
 		$mapper = new WpProQuiz_Model_QuestionMapper();
@@ -281,7 +288,7 @@ class WpProQuiz_Controller_Question extends WpProQuiz_Controller_Controller {
 			$mapper->updateSort( $v, $k );
 		}
 
-		exit;
+		wp_die();
 	}
 
 	public function deleteAction( $id ) {
@@ -467,7 +474,9 @@ class WpProQuiz_Controller_Question extends WpProQuiz_Controller_Controller {
 			}
 		}
 
-		$question_points = isset( $post['points'] ) ? $post['points'] : 0.;
+		$question_points = isset( $post['points'] )
+			? $post['points']
+			: LEARNDASH_LMS_DEFAULT_QUESTION_POINTS;
 
 		// 'Fill in the blank' question.
 

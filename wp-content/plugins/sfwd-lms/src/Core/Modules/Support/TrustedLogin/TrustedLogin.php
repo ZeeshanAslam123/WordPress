@@ -74,11 +74,11 @@ class TrustedLogin {
 	 */
 	public function register(): void {
 		$config = [
-			'auth'   => [
+			'auth'       => [
 				'api_key'     => self::API_KEY,
 				'license_key' => get_option( LEARNDASH_LICENSE_KEY, '' ),
 			],
-			'vendor' => [
+			'vendor'     => [
 				'namespace'   => self::NAMESPACE,
 				'title'       => 'LearnDash',
 				'logo_url'    => LEARNDASH_LMS_PLUGIN_URL . 'assets/images/learndash.svg',
@@ -86,11 +86,12 @@ class TrustedLogin {
 				'support_url' => 'https://www.learndash.com/support/',
 				'website'     => 'https://checkout.learndash.com',
 			],
-			'decay'  => WEEK_IN_SECONDS,
-			'menu'   => [
+			'decay'      => WEEK_IN_SECONDS,
+			'menu'       => [
 				'slug' => self::PARENT_SLUG,
 			],
-			'role'   => self::USER_ROLE,
+			'role'       => self::USER_ROLE,
+			'clone_role' => false,
 		];
 
 		new Client(

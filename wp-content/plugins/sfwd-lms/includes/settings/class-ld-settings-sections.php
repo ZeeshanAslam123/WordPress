@@ -1118,8 +1118,10 @@ if ( ! class_exists( 'LearnDash_Settings_Section' ) ) {
 		 *
 		 * @since 2.4.0
 		 *
-		 * @param string $section_org Settings Section.
-		 * @param string $field       Settings Section field key.
+		 * @param string $section_org       Settings Section.
+		 * @param string $field             Settings Section field key.
+
+		 * @return null|array<string,mixed> If found returns the field values.
 		 */
 		public static function get_section_settings_all( $section_org = '', $field = 'value' ) {
 			if ( empty( $section_org ) ) {
@@ -1150,6 +1152,8 @@ if ( ! class_exists( 'LearnDash_Settings_Section' ) ) {
 
 				return $fields_values;
 			}
+
+			return null;
 		}
 
 		/**

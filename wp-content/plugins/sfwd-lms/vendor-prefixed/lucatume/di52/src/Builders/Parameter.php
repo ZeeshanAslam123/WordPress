@@ -3,10 +3,6 @@
  * The representation of a builder parameter.
  *
  * @package StellarWP\Learndash\lucatume\DI52\Builders
- *
- * @license GPL-3.0
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 
 namespace StellarWP\Learndash\lucatume\DI52\Builders;

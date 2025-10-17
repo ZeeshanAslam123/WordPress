@@ -51,6 +51,12 @@ class Provider extends ServiceProvider {
 			$this->container->callback( Experiments::class, 'init' )
 		);
 
+		// Enqueue admin scripts.
+		add_action(
+			'admin_enqueue_scripts',
+			$this->container->callback( Experiments::class, 'enqueue_admin_scripts' )
+		);
+
 		// Settings.
 		// Hooks can't be called via the container because of some architecture issues.
 

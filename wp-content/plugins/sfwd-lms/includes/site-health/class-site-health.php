@@ -7,6 +7,8 @@
  * @package LearnDash\GDPR
  */
 
+use LearnDash\Core\Themes\LD30\Presenter_Mode\Settings as Presenter_Mode_Settings;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -188,12 +190,15 @@ if ( ! class_exists( 'Learndash_Site_Health' ) ) {
 		private function map_settings_fields(): array {
 			// Settings.
 
-			$shared_steps_enabled  = learndash_is_course_shared_steps_enabled();
-			$focus_mode_enabled    = $this->focus_mode_is_enabled();
-			$is_rtl                = is_rtl();
-			$registration_page_set = learndash_registration_page_is_set();
-			$currency_code         = learndash_get_currency_code();
-			$nested_urls_enabled   = 'yes' === LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Section_Permalinks', 'nested_urls' );
+			$shared_steps_enabled        = learndash_is_course_shared_steps_enabled();
+			$focus_mode_enabled          = $this->focus_mode_is_enabled();
+			$is_rtl                      = is_rtl();
+			$registration_page_set       = learndash_registration_page_is_set();
+			$currency_code               = learndash_get_currency_code();
+			$nested_urls_enabled         = 'yes' === LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Section_Permalinks', 'nested_urls' );
+			$modern_course_enabled       = LearnDash_Settings_Section_General_Appearance::get_setting( 'course_enabled' ) === 'yes';
+			$modern_group_enabled        = LearnDash_Settings_Section_General_Appearance::get_setting( 'group_enabled' ) === 'yes';
+			$modern_registration_enabled = LearnDash_Settings_Section_General_Appearance::get_setting( 'registration_enabled' ) === 'yes';
 
 			// Gateways.
 
@@ -205,6 +210,13 @@ if ( ! class_exists( 'Learndash_Site_Health' ) ) {
 
 			$razorpay_gateway    = Learndash_Razorpay_Gateway::get_initiated_instance();
 			$razorpay_configured = $razorpay_gateway && $razorpay_gateway->is_ready();
+
+			// Labels.
+
+			$course_label = LearnDash_Custom_Label::get_label( 'course' );
+			$group_label  = LearnDash_Custom_Label::get_label( 'group' );
+
+			$presenter_mode_settings = Presenter_Mode_Settings::get();
 
 			return array(
 				'shared_course_steps'            => array(
@@ -257,6 +269,39 @@ if ( ! class_exists( 'Learndash_Site_Health' ) ) {
 					'value' => $this->bool_to_yes_no_string( $razorpay_configured ),
 					'debug' => $razorpay_configured,
 				),
+				'modern_registration_enabled'    => [
+					'label' => __( 'Modern Registration Page', 'learndash' ),
+					'value' => $this->bool_to_on_off_string( $modern_registration_enabled ),
+					'debug' => $modern_registration_enabled,
+				],
+				'modern_course_enabled'          => [
+					'label' => sprintf(
+						/* translators: %1$s = Course custom label */
+						__( 'Modern %1$s Page', 'learndash' ),
+						$course_label
+					),
+					'value' => $this->bool_to_on_off_string( $modern_course_enabled ),
+					'debug' => $modern_course_enabled,
+				],
+				'presenter_mode_enabled'         => [
+					'label' => __( 'Presenter Mode', 'learndash' ),
+					'value' => $this->bool_to_on_off_string( (bool) $presenter_mode_settings['presenter_mode_enabled'] ),
+					'debug' => $presenter_mode_settings['presenter_mode_enabled'],
+				],
+				'presenter_mode_icon_position'   => [
+					'label' => __( 'Presenter Mode Icon Position', 'learndash' ),
+					'value' => $presenter_mode_settings['presenter_mode_icon_position'],
+					'debug' => $presenter_mode_settings['presenter_mode_icon_position'],
+				],
+				'modern_group_enabled'           => [
+					'label' => sprintf(
+						/* translators: %1$s = Group custom label */
+						__( 'Modern %1$s Page', 'learndash' ),
+						$group_label
+					),
+					'value' => $this->bool_to_on_off_string( $modern_group_enabled ),
+					'debug' => $modern_group_enabled,
+				],
 			);
 		}
 

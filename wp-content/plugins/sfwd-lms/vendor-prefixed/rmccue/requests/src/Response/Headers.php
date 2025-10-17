@@ -2,11 +2,7 @@
 /**
  * Case-insensitive dictionary, suitable for HTTP headers
  *
- * @package Learndash_Core_Requests
- *
- * @license ISC
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * @package Requests
  */
 
 namespace StellarWP\Learndash\WpOrg\Requests\Response;

@@ -148,3 +148,54 @@ if ( ! function_exists( 'buddyboss_notification_avatar' ) ) {
 
 	}
 }
+
+if ( ! function_exists( 'buddyboss_theme_get_header_notifications' ) ) {
+
+	/**
+	 * Prepare header notification for user.
+	 *
+	 * @since 2.5.70
+	 *
+	 * @return void
+	 */
+	function buddyboss_theme_get_header_notifications() {
+		_deprecated_function( __FUNCTION__, '2.5.70' );
+
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_success(
+				array(
+					'message' => __( 'You need to be loggedin.', 'buddyboss-theme' ),
+				)
+			);
+		}
+
+		$response = array();
+
+		ob_start();
+
+		get_template_part( 'template-parts/unread-notifications' );
+
+		$response['contents']            = ob_get_clean();
+		$response['total_notifications'] = bp_notifications_get_unread_notification_count( bp_displayed_user_id() );
+
+		wp_send_json_success( $response );
+	}
+}
+
+if ( ! function_exists( 'bb_theme_elementor_activity_edit_button' ) ) {
+	/**
+	 * Deprecated function for activity edit button in Elementor
+	 *
+	 * @since BuddyBoss 1.5.1
+	 * @deprecated BuddyBoss 2.8.00
+	 *
+	 * @param array $buttons Array of buttons.
+	 * @param int   $activity_id Activity ID.
+	 *
+	 * @return mixed
+	 */
+	function bb_theme_elementor_activity_edit_button( $buttons, $activity_id ) {
+		_deprecated_function( __FUNCTION__, '2.8.00', 'bb_theme_elementor_activity_bubble_buttons' );
+		return $buttons;
+	}
+}

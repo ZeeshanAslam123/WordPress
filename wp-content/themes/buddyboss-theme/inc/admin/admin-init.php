@@ -6,29 +6,172 @@ if ( ! function_exists( 'buddyboss_theme_get_theme_sudharo' ) ) {
 	 * @since 1.6.0
 	 */
 	function buddyboss_theme_get_theme_sudharo() {
-		$whitelist_domain = array(
-			'.test',
-			'.dev',
-			'staging.',
-			'localhost',
-			'.local',
-		);
+		if ( buddyboss_theme_check_staging_server() ) {
+			return false;
+		}
 
-		foreach ( $whitelist_domain as $domain ) {
-			if ( isset( $_SERVER ) && isset( $_SERVER['SERVER_NAME'] ) && false !== strpos( $_SERVER['SERVER_NAME'], $domain ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-				return false;
+		$license_exists = false;
+
+		if ( class_exists( '\BuddyBoss\Core\Admin\Mothership\BB_License_Manager' ) ) {
+			$license_status = \BuddyBoss\Core\Admin\Mothership\BB_License_Manager::checkLicenseStatus();
+			if (
+					! empty( $license_status ) &&
+					class_exists( '\BuddyBoss\Core\Admin\Mothership\BB_Addons_Manager' ) &&
+					\BuddyBoss\Core\Admin\Mothership\BB_Addons_Manager::checkProductBySlug( 'buddyboss-theme' )
+			) {
+				$license_exists = true;
+			}
+		} elseif (
+                ! class_exists( '\BuddyBoss\Core\Admin\Mothership\BB_License_Manager' ) &&
+                class_exists( '\BuddyBossTheme\Admin\Mothership\BB_Theme_License_Manager' )
+        ) {
+			$license_exists = \BuddyBossTheme\Admin\Mothership\BB_Theme_License_Manager::checkLicenseStatus();
+		}
+
+		return ( ! $license_exists );
+	}
+}
+
+/**
+ * Check if the current site is a staging or development server.
+ *
+ * This function checks the provided domain (or the current site URL if no domain is provided)
+ * against a list of known staging/development indicators, including reserved hosting provider
+ * domains, reserved words, reserved TLDs, and known local development tool domains. It also
+ * checks for common WordPress-specific staging indicators.
+ *
+ * @since 2.14.0
+ *
+ * @param string $raw_domain The domain to check. If empty, the current site URL will be used.
+ * @return bool True if the domain indicates a staging/development environment, false otherwise.
+ */
+function buddyboss_theme_check_staging_server( $raw_domain = '' ) {
+
+	// If no domain provided, use the current site URL.
+	if ( empty( $raw_domain ) ) {
+		$raw_domain = site_url();
+	}
+
+	// Reserved hosting provider domains that indicate staging/development.
+	$reserved_hosting_provider_domains = array(
+		'accessdomain',     // Generic hosting.
+		'cloudwaysapps',    // Cloudways.
+		'flywheelsites',    // Flywheel.
+		'kinsta',           // Kinsta.
+		'mybluehost',       // BlueHost.
+		'myftpupload',      // GoDaddy.
+		'netsolhost',       // Network Solutions.
+		'pantheonsite',     // Pantheon.
+		'sg-host',          // SiteGround.
+		'wpengine',         // WP Engine (old).
+		'wpenginepowered',  // WP Engine.
+		'rapydapps.cloud',  // Rapyd.
+	);
+
+	// Reserved words that indicate testing/staging environments.
+	$reserved_words = array(
+		'dev',
+		'develop',
+		'development',
+		'test',
+		'testing',
+		'stg',
+		'stage',
+		'staging',
+		'demo',
+		'sandbox',
+		'preview',
+	);
+
+	// Reserved TLDs for local development.
+	$reserved_tlds = array(
+		'local',
+		'localhost',
+		'test',
+		'example',
+		'invalid',
+		'dev',
+		'staging',
+	);
+
+	// Known local development tool domains.
+	$reserved_local_domains = array(
+		'lndo.site',        // Lando.
+		'ddev.site',        // DDEV.
+		'docksal',          // Docksal.
+		'localwp.com',      // Local by Flywheel.
+		'local.test',       // Generic local.
+		'docker.internal',  // Docker.
+		'ngrok.io',         // ngrok tunneling.
+		'localtunnel.me',   // localtunnel.
+	);
+
+	// Parse the URL to get the host.
+	$parsed_url = wp_parse_url( $raw_domain );
+	$domain     = isset( $parsed_url['host'] ) ? $parsed_url['host'] : $raw_domain;
+
+	// Remove www prefix if present.
+	$domain = preg_replace( '/^www\./i', '', $domain );
+
+	// Check if domain is localhost or an IP address.
+	if ( 'localhost' === $domain || filter_var( $domain, FILTER_VALIDATE_IP ) ) {
+		return true;
+	}
+
+	// Check for port numbers (often indicates local development).
+	if ( isset( $parsed_url['port'] ) && ! in_array( $parsed_url['port'], array( 80, 443 ), true ) ) {
+		return true;
+	}
+
+	// Extract domain parts.
+	$domain_parts = explode( '.', $domain );
+	$tld          = end( $domain_parts );
+
+	// Check for reserved TLDs.
+	if ( in_array( $tld, $reserved_tlds, true ) ) {
+		return true;
+	}
+
+	// Check for reserved testing words in subdomains.
+	$subdomain_pattern = '/(\.|-)(' . implode( '|', $reserved_words ) . ')(\.|-)|(^(' . implode( '|', $reserved_words ) . ')\.)/i';
+	if ( preg_match( $subdomain_pattern, $domain ) ) {
+		return true;
+	}
+
+	// Check for known hosting provider staging domains.
+	$hosting_pattern = '/\.(' . implode( '|', $reserved_hosting_provider_domains ) . ')\./i';
+	if ( preg_match( $hosting_pattern, '.' . $domain . '.' ) ) {
+		return true;
+	}
+
+	// Check for known development tool domains.
+	$dev_tools_pattern = '/(' . implode( '|', array_map( 'preg_quote', $reserved_local_domains ) ) . ')$/i';
+	if ( preg_match( $dev_tools_pattern, $domain ) ) {
+		return true;
+	}
+
+	// Check WordPress-specific staging indicators.
+	if ( defined( 'WP_ENVIRONMENT_TYPE' ) && 'production' !== WP_ENVIRONMENT_TYPE ) {
+		return true;
+	}
+
+	// Check for common WordPress staging constants.
+	if ( defined( 'WP_STAGING' ) && WP_STAGING ) {
+		return true;
+	}
+
+	// Additional WordPress multisite check.
+	if ( is_multisite() ) {
+		$network_domain = parse_url( network_site_url(), PHP_URL_HOST );
+		if ( $network_domain !== $domain ) {
+			// Check if this is a staging subdomain in multisite.
+			if ( preg_match( $subdomain_pattern, $network_domain ) ) {
+				return true;
 			}
 		}
-
-		$value = get_option( 'be5f330bbd49d6160ff4658ac3d219ee' );
-		if ( is_multisite() ) {
-			$value = get_site_option( 'be5f330bbd49d6160ff4658ac3d219ee' );
-		}
-		if ( ! empty( $value ) ) {
-			return true;
-		}
-		return false;
 	}
+
+	return false;
 }
 
 /**
@@ -139,22 +282,22 @@ if ( ! function_exists( 'register_buddyboss_menu_page' ) ) {
  * Load customizer helper - MUST be loaded before your options are set.
  * Override customizer value fixed here.
  */
-if ( file_exists( dirname( __FILE__ ) . '/customizer-helper/bb-customizer-helper-init.php' ) ) {
-	require_once dirname( __FILE__ ) . '/customizer-helper/bb-customizer-helper-init.php';
+if ( file_exists( __DIR__ . '/customizer-helper/bb-customizer-helper-init.php' ) ) {
+	require_once __DIR__ . '/customizer-helper/bb-customizer-helper-init.php';
 }
 
 /**
  * Load extensions - MUST be loaded before your options are set
  */
-if ( file_exists( dirname( __FILE__ ) . '/buddyboss-extensions/extensions-init.php' ) ) {
-	require_once dirname( __FILE__ ) . '/buddyboss-extensions/extensions-init.php';
+if ( file_exists( __DIR__ . '/buddyboss-extensions/extensions-init.php' ) ) {
+	require_once __DIR__ . '/buddyboss-extensions/extensions-init.php';
 }
 
 /**
  * Load redux
  */
-if ( ! class_exists( 'ReduxFramework' ) && file_exists( dirname( __FILE__ ) . '/framework/redux-core/framework.php' ) ) {
-	require_once dirname( __FILE__ ) . '/framework/redux-core/framework.php';
+if ( ! class_exists( 'ReduxFramework' ) && file_exists( __DIR__ . '/framework/redux-core/framework.php' ) ) {
+	require_once __DIR__ . '/framework/redux-core/framework.php';
 }
 
 /**
@@ -163,11 +306,11 @@ if ( ! class_exists( 'ReduxFramework' ) && file_exists( dirname( __FILE__ ) . '/
 if ( ! function_exists( 'load_boss_theme_options' ) ) {
 
 	function load_boss_theme_options() {
-		if ( file_exists( dirname( __FILE__ ) . '/options-init.php' ) ) {
-			require_once dirname( __FILE__ ) . '/options-init.php';
+		if ( file_exists( __DIR__ . '/options-init.php' ) ) {
+			require_once __DIR__ . '/options-init.php';
 		}
-		if ( file_exists( dirname( __FILE__ ) . '/plugin-support.php' ) ) {
-			require_once dirname( __FILE__ ) . '/plugin-support.php';
+		if ( file_exists( __DIR__ . '/plugin-support.php' ) ) {
+			require_once __DIR__ . '/plugin-support.php';
 		}
 	}
 
@@ -175,7 +318,7 @@ if ( ! function_exists( 'load_boss_theme_options' ) ) {
 	if ( function_exists( 'bp_is_active' ) ) {
 		add_action( 'bp_init', 'load_boss_theme_options' );
 	} else {
-		load_boss_theme_options();
+		add_action( 'init', 'load_boss_theme_options' );
 	}
 }
 
@@ -253,12 +396,12 @@ if ( ! function_exists( 'boss_custom_panel_styles_scripts' ) ) {
 			'BOSS_CUSTOM_ADMIN',
 			array(
 				'elementor_pro_active' => ! empty( buddyboss_theme()->elementor_pro_helper() ) ? '1' : '0',
-				'ieInfo' => esc_html__( 'Please click "Reset All" at the top, before doing an import in order for your changes to take effect.', 'buddyboss-theme' ),
+				'ieInfo'               => esc_html__( 'Please click "Reset All" at the top, before doing an import in order for your changes to take effect.', 'buddyboss-theme' ),
 			)
 		);
 
 		// Modified css because its not displaying like same as before update redux framework.
-		wp_deregister_style( 'redux-admin-theme-css' );
+		wp_deregister_style( 'redux-admin-theme' );
 		wp_deregister_style( 'redux-admin-css' );
 		wp_enqueue_style(
 			'redux-admin-css',
@@ -276,11 +419,12 @@ if ( ! function_exists( 'buddyboss_theme_show_theme_option_jaherat_pehla' ) ) {
 
 	function buddyboss_theme_show_theme_option_jaherat_pehla() {
 		if ( buddyboss_theme_get_theme_sudharo() ) {
-			$url = is_multisite() ? network_admin_url( 'admin.php?page=buddyboss-updater' ) : admin_url( 'admin.php?page=buddyboss-updater' );
+            $slug = buddyboss_theme_licence_page_slug();
+			$url = is_multisite() ? network_admin_url( 'admin.php?page=' . $slug ) : admin_url( 'admin.php?page=' . $slug );
 			?>
 		<div class="unlicensed-theme">
 			<div class="block">
-				<p><?php echo sprintf( __( 'Warning: Access Restricted. Please enable BuddyBoss Theme License key <a href="%s">HERE</a> and try again.', 'buddyboss-theme' ), esc_url( $url ) ); ?></p>
+				<p><?php printf( __( 'Warning: Access Restricted. Please enable BuddyBoss Theme License key <a href="%s">HERE</a> and try again.', 'buddyboss-theme' ), esc_url( $url ) ); ?></p>
 			</div>
 			<?php
 		}
@@ -355,7 +499,6 @@ if ( ! function_exists( 'redux_options_buddyboss_theme_saved' ) ) {
 		) ) {
 			buddyboss_theme_compressed_transient_delete();
 		}
-
 	}
 
 	add_action( 'redux/options/buddyboss_theme_options/saved', 'redux_options_buddyboss_theme_saved' );
@@ -498,34 +641,6 @@ if ( ! function_exists( 'buddyboss_page_padding_meta_box' ) ) {
 	}
 }
 
-/**
- * Display Hello Screen
- */
-if ( ! function_exists( 'buddyboss_theme_activation_redirect' ) ) {
-	function buddyboss_theme_activation_redirect() {
-		global $pagenow;
-		if ( 'themes.php' == $pagenow && is_admin() && isset( $_GET['activated'] ) ) {
-			wp_redirect( esc_url_raw( add_query_arg( 'hello', 'theme', admin_url() ) ) );
-		}
-	}
-	add_action( 'admin_init', 'buddyboss_theme_activation_redirect' );
-}
-
-/**
- * Display About Screen
- */
-if ( ! function_exists( 'about_theme_screen' ) ) {
-	function about_theme_screen() {
-		if ( 0 !== strpos( get_current_screen()->id, 'dashboard' ) || empty( $_GET['hello'] ) || $_GET['hello'] !== 'theme' ) {
-			return;
-		}
-
-		include get_template_directory() . '/template-parts/admin-hello-theme-popup.php';
-	}
-	// Hello Theme.
-	add_action( 'admin_footer', 'about_theme_screen' );
-}
-
 if ( ! function_exists( 'buddyboss_theme_hello_theme_custom_wp_admin_style' ) ) {
 	function buddyboss_theme_hello_theme_custom_wp_admin_style() {
 		$rtl_css      = is_rtl() ? '-rtl' : '';
@@ -555,7 +670,7 @@ if ( ! function_exists( 'buddyboss_theme_hello_theme_custom_wp_admin_style' ) ) 
 if ( ! function_exists( 'buddyboss_theme_ld_30_admin_notice' ) ) {
 	function buddyboss_theme_ld_30_admin_notice() {
 
-		if ( in_array( 'sfwd-lms/sfwd_lms.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+		if ( in_array( 'sfwd-lms/sfwd_lms.php', apply_filters( 'active_plugins', (array) get_option( 'active_plugins', array() ) ), true ) ) {
 
 			$plugin_data    = get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . 'sfwd-lms/sfwd_lms.php' );
 			$plugin_version = ! empty( $plugin_data['Version'] ) ? $plugin_data['Version'] : 0;
@@ -563,16 +678,15 @@ if ( ! function_exists( 'buddyboss_theme_ld_30_admin_notice' ) ) {
 			if ( $plugin_version && version_compare( $plugin_version, '3.0', '<' ) ) {
 				?>
 				<div class="notice notice-success">
-					<p><?php echo sprintf( __( 'BuddyBoss Theme requires LearnDash 3.0 or above.  <a href="%s">Update LearnDash</a>', 'buddyboss-theme' ), esc_url( admin_url( 'plugins.php' ) ) ); ?></p>
+					<p><?php printf( __( 'BuddyBoss Theme requires LearnDash 3.0 or above.  <a href="%s">Update LearnDash</a>', 'buddyboss-theme' ), esc_url( admin_url( 'plugins.php' ) ) ); ?></p>
 				</div>
 				<?php
-			} else {
-				if ( function_exists( 'learndash_is_active_theme' ) && learndash_is_active_theme( 'legacy' ) ) {
-					?>
+			} elseif ( function_exists( 'learndash_is_active_theme' ) && learndash_is_active_theme( 'legacy' ) ) {
+				?>
 					<div class="notice notice-success">
 						<p>
 						<?php
-						echo sprintf(
+						printf(
 							__( 'BuddyBoss Theme requires the <strong>LearnDash 3.0</strong>  template, however you are using the <strong>Legacy</strong> template. <a href="%s">Repair</a>', 'buddyboss-theme' ),
 							add_query_arg(
 								array(
@@ -585,7 +699,7 @@ if ( ! function_exists( 'buddyboss_theme_ld_30_admin_notice' ) ) {
 						</p>
 					</div>
 					<?php
-				}
+
 			}
 		}
 	}
@@ -630,7 +744,12 @@ if ( ! function_exists( 'buddyboss_theme_add_typography_field_default_fonts' ) )
  */
 if ( ! function_exists( 'buddyboss_theme_plugin_update_notice' ) ) {
 	function buddyboss_theme_plugin_update_notice() {
-		if ( function_exists( 'buddypress' ) && version_compare( BP_PLATFORM_VERSION, '1.4.0', '<' ) ) {
+
+		if (
+			function_exists( 'buddypress' ) &&
+			defined( 'BP_PLATFORM_VERSION' ) &&
+			version_compare( BP_PLATFORM_VERSION, '1.4.0', '<' )
+		) {
 			$class   = 'notice notice-error';
 			$message = __( 'Please update BuddyBoss Platform to v1.4.0 to maintain compatibility with BuddyBoss Theme. Some icons in your theme will look wrong until you update.', 'buddyboss-theme' );
 			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );

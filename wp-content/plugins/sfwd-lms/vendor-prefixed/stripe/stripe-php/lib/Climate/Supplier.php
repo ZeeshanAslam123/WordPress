@@ -14,10 +14,6 @@ namespace StellarWP\Learndash\Stripe\Climate;
  * @property \StellarWP\Learndash\Stripe\StripeObject[] $locations The locations in which this supplier operates.
  * @property string $name Name of this carbon removal supplier.
  * @property string $removal_pathway The scientific pathway used for carbon removal.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Supplier extends \StellarWP\Learndash\Stripe\ApiResource
 {

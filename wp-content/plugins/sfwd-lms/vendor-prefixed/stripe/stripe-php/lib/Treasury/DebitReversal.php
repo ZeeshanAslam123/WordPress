@@ -22,9 +22,6 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property string $status Status of the DebitReversal
  * @property \StellarWP\Learndash\Stripe\StripeObject $status_transitions
  * @property null|string|\StellarWP\Learndash\Stripe\Treasury\Transaction $transaction The Transaction associated with this object.
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class DebitReversal extends \StellarWP\Learndash\Stripe\ApiResource
 {

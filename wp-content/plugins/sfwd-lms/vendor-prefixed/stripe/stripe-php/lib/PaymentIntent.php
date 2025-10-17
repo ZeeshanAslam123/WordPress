@@ -57,10 +57,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property string $status Status of this PaymentIntent, one of <code>requires_payment_method</code>, <code>requires_confirmation</code>, <code>requires_action</code>, <code>processing</code>, <code>requires_capture</code>, <code>canceled</code>, or <code>succeeded</code>. Read more about each PaymentIntent <a href="https://stripe.com/docs/payments/intents#intent-statuses">status</a>.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $transfer_data The data that automatically creates a Transfer after the payment finalizes. Learn more about the <a href="https://stripe.com/docs/payments/connected-accounts">use case for connected accounts</a>.
  * @property null|string $transfer_group A string that identifies the resulting payment as part of a group. Learn more about the <a href="https://stripe.com/docs/connect/separate-charges-and-transfers">use case for connected accounts</a>.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class PaymentIntent extends ApiResource
 {
@@ -206,7 +202,7 @@ class PaymentIntent extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\SearchResult<\Stripe\PaymentIntent> the payment intent search results
+     * @return \StellarWP\Learndash\Stripe\SearchResult<\StellarWP\Learndash\Stripe\PaymentIntent> the payment intent search results
      */
     public static function search($params = null, $opts = null)
     {

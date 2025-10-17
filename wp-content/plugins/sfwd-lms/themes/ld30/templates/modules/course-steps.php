@@ -12,7 +12,7 @@
  * $context		     : (string) Context of the usage. Either 'lesson', 'topic' or 'focus' use for Focus Mode header navigation.
  *
  * @since 3.0.0
- * @version 4.11.0
+ * @version 4.21.1
  *
  * @package LearnDash\Templates\LD30
  */
@@ -93,12 +93,16 @@ if ( $learndash_maybe_show_next_step_link !== true ) {
 /**
  * Filters whether to show the next link in the course navigation.
  *
+ * This filter is not applied in the LD30 Modern mode.
+ * If you want to hide the next link in LD30 Modern mode, use the hooks available in the `LearnDash\Core\Template` class.
+ *
  * @since 2.3.0
  *
  * @param bool $show_next_link Whether to show next link.
  * @param int  $user_id        User ID.
  * @param int  $step_id        ID of the lesson/topic post.
  *
+ * @return bool
  */
 $learndash_maybe_show_next_step_link = apply_filters( 'learndash_show_next_link', $learndash_maybe_show_next_step_link, $user_id, $course_step_post->ID );
 
@@ -140,6 +144,9 @@ if ( true === (bool) $learndash_maybe_show_next_step_link ) {
 
 /**
  * Filters to override next step post ID.
+ *
+ * This filter is not applied in the LD30 Modern mode.
+ * If you want to override the next step post ID in LD30 Modern mode, use the `learndash_model_{$post_type_key}_next_step` filter instead.
  *
  * @since 3.1.2
  *
@@ -255,7 +262,11 @@ if ( ( true === $current_complete ) && ( is_a( $course_step_post, 'WP_Post' ) ) 
 			<?php endif; ?>
 			</div>
 			<?php else : ?>
-			<a href="<?php echo esc_attr( learndash_get_step_permalink( $parent_id, $course_id ) ); ?>" class="ld-primary-color"><?php echo learndash_get_label_course_step_back( get_post_type( $parent_id ) ); ?></a>
+				<div class="ld-content-action">
+					<a href="<?php echo esc_attr( learndash_get_step_permalink( $parent_id, $course_id ) ); ?>" class="ld-primary-color ld-course-step-back">
+						<?php echo learndash_get_label_course_step_back( get_post_type( $parent_id ) ); ?>
+					</a>
+				</div>
 			<div class="ld-content-action <?php if ( ( ! $can_complete ) && ( ! $learndash_next_step_id ) ) : ?>ld-empty<?php endif; ?>">
 				<?php
 				if ( ( true === $can_complete ) && ( true !== $current_complete ) && ( ! empty( $complete_button ) ) ) :

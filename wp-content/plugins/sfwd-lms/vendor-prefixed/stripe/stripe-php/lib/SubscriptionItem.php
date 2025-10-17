@@ -19,10 +19,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|int $quantity The <a href="https://stripe.com/docs/subscriptions/quantities">quantity</a> of the plan to which the customer should be subscribed.
  * @property string $subscription The <code>subscription</code> this <code>subscription_item</code> belongs to.
  * @property null|\StellarWP\Learndash\Stripe\TaxRate[] $tax_rates The tax rates which apply to this <code>subscription_item</code>. When set, the <code>default_tax_rates</code> on the subscription do not apply to this <code>subscription_item</code>.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class SubscriptionItem extends ApiResource
 {
@@ -59,7 +55,7 @@ class SubscriptionItem extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\UsageRecordSummary> the list of usage record summaries
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\UsageRecordSummary> the list of usage record summaries
      */
     public static function allUsageRecordSummaries($id, $params = null, $opts = null)
     {

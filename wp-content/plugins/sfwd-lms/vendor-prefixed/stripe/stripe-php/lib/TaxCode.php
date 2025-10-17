@@ -11,10 +11,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property string $object String representing the object's type. Objects of the same type share the same value.
  * @property string $description A detailed description of which types of products the tax code represents.
  * @property string $name A short name for the tax code.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class TaxCode extends ApiResource
 {

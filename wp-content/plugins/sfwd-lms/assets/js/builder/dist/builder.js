@@ -3059,6 +3059,17 @@ const Icon = _ref => {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", null, `${LearnDashData.i18n.question_data_invalid}`), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
       d: "M538.5,386.199L356.5,70.8c-16.4-28.4-46.7-45.9-79.501-45.9c-32.8,0-63.1,17.5-79.5,45.9L12.3,391.6 c-16.4,28.4-16.4,63.4,0,91.8C28.7,511.8,59,529.3,91.8,529.3H462.2c0.101,0,0.2,0,0.2,0c50.7,0,91.8-41.101,91.8-91.8 C554.2,418.5,548.4,400.8,538.5,386.199z M316.3,416.899c0,21.7-16.7,38.3-39.2,38.3s-39.2-16.6-39.2-38.3V416 c0-21.601,16.7-38.301,39.2-38.301S316.3,394.3,316.3,416V416.899z M317.2,158.7L297.8,328.1c-1.3,12.2-9.4,19.8-20.7,19.8 s-19.4-7.7-20.7-19.8L237,158.6c-1.3-13.1,5.801-23,18-23H299.1C311.3,135.7,318.5,145.6,317.2,158.7z"
     }));
+  } else if ('accessibility-warning' === icon) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      x: "0",
+      y: "0",
+      width: "554.2",
+      height: "554.199",
+      viewBox: "0 0 554.2 554.199"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", null, `${LearnDashData.i18n.matrix_sort_answer_accessibility_warning_label}`), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+      d: "M538.5,386.199L356.5,70.8c-16.4-28.4-46.7-45.9-79.501-45.9c-32.8,0-63.1,17.5-79.5,45.9L12.3,391.6 c-16.4,28.4-16.4,63.4,0,91.8C28.7,511.8,59,529.3,91.8,529.3H462.2c0.101,0,0.2,0,0.2,0c50.7,0,91.8-41.101,91.8-91.8 C554.2,418.5,548.4,400.8,538.5,386.199z M316.3,416.899c0,21.7-16.7,38.3-39.2,38.3s-39.2-16.6-39.2-38.3V416 c0-21.601,16.7-38.301,39.2-38.301S316.3,394.3,316.3,416V416.899z M317.2,158.7L297.8,328.1c-1.3,12.2-9.4,19.8-20.7,19.8 s-19.4-7.7-20.7-19.8L237,158.6c-1.3-13.1,5.801-23,18-23H299.1C311.3,135.7,318.5,145.6,317.2,158.7z"
+    }));
   }
   return null;
 };
@@ -3706,8 +3717,8 @@ class NodeHeader extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       error: null,
       value: '',
       type: this.props.type,
-      points: this.props.node.points ? parseFloat(this.props.node.points) : 0,
-      points_temp: this.props.node.points ? parseFloat(this.props.node.points) : 0
+      points: this.props.node.points ? parseFloat(this.props.node.points) : 1,
+      points_temp: this.props.node.points ? parseFloat(this.props.node.points) : 1
     };
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleChangePoints = this.handleChangePoints.bind(this);
@@ -4144,7 +4155,16 @@ class NodeHeader extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
       className: "screen-reader-text"
     }, `${LearnDashData.i18n.answer_missing}`), 0 === questionAlerts.correctAnswersCount && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
       className: "screen-reader-text"
-    }, `${LearnDashData.i18n.correct_answer_missing}`))), !showForm && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    }, `${LearnDashData.i18n.correct_answer_missing}`)), 'matrix_sort_answer' === node.question_type && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+      className: "ld-button-reset accessibility-warning",
+      onClick: toggleNode
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      className: "warning-icon warning-icon--accessibility -header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_icon__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      icon: "accessibility-warning"
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+      className: "screen-reader-text"
+    }, `${LearnDashData.i18n.matrix_sort_answer_accessibility_warning_label}`))), !showForm && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       className: "row-actions -right"
     }, 'section-heading' !== node.type && node.edit_link && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
       className: "edit"
@@ -4334,7 +4354,9 @@ class RichText extends react__WEBPACK_IMPORTED_MODULE_0__.PureComponent {
     } = this.props;
 
     // We need to listen for changes from TinyMCE Visual to Text mode and vice versa.
-    const editorContainer = document.querySelector('.ld-answer-rt-editor');
+
+    const editor = document.getElementById(id);
+    const editorContainer = editor.closest('.ld-answer-rt-editor');
     if (editorContainer) {
       const observer = new MutationObserver(() => {
         // Check if the editor is switched to text mode
@@ -4383,9 +4405,6 @@ class RichText extends react__WEBPACK_IMPORTED_MODULE_0__.PureComponent {
               editor.on('change', () => {
                 onChange(editor.getContent());
               });
-              editor.on('init', () => {
-                editor.focus();
-              });
             },
             wpautop: true,
             plugins: 'charmap colorpicker compat3x directionality fullscreen hr image lists media paste tabfocus textcolor wordpress wpautoresize wpdialogs wpeditimage wpemoji wpgallery wplink wptextpattern wpview',
@@ -4404,9 +4423,6 @@ class RichText extends react__WEBPACK_IMPORTED_MODULE_0__.PureComponent {
               });
               editor.on('change', () => {
                 onChange(editor.getContent());
-              });
-              editor.on('init', () => {
-                editor.focus();
               });
             },
             wpautop: true,
@@ -5104,7 +5120,7 @@ class SidebarWidget extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
       id: `${type}-${contentItem.ID}`,
       type: "checkbox",
-      className: "components-checkbox-control__input",
+      className: "components-checkbox-control components-checkbox-control__input",
       onChange: this.toggleCheckboxChange.bind(this, contentItem),
       name: "checkedItems",
       value: contentItem,
@@ -6874,19 +6890,18 @@ class QuestionChildWorkspace extends react__WEBPACK_IMPORTED_MODULE_0__.Componen
 
     // Update question's answers.
     const res = await (0,_api__WEBPACK_IMPORTED_MODULE_4__.updateAnswer)(question.ID, newAnswers);
-    this.props.handleShowForm();
-    this.handleShowFormIndividual();
-    if (200 === res.status) {
+    if (200 === res.status && this._isMounted) {
       // Sync question points.
       updateQuestionType(_objectSpread(_objectSpread({}, question), {}, {
         points: res.data._points
       }));
-      if (this._isMounted) {
-        // Update our workspace
-        this.setState(() => ({
-          updated: true
-        }));
-      }
+      this.props.handleShowForm();
+      this.handleShowFormIndividual();
+
+      // Update our workspace
+      this.setState(() => ({
+        updated: true
+      }));
     }
   }
 
@@ -6961,14 +6976,16 @@ class QuestionChildWorkspace extends react__WEBPACK_IMPORTED_MODULE_0__.Componen
     if (e) {
       e.preventDefault();
     }
-    this.setState(_ref2 => {
-      let {
-        showFormIndividual
-      } = _ref2;
-      return {
-        showFormIndividual: !showFormIndividual
-      };
-    });
+    if (this._isMounted) {
+      this.setState(_ref2 => {
+        let {
+          showFormIndividual
+        } = _ref2;
+        return {
+          showFormIndividual: !showFormIndividual
+        };
+      });
+    }
   }
 
   /**
@@ -7427,7 +7444,6 @@ class QuestionSettings extends react__WEBPACK_IMPORTED_MODULE_0__.PureComponent 
     this.setState({
       correctMessage: value
     });
-    this.props.question.correctMsg = value;
   }
 
   /**
@@ -7439,7 +7455,6 @@ class QuestionSettings extends react__WEBPACK_IMPORTED_MODULE_0__.PureComponent 
     this.setState({
       incorrectMessage: value
     });
-    this.props.question.incorrectMsg = value;
   }
 
   /**
@@ -7472,6 +7487,14 @@ class QuestionSettings extends react__WEBPACK_IMPORTED_MODULE_0__.PureComponent 
       solutionHintMessage,
       answerPointsActivated
     } = this.state;
+
+    // Update the question props to persist the changes.
+    this.props.question.correctMsg = correctMessage;
+    this.props.question.incorrectMsg = incorrectMessage;
+    this.props.question.correctSameText = useSameMessage;
+    this.props.question.tipEnabled = solutionHint;
+    this.props.question.tipMsg = solutionHintMessage;
+    this.props.question.answerPointsActivated = answerPointsActivated;
     const res = await (0,_api__WEBPACK_IMPORTED_MODULE_4__.updateQuestion)(this.props.question.ID, {
       _correctMsg: correctMessage,
       _incorrectMsg: incorrectMessage,
@@ -7481,9 +7504,6 @@ class QuestionSettings extends react__WEBPACK_IMPORTED_MODULE_0__.PureComponent 
       _answerPointsActivated: answerPointsActivated
     });
     if (200 === res.status) {
-      // We need to update this here, as it was not updated on switch change, like we do for the other fields.
-      // This is because I don't want to update the state on every switch change, instead do it once on save.
-      this.props.question.answerPointsActivated = answerPointsActivated;
       updateQuestionType(_objectSpread(_objectSpread({}, this.props.question), {}, {
         points: res.data._points
       }));
@@ -8075,11 +8095,7 @@ const QuestionTypeFree = _ref => {
     dangerouslySetInnerHTML: {
       __html: `${LearnDashData.i18n.edit_answer}`
     }
-  }), '' !== answer && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("pre", {
-    dangerouslySetInnerHTML: {
-      __html: answer
-    }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_common_icon__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), '' !== answer && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("pre", null, answer), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_common_icon__WEBPACK_IMPORTED_MODULE_1__["default"], {
     icon: "pencil"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
     className: "screen-reader-text"
@@ -8717,7 +8733,18 @@ class QuestionWorkspace extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
         icon: "warning"
       })), "\xA0", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
         className: "warning description-red"
-      }, `${LearnDashData.i18n.correct_answer_missing}`, ".")), question.answers && 0 !== question.answers.length && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_12__.Droppable, {
+      }, `${LearnDashData.i18n.correct_answer_missing}`, ".")), 'matrix_sort_answer' === question.question_type && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+        className: "ld-builder__accessibility-warning"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+        className: "warning-icon warning-icon--accessibility -answer"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_common_icon__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        icon: "accessibility-warning"
+      })), "\xA0", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+        className: "warning",
+        dangerouslySetInnerHTML: {
+          __html: LearnDashData.i18n.matrix_sort_answer_accessibility_warning_html
+        }
+      })), question.answers && 0 !== question.answers.length && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_12__.Droppable, {
         droppableId: JSON.stringify({
           ID: question.ID,
           type: 'question',
@@ -10292,6 +10319,7 @@ function _toPrimitive(input, hint) { if (typeof input !== "object" || input === 
 const defaultState = {
   currentTab: LearnDashData.currentTab && LearnDashData.currentTab,
   tabs: LearnDashData.tabs && LearnDashData.tabs || '',
+  buttons: LearnDashData.buttons || [],
   editing: LearnDashData.editing && LearnDashData.editing,
   courses: LearnDashData.courses && LearnDashData.courses,
   lessons: LearnDashData.lessons && LearnDashData.lessons,
@@ -10834,17 +10862,15 @@ const workspaceReducer = function () {
         const parentIndex = immutableQuestions.findIndex(node => node.get('ID') === action.parent.ID);
         const index = state.questions[parentIndex].answers[answerType].length + 1;
         const nodePath = [parentIndex, 'answers', answerType, action.payload.index];
-        if (nodePath.length) {
-          // we need to update a tree
-          const treePath = nodePath.slice(0, nodePath.length - 1);
-          questions = immutableQuestions.updateIn(treePath, tree => {
-            return tree.insert(index, action.payload);
-          }).toJS();
-          return _objectSpread(_objectSpread({}, state), {}, {
-            questions
-          });
-        }
-        return state;
+
+        // we need to update a tree
+        const treePath = nodePath.slice(0, nodePath.length - 1);
+        questions = immutableQuestions.updateIn(treePath, tree => {
+          return tree.insert(index, action.payload);
+        }).toJS();
+        return _objectSpread(_objectSpread({}, state), {}, {
+          questions
+        });
       }
 
     /**

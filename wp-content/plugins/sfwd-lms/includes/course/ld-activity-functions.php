@@ -58,7 +58,7 @@ function learndash_update_user_activity( $args = array() ) {
 		'user_id'            => 0,
 
 		// Will be the token stats that described the status_times array (next argument) Can be most anything.
-		// From 'course', 'lesson', 'topic', 'access' or 'expired'. Unique key part 4/4.
+		// From 'course', 'lesson', 'topic', 'access', 'group_progress', 'exam', or 'expired'. Unique key part 4/4.
 		'activity_type'      => '',
 
 		// true if the lesson, topic, course, quiz is complete. False if not complete. null if not started.
@@ -374,9 +374,9 @@ function learndash_get_user_activity_meta( $activity_id = 0, $activity_meta_key 
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
- * @param int         $activity_id Optional. Activity ID. Default 0.
- * @param string      $meta_key    Optional. The activity meta key to get. Default empty.
- * @param string|null $meta_value  Optional. Activity meta value. Default null.
+ * @param int                 $activity_id Optional. Activity ID. Default 0.
+ * @param string              $meta_key    Optional. The activity meta key to get. Default empty.
+ * @param string|mixed[]|null $meta_value  Optional. Activity meta value. Default null.
  */
 function learndash_update_user_activity_meta( $activity_id = 0, $meta_key = '', $meta_value = null ) {
 	global $wpdb;

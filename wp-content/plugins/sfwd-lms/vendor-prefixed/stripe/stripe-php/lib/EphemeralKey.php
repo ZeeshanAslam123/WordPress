@@ -11,10 +11,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property int $expires Time at which the key will expire. Measured in seconds since the Unix epoch.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property null|string $secret The key's secret. You can use this value to make authorized requests to the Stripe API.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class EphemeralKey extends ApiResource
 {

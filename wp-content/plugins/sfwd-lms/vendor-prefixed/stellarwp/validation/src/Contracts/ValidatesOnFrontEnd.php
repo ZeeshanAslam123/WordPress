@@ -1,10 +1,4 @@
 <?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
 
 declare(strict_types=1);
 
@@ -17,7 +11,7 @@ interface ValidatesOnFrontEnd
      *
      * @since 1.0.0
      *
-     * @return int|float|string|bool|array|null
+     * @return mixed
      */
     public function serializeOption();
 }

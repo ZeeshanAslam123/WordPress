@@ -16,10 +16,6 @@ namespace StellarWP\Learndash\Stripe\Terminal;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $offline
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $tipping
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $verifone_p400
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Configuration extends \StellarWP\Learndash\Stripe\ApiResource
 {

@@ -240,6 +240,14 @@
                     redux.field_objects.bb_typography.select( $( this ).parents( '.redux-container-bb_typography:first' ) );
                   }
                 );
+
+                // Init when value is changed.
+                $( this ).find( '.redux-typography-family' ).on(
+                  'change',
+                  function() {
+                    redux.field_objects.bb_typography.select( $( this ).parents( '.redux-container-bb_typography:first' ) );
+                  }
+                );
                 
                 // Have to redeclare the wpColorPicker to get a callback function.
                 $( this ).find( '.redux-typography-color, .redux-typography-shadow-color' ).wpColorPicker(
@@ -716,7 +724,28 @@
         
         if ( false === isSelecting ) {
           if ( 'undefined' !== typeof ( WebFont ) && WebFont ) {
-            WebFont.load( { google: { families: [link] } } );
+            var isLinux = navigator.userAgent.toLowerCase().indexOf( 'linux' ) !== -1;
+
+            // Check if the system is Linux and the selected font is Roboto, 'Oxygen-Sans' or 'Cantarell'
+            if ( [ 'Roboto', 'Oxygen-Sans', 'Cantarell' ].includes( family ) && isLinux ) {
+              // Remove any previously created style element
+              $('#typography-preview-style-' + mainID).remove();
+              
+              // Create a style tag that imports the font and scopes its usage
+              var styleTag = '<style id="typography-preview-style-' + mainID + '">' +
+                            '@import url("https://fonts.googleapis.com/css?family=' + family + ':' + style + '");' +
+                            // Apply to the preview element
+                            '#' + mainID + ' .typography-preview { font-family: "' + family + '", sans-serif !important; }' +
+                            // Explicitly avoid applying to body or other elements
+                            'body, #wpadminbar *, .e-notice { font-family: Oxygen-Sans, Ubuntu, Cantarell, sans-serif; }' +
+                            '</style>';
+              
+              // Add to document
+              $( styleTag ).appendTo( 'head' );
+            } else {
+              // Use the original approach for other fonts
+              WebFont.load( { google: { families: [link] } } );
+            }
           }
         }
         
@@ -789,7 +818,12 @@
       if ( 0 === isPreviewSize ) {
         that.find( '.typography-preview' ).css( 'font-size', size + units );
       }
-      
+
+      // Make sure to wrap Baloo fonts in quotes
+      if( family.indexOf('Baloo') !== -1 ) {
+        family =  '"' + family + '"';
+      }
+
       that.find( '.typography-preview' ).css(
         {
           'font-weight': style,

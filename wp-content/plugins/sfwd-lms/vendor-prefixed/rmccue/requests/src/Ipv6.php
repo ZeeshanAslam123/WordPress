@@ -3,10 +3,6 @@
  * Class to validate and to work with IPv6 addresses
  *
  * @package Requests\Utilities
- *
- * @license ISC
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 
 namespace StellarWP\Learndash\WpOrg\Requests;
@@ -165,7 +161,7 @@ final class Ipv6 {
 		list($ipv6, $ipv4) = self::split_v6_v4($ip);
 		$ipv6              = explode(':', $ipv6);
 		$ipv4              = explode('.', $ipv4);
-		if (count($ipv6) === 8 && count($ipv4) === 1 || count($ipv6) === 6 && count($ipv4) === 4) {
+		if ((count($ipv6) === 8 && count($ipv4) === 1) || (count($ipv6) === 6 && count($ipv4) === 4)) {
 			foreach ($ipv6 as $ipv6_part) {
 				// The section can't be empty
 				if ($ipv6_part === '') {

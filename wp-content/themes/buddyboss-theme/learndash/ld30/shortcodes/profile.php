@@ -11,6 +11,7 @@
  * $shortcode_atts : Array of values passed to shortcode
  *
  * @since   3.0.0
+ * @version 4.20.2
  *
  * @package LearnDash\Templates\LD30
  */
@@ -41,9 +42,11 @@ if ( ! isset( $learndash_assets_loaded['scripts']['learndash_template_script_js'
 endif;
 
 /**
- * We don't want to include this if this is a paginated view as we'll end up with duplicates
- *
- * @var $_GET ['action'] (string)    is set to ld30_ajax_pager if paginating
+ * We don't want to include this if this is a paginated view as we'll end up with duplicates.
+ * 
+ * The $_GET['action'] parameter, if set, indicates the type of action being performed. 
+ * If it is one of the paginating actions, such as 'ld30_ajax_pager' or 'ld30_ajax_profile_search',
+ * we want to exclude this block to prevent duplicates.
  */
 if ( ! isset( $_GET['action'] ) || ! in_array(
 	$_GET['action'],
@@ -162,17 +165,41 @@ endif; ?>
 						);
 						?>
 					</h3>
+
+					<?php
+						$course_container_ids = implode(
+							' ',
+							array_map(
+								function( $course_id ) {
+									return "ld-course-list-item-{$course_id}-container";
+								},
+								$user_courses
+							)
+						);
+					?>
+
 					<div class="ld-item-list-actions">
-						<div class="ld-search-prompt" data-ld-expands="ld-course-search">
-							<?php echo esc_html__( 'Search', 'buddyboss-theme' ); ?> <span
-									class="ld-icon-search ld-icon"></span>
-						</div> <!--/.ld-search-prompt-->
-						<div class="ld-expand-button" data-ld-expands="ld-main-course-list"
-							 data-ld-expand-text="<?php echo esc_attr_e( 'Expand All', 'buddyboss-theme' ); ?>"
-							 data-ld-collapse-text="<?php echo esc_attr_e( 'Collapse All', 'buddyboss-theme' ); ?>">
+						<?php
+						if ( isset( $shortcode_atts['show_search'] ) && 'yes' === $shortcode_atts['show_search'] ) {
+							?>
+							<div aria-controls="ld-course-search" aria-expanded="false" aria-label="<?php esc_attr_e( 'Show Courses Search Field', 'buddyboss-theme' ); ?>" class="ld-search-prompt" data-ld-expands="ld-course-search">
+								<?php echo esc_html__( 'Search', 'buddyboss-theme' ); ?>
+								<span class="ld-icon-search ld-icon"></span>
+							</div> <!--/.ld-search-prompt-->
+							<?php
+						}
+						?>
+						<button
+							aria-controls="<?php echo esc_attr( $course_container_ids ); ?>"
+							aria-expanded="false"
+							class="ld-expand-button"
+							data-ld-expand-text="<?php esc_attr_e( 'Expand All', 'buddyboss-theme' ); ?>"
+							data-ld-collapse-text="<?php esc_attr_e( 'Collapse All', 'buddyboss-theme' ); ?>"
+							data-ld-expands="<?php echo esc_attr( $course_container_ids ); ?>"
+						>
 							<span class="ld-icon-arrow-down ld-icon"></span>
-							<span class="ld-text"><?php echo esc_html_e( 'Expand All', 'buddyboss-theme' ); ?></span>
-						</div> <!--/.ld-expand-button-->
+							<span class="ld-text"><?php esc_html_e( 'Expand All', 'buddyboss-theme' ); ?></span>
+						</button> <!--/.ld-expand-button-->
 					</div> <!--/.ld-course-list-actions-->
 				</div> <!--/.ld-section-heading-->
 				<?php

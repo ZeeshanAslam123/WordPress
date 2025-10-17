@@ -452,6 +452,7 @@ function learndash_save_user_course_complete( $user_id = 0 ) {
  *
  * @since 4.0.0
  * @since 4.12.1 Added $force parameter.
+ * @since 4.21.2 Lessons and Topics will now fire the appropriate actions when marked complete.
  *
  * @param int   $user_id       User ID to update.
  * @param array $user_progress User progress array.
@@ -508,10 +509,70 @@ function learndash_process_user_course_progress_update( $user_id = 0, $user_prog
 			if ( isset( $course_progress[ $course_id ] ) ) { // @phpstan-ignore-line -- legacy code.
 				$course_data_old = $course_progress[ $course_id ];
 			} else {
-				$course_data_old = array();
+				$course_data_old = [];
+			}
+
+			if ( ! is_array( $course_data_old ) ) {
+				$course_data_old = [];
 			}
 
 			$course_data_new = learndash_course_item_to_activity_sync( $user_id, $course_id, $course_data_new, $course_data_old );
+
+			if ( is_array( $course_data_new ) ) {
+				foreach ( $course_data_new['lessons'] as $lesson_id => $lesson_new_status ) {
+					// Only run the Lesson completion action if the Lesson is newly completed.
+					if (
+						! $lesson_new_status
+						|| (
+							isset( $course_data_old['lessons'] )
+							&& isset( $course_data_old['lessons'][ $lesson_id ] )
+							&& $course_data_old['lessons'][ $lesson_id ]
+						)
+					) {
+						continue;
+					}
+
+					do_action(
+						/** This action is documented in includes/course/ld-course-progress.php */
+						'learndash_lesson_completed',
+						[
+							'user'     => new WP_User( $user_id ),
+							'course'   => get_post( Cast::to_int( $course_id ) ),
+							'lesson'   => get_post( Cast::to_int( $lesson_id ) ),
+							'progress' => $course_progress,
+						]
+					);
+				}
+
+				foreach ( $course_data_new['topics'] as $lesson_id => $topics ) {
+					foreach ( $topics as $topic_id => $topic_new_status ) {
+						// Only run the Topic completion action if the Topic is newly completed.
+						if (
+							! $topic_new_status
+							|| (
+								isset( $course_data_old['topics'] )
+								&& isset( $course_data_old['topics'][ $lesson_id ] )
+								&& isset( $course_data_old['topics'][ $lesson_id ][ $topic_id ] )
+								&& $course_data_old['topics'][ $lesson_id ][ $topic_id ]
+							)
+						) {
+							continue;
+						}
+
+						do_action(
+							/** This action is documented in includes/course/ld-course-progress.php */
+							'learndash_topic_completed',
+							[
+								'user'     => new WP_User( $user_id ),
+								'course'   => get_post( Cast::to_int( $course_id ) ),
+								'lesson'   => get_post( Cast::to_int( $lesson_id ) ),
+								'topic'    => get_post( Cast::to_int( $topic_id ) ),
+								'progress' => $course_progress,
+							]
+						);
+					}
+				}
+			}
 
 			$course_progress[ $course_id ] = $course_data_new;
 

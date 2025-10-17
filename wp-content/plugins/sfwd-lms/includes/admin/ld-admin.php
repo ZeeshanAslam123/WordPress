@@ -6,6 +6,8 @@
  * @package LearnDash
  */
 
+use StellarWP\Learndash\StellarWP\Assets\Asset;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -252,6 +254,13 @@ function learndash_load_admin_resources() {
 		wp_style_add_data( 'ld-datepicker-ui-css', 'rtl', 'replace' );
 		$learndash_assets_loaded['styles']['ld-datepicker-ui-css'] = __FUNCTION__;
 	}
+
+	Asset::add( 'learndash-copy-text-button', 'copy-text/button.js' )
+		->add_dependency( 'jquery' )
+		->set_path( 'src/assets/dist/js/admin', false )
+		->set_condition( 'learndash_should_load_admin_assets' )
+		->set_action( 'admin_enqueue_scripts' )
+		->enqueue();
 }
 add_action( 'admin_enqueue_scripts', 'learndash_load_admin_resources' );
 

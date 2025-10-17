@@ -9,7 +9,10 @@
 
 namespace LearnDash\Core\Modules\AI\Virtual_Instructor;
 
+use LDLMS_Post_Types;
+use LearnDash\Core\Modules\Experiments\Action_Item;
 use LearnDash\Core\Modules\Experiments\Experiment as Experiment_Base;
+use LearnDash_Custom_Label;
 
 /**
  * Virtual Instructor experiment class.
@@ -23,10 +26,39 @@ class Experiment extends Experiment_Base {
 	 * @since 4.13.0
 	 */
 	public function __construct() {
-		$this->id          = 'virtual_instructor';
-		$this->title       = __( 'Virtual Instructor', 'learndash' );
-		$this->description = __( 'Virtual instructors to interact with your students and assist with their learning.', 'learndash' );
-		$this->url         = 'https://forms.gle/MYbATTwntU3kZeabA';
+		$this->id           = 'virtual_instructor';
+		$this->title        = LearnDash_Custom_Label::get_label( 'virtual_instructor' );
+		$this->description  = sprintf(
+			// Translators: %s: virtual instructors label.
+			esc_html_x( '%s to interact with your students and assist with their learning.', 'placeholder: virtual instructors label', 'learndash' ),
+			LearnDash_Custom_Label::get_label( 'virtual_instructors' )
+		);
+		$this->action_items = [
+			new Action_Item(
+				[
+					'label'    => __( 'Give Feedback', 'learndash' ),
+					'url'      => 'https://forms.gle/MYbATTwntU3kZeabA',
+					'external' => true,
+				]
+			),
+			new Action_Item(
+				[
+					'label'    => __( 'Learn More', 'learndash' ),
+					'url'      => 'https://go.learndash.com/viexperiment',
+					'external' => true,
+				]
+			),
+			new Action_Item(
+				[
+					'label'   => __( 'Settings', 'learndash' ),
+					'url'     => 'edit.php?post_type=' . learndash_get_post_type_slug( LDLMS_Post_Types::VIRTUAL_INSTRUCTOR ),
+					// Action item is enabled only if the experiment is enabled.
+					'enabled' => $this->is_enabled(),
+				]
+			),
+		];
+
+		parent::__construct();
 	}
 
 	/**

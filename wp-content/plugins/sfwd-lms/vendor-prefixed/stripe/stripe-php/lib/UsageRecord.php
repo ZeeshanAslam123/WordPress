@@ -16,10 +16,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property int $quantity The usage quantity for the specified date.
  * @property string $subscription_item The ID of the subscription item this usage record contains data for.
  * @property int $timestamp The timestamp when this usage occurred.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class UsageRecord extends ApiResource
 {

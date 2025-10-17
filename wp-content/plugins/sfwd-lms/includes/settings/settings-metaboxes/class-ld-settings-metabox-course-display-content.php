@@ -51,7 +51,6 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 
 				// Legacy fields.
 				'course_materials'              => 'course_materials',
-				'certificate'                   => 'certificate',
 				'exam_challenge'                => 'exam_challenge',
 				'course_disable_content_table'  => 'course_disable_content_table',
 				'course_lesson_per_page'        => 'course_lesson_per_page',
@@ -84,10 +83,6 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 
 				if ( ! isset( $this->setting_option_values['course_materials'] ) ) {
 					$this->setting_option_values['course_materials'] = '';
-				}
-
-				if ( ! isset( $this->setting_option_values['certificate'] ) ) {
-					$this->setting_option_values['certificate'] = '';
 				}
 
 				if ( ! isset( $this->setting_option_values['course_disable_content_table'] ) ) {
@@ -150,25 +145,11 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 				'order'   => LearnDash_Settings_Section::get_section_setting_select_option_label( 'LearnDash_Settings_Section_Lessons_Display_Order', 'order' ),
 			);
 
-			$select_cert_options         = array();
-			$select_cert_query_data_json = '';
-
 			$select_exam_challenge_options         = array();
 			$select_exam_challenge_query_data_json = '';
 
 			/** This filter is documented in includes/class-ld-lms.php */
 			if ( learndash_use_select2_lib() ) {
-				$select_cert_options_default = array(
-					'-1' => esc_html__( 'Search or select a certificate…', 'learndash' ),
-				);
-
-				if ( ! empty( $this->setting_option_values['certificate'] ) ) {
-					$cert_post = get_post( absint( $this->setting_option_values['certificate'] ) );
-					if ( ( $cert_post ) && ( is_a( $cert_post, 'WP_Post' ) ) ) {
-						$select_cert_options[ $cert_post->ID ] = learndash_format_step_post_title_with_status_label( $cert_post );
-					}
-				}
-
 				$select_exam_challenge_options_default = sprintf(
 					// translators: placeholder: Exam.
 					esc_html_x( 'Search or select a %s…', 'placeholder: Exam', 'learndash' ),
@@ -183,19 +164,6 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 				}
 
 				if ( learndash_use_select2_lib_ajax_fetch() ) {
-					$select_cert_query_data_json = $this->build_settings_select2_lib_ajax_fetch_json(
-						array(
-							'query_args'       => array(
-								'post_type' => learndash_get_post_type_slug( 'certificate' ),
-							),
-							'settings_element' => array(
-								'settings_parent_class' => get_parent_class( __CLASS__ ),
-								'settings_class'        => __CLASS__,
-								'settings_field'        => 'certificate',
-							),
-						)
-					);
-
 					$select_exam_challenge_query_data_json = $this->build_settings_select2_lib_ajax_fetch_json(
 						array(
 							'query_args'       => array(
@@ -215,14 +183,8 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 							),
 						)
 					);
-				} else {
-					$select_cert_options = $sfwd_lms->select_a_certificate();
 				}
 			} else {
-				$select_cert_options_default = array(
-					'' => esc_html__( 'Select Certificate', 'learndash' ),
-				);
-
 				$select_exam_challenge_options_default = array(
 					'' => sprintf(
 						// translators: placeholder: Exam.
@@ -230,13 +192,6 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 						learndash_get_custom_label( 'exam' )
 					),
 				);
-				$select_cert_options                   = $sfwd_lms->select_a_certificate();
-				if ( ( is_array( $select_cert_options ) ) && ( ! empty( $select_cert_options ) ) ) {
-					$select_cert_options = $select_cert_options_default + $select_cert_options;
-				} else {
-					$select_cert_options = $select_cert_options_default;
-				}
-				$select_cert_options_default = '';
 			}
 
 			$this->setting_option_fields = array(
@@ -316,37 +271,11 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 						),
 					),
 				),
-				'certificate'                   => array(
-					'name'        => 'certificate',
-					'type'        => 'select',
-					'label'       => sprintf(
-						// translators: placeholder: Course.
-						esc_html_x( '%s Certificate', 'placeholder: Course', 'learndash' ),
-						learndash_get_custom_label( 'course' )
-					),
-					'default'     => '',
-					'value'       => $this->setting_option_values['certificate'],
-					'options'     => $select_cert_options,
-					'placeholder' => $select_cert_options_default,
-					'attrs'       => array(
-						'data-select2-query-data' => $select_cert_query_data_json,
-					),
-					'rest'        => array(
-						'show_in_rest' => LearnDash_REST_API::enabled(),
-						'rest_args'    => array(
-							'schema' => array(
-								'type'    => 'integer',
-								'default' => 0,
-							),
-						),
-					),
-				),
 				'exam_challenge'                => array(
 					'name'        => 'exam_challenge',
 					'type'        => 'select',
 					'label'       => sprintf(
-						// translators: placeholder: Exam.
-						esc_html_x( '%s Show', 'placeholder: Exam', 'learndash' ),
+						'%s',
 						learndash_get_custom_label( 'exam' )
 					),
 					'default'     => '',
@@ -667,16 +596,6 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 				if ( empty( $settings_values['course_lesson_per_page'] ) ) {
 					$settings_values['course_lesson_per_page_custom'] = '';
 					$settings_values['course_topic_per_page_custom']  = '';
-				}
-
-				/**
-				 * Check Certificate choice.
-				 */
-				if ( ! isset( $settings_values['certificate'] ) ) {
-					$settings_values['certificate'] = '';
-				}
-				if ( '-1' === $settings_values['certificate'] ) {
-					$settings_values['certificate'] = '';
 				}
 
 				if ( ! isset( $settings_values['course_lesson_order_enabled'] ) ) {

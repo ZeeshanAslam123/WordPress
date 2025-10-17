@@ -15,10 +15,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property string|\StellarWP\Learndash\Stripe\Customer $customer The customer the customer session was created for.
  * @property int $expires_at The timestamp at which this customer session will expire.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class CustomerSession extends ApiResource
 {

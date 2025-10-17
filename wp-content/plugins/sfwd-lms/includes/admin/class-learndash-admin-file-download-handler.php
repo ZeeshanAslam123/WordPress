@@ -86,10 +86,26 @@ if ( ! class_exists( 'Learndash_Admin_File_Download_Handler' ) ) {
 					'file_path_id' => $file_path_id,
 					'file_name'    => $file_name,
 				),
-				admin_url( 'admin-post.php' )
+				static::get_download_url_base()
 			);
 
-			return $download_url;
+			/**
+			 * Filters the file download URL.
+			 *
+			 * @since 4.19.0
+			 *
+			 * @param string $download_url The file download URL.
+			 * @param string $file_path_id The file path ID.
+			 * @param string $file_name    The file name.
+			 *
+			 * @return string
+			 */
+			return apply_filters(
+				'learndash_file_download_url',
+				$download_url,
+				$file_path_id,
+				$file_name
+			);
 		}
 
 		/**
@@ -223,62 +239,90 @@ if ( ! class_exists( 'Learndash_Admin_File_Download_Handler' ) ) {
 		public static function init(): void {
 			add_action(
 				'admin_post_' . static::$file_download_action,
-				function() {
-					$file_path_id = filter_input( INPUT_GET, 'file_path_id', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-					$file_name    = filter_input( INPUT_GET, 'file_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-					$nonce        = filter_input( INPUT_GET, 'nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-
-					if ( ! wp_verify_nonce( $nonce, static::$file_download_action . $file_path_id . $file_name ) ) {
-						echo esc_html__( 'URL expired. Please refresh the page and try it again.', 'learndash' );
-						exit;
-					}
-
-					if ( ! isset( self::$file_paths[ $file_path_id ] ) ) {
-						echo esc_html__( 'Invalid URL.', 'learndash' );
-						exit;
-					}
-
-					/**
-					 * Filters whether the file can be downloaded.
-					 *
-					 * @since 4.10.3
-					 *
-					 * @param bool   $file_can_be_downloaded Whether the file can be downloaded.
-					 * @param string $file_path_id           The file path ID.
-					 * @param string $file_name              The file name.
-					 *
-					 * @return bool
-					 */
-					$file_can_be_downloaded = apply_filters(
-						'learndash_file_can_be_downloaded',
-						static::can_be_downloaded(),
-						$file_path_id,
-						$file_name
-					);
-
-					if ( ! $file_can_be_downloaded ) {
-						echo esc_html__( 'You do not have sufficient permissions to download this file.', 'learndash' );
-						exit;
-					}
-
-					$file_path = self::$file_paths[ $file_path_id ] . DIRECTORY_SEPARATOR . $file_name;
-					if ( ! file_exists( $file_path ) ) {
-						echo esc_html__( 'File does not exist.', 'learndash' );
-						exit;
-					}
-
-					// download the file.
-					header( 'Content-Description: File Transfer' );
-					header( 'Content-Type: application/octet-stream' );
-					header( 'Content-Disposition: attachment; filename=' . basename( $file_path ) );
-					header( 'Expires: 0' );
-					header( 'Cache-Control: must-revalidate' );
-					header( 'Pragma: public' );
-					header( 'Content-Length: ' . filesize( $file_path ) );
-					readfile( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_readfile -- readfile is faster
-					exit;
-				}
+				[ get_called_class(), 'download' ]
 			);
+		}
+
+		/**
+		 * Downloads the file based on set query parameters.
+		 *
+		 * @since 4.19.0
+		 *
+		 * @return void
+		 */
+		public static function download(): void {
+			$file_path_id = filter_input( INPUT_GET, 'file_path_id', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+			$file_name    = filter_input( INPUT_GET, 'file_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+			$nonce        = filter_input( INPUT_GET, 'nonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+
+			if ( ! wp_verify_nonce( $nonce, static::$file_download_action . $file_path_id . $file_name ) ) {
+				echo esc_html__( 'URL expired. Please refresh the page and try it again.', 'learndash' );
+				exit;
+			}
+
+			if ( ! isset( self::$file_paths[ $file_path_id ] ) ) {
+				echo esc_html__( 'Invalid URL.', 'learndash' );
+				exit;
+			}
+
+			/**
+			 * Filters whether the file can be downloaded.
+			 *
+			 * @since 4.10.3
+			 *
+			 * @param bool   $file_can_be_downloaded Whether the file can be downloaded.
+			 * @param string $file_path_id           The file path ID.
+			 * @param string $file_name              The file name.
+			 *
+			 * @return bool
+			 */
+			$file_can_be_downloaded = apply_filters(
+				'learndash_file_can_be_downloaded',
+				static::can_be_downloaded(),
+				$file_path_id,
+				$file_name
+			);
+
+			if ( ! $file_can_be_downloaded ) {
+				echo esc_html__( 'You do not have sufficient permissions to download this file.', 'learndash' );
+				exit;
+			}
+
+			$file_path = self::$file_paths[ $file_path_id ] . DIRECTORY_SEPARATOR . $file_name;
+
+			/**
+			 * Filters the file download path.
+			 *
+			 * @since 4.19.0
+			 *
+			 * @param string $file_path    The file path.
+			 * @param string $file_path_id The file path ID.
+			 * @param string $file_name    The file name.
+			 *
+			 * @return string
+			 */
+			$file_path = apply_filters(
+				'learndash_file_download_path',
+				$file_path,
+				$file_path_id,
+				$file_name
+			);
+
+			if ( ! file_exists( $file_path ) ) {
+				echo esc_html__( 'File does not exist.', 'learndash' );
+				exit;
+			}
+
+			// download the file.
+			header( 'Content-Description: File Transfer' );
+			header( 'Content-Type: application/octet-stream' );
+			header( 'Content-Disposition: attachment; filename=' . basename( $file_path ) );
+			header( 'Expires: 0' );
+			header( 'Cache-Control: must-revalidate' );
+			header( 'Pragma: public' );
+			header( 'Content-Length: ' . filesize( $file_path ) );
+			readfile( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_readfile, WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- readfile is faster
+			exit;
 		}
 
 		/**
@@ -290,6 +334,17 @@ if ( ! class_exists( 'Learndash_Admin_File_Download_Handler' ) ) {
 		 */
 		protected static function can_be_downloaded(): bool {
 			return learndash_is_admin_user();
+		}
+
+		/**
+		 * Returns the base URL for downloading files.
+		 *
+		 * @since 4.19.0
+		 *
+		 * @return string
+		 */
+		protected static function get_download_url_base(): string {
+			return admin_url( 'admin-post.php' );
 		}
 	}
 }

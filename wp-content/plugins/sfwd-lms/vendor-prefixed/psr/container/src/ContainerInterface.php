@@ -1,10 +1,4 @@
 <?php
-/**
- * @license MIT
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
 
 declare(strict_types=1);
 

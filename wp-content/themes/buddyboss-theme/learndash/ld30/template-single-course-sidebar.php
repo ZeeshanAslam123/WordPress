@@ -42,8 +42,8 @@ if ( sfwd_lms_has_access( $course->ID, $current_user_id ) ) {
 }
 
 $ld_product = null;
-if ( class_exists( 'LearnDash\Core\Models\Product' ) ) {
-	$ld_product = LearnDash\Core\Models\Product::find( $course_id );
+if ( class_exists( 'LearnDash\Core\Models\Product' ) && isset( $course_id ) ) {
+	$ld_product = LearnDash\Core\Models\Product::find( (int) $course_id );
 }
 
 $progress = learndash_course_progress(
@@ -288,7 +288,7 @@ if ( 0 < $progress['percentage'] && 100 !== $progress['percentage'] ) {
 							echo '<div class="learndash_join_button ' . esc_attr( $btn_advance_class ) . '"><a href="' . esc_url( $login_url ) . '" class="btn-advance ld-primary-background">' . __( 'Login to Enroll', 'buddyboss-theme' ) . '</a></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						} else {
 							if ( 'free' === $course_pricing['type'] && false === $is_enrolled ) {
-								echo '<div class="learndash_join_button ' . $btn_advance_class . '">' . learndash_payment_buttons( $post ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Outputs Payment button HTML
+								echo '<div class="learndash_join_button ' . $btn_advance_class . '">' . learndash_payment_buttons( $course ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Outputs Payment button HTML
 							} else {
 								echo '<div class="learndash_join_button ' . esc_attr( $btn_advance_class ) . '"><a href="' . esc_url( $resume_link ) . '" class="btn-advance ld-primary-background">' . esc_html( $btn_advance_label ) . '</a></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							}

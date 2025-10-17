@@ -8,10 +8,6 @@ namespace StellarWP\Learndash\Stripe\Service\Checkout;
  * Service factory class for API resources in the Checkout namespace.
  *
  * @property SessionService $sessions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class CheckoutServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

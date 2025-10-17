@@ -7,6 +7,7 @@
  */
 
 use LearnDash\Core\Models\Transaction;
+use LearnDash\Core\Utilities\Cast;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit();
@@ -216,9 +217,15 @@ if ( ! function_exists( 'learndash_generate_purchase_invoice' ) ) {
 			unset( $transaction_meta['stripe_metadata'] );
 		}
 
-		$purchase_date  = date_i18n( strval( get_option( 'date_format' ) ), strtotime( $transaction_post->post_date ) );
+		$purchase_date  = learndash_adjust_date_time_display(
+			(int) strtotime( $transaction_post->post_date_gmt ),
+			strval( get_option( 'date_format' ) )
+		);
 		$purchase_date .= ' ';
-		$purchase_date .= date_i18n( strval( get_option( 'time_format' ) ), strtotime( $transaction_post->post_date ) );
+		$purchase_date .= learndash_adjust_date_time_display(
+			(int) strtotime( $transaction_post->post_date_gmt ),
+			strval( get_option( 'time_format' ) )
+		);
 
 		$filepath = learndash_purchase_invoice_filepath( $transaction_id );
 
@@ -534,7 +541,15 @@ if ( ! function_exists( 'learndash_purchase_invoice_pdf' ) ) {
 
 		$transaction = Transaction::find( $transaction_id );
 		if ( ! $transaction ) {
-			wp_die( esc_html__( 'Transaction now found.', 'learndash' ) );
+			wp_die(
+				sprintf(
+					// Translators: %s: Order label.
+					esc_html__( '%s now found.', 'learndash' ),
+					esc_html(
+						learndash_get_custom_label( 'order' )
+					)
+				)
+			);
 		}
 
 		$transaction_pricing = $transaction->get_pricing();
@@ -1040,6 +1055,8 @@ if ( ! function_exists( 'learndash_purchase_invoice_pdf' ) ) {
 			'filepath' => $filepath,
 			'filename' => $filename,
 		);
+
+		wp_mkdir_p( Cast::to_string( $filepath ) );
 
 		// Save pdf document.
 		$pdf->Output( $filepath . $filename, $destination );

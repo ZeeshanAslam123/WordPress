@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class LearnDash Custom Label
+ * Class to test the class-ld-custom-label.php file.
  */
 class LearnDash_Custom_Label {
 	/**
@@ -49,6 +49,18 @@ class LearnDash_Custom_Label {
 	 */
 	public static function get_label( string $key ): string {
 		$key = strtolower( $key );
+
+		// Transactions have been renamed to Orders in version 4.19.0, so we need to support this case.
+		switch ( $key ) {
+			case 'order':
+				$key = 'transaction';
+				break;
+			case 'orders':
+				$key = 'transactions';
+				break;
+			default:
+				break;
+		}
 
 		$labels = get_option( 'learndash_settings_custom_labels', array() );
 		if ( ! is_array( $labels ) ) {
@@ -116,11 +128,11 @@ class LearnDash_Custom_Label {
 					break;
 
 				case 'transaction':
-					$label = esc_html__( 'Transaction', 'learndash' );
+					$label = esc_html__( 'Order', 'learndash' );
 					break;
 
 				case 'transactions':
-					$label = esc_html__( 'Transactions', 'learndash' );
+					$label = esc_html__( 'Orders', 'learndash' );
 					break;
 
 				case 'group':
@@ -159,6 +171,14 @@ class LearnDash_Custom_Label {
 					$label = esc_html__( 'Certificates', 'learndash' );
 					break;
 
+				case 'virtual_instructor':
+					$label = esc_html__( 'Virtual Instructor', 'learndash' );
+					break;
+
+				case 'virtual_instructors':
+					$label = esc_html__( 'Virtual Instructors', 'learndash' );
+					break;
+
 				case self::$button_take_course:
 					$label = esc_html__( 'Take this Course', 'learndash' );
 					break;
@@ -176,7 +196,15 @@ class LearnDash_Custom_Label {
 					break;
 
 				case 'button_click_here_to_continue':
-					$label = esc_html__( 'Click Here to Continue', 'learndash' );
+					$label = esc_html__( 'Continue', 'learndash' );
+					break;
+
+				case 'terms_of_service':
+					$label = esc_html__( 'Terms of Service', 'learndash' );
+					break;
+
+				case 'privacy_policy':
+					$label = esc_html__( 'Privacy Policy', 'learndash' );
 					break;
 
 				default:
@@ -202,7 +230,7 @@ class LearnDash_Custom_Label {
 	 * @return string Lowercase string.
 	 */
 	public static function label_to_lower( string $key ): string {
-		$label = strtolower(
+		$label = mb_strtolower(
 			self::get_label( $key )
 		);
 

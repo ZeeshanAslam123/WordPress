@@ -37,14 +37,26 @@ class LD30 extends Theme {
 	 * @return void
 	 */
 	public function __construct() {
+		$colors = wp_parse_args(
+			array_filter(
+				[
+					'primary'   => sanitize_hex_color( LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_primary' ) ),
+					'secondary' => sanitize_hex_color( LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_secondary' ) ),
+					'tertiary'  => sanitize_hex_color( LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_tertiary' ) ),
+				]
+			),
+			// If the values are empty or invalid, we want to keep them in this case.
+			[
+				'primary'   => sanitize_hex_color( constant( 'LD_30_COLOR_PRIMARY' ) ),
+				'secondary' => sanitize_hex_color( constant( 'LD_30_COLOR_SECONDARY' ) ),
+				'tertiary'  => sanitize_hex_color( constant( 'LD_30_COLOR_TERTIARY' ) ),
+			]
+		);
+
 		/** This filter is documented in themes/ld30/includes/helpers.php */
 		$this->colors = apply_filters(
 			'learndash_30_custom_colors',
-			array(
-				'primary'   => LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_primary' ),
-				'secondary' => LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_secondary' ),
-				'tertiary'  => LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_tertiary' ),
-			)
+			$colors
 		);
 	}
 
@@ -233,12 +245,35 @@ class LD30 extends Theme {
 					'type'     => 'color',
 					'label'    => __( 'Next Button Background Color', 'learndash' ),
 					'settings' => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_global_next_button_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.learndash-wrapper .ld-content-action:last-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'selector'          => '.learndash-wrapper .ld-content-action:last-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent):not([disabled])',
 							'property'          => 'background-color',
 							'important'         => true, // Required due to other CSS in the plugin using !important.
+							'default'           => $this->colors['primary'],
+							'supports'          => [
+								'button-hover',
+								'button-focus',
+							],
+							'transport'         => 'refresh', // Required due to the button-hover support.
+						],
+						[
+							'id'                => 'learndash_ld30_global_next_button_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash-wrapper .ld-content-action:last-child .ld-button:focus:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'property'          => 'outline-color',
+							'important'         => false,
 							'default'           => $this->colors['primary'],
 						],
 					],
@@ -262,12 +297,35 @@ class LD30 extends Theme {
 					'type'     => 'color',
 					'label'    => __( 'Previous Button Background Color', 'learndash' ),
 					'settings' => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_global_previous_button_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.learndash-wrapper .ld-content-action:first-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'selector'          => '.learndash-wrapper .ld-content-action:first-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent):not([disabled])',
 							'property'          => 'background-color',
 							'important'         => true, // Required due to other CSS in the plugin using !important.
+							'default'           => $this->colors['primary'],
+							'supports'          => [
+								'button-hover',
+								'button-focus',
+							],
+							'transport'         => 'refresh', // Required due to the button-hover support.
+						],
+						[
+							'id'                => 'learndash_ld30_global_previous_button_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash-wrapper .ld-content-action:first-child .ld-button:focus:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'property'          => 'outline-color',
+							'important'         => false,
 							'default'           => $this->colors['primary'],
 						],
 					],
@@ -400,12 +458,35 @@ class LD30 extends Theme {
 					'type'     => 'color',
 					'label'    => __( 'Expand/Collapse Button Background Color', 'learndash' ),
 					'settings' => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_course_expand_button_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.single-sfwd-courses .learndash-wrapper .ld-expand-button.ld-button-alternate .ld-icon, .single-sfwd-courses .learndash-wrapper .ld-expand-button.ld-primary-background',
+							'selector'          => '.single-sfwd-courses .learndash-wrapper .ld-expand-button.ld-button-alternate:not([disabled]) .ld-icon, .single-sfwd-courses .learndash-wrapper .ld-expand-button.ld-primary-background:not([disabled])',
 							'property'          => 'background-color',
 							'important'         => true, // Required due to other CSS in the plugin using !important.
+							'default'           => $this->colors['primary'],
+							'supports'          => [
+								'button-hover',
+								'button-focus',
+							],
+							'transport'         => 'refresh', // Required due to the button-hover support.
+						],
+						[
+							'id'                => 'learndash_ld30_course_expand_button_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.single-sfwd-courses .learndash-wrapper .ld-expand-button.ld-button-alternate:focus .ld-icon, .single-sfwd-courses .learndash-wrapper .ld-expand-button.ld-primary-background:focus',
+							'property'          => 'outline-color',
+							'important'         => false,
 							'default'           => $this->colors['primary'],
 						],
 					],
@@ -760,12 +841,35 @@ class LD30 extends Theme {
 					'label'       => __( 'Next Button Background Color', 'learndash' ),
 					'description' => __( 'This will override the setting under "Global Styles" if set.', 'learndash' ),
 					'settings'    => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_lesson_next_button_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.learndash_post_sfwd-lessons .learndash-wrapper .ld-content-action:last-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'selector'          => '.learndash_post_sfwd-lessons .learndash-wrapper .ld-content-action:last-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent):not([disabled])',
 							'property'          => 'background-color',
 							'important'         => true, // Required due to other CSS in the plugin using !important.
+							'default'           => $this->colors['primary'],
+							'supports'          => [
+								'button-hover',
+								'button-focus',
+							],
+							'transport'         => 'refresh', // Required due to the button-hover support.
+						],
+						[
+							'id'                => 'learndash_ld30_lesson_next_button_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash_post_sfwd-lessons .learndash-wrapper .ld-content-action:last-child .ld-button:focus:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'property'          => 'outline-color',
+							'important'         => false,
 							'default'           => $this->colors['primary'],
 						],
 					],
@@ -791,12 +895,35 @@ class LD30 extends Theme {
 					'label'       => __( 'Previous Button Background Color', 'learndash' ),
 					'description' => __( 'This will override the setting under "Global Styles" if set.', 'learndash' ),
 					'settings'    => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_lesson_previous_button_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.learndash_post_sfwd-lessons .learndash-wrapper .ld-content-action:first-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'selector'          => '.learndash_post_sfwd-lessons .learndash-wrapper .ld-content-action:first-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent):not([disabled])',
 							'property'          => 'background-color',
 							'important'         => true, // Required due to other CSS in the plugin using !important.
+							'default'           => $this->colors['primary'],
+							'supports'          => [
+								'button-hover',
+								'button-focus',
+							],
+							'transport'         => 'refresh', // Required due to the button-hover support.
+						],
+						[
+							'id'                => 'learndash_ld30_lesson_previous_button_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash_post_sfwd-lessons .learndash-wrapper .ld-content-action:first-child .ld-button:focus:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'property'          => 'outline-color',
+							'important'         => false,
 							'default'           => $this->colors['primary'],
 						],
 					],
@@ -961,12 +1088,35 @@ class LD30 extends Theme {
 					'label'       => __( 'Next Button Background Color', 'learndash' ),
 					'description' => __( 'This will override the setting under "Global Styles" if set.', 'learndash' ),
 					'settings'    => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_topic_next_button_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.learndash_post_sfwd-topic .learndash-wrapper .ld-content-action:last-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'selector'          => '.learndash_post_sfwd-topic .learndash-wrapper .ld-content-action:last-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent):not([disabled])',
 							'property'          => 'background-color',
 							'important'         => true, // Required due to other CSS in the plugin using !important.
+							'default'           => $this->colors['primary'],
+							'supports'          => [
+								'button-hover',
+								'button-focus',
+							],
+							'transport'         => 'refresh', // Required due to the button-hover support.
+						],
+						[
+							'id'                => 'learndash_ld30_topic_next_button_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash_post_sfwd-topic .learndash-wrapper .ld-content-action:last-child .ld-button:focus:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'property'          => 'outline-color',
+							'important'         => false,
 							'default'           => $this->colors['primary'],
 						],
 					],
@@ -992,12 +1142,35 @@ class LD30 extends Theme {
 					'label'       => __( 'Previous Button Background Color', 'learndash' ),
 					'description' => __( 'This will override the setting under "Global Styles" if set.', 'learndash' ),
 					'settings'    => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_topic_previous_button_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.learndash_post_sfwd-topic .learndash-wrapper .ld-content-action:first-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'selector'          => '.learndash_post_sfwd-topic .learndash-wrapper .ld-content-action:first-child .ld-button:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent):not([disabled])',
 							'property'          => 'background-color',
 							'important'         => true, // Required due to other CSS in the plugin using !important.
+							'default'           => $this->colors['primary'],
+							'supports'          => [
+								'button-hover',
+								'button-focus',
+							],
+							'transport'         => 'refresh', // Required due to the button-hover support.
+						],
+						[
+							'id'                => 'learndash_ld30_topic_previous_button_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash_post_sfwd-topic .learndash-wrapper .ld-content-action:first-child .ld-button:focus:not(.ld-button-reverse):not(.learndash-link-previous-incomplete):not(.ld-button-transparent)',
+							'property'          => 'outline-color',
+							'important'         => false,
 							'default'           => $this->colors['primary'],
 						],
 					],
@@ -1082,12 +1255,35 @@ class LD30 extends Theme {
 						learndash_get_custom_label( 'quiz' )
 					),
 					'settings' => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_quiz_start_button_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.single-sfwd-quiz .learndash-wrapper .wpProQuiz_content .wpProQuiz_button:not(.wpProQuiz_button_reShowQuestion)',
+							'selector'          => '.single-sfwd-quiz .learndash-wrapper .wpProQuiz_content .wpProQuiz_button:not(.wpProQuiz_button_reShowQuestion):not([disabled])',
 							'property'          => 'background-color',
 							'important'         => true,
+							'default'           => $this->colors['primary'],
+							'supports'          => [
+								'button-hover',
+								'button-focus',
+							],
+							'transport'         => 'refresh', // Required due to the button-hover support.
+						],
+						[
+							'id'                => 'learndash_ld30_quiz_start_button_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.single-sfwd-quiz .learndash-wrapper .wpProQuiz_content .wpProQuiz_button:focus:not(.wpProQuiz_button_reShowQuestion)',
+							'property'          => 'outline-color',
+							'important'         => false,
 							'default'           => $this->colors['primary'],
 						],
 					],
@@ -1160,11 +1356,36 @@ class LD30 extends Theme {
 					'type'     => 'color',
 					'label'    => __( 'Header Arrow Icon Background Color', 'learndash' ),
 					'settings' => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_navigation_panel_header_arrow_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger .ld-icon',
+							'selector'          => '.learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger:not(:hover):not(:focus) .ld-icon',
 							'property'          => 'background-color',
+							'default'           => $this->colors['primary'],
+							'important'         => true, // Required due to other CSS in the plugin using !important.
+						],
+						[
+							'id'                => 'learndash_ld30_navigation_panel_header_arrow_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger:hover .ld-icon, .learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger:focus .ld-icon',
+							'property'          => 'border-color',
+							'default'           => $this->colors['primary'],
+						],
+						[
+							'id'                => 'learndash_ld30_navigation_panel_header_arrow_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger:hover .ld-icon, .learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger:focus .ld-icon',
+							'property'          => 'color',
 							'default'           => $this->colors['primary'],
 						],
 					],
@@ -1174,11 +1395,42 @@ class LD30 extends Theme {
 					'type'     => 'color',
 					'label'    => __( 'Header Arrow Icon Text Color', 'learndash' ),
 					'settings' => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_navigation_panel_header_arrow_text_text_color',
 							'sanitize_callback' => 'sanitize_hex_color',
-							'selector'          => '.learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger',
+							'selector'          => '.learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger:hover .ld-icon, .learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger:focus .ld-icon',
+							'property'          => 'background-color',
+							'default'           => '#fff',
+						],
+						[
+							'id'                => 'learndash_ld30_navigation_panel_header_arrow_text_text_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger:not(:hover):not(:focus) .ld-icon',
+							'property'          => 'border-color',
+							'default'           => '#fff',
+						],
+						[
+							'id'                => 'learndash_ld30_navigation_panel_header_arrow_text_text_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger .ld-icon',
 							'property'          => 'color',
+							'default'           => '#fff',
+						],
+						[
+							'id'                => 'learndash_ld30_navigation_panel_header_arrow_text_text_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => '.learndash-wrapper .ld-focus .ld-focus-sidebar .ld-focus-sidebar-trigger:focus .ld-icon',
+							'property'          => 'outline-color',
 							'default'           => '#fff',
 						],
 					],
@@ -1192,12 +1444,30 @@ class LD30 extends Theme {
 						learndash_get_custom_label( 'lesson' )
 					),
 					'settings' => [
+						/**
+						 * This workaround allows us to set multiple CSS properties based on the
+						 * same Setting via the Control.
+						 *
+						 * The IDs are intentionally the same to ensure we only create one theme_mod.
+						 *
+						 * The Customizer itself will ignore Settings with duplicate IDs but our CSS
+						 * and JS code will not, which means it will properly assign the additional
+						 * CSS Properties as defined by these configs.
+						 */
 						[
 							'id'                => 'learndash_ld30_navigation_panel_lesson_content_preview_arrow_background_color',
 							'sanitize_callback' => 'sanitize_hex_color',
 							'selector'          => 'body .learndash-wrapper .ld-expand-button.ld-button-alternate .ld-icon',
 							'property'          => 'background-color',
 							'important'         => true, // Required due to other CSS in the plugin using !important.
+							'default'           => $this->colors['primary'],
+						],
+						[
+							'id'                => 'learndash_ld30_navigation_panel_lesson_content_preview_arrow_background_color',
+							'sanitize_callback' => 'sanitize_hex_color',
+							'selector'          => 'body .learndash-wrapper .ld-expand-button.ld-button-alternate:focus .ld-icon',
+							'property'          => 'outline-color',
+							'important'         => false,
 							'default'           => $this->colors['primary'],
 						],
 

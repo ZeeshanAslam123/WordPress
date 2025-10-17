@@ -124,16 +124,20 @@ class WpProQuiz_View_StatisticsAjax extends WpProQuiz_View_View {
 		<?php if ( $this->avg ) { ?>
 		<h2>
 			<?php
-			echo date_i18n( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Quizzes_Management_Display', 'statistics_time_format' ),
-				$this->statisticModel->getMinCreateTime()
+			echo esc_html(
+				learndash_adjust_date_time_display(
+					$this->statisticModel->getMinCreateTime(), // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Existing property.
+					LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Quizzes_Management_Display', 'statistics_time_format' )
+				)
 			);
 			?>
 			-
 			<?php
-			echo date_i18n( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Quizzes_Management_Display', 'statistics_time_format' ),
-				$this->statisticModel->getMaxCreateTime()
+			echo esc_html(
+				learndash_adjust_date_time_display(
+					$this->statisticModel->getMaxCreateTime(), // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Existing property.
+					LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Quizzes_Management_Display', 'statistics_time_format' )
+				)
 			);
 			?>
 		</h2>
@@ -154,7 +158,7 @@ class WpProQuiz_View_StatisticsAjax extends WpProQuiz_View_View {
 			<thead>
 				<tr>
 					<th scope="col" style="width: 50px;"></th>
-					<th scope="col"><?php esc_html_e( 'Question', 'learndash' ); ?></th>
+					<th scope="col" style="min-width: 250px;"><?php esc_html_e( 'Question', 'learndash' ); ?></th>
 					<th scope="col" style="width: 100px;"><?php esc_html_e( 'Points', 'learndash' ); ?></th>
 					<th scope="col" style="width: 100px;"><?php esc_html_e( 'Correct', 'learndash' ); ?></th>
 					<th scope="col" style="width: 100px;"><?php esc_html_e( 'Incorrect', 'learndash' ); ?></th>

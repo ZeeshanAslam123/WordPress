@@ -276,6 +276,10 @@ function buddyboss_theme_scripts() {
 		wp_enqueue_style( 'buddyboss-theme-lifterlms', get_template_directory_uri() . '/assets/css' . $rtl_css . '/lifterlms' . $mincss . '.css', '', buddyboss_theme()->version() );
 	}
 
+	if ( class_exists( 'Academy' ) ) {
+		wp_enqueue_style( 'buddyboss-theme-academy', get_template_directory_uri() . '/assets/css' . $rtl_css . '/academy' . $mincss . '.css', '', buddyboss_theme()->version() );
+	}
+
 	// Tutor LMS.
 	if ( function_exists( 'tutor' ) ) {
 		wp_enqueue_style( 'buddyboss-theme-tutorlms', get_template_directory_uri() . '/assets/css' . $rtl_css . '/tutorlms' . $mincss . '.css', '', buddyboss_theme()->version() );
@@ -289,7 +293,7 @@ function buddyboss_theme_scripts() {
 		wp_enqueue_style( 'buddyboss-theme-badgeos', get_template_directory_uri() . '/assets/css' . $rtl_css . '/badgeos' . $mincss . '.css', '', buddyboss_theme()->version() );
 	}
 
-	if ( class_exists( 'BuddyForms' ) || class_exists( 'WPCF7' ) || class_exists( 'Easy_Digital_Downloads' ) || class_exists( 'GFForms' ) || class_exists( 'IT_Exchange' ) || class_exists( 'Ninja_Forms' ) || class_exists( 'WPForms' ) || class_exists( 'BuddyBoss_SAP_Plugin' ) || class_exists( 'BPAPR_Activity_Plus_Reloaded' ) ) {
+	if ( class_exists( 'BuddyForms' ) || class_exists( 'WPCF7' ) || class_exists( 'Easy_Digital_Downloads' ) || class_exists( 'GFForms' ) || class_exists( 'IT_Exchange' ) || class_exists( 'Ninja_Forms' ) || class_exists( 'WPForms' ) || class_exists( 'BuddyBoss_SAP_Plugin' ) || class_exists( 'BPAPR_Activity_Plus_Reloaded' ) || function_exists( 'pm_load_libs' ) ) {
 		wp_enqueue_style( 'buddyboss-theme-plugins', get_template_directory_uri() . '/assets/css' . $rtl_css . '/plugins' . $mincss . '.css', '', buddyboss_theme()->version() );
 	}
 
@@ -435,7 +439,9 @@ function buddyboss_theme_scripts() {
 				'show_notifications'    => $show_notifications,
 				'show_messages'         => $show_messages,
 				'facebook_label'        => esc_html__( 'Share on Facebook', 'buddyboss-theme' ),
-				'twitter_label'         => esc_html__( 'Tweet', 'buddyboss-theme' ),
+				'twitter_label'         => esc_html__( 'Post on X', 'buddyboss-theme' ),
+				'more_menu_title'       => esc_html__( 'Menu Items', 'buddyboss-theme' ),
+				'more_menu_options'     => esc_html__( 'More options', 'buddyboss-theme' ),
 				'translation'           => array(
 					'comment_posted'      => esc_html__( 'Your comment has been posted.', 'buddyboss-theme' ),
 					'comment_btn_loading' => esc_html__( 'Please Wait...', 'buddyboss-theme' ),
@@ -612,9 +618,26 @@ if ( ! function_exists( 'bb_buddypanel_menu_atts' ) ) {
 				$atts['data-balloon-pos'] = 'right';
 			}
 			$atts['data-balloon'] = $item->title;
+			$atts['aria-label']   = $item->title;
 		}
 
-		return $atts;
+		/**
+		 * Filters the HTML attributes applied to a menu item's anchor element.
+		 *
+		 * @since 2.5.60
+		 *
+		 * @param array $atts {
+		 *     The HTML attributes applied to the menu item's `<a>` element, empty strings are ignored.
+		 *
+		 *     @type string $title  Title attribute.
+		 *     @type string $target Target attribute.
+		 *     @type string $rel    The rel attribute.
+		 *     @type string $href   The href attribute.
+		 * }
+		 * @param WP_Post  $item  The current menu item.
+		 * @param stdClass $args  An object of wp_nav_menu() arguments.
+		 */
+		return apply_filters( 'bb_buddypanel_nav_menu_link_attributes', $atts, $item, $args );
 	}
 
 	add_filter( 'nav_menu_link_attributes', 'bb_buddypanel_menu_atts', 10, 3 );
@@ -739,12 +762,12 @@ function buddyboss_panel_menu_counters( $args, $item ) {
 	) {
 		$count = 0;
 		$class = '';
-		if ( ! $item->menu_item_parent && function_exists( 'bp_is_active' ) ) {
-			if ( bp_is_active( 'messages' ) && trailingslashit( $item->url ) === trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ) ) {
+		if ( apply_filters( 'buddyboss_theme_panel_menu_counters', true, $item ) && function_exists( 'bp_is_active' ) ) {
+			if ( bp_is_active( 'notifications' ) && trailingslashit( $item->url ) === trailingslashit( bp_loggedin_user_domain() . bp_get_notifications_slug() ) ) {
+				$count = bp_notifications_get_unread_notification_count( bp_loggedin_user_id() );
+			} elseif ( bp_is_active( 'messages' ) && trailingslashit( $item->url ) === trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ) ) {
 				$count = messages_get_unread_count( bp_loggedin_user_id() );
 				$class = 'bb-messages-inbox-unread-count';
-			} elseif ( bp_is_active( 'notifications' ) && trailingslashit( $item->url ) === trailingslashit( bp_loggedin_user_domain() . bp_get_notifications_slug() ) ) {
-				$count = bp_notifications_get_unread_notification_count( bp_loggedin_user_id() );
 			} elseif ( bp_is_active( 'friends' ) && trailingslashit( $item->url ) === trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests/' ) ) {
 				$count = count( friends_get_friendship_request_user_ids( bp_loggedin_user_id() ) );
 			} elseif ( bp_is_active( 'groups' ) && trailingslashit( $item->url ) === trailingslashit( bp_core_get_user_domain( bp_loggedin_user_id() ) . bp_get_groups_slug() . '/invites' ) ) {
@@ -851,7 +874,12 @@ class BuddyBoss_BuddyPanel_Menu_Walker extends Walker_Nav_Menu {
 		$id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth );
 		$id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
 
-		$output .= $indent . '<li' . $id . $class_names . '>';
+		// Add size to the menu item.
+		$meta                  = Menu_Icons_Meta::get( $item->ID );
+		$meta_font_size_amount = ( isset( $meta['font_size_amount'] ) && intval( $meta['font_size_amount'] ) > 24 ) ? intval( $meta['font_size_amount'] ) + 25 : 0;
+		$data_icon_size_amount = ! empty( $meta_font_size_amount ) ? ' style="min-height:' . esc_attr( $meta_font_size_amount ) . 'px"' : '';
+
+		$output .= $indent . '<li' . $id . $class_names . $data_icon_size_amount . '>';
 
 		$atts           = array();
 		$atts['title']  = ! empty( $item->attr_title ) ? $item->attr_title : '';
@@ -889,7 +917,6 @@ class BuddyBoss_BuddyPanel_Menu_Walker extends Walker_Nav_Menu {
 
 		$icon = false;
 		if ( class_exists( 'Menu_Icons' ) || class_exists( 'Buddyboss_Menu_Icons' ) ) {
-			$meta = Menu_Icons_Meta::get( $item->ID );
 			if ( ! class_exists( 'Menu_Icons_Front_End' ) ) {
 				$path = ABSPATH . 'wp-content/themes/buddyboss-theme/inc/plugins/buddyboss-menu-icons/includes/front.php';
 				if ( file_exists( $path ) ) {
@@ -901,6 +928,18 @@ class BuddyBoss_BuddyPanel_Menu_Walker extends Walker_Nav_Menu {
 				$icon = Menu_Icons_Front_End::get_icon( $meta );
 			}
 		}
+
+		/**
+		 * Filters the arguments for a single nav menu item icon.
+		 *
+		 * @since 2.5.60
+		 *
+		 * @param string   $icon  Menu icon.
+		 * @param WP_Post  $item  Menu item data object.
+		 * @param stdClass $args  An object of wp_nav_menu() arguments.
+		 * @param int      $depth Depth of menu item. Used for padding.
+		 */
+		$icon = apply_filters( 'bb_theme_buddypanel_nav_menu_item_icon', $icon, $item, $args, $depth );
 
 		if ( ! $icon ) {
 			if ( in_array( 'bp-menu', $item->classes ) ) {
@@ -938,6 +977,7 @@ class BuddyBoss_BuddyPanel_Menu_Walker extends Walker_Nav_Menu {
 					$icon = 'bb-icon-graduation-cap';
 				}
 			}
+
 			if ( ! $icon ) {
 				$item->title = "<i class='bb-icon-file'></i><span class='link-text'>{$item->title}</span>";
 			} else {
@@ -1040,6 +1080,18 @@ class BuddyBoss_SubMenuWrap extends Walker_Nav_Menu {
 				$icon = Menu_Icons_Front_End::get_icon( $meta );
 			}
 		}
+
+		/**
+		 * Filters the arguments for a single nav menu item icon.
+		 *
+		 * @since 2.5.60
+		 *
+		 * @param string   $icon  Menu icon.
+		 * @param WP_Post  $item  Menu item data object.
+		 * @param stdClass $args  An object of wp_nav_menu() arguments.
+		 * @param int      $depth Depth of menu item. Used for padding.
+		 */
+		$icon = apply_filters( 'bb_theme_sub_nav_menu_wrap_item_icon', $icon, $item, $args, $depth );
 
 		if ( ! $icon ) {
 			$classes[] = 'no-icon';
@@ -1671,24 +1723,26 @@ function buddyboss_theme_add_admin_menus() {
 
 			foreach ( (array) $menu_items as $key => $menu_item ) {
 
-				// Replace the URL when bp_loggedin_user_domain && bp_displayed_user_domain are not same.
-				if ( class_exists( 'BuddyPress' ) ) {
-					if ( bp_loggedin_user_domain() !== bp_displayed_user_domain() ) {
-						$menu_item->url = str_replace( bp_displayed_user_domain(), bp_loggedin_user_domain(), $menu_item->url );
-					}
+				if ( strpos( $menu_item->url, 'wp-login.php?action=logout' ) === false ) {
+					// Replace the URL when bp_loggedin_user_domain && bp_displayed_user_domain are not same.
+					if ( class_exists( 'BuddyPress' ) ) {
+						if ( bp_loggedin_user_domain() !== bp_displayed_user_domain() ) {
+							$menu_item->url = str_replace( bp_displayed_user_domain(), bp_loggedin_user_domain(), $menu_item->url );
+						}
 
-					if (
-						is_admin() &&
-						in_array( 'bp-menu', $menu_item->classes, true )
-					) {
+						if (
+							is_admin() &&
+							in_array( 'bp-menu', $menu_item->classes, true )
+						) {
 
-						// Replace the user domain with the current user backend urls if mismatch found with and without user switching.
-						$path_info = pathinfo( $menu_item->url );
-						if ( ! empty( $path_info['dirname'] ) ) {
-							$old_user_domain = trailingslashit( $path_info['dirname'] );
-							$new_user_domain = trailingslashit( bp_core_get_user_domain( bp_loggedin_user_id() ) );
-							if ( $old_user_domain !== $new_user_domain ) {
-								$menu_item->url = str_replace( $old_user_domain, $new_user_domain, $menu_item->url );
+							// Replace the user domain with the current user backend urls if mismatch found with and without user switching.
+							$path_info = pathinfo( $menu_item->url );
+							if ( ! empty( $path_info['dirname'] ) ) {
+								$old_user_domain = trailingslashit( $path_info['dirname'] );
+								$new_user_domain = trailingslashit( bp_core_get_user_domain( bp_loggedin_user_id() ) );
+								if ( $old_user_domain !== $new_user_domain ) {
+									$menu_item->url = str_replace( $old_user_domain, $new_user_domain, $menu_item->url );
+								}
 							}
 						}
 					}

@@ -3227,18 +3227,25 @@ input[type="submit"] {
 
 .bb-bp-invites-content .table-responsive .page-numbers,
 .bb-bp-invites-content .table-responsive .post-page-numbers,
+.bb-bp-invites-content .table-responsive .bb-rl-page-numbers,
 .bb-lms-pagination .page-numbers,
 .bb-lms-pagination .post-page-numbers,
+.bb-lms-pagination .bb-rl-page-numbers,
 .bp-pagination-links .page-numbers,
 .bp-pagination-links .post-page-numbers,
+.bp-pagination-links .bb-rl-page-numbers,
 .bbp-pagination-links .page-numbers,
 .bbp-pagination-links .post-page-numbers,
+.bbp-pagination-links .bb-rl-page-numbers,
 .woocommerce-pagination .page-numbers,
 .woocommerce-pagination .post-page-numbers,
+.woocommerce-pagination .bb-rl-page-numbers,
 .llms-pagination .page-numbers,
 .llms-pagination .post-page-numbers,
+.llms-pagination .bb-rl-page-numbers,
 .page-links .page-numbers,
-.page-links .post-page-numbers {
+.page-links .post-page-numbers,
+.page-links .bb-rl-page-numbers {
   display: inline-block;
   height: 28px;
   line-height: 28px;
@@ -3249,79 +3256,114 @@ input[type="submit"] {
 }
 .bb-bp-invites-content .table-responsive .page-numbers:not(.next, .prev),
 .bb-bp-invites-content .table-responsive .post-page-numbers:not(.next, .prev),
+.bb-bp-invites-content .table-responsive .bb-rl-page-numbers:not(.next, .prev),
 .bb-lms-pagination .page-numbers:not(.next, .prev),
 .bb-lms-pagination .post-page-numbers:not(.next, .prev),
+.bb-lms-pagination .bb-rl-page-numbers:not(.next, .prev),
 .bp-pagination-links .page-numbers:not(.next, .prev),
 .bp-pagination-links .post-page-numbers:not(.next, .prev),
+.bp-pagination-links .bb-rl-page-numbers:not(.next, .prev),
 .bbp-pagination-links .page-numbers:not(.next, .prev),
 .bbp-pagination-links .post-page-numbers:not(.next, .prev),
+.bbp-pagination-links .bb-rl-page-numbers:not(.next, .prev),
 .woocommerce-pagination .page-numbers:not(.next, .prev),
 .woocommerce-pagination .post-page-numbers:not(.next, .prev),
+.woocommerce-pagination .bb-rl-page-numbers:not(.next, .prev),
 .llms-pagination .page-numbers:not(.next, .prev),
 .llms-pagination .post-page-numbers:not(.next, .prev),
+.llms-pagination .bb-rl-page-numbers:not(.next, .prev),
 .page-links .page-numbers:not(.next, .prev),
-.page-links .post-page-numbers:not(.next, .prev) {
+.page-links .post-page-numbers:not(.next, .prev),
+.page-links .bb-rl-page-numbers:not(.next, .prev) {
   min-width: 28px;
 }
 .bb-bp-invites-content .table-responsive .page-numbers.next, .bb-bp-invites-content .table-responsive .page-numbers.prev,
 .bb-bp-invites-content .table-responsive .post-page-numbers.next,
 .bb-bp-invites-content .table-responsive .post-page-numbers.prev,
+.bb-bp-invites-content .table-responsive .bb-rl-page-numbers.next,
+.bb-bp-invites-content .table-responsive .bb-rl-page-numbers.prev,
 .bb-lms-pagination .page-numbers.next,
 .bb-lms-pagination .page-numbers.prev,
 .bb-lms-pagination .post-page-numbers.next,
 .bb-lms-pagination .post-page-numbers.prev,
+.bb-lms-pagination .bb-rl-page-numbers.next,
+.bb-lms-pagination .bb-rl-page-numbers.prev,
 .bp-pagination-links .page-numbers.next,
 .bp-pagination-links .page-numbers.prev,
 .bp-pagination-links .post-page-numbers.next,
 .bp-pagination-links .post-page-numbers.prev,
+.bp-pagination-links .bb-rl-page-numbers.next,
+.bp-pagination-links .bb-rl-page-numbers.prev,
 .bbp-pagination-links .page-numbers.next,
 .bbp-pagination-links .page-numbers.prev,
 .bbp-pagination-links .post-page-numbers.next,
 .bbp-pagination-links .post-page-numbers.prev,
+.bbp-pagination-links .bb-rl-page-numbers.next,
+.bbp-pagination-links .bb-rl-page-numbers.prev,
 .woocommerce-pagination .page-numbers.next,
 .woocommerce-pagination .page-numbers.prev,
 .woocommerce-pagination .post-page-numbers.next,
 .woocommerce-pagination .post-page-numbers.prev,
+.woocommerce-pagination .bb-rl-page-numbers.next,
+.woocommerce-pagination .bb-rl-page-numbers.prev,
 .llms-pagination .page-numbers.next,
 .llms-pagination .page-numbers.prev,
 .llms-pagination .post-page-numbers.next,
 .llms-pagination .post-page-numbers.prev,
+.llms-pagination .bb-rl-page-numbers.next,
+.llms-pagination .bb-rl-page-numbers.prev,
 .page-links .page-numbers.next,
 .page-links .page-numbers.prev,
 .page-links .post-page-numbers.next,
-.page-links .post-page-numbers.prev {
+.page-links .post-page-numbers.prev,
+.page-links .bb-rl-page-numbers.next,
+.page-links .bb-rl-page-numbers.prev {
   width: 28px;
 }
 .bb-bp-invites-content .table-responsive a.page-numbers:not(.prev, .next),
+.bb-bp-invites-content .table-responsive a.bb-rl-page-numbers:not(.prev, .next),
 .bb-bp-invites-content .table-responsive a.post-page-numbers,
 .bb-lms-pagination a.page-numbers:not(.prev, .next),
+.bb-lms-pagination a.bb-rl-page-numbers:not(.prev, .next),
 .bb-lms-pagination a.post-page-numbers,
 .bp-pagination-links a.page-numbers:not(.prev, .next),
+.bp-pagination-links a.bb-rl-page-numbers:not(.prev, .next),
 .bp-pagination-links a.post-page-numbers,
 .bbp-pagination-links a.page-numbers:not(.prev, .next),
+.bbp-pagination-links a.bb-rl-page-numbers:not(.prev, .next),
 .bbp-pagination-links a.post-page-numbers,
 .woocommerce-pagination a.page-numbers:not(.prev, .next),
+.woocommerce-pagination a.bb-rl-page-numbers:not(.prev, .next),
 .woocommerce-pagination a.post-page-numbers,
 .llms-pagination a.page-numbers:not(.prev, .next),
+.llms-pagination a.bb-rl-page-numbers:not(.prev, .next),
 .llms-pagination a.post-page-numbers,
 .page-links a.page-numbers:not(.prev, .next),
+.page-links a.bb-rl-page-numbers:not(.prev, .next),
 .page-links a.post-page-numbers {
   color: var(--bb-body-text-color);
   margin: 0 2px;
 }
 .bb-bp-invites-content .table-responsive a.page-numbers:not(.prev, .next):hover,
+.bb-bp-invites-content .table-responsive a.bb-rl-page-numbers:not(.prev, .next):hover,
 .bb-bp-invites-content .table-responsive a.post-page-numbers:hover,
 .bb-lms-pagination a.page-numbers:not(.prev, .next):hover,
+.bb-lms-pagination a.bb-rl-page-numbers:not(.prev, .next):hover,
 .bb-lms-pagination a.post-page-numbers:hover,
 .bp-pagination-links a.page-numbers:not(.prev, .next):hover,
+.bp-pagination-links a.bb-rl-page-numbers:not(.prev, .next):hover,
 .bp-pagination-links a.post-page-numbers:hover,
 .bbp-pagination-links a.page-numbers:not(.prev, .next):hover,
+.bbp-pagination-links a.bb-rl-page-numbers:not(.prev, .next):hover,
 .bbp-pagination-links a.post-page-numbers:hover,
 .woocommerce-pagination a.page-numbers:not(.prev, .next):hover,
+.woocommerce-pagination a.bb-rl-page-numbers:not(.prev, .next):hover,
 .woocommerce-pagination a.post-page-numbers:hover,
 .llms-pagination a.page-numbers:not(.prev, .next):hover,
+.llms-pagination a.bb-rl-page-numbers:not(.prev, .next):hover,
 .llms-pagination a.post-page-numbers:hover,
 .page-links a.page-numbers:not(.prev, .next):hover,
+.page-links a.bb-rl-page-numbers:not(.prev, .next):hover,
 .page-links a.post-page-numbers:hover {
   color: var(--bb-primary-color);
 }
@@ -3431,29 +3473,43 @@ input[type="submit"] {
   content: "\e827";
 }
 .bb-bp-invites-content .table-responsive span.page-numbers:not(.dots),
+.bb-bp-invites-content .table-responsive span.bb-rl-page-numbers:not(.dots),
 .bb-bp-invites-content .table-responsive span.post-page-numbers,
 .bb-lms-pagination span.page-numbers:not(.dots),
+.bb-lms-pagination span.bb-rl-page-numbers:not(.dots),
 .bb-lms-pagination span.post-page-numbers,
 .bp-pagination-links span.page-numbers:not(.dots),
+.bp-pagination-links span.bb-rl-page-numbers:not(.dots),
 .bp-pagination-links span.post-page-numbers,
 .bbp-pagination-links span.page-numbers:not(.dots),
+.bbp-pagination-links span.bb-rl-page-numbers:not(.dots),
 .bbp-pagination-links span.post-page-numbers,
 .woocommerce-pagination span.page-numbers:not(.dots),
+.woocommerce-pagination span.bb-rl-page-numbers:not(.dots),
 .woocommerce-pagination span.post-page-numbers,
 .llms-pagination span.page-numbers:not(.dots),
+.llms-pagination span.bb-rl-page-numbers:not(.dots),
 .llms-pagination span.post-page-numbers,
 .page-links span.page-numbers:not(.dots),
+.page-links span.bb-rl-page-numbers:not(.dots),
 .page-links span.post-page-numbers {
   color: var(--bb-body-background-color);
   background-color: var(--bb-primary-color);
 }
 .bb-bp-invites-content .table-responsive span.page-numbers.disabled,
+.bb-bp-invites-content .table-responsive span.bb-rl-page-numbers.disabled,
 .bb-lms-pagination span.page-numbers.disabled,
+.bb-lms-pagination span.bb-rl-page-numbers.disabled,
 .bp-pagination-links span.page-numbers.disabled,
+.bp-pagination-links span.bb-rl-page-numbers.disabled,
 .bbp-pagination-links span.page-numbers.disabled,
+.bbp-pagination-links span.bb-rl-page-numbers.disabled,
 .woocommerce-pagination span.page-numbers.disabled,
+.woocommerce-pagination span.bb-rl-page-numbers.disabled,
 .llms-pagination span.page-numbers.disabled,
-.page-links span.page-numbers.disabled {
+.llms-pagination span.bb-rl-page-numbers.disabled,
+.page-links span.page-numbers.disabled,
+.page-links span.bb-rl-page-numbers.disabled {
   background-color: transparent;
   color: var(--bb-body-text-color);
 }
@@ -4998,6 +5054,15 @@ body.login.login-split-page #login h1 a {
 }
 
 @media (min-width: 992px) {
+  body.login.login-split-page .grecaptcha-badge[data-style="bottomleft"] {
+    right: -webkit-calc(-50vw - 186px) !important;
+    right: calc(-50vw - 186px) !important;
+  }
+  body.login.login-split-page .grecaptcha-badge[data-style="bottomleft"]:hover {
+    right: -webkit-calc(-50vw) !important;
+    right: calc(-50vw) !important;
+  }
+
   body.login.login-split-page .login-split {
     width: 50%;
     position: fixed;
@@ -5024,6 +5089,17 @@ body.login.login-split-page #login h1 a {
     width: 50vw;
     padding: 30px -webkit-calc((50vw - 450px) / 2);
     padding: 30px calc((50vw - 450px) / 2);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    min-height: 100%;
   }
 
   body.login.login-split-page.login-exh #login {
@@ -5033,20 +5109,12 @@ body.login.login-split-page #login h1 a {
   }
 
   body.login.login-split-page .language-switcher {
-    position: absolute;
-    right: 50%;
     padding-top: 15px;
-    width: 50vw;
-    padding-right: -webkit-calc((50vw - 450px) / 2);
-    padding-right: calc((50vw - 450px) / 2);
-    padding-left: -webkit-calc((50vw - 450px) / 2);
-    padding-left: calc((50vw - 450px) / 2);
   }
 }
 @media screen and (max-width: 991px) {
   body.login.login-split-page .language-switcher {
     top: initial !important;
-    margin-top: -25px;
   }
 
   body.login.login-split-page #login {
@@ -5278,7 +5346,6 @@ body.login:not(.login-split-page) .language-switcher {
   line-height: 40px;
   padding: 0 30px;
   border-radius: 50px;
-  margin-left: 15px;
   outline: none;
   box-shadow: none;
   min-width: 160px;
@@ -5468,6 +5535,7 @@ body.login .login-heading a:hover, body.login .login-heading a:focus {
           align-items: center;
   -ms-flex-flow: row wrap;
       flex-flow: row wrap;
+  gap: 10px;
 }
 .admin-email__actions-primary #correct-admin-email {
   margin: 0;
@@ -5629,7 +5697,52 @@ form#lostpasswordform a.bs-sign-in:hover {
 }
 
 #bs-pass2 {
+  margin-bottom: 0;
+}
+
+.user-bs-pass2-wrap {
   margin-bottom: 20px;
+  position: relative;
+}
+.user-bs-pass2-wrap .button-reset-hide-pw {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.user-bs-pass2-wrap .button-reset-hide-pw i {
+  font-size: 18px;
+  color: #122b46;
+  opacity: 0.5;
+}
+
+#resetpassform .wp-pwd .wp-hide-pw .dashicons {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+#resetpassform .wp-pwd .wp-hide-pw .dashicons:before {
+  font-family: bb-icons;
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  font-variant: normal;
+  font-size: 18px;
+  color: #122b46;
+  opacity: 0.5;
+}
+#resetpassform .wp-pwd .wp-hide-pw .dashicons-hidden:before {
+  content: "\ee6a";
+}
+#resetpassform .wp-pwd .wp-hide-pw .dashicons-visibility:before {
+  content: "\ee69";
 }
 
 .login.login-action-lostpassword.bb-login form#lostpasswordform p.submit {
@@ -5731,4 +5844,30 @@ body.login .mfp-bg {
 }
 .bb-modal iframe {
   margin-bottom: 1.6875rem;
+}
+
+div.bb-sso-container .bb-sso-button-default {
+  background-color: var(--bb-content-background-color);
+  border-color: var(--bb-content-border-color);
+  color: var(--bb-secondary-button-text-regular);
+  border-radius: var(--bb-button-radius);
+}
+
+#wfls-prompt-overlay {
+  z-index: 10;
+  padding: 0;
+}
+#wfls-prompt-overlay #wfls-prompt-wrapper {
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+}
+#wfls-prompt-overlay .wfls-remember-device-wrapper #wfls-remember-device {
+  vertical-align: middle;
+  height: 1rem;
+  width: 1rem;
+  margin-right: 1px;
+}
+
+#loginform > .cf-turnstile {
+  margin-right: 0;
 }

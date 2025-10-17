@@ -2,8 +2,12 @@
 /**
  * Plugin Name: LearnDash LMS
  * Plugin URI: http://www.learndash.com
+ * Update URI: learndash
  * Description: LearnDash LMS Plugin - Turn your WordPress site into a learning management system.
- * Version: 4.15.0
+ * Version: 4.25.2
+ * Requires PHP: 7.4
+ * Requires at least: 6.6
+ * Tested up to: 6.8.2
  * Author: LearnDash
  * Author URI: http://www.learndash.com
  * Text Domain: learndash
@@ -18,10 +22,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-update_option( 'nss_plugin_license_sfwd_lms', 'activated' );
-update_option( 'nss_plugin_license_email_sfwd_lms', '1@1.com' );
-update_option( 'nss_plugin_remote_license_sfwd_lms', [ 'value' => 'active' ] );
-
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 require_once plugin_dir_path( __FILE__ ) . 'vendor-prefixed/autoload.php';
 
@@ -29,11 +29,11 @@ use LearnDash\Core\App;
 use LearnDash\Core\Autoloader;
 use LearnDash\Core\Container;
 use StellarWP\Learndash\lucatume\DI52\ContainerException;
+use StellarWP\Learndash\StellarWP\AdminNotices\AdminNotices;
 use StellarWP\Learndash\StellarWP\Telemetry\Config as TelemetryConfig;
 use StellarWP\Learndash\StellarWP\Telemetry\Core as Telemetry;
 use StellarWP\Learndash\StellarWP\DB\DB;
 use StellarWP\Learndash\StellarWP\Validation\Config as ValidationConfig;
-use StellarWP\Learndash\StellarWP\Assets\Config as AssetsConfig;
 
 // CONSTANTS.
 
@@ -44,8 +44,7 @@ use StellarWP\Learndash\StellarWP\Assets\Config as AssetsConfig;
 *
 * @internal Will be set by LearnDash LMS. Semantic versioning is used.
 */
-define( 'LEARNDASH_VERSION', '4.15.0' );
-
+define( 'LEARNDASH_VERSION', '4.25.2' );
 
 if ( ! defined( 'LEARNDASH_LMS_PLUGIN_DIR' ) ) {
 	/**
@@ -133,6 +132,10 @@ add_action(
 		ValidationConfig::setHookPrefix( $hook_prefix );
 
 		ValidationConfig::initialize();
+
+		// Admin Notices.
+
+		AdminNotices::initialize( 'learndash', plugin_dir_url( __FILE__ ) . 'vendor-prefixed/stellarwp/admin-notices' );
 	},
 	0
 );
@@ -219,14 +222,47 @@ function learndash_register_provider( string $service_provider_class, string ...
  * Setup the autoloader for extra classes, which are not in the src/Core directory.
  *
  * @since 4.6.0
+ * @since 4.20.1 Support autoload from subdirectories in the src/deprecated directory.
  *
  * @return void
  */
 function learndash_extra_autoloading(): void {
 	$autoloader = Autoloader::instance();
 
-	foreach ( (array) glob( LEARNDASH_LMS_PLUGIN_DIR . 'src/deprecated/*.php' ) as $file ) {
-		$autoloader->register_class( basename( (string) $file, '.php' ), (string) $file );
+	// Iterate through all files under ./src/deprecated.
+	$iterator = new RecursiveDirectoryIterator( LEARNDASH_LMS_PLUGIN_DIR . 'src/deprecated/' );
+	$files    = new RecursiveIteratorIterator( $iterator, RecursiveIteratorIterator::SELF_FIRST );
+
+	foreach ( $files as $file ) {
+		if (
+			! $file instanceof SplFileInfo
+			|| ! $file->isFile()
+			|| $file->getExtension() !== 'php'
+		) {
+			continue;
+		}
+
+		if ( strstr( $file->getRealPath(), 'functions' ) ) {
+			// If this was named functions.php in any directory, load it.
+			include_once $file->getRealPath();
+		} else {
+			// Construct the proper Class Name based on the file path.
+			$class_name = str_replace(
+				'/',
+				'\\',
+				(string) preg_replace(
+					'/.*?src\/deprecated\/(.*?)\.php/',
+					'$1',
+					$file->getRealPath()
+				)
+			);
+
+			if ( strpos( $class_name, '\\' ) !== false ) {
+				$class_name = 'LearnDash\\' . $class_name;
+			}
+
+			$autoloader->register_class( $class_name, $file->getRealPath() );
+		}
 	}
 
 	$autoloader->register_autoloader();

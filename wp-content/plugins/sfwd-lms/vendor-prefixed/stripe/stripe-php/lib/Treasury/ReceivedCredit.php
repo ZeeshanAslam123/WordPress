@@ -23,9 +23,6 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $reversal_details Details describing when a ReceivedCredit may be reversed.
  * @property string $status Status of the ReceivedCredit. ReceivedCredits are created either <code>succeeded</code> (approved) or <code>failed</code> (declined). If a ReceivedCredit is declined, the failure reason can be found in the <code>failure_code</code> field.
  * @property null|string|\StellarWP\Learndash\Stripe\Treasury\Transaction $transaction The Transaction associated with this object.
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class ReceivedCredit extends \StellarWP\Learndash\Stripe\ApiResource
 {

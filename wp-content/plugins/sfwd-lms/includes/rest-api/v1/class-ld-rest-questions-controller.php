@@ -278,7 +278,7 @@ if ( ( ! class_exists( 'LD_REST_Questions_Controller_V1' ) ) && ( class_exists( 
 				&& count( $parameters['_answerData'] ) > 0;
 
 			$question_answer_data = $question->getAnswerData();
-			$first_answer_data    = $question_answer_data && count( $question_answer_data ) > 0
+			$first_answer_data    = is_array( $question_answer_data ) && count( $question_answer_data ) > 0
 				? $question_answer_data[0]
 				: null;
 
@@ -341,20 +341,34 @@ if ( ( ! class_exists( 'LD_REST_Questions_Controller_V1' ) ) && ( class_exists( 
 						foreach ( $parameters['_answerData'] as $answer ) {
 							$answer = (array) $answer;
 
-							$mapped_parameters['answerData'][] = [
-								'answer'     => $answer['_answer'],
-								'points'     => $answer['_points'],
-								'sortString' => $answer['_sortString'],
-								'correct'    => $answer['_correct'],
-							];
+							$answer_data = [];
+							foreach ( $answer as $key => $value ) {
+								// Remove the underscore from the key for certain keys to match the existing array keys format.
+								if ( in_array( $key, [ '_answer', '_points', '_sortString', '_correct' ], true ) ) {
+									$key = str_replace( '_', '', $key );
+								}
+
+								$answer_data[ $key ] = $value;
+							}
+
+							$mapped_parameters['answerData'][] = $answer_data;
 						}
 					} else {
-						foreach ( (array) $question->getAnswerData() as $answer ) {
+						foreach ( (array) $question_answer_data as $answer ) {
+							if ( ! $answer instanceof WpProQuiz_Model_AnswerTypes ) {
+								continue;
+							}
+
 							$mapped_parameters['answerData'][] = [
-								'answer'     => $answer->getAnswer(),
-								'points'     => $answer->getPoints(),
-								'sortString' => $answer->getSortString(),
-								'correct'    => $answer->isCorrect(),
+								'answer'              => $answer->getAnswer(),
+								'points'              => $answer->getPoints(),
+								'sortString'          => $answer->getSortString(),
+								'correct'             => $answer->isCorrect(),
+								'_html'               => $answer->isHtml(),
+								'_sortStringHtml'     => $answer->isSortStringHtml(),
+								'_graded'             => $answer->isGraded(),
+								'_gradingProgression' => $answer->getGradingProgression(),
+								'_gradedType'         => $answer->getGradedType(),
 							];
 						}
 					}

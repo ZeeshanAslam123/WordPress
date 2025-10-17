@@ -27,9 +27,6 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property string $status Status of the InboundTransfer: <code>processing</code>, <code>succeeded</code>, <code>failed</code>, and <code>canceled</code>. An InboundTransfer is <code>processing</code> if it is created and pending. The status changes to <code>succeeded</code> once the funds have been &quot;confirmed&quot; and a <code>transaction</code> is created and posted. The status changes to <code>failed</code> if the transfer fails.
  * @property \StellarWP\Learndash\Stripe\StripeObject $status_transitions
  * @property null|string|\StellarWP\Learndash\Stripe\Treasury\Transaction $transaction The Transaction associated with this object.
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class InboundTransfer extends \StellarWP\Learndash\Stripe\ApiResource
 {

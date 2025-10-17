@@ -532,45 +532,56 @@ function learndash_seconds_to_time( $input_seconds = 0 ) {
 }
 
 /**
- * Converts a timestamp to local timezone adjusted display.
+ * Converts a GMT timestamp to local timezone adjusted display.
  *
  * @since 2.2.0
  *
- * @param int    $timestamp      Optional. The timestamp to display. Default 0.
- * @param string $display_format Optional. The time display format. Default empty.
+ * @param int    $timestamp      Optional. The Unix timestamp to display. Default 0.
+ * @param string $display_format Optional. The time display format. Default empty. If empty, uses the format defined for WordPress under Settings -> General.
  *
  * @return string The adjusted date time display.
  */
 function learndash_adjust_date_time_display( $timestamp = 0, $display_format = '' ) {
 	$date_time_display = '';
 
-	if ( ! empty( $timestamp ) ) {
-		if ( empty( $display_format ) ) {
-			$date_format = get_option( 'date_format', 'Y-m-d' );
-			if ( empty( $date_format ) ) {
-				$date_format = 'Y-m-d';
-			}
+	if ( $timestamp <= 0 ) {
+		return $date_time_display;
+	}
 
-			$time_format = get_option( 'time_format', 'H:i:s' );
-			if ( empty( $time_format ) ) {
-				$time_format = 'H:i:s';
-			}
-
-			/**
-			 * Filters LearnDash date and time format.
-			 *
-			 * @param string  $format Format to display the date.
-			 */
-			$display_format = apply_filters( 'learndash_date_time_formats', $date_format . ' ' . $time_format );
+	if ( empty( $display_format ) ) {
+		$date_format = get_option( 'date_format', 'Y-m-d' );
+		if ( empty( $date_format ) ) {
+			$date_format = 'Y-m-d';
 		}
 
-		// First we convert the timestamp to local Y-m-d H:i:s format.
-		$date_time_display = get_date_from_gmt( date( 'Y-m-d H:i:s', $timestamp ), 'Y-m-d H:i:s' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+		$time_format = get_option( 'time_format', 'H:i:s' );
+		if ( empty( $time_format ) ) {
+			$time_format = 'H:i:s';
+		}
 
-		// Then we take that value and reconvert it to a timestamp and call date_i18n to translate the month, date name etc.
-		$date_time_display = date_i18n( $display_format, strtotime( $date_time_display ) );
+		$display_format = $date_format . ' ' . $time_format;
 	}
-	return $date_time_display;
+
+	/**
+	 * Filters LearnDash date and time format.
+	 *
+	 * @since 2.2.0
+	 * @since 4.20.0 This filter is now also applied when a format was specified rather than only to the default.
+	 *
+	 * @param string $display_format Format to display the date.
+	 *
+	 * @return string
+	 */
+	$display_format = apply_filters(
+		'learndash_date_time_formats',
+		$display_format
+	);
+
+	// First we convert the timestamp to local Y-m-d H:i:s format.
+	$date_time_display = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $timestamp ), 'Y-m-d H:i:s' );
+
+	// Then we take that value and reconvert it to a timestamp and call date_i18n to translate the month, date name etc.
+	return date_i18n( $display_format, strtotime( $date_time_display ) );
 }
 
 /**
@@ -934,6 +945,8 @@ function learndash_get_ignored_upload_file_extensions() {
  * This utility function is used to limit the allowed file extensions for
  * Assignments and Essays.
  *
+ * Warning: In the context of Assignments, this function is a candidate for deprecation. Use `Has_Assignments::get_supported_assignment_file_mime_types()` instead.
+ *
  * @since 3.1.7
  *
  * @param integer $post_id Post ID for Assignment or Essay.
@@ -1167,7 +1180,7 @@ function learndash_post_updated_messages( $post_messages = array() ) {
 		}
 
 		// translators: Publish box date format, see https://secure.php.net/date.
-		$scheduled_date = date_i18n( __( 'M j, Y @ H:i', 'learndash' ), strtotime( $post->post_date ) );
+		$scheduled_date = learndash_adjust_date_time_display( (int) strtotime( $post->post_date_gmt ), __( 'M j, Y @ H:i', 'learndash' ) );
 
 		$post_messages[ $post_type ] = array(
 			0  => '', // Unused. Messages start at index 1.
@@ -1903,13 +1916,16 @@ function learndash_use_select2_lib_ajax_fetch() {
 }
 
 /**
- * Add index file to directory
+ * Add an index file to directory.
  *
  * @param string $index_filename File name.
+ *
+ * @return void
  */
 function learndash_put_directory_index_file( $index_filename = '' ) {
 	if (
 		! empty( $index_filename )
+		&& ! file_exists( $index_filename )
 		&& is_writable( dirname( $index_filename ) )
 	) {
 		file_put_contents( $index_filename, '//LearnDash is THE Best LMS' );
@@ -2109,11 +2125,12 @@ add_action( 'admin_notices', 'learndash_stripe_addon_deprecation_notice' );
  * Shows admin notice warning if Licensing & Management plugin is not activated.
  *
  * @since 4.6.0
+ * @deprecated 4.18.0 -- This is now included in LearnDash - LMS.
  *
  * @return void
  */
 function learndash_hub_deactivated_notice() {
-	return;
+	_deprecated_function( __FUNCTION__, '4.18.0' );
 
 	if (
 		learndash_is_learndash_hub_active()
@@ -2152,8 +2169,6 @@ function learndash_hub_deactivated_notice() {
 	);
 }
 
-add_action( 'admin_notices', 'learndash_hub_deactivated_notice' );
-
 /**
  * Creates a cryptographic token tied to a specific action, user, user session, and window of time.
  * Adds the `learndash_` prefix to the action.
@@ -2166,4 +2181,31 @@ add_action( 'admin_notices', 'learndash_hub_deactivated_notice' );
  */
 function learndash_create_nonce( string $action ): string {
 	return wp_create_nonce( 'learndash_' . $action );
+}
+
+/**
+ * Sanitizes a given version string to ensure that it follows SemVer properly.
+ *
+ * @since 4.18.1
+ * @since 4.21.1 Added support for WordPress Beta and Nightly version strings.
+ *
+ * @param string $version Version string.
+ *
+ * @return string
+ */
+function learndash_sanitize_version_string( string $version ): string {
+	$modifier = '';
+
+	// Extracts the "modifier" to add it back later. Example: -RC2, -dev.hash, -beta1-hash, etc.
+	if ( strpos( $version, '-' ) !== false ) {
+		$modifier = Cast::to_string( preg_replace( '/^[^-]*(.*$)/', '$1', $version ) );
+		$version  = str_replace( $modifier, '', $version );
+	}
+
+	// Ensure that the version string has at least 3 parts.
+	for ( $count = count( explode( '.', $version ) ); $count < 3; $count++ ) {
+		$version .= '.0';
+	}
+
+	return $version . $modifier;
 }

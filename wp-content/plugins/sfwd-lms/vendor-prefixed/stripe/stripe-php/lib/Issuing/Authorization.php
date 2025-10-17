@@ -36,10 +36,6 @@ namespace StellarWP\Learndash\Stripe\Issuing;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $treasury <a href="https://stripe.com/docs/api/treasury">Treasury</a> details related to this authorization if it was created on a <a href="https://stripe.com/docs/api/treasury/financial_accounts">FinancialAccount</a>.
  * @property \StellarWP\Learndash\Stripe\StripeObject $verification_data
  * @property null|string $wallet The digital wallet used for this transaction. One of <code>apple_pay</code>, <code>google_pay</code>, or <code>samsung_pay</code>. Will populate as <code>null</code> when no digital wallet was utilized.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Authorization extends \StellarWP\Learndash\Stripe\ApiResource
 {

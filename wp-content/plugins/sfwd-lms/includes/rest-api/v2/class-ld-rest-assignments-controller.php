@@ -567,6 +567,20 @@ if ( ( ! class_exists( 'LD_REST_Assignments_Controller_V2' ) ) && ( class_exists
 						'required'    => false,
 					);
 				}
+
+				if ( ! isset( $query_params['topic'] ) ) {
+					$query_params['topic'] = array(
+						'description' => sprintf(
+							// translators: placeholder: Topic.
+							esc_html_x( 'Filter by %s ID', 'placeholder: Lesson', 'learndash' ),
+							LearnDash_Custom_Label::get_label( 'topic' )
+						),
+						'type'        => 'integer',
+						'default'     => 0,
+						'context'     => array( 'view' ),
+						'required'    => false,
+					);
+				}
 			}
 
 			return $query_params;

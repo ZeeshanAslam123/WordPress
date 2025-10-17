@@ -524,7 +524,7 @@ if ( ! class_exists( 'Learndash_Course_Video' ) ) {
 												$url_path            = wp_parse_url( $matches_1_new, PHP_URL_PATH );
 												$url_path_parts      = explode( '/', $url_path );
 												$video_id            = $url_path_parts[ count( $url_path_parts ) - 1 ];
-												$this->video_content = str_replace( '<iframe ', '<iframe data-learndash-video-wistia-id="' . $video_id . '" ', $this->video_content );
+												$this->video_content = str_replace( '<iframe ', '<iframe class="wistia_embed" data-learndash-video-wistia-id="' . $video_id . '" ', $this->video_content );
 											} elseif ( 'bunny' === $this->video_data['videos_found_provider'] ) {
 												/** This filter is documented in includes/course/ld-course-video.php */
 												$bunny_video_params = apply_filters(
@@ -718,6 +718,8 @@ if ( ! class_exists( 'Learndash_Course_Video' ) ) {
 				wp_enqueue_script( 'youtube_iframe_api', 'https://www.youtube.com/iframe_api', [ 'learndash_video_script_js' ], LEARNDASH_SCRIPT_VERSION_TOKEN, true );
 			} elseif ( 'vimeo' === $this->video_data['videos_found_provider'] ) {
 				wp_enqueue_script( 'vimeo_iframe_api', 'https://player.vimeo.com/api/player.js', [ 'learndash_video_script_js' ], LEARNDASH_SCRIPT_VERSION_TOKEN, true );
+			} elseif ( 'wistia' === $this->video_data['videos_found_provider'] ) {
+				wp_enqueue_script( 'wistia_iframe_api', 'https://fast.wistia.com/assets/external/E-v1.js', [ 'learndash_video_script_js' ], LEARNDASH_SCRIPT_VERSION_TOKEN, array( 'strategy' => 'async' ) );
 			}
 		}
 

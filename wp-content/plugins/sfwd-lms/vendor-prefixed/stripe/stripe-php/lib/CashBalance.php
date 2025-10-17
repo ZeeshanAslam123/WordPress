@@ -12,10 +12,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property string $customer The ID of the customer whose cash balance this object represents.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property \StellarWP\Learndash\Stripe\StripeObject $settings
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class CashBalance extends ApiResource
 {

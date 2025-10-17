@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: BuddyBoss Theme v2.5.10\n"
+"Project-Id-Version: BuddyBoss Theme v2.6.80\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 13:13:36+00:00\n"
-"PO-Revision-Date: 2024-01-24 18:48+0400\n"
+"POT-Creation-Date: 2024-09-05 11:47:46+00:00\n"
+"PO-Revision-Date: 2024-09-18 16:22+0400\n"
 "Last-Translator: Thorsten Wollenhöfer <thorsten.wollenhoefer@gmail.com>\n"
 "Language-Team: Thorsten Wollenhöfer <thorsten.wollenhoefer@gmail.com>\n"
 "Language: de_DE@formal\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: style.css\n"
@@ -60,7 +60,7 @@ msgstr "404"
 #: inc/plugins/elementor/widgets/courses/templates/learndash-courses-template.php:41
 #: inc/plugins/elementor/widgets/courses/templates/lifterlms-courses-template.php:48
 #: inc/plugins/elementor/widgets/header-bar/bb-header-bar.php:281
-#: learndash/ld30/shortcodes/profile.php:167
+#: learndash/ld30/shortcodes/profile.php:169
 #: lifterlms/course/course-index.php:20
 #: lifterlms/membership/membership-index.php:20 searchform.php:15
 #: template-parts/bbpress-banner.php:121 template-parts/header-aside.php:37
@@ -90,7 +90,7 @@ msgstr "Meine %s"
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/dashicons.php:659
 #: inc/plugins/elementor/widgets/courses/templates/learndash-courses-template.php:165
 #: inc/plugins/elementor/widgets/courses/templates/lifterlms-courses-template.php:179
-#: inc/plugins/learndash-helper.php:427 lifterlms/course/course-index.php:170
+#: inc/plugins/learndash-helper.php:429 lifterlms/course/course-index.php:170
 #: lifterlms/membership/membership-index.php:29
 msgid "Grid View"
 msgstr "Rasteransicht"
@@ -101,7 +101,7 @@ msgstr "Rasteransicht"
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/dashicons.php:649
 #: inc/plugins/elementor/widgets/courses/templates/learndash-courses-template.php:169
 #: inc/plugins/elementor/widgets/courses/templates/lifterlms-courses-template.php:183
-#: inc/plugins/learndash-helper.php:432 lifterlms/course/course-index.php:173
+#: inc/plugins/learndash-helper.php:434 lifterlms/course/course-index.php:173
 #: lifterlms/membership/membership-index.php:33
 msgid "List View"
 msgstr "Listenansicht"
@@ -113,7 +113,7 @@ msgstr "Listenansicht"
 #: inc/plugins/elementor/templates/types/page.php:35
 #: inc/plugins/elementor/widgets/courses/templates/learndash-courses-template.php:221
 #: inc/plugins/elementor/widgets/courses/templates/lifterlms-courses-template.php:220
-#: inc/plugins/learndash-helper.php:847 inc/plugins/lifterlms-helper.php:858
+#: inc/plugins/learndash-helper.php:849 inc/plugins/lifterlms-helper.php:858
 #: inc/plugins/lifterlms-helper.php:962 lifterlms/course/course-index.php:283
 #: lifterlms/course/course-index.php:331
 #: lifterlms/membership/membership-index.php:66
@@ -123,7 +123,7 @@ msgstr "Seite"
 #: archive-sfwd-courses.php:147
 #: inc/plugins/elementor/widgets/courses/templates/learndash-courses-template.php:240
 #: inc/plugins/elementor/widgets/courses/templates/lifterlms-courses-template.php:239
-#: inc/plugins/learndash-helper.php:860 inc/plugins/lifterlms-helper.php:885
+#: inc/plugins/learndash-helper.php:862 inc/plugins/lifterlms-helper.php:885
 #: lifterlms/course/course-index.php:302 lifterlms/course/course-index.php:349
 #: lifterlms/membership/membership-index.php:78
 msgid "Sorry, no courses were found."
@@ -175,22 +175,22 @@ msgstr "Öffnen"
 msgid "More actions"
 msgstr "Weitere Aktionen"
 
-#: bbpress/content-single-topic-lead.php:177
+#: bbpress/content-single-topic-lead.php:179
 msgid "Posted by"
 msgstr "Veröffentlicht von"
 
-#: bbpress/content-single-topic-lead.php:187
+#: bbpress/content-single-topic-lead.php:189
 msgid "on"
 msgstr "auf"
 
-#: bbpress/content-single-topic-lead.php:210 bbpress/loop-search-reply.php:17
+#: bbpress/content-single-topic-lead.php:212 bbpress/loop-search-reply.php:17
 #: bbpress/loop-search-topic.php:49 bbpress/loop-topic-list.php:50
 #: inc/plugins/elementor/widgets/bb-forums-activity.php:930
 #: inc/plugins/elementor/widgets/bb-forums.php:559
 msgid "replied"
 msgstr "beantwortet"
 
-#: bbpress/content-single-topic-lead.php:215 bbpress/loop-replies.php:124
+#: bbpress/content-single-topic-lead.php:217 bbpress/loop-replies.php:124
 #: bbpress/loop-search-topic.php:54 bbpress/loop-topic-list.php:55
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:1578
 #: inc/plugins/elementor/widgets/bb-forums.php:565
@@ -200,28 +200,28 @@ msgstr "beantwortet"
 msgid "Members"
 msgstr "Mitglieder"
 
-#: bbpress/content-single-topic-lead.php:215 bbpress/loop-replies.php:124
+#: bbpress/content-single-topic-lead.php:217 bbpress/loop-replies.php:124
 #: bbpress/loop-search-topic.php:54 bbpress/loop-topic-list.php:55
 #: inc/plugins/elementor/widgets/bb-forums.php:565
 msgid "Member"
 msgstr "Mitglied"
 
-#: bbpress/content-single-topic-lead.php:225
-#: bbpress/content-single-topic-lead.php:278 bbpress/loop-replies.php:136
+#: bbpress/content-single-topic-lead.php:227
+#: bbpress/content-single-topic-lead.php:280 bbpress/loop-replies.php:136
 #: inc/plugins/bbpress-helper.php:222
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:1953
 msgid "Replies"
 msgstr "Antworten"
 
-#: bbpress/content-single-topic-lead.php:225
-#: bbpress/content-single-topic-lead.php:278 bbpress/loop-replies.php:136
+#: bbpress/content-single-topic-lead.php:227
+#: bbpress/content-single-topic-lead.php:280 bbpress/loop-replies.php:136
 #: inc/plugins/bbpress-helper.php:222
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:1958
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:2594
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/genericon.php:623
 #: inc/plugins/learndash-compat.php:63 inc/theme/template-functions.php:905
-#: inc/theme/template-functions.php:1943 inc/theme/template-functions.php:1956
-#: inc/theme/template-functions.php:2065 inc/theme/template-functions.php:2080
+#: inc/theme/template-functions.php:1931 inc/theme/template-functions.php:1944
+#: inc/theme/template-functions.php:2053 inc/theme/template-functions.php:2068
 #: learndash/ld30/focus/comments_list.php:120
 #: tutor/dashboard/question-answer/answers.php:107
 #: tutor/single/lesson/comments-loop.php:37
@@ -229,17 +229,17 @@ msgstr "Antworten"
 msgid "Reply"
 msgstr "Antwort"
 
-#: bbpress/content-single-topic-lead.php:228
-#: bbpress/content-single-topic-lead.php:281 inc/plugins/bbpress-helper.php:226
+#: bbpress/content-single-topic-lead.php:230
+#: bbpress/content-single-topic-lead.php:283 inc/plugins/bbpress-helper.php:226
 #: template-parts/header-profile-menu.php:143
 msgid "Posts"
 msgstr "Beiträge"
 
-#: bbpress/content-single-topic-lead.php:228
-#: bbpress/content-single-topic-lead.php:281 bbpress/form-reply.php:229
+#: bbpress/content-single-topic-lead.php:230
+#: bbpress/content-single-topic-lead.php:283 bbpress/form-reply.php:229
 #: bbpress/form-topic.php:276 inc/plugins/bbpress-helper.php:226
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/dashicons.php:104
-#: lifterlms/card-new-share.php:28
+#: inc/theme/functions.php:442 lifterlms/card-new-share.php:28
 msgid "Post"
 msgstr "Beitrag"
 
@@ -310,7 +310,7 @@ msgstr "Alle Diskussionen"
 msgid "New discussion"
 msgstr "Neue Diskussion"
 
-#: bbpress/feedback-no-topics.php:82
+#: bbpress/feedback-no-topics.php:84
 msgid "Sorry, there were no discussions found."
 msgstr "Es wurden leider keine Diskussionen gefunden."
 
@@ -397,6 +397,7 @@ msgid "Notify me of new replies"
 msgstr "Benachrichtigen Sie mich über neue Antworten"
 
 #: bbpress/form-reply-activity.php:192
+#: inc/compatibility/incompatible-themes-helper.php:139
 msgid "Post Reply"
 msgstr "Antwort verfassen"
 
@@ -437,7 +438,7 @@ msgstr "Antwort auf:"
 
 #: bbpress/form-reply.php:47 bbpress/form-topic.php:74
 #: inc/admin/buddyboss-extensions/extensions/custom_image_select/custom_image_select/field_custom_image_select.php:231
-#: paid-memberships-pro/pages/account.php:144
+#: paid-memberships-pro/pages/account.php:156
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -592,7 +593,7 @@ msgid "Edit %s's Profile"
 msgstr "%ss Profil bearbeiten"
 
 #: bbpress/user-details.php:74
-#: buddypress/members/single/profile/profile-loop.php:28
+#: buddypress/members/single/profile/profile-loop.php:26
 #: inc/custom-fonts/classes/class-buddyboss-custom-fonts-cpt.php:299
 #: inc/custom-fonts/classes/class-buddyboss-custom-fonts-cpt.php:300
 #: inc/custom-fonts/classes/class-buddyboss-custom-fonts-cpt.php:377
@@ -635,9 +636,18 @@ msgstr ""
 "%1$sErstellen Sie ein Menü%2$s und weisen Sie es der BuddyPanel-Position zu, "
 "um es in diesem Block anzuzeigen."
 
-#: buddypress/activity/entry.php:39
+#: buddypress/activity/entry.php:36
+#: inc/plugins/elementor/widgets/bb-activity.php:697
+msgid "%s's Post"
+msgstr "Beitrag von %s"
+
+#: buddypress/activity/entry.php:55
 msgid "Pinned Post"
 msgstr "Angepinnter Beitrag"
+
+#: buddypress/activity/entry.php:62
+msgid "Turned off notifications"
+msgstr "Benachrichtigungen deaktiviert"
 
 #: buddypress/common/nav/directory-nav.php:10 docs/tabs-nouveau.php:2
 msgid "Directory menu"
@@ -647,18 +657,18 @@ msgstr "Verzeichnismenü"
 msgid "Close this notice"
 msgstr "Diese Nachricht schließen"
 
-#: buddypress/groups/single/invite-anyone.php:15
+#: buddypress/groups/single/invite-anyone.php:13
 msgid ""
 "Want to invite someone to the group who is not yet a member of the site?"
 msgstr ""
 "Sie möchten jemanden in die Gruppe einladen, der noch kein Mitglied der "
 "Website ist?"
 
-#: buddypress/groups/single/invite-anyone.php:15
+#: buddypress/groups/single/invite-anyone.php:13
 msgid "Send invitations by email."
 msgstr "Einladungen per E-Mail verschicken."
 
-#: buddypress/groups/single/invite-anyone.php:31
+#: buddypress/groups/single/invite-anyone.php:30
 msgid "Search members"
 msgstr "Mitglieder durchsuchen"
 
@@ -670,11 +680,11 @@ msgstr "Mitglieder auswählen:"
 msgid "Select people to invite from your friends list."
 msgstr "Laden Sie Leute aus Ihrer Kontakteliste ein."
 
-#: buddypress/groups/single/invite-anyone.php:71
+#: buddypress/groups/single/invite-anyone.php:72
 msgid "Remove Invite"
 msgstr "Einladung entfernen"
 
-#: buddypress/groups/single/invite-anyone.php:86
+#: buddypress/groups/single/invite-anyone.php:88
 #: template-parts/header-profile-menu.php:520
 msgid "Send Invites"
 msgstr "Einladungen versenden"
@@ -684,11 +694,11 @@ msgstr "Einladungen versenden"
 msgid "Message"
 msgstr "Nachricht"
 
-#: buddypress/groups/single/parts/header-item-actions.php:44
+#: buddypress/groups/single/parts/header-item-actions.php:46
 msgid "Organized by"
 msgstr "Organisiert von"
 
-#: buddypress/media/actions.php:36
+#: buddypress/media/actions.php:38
 #: inc/admin/buddyboss-extensions/extensions/repeater/repeater/field_repeater.php:186
 #: inc/admin/buddyboss-extensions/extensions/repeater/repeater/field_repeater.php:229
 #: inc/custom-fonts/classes/class-buddyboss-custom-fonts-cpt.php:324
@@ -698,7 +708,7 @@ msgstr "Organisiert von"
 msgid "Delete"
 msgstr "Löschen"
 
-#: buddypress/media/actions.php:37
+#: buddypress/media/actions.php:39
 msgid "Select All"
 msgstr "Alles auswählen"
 
@@ -712,7 +722,7 @@ msgstr "Entschuldigung, es wurden keine %s gefunden."
 msgid "Group Invites"
 msgstr "Gruppeneinladungen"
 
-#: buddypress/members/single/groups/invites.php:43
+#: buddypress/members/single/groups/invites.php:41
 msgid "Invited by %1$s &middot; %2$s."
 msgstr "Eingeladen von %1$s &middot; %2$s."
 
@@ -727,7 +737,7 @@ msgstr ""
 "Es wurden keine Einladungen verschickt, da die folgenden E-Mail-Adressen "
 "ungültig sind:"
 
-#: buddypress/members/single/invites/sent-invites.php:45
+#: buddypress/members/single/invites/sent-invites.php:44
 msgid ""
 "Invitations did not send to the following email addresses, because they are "
 "already members:"
@@ -735,7 +745,15 @@ msgstr ""
 "An die folgenden E-Mail-Adressen wurden keine Einladungen verschickt, da sie "
 "bereits Mitglieder sind:"
 
-#: buddypress/members/single/invites/sent-invites.php:62
+#: buddypress/members/single/invites/sent-invites.php:59
+msgid ""
+"Invitations did not send to the following email addresses, because they are "
+"already invited:"
+msgstr ""
+"Einladungen wurden nicht an die folgenden E-Mail-Adressen gesendet, da die "
+"Empfänger bereits eingeladen sind:"
+
+#: buddypress/members/single/invites/sent-invites.php:76
 msgid ""
 "Invitations did not send to the following email addresses, because the "
 "address or domain has been blacklisted:"
@@ -743,75 +761,75 @@ msgstr ""
 "Die Einladungen wurden nicht an die folgenden E-Mail-Adressen gesendet, da "
 "die Adresse oder Domain auf der schwarzen Liste steht:"
 
-#: buddypress/members/single/invites/sent-invites.php:74
+#: buddypress/members/single/invites/sent-invites.php:87
 #: template-parts/header-profile-menu.php:523
 msgid "Sent Invites"
 msgstr "Versendete Einladungen"
 
-#: buddypress/members/single/invites/sent-invites.php:78
+#: buddypress/members/single/invites/sent-invites.php:91
 msgid "You have sent invitation emails to the following people:"
 msgstr "Sie haben Einladungs-E-Mails an die folgenden Personen geschickt:"
 
-#: buddypress/members/single/invites/sent-invites.php:85
+#: buddypress/members/single/invites/sent-invites.php:98
 #: inc/plugins/elementor/widgets/bb-review.php:548
 #: inc/plugins/elementor/widgets/members/bb-members.php:566
 msgid "Name"
 msgstr "Name"
 
-#: buddypress/members/single/invites/sent-invites.php:86
+#: buddypress/members/single/invites/sent-invites.php:99
 #: inc/lib/buddyboss-updater/includes/views/package.php:69
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/dashicons.php:689
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/dashicons.php:694
 #: inc/theme/login.php:179 learndash/ld30/modules/login-modal.php:404
-#: paid-memberships-pro/pages/account.php:209
+#: paid-memberships-pro/pages/account.php:228
 msgid "Email"
 msgstr "Infos via E-Mail"
 
-#: buddypress/members/single/invites/sent-invites.php:87
-#: buddypress/members/single/invites/sent-invites.php:130
+#: buddypress/members/single/invites/sent-invites.php:100
+#: buddypress/members/single/invites/sent-invites.php:145
 msgid "Invited"
 msgstr "Eingeladen"
 
-#: buddypress/members/single/invites/sent-invites.php:88
+#: buddypress/members/single/invites/sent-invites.php:101
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/dashicons.php:294
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/genericon.php:713
 #: inc/theme-activation.php:2594 lifterlms/myaccount/view-order.php:39
-#: paid-memberships-pro/pages/account.php:263
+#: paid-memberships-pro/pages/account.php:282
 #: woocommerce/myaccount/dashboard.php:79
 #: woocommerce/myaccount/my-orders.php:16
 msgid "Status"
 msgstr "Status"
 
-#: buddypress/members/single/invites/sent-invites.php:130
-#: buddypress/members/single/invites/sent-invites.php:131
-#: buddypress/members/single/invites/sent-invites.php:136
-#: buddypress/members/single/invites/sent-invites.php:137
+#: buddypress/members/single/invites/sent-invites.php:145
+#: buddypress/members/single/invites/sent-invites.php:146
+#: buddypress/members/single/invites/sent-invites.php:151
+#: buddypress/members/single/invites/sent-invites.php:152
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:2579
 msgid "Registered"
 msgstr "Registriert"
 
-#: buddypress/members/single/invites/sent-invites.php:131
-#: buddypress/members/single/invites/sent-invites.php:137
+#: buddypress/members/single/invites/sent-invites.php:146
+#: buddypress/members/single/invites/sent-invites.php:152
 msgid "Are you sure you want to revoke this invitation?"
 msgstr "Sind Sie sicher, dass Sie diese Einladung widerrufen wollen?"
 
-#: buddypress/members/single/invites/sent-invites.php:136
+#: buddypress/members/single/invites/sent-invites.php:151
 msgid "Revoke Invite"
 msgstr "Einladung zurücknehmen"
 
-#: buddypress/members/single/invites/sent-invites.php:176
+#: buddypress/members/single/invites/sent-invites.php:191
 msgid "You haven't sent any invitations yet."
 msgstr "Sie haben noch keine Einladungen versendet."
 
-#: buddypress/members/single/invites/sent-invites.php:193
+#: buddypress/members/single/invites/sent-invites.php:206
 msgid "« Prev"
 msgstr "« Zurück"
 
-#: buddypress/members/single/invites/sent-invites.php:194
+#: buddypress/members/single/invites/sent-invites.php:207
 msgid "Next »"
 msgstr "Weiter »"
 
-#: buddypress/members/single/notifications/notifications-loop.php:28
+#: buddypress/members/single/notifications/notifications-loop.php:29
 msgid "Sort by date"
 msgstr "Nach Datum sortieren"
 
@@ -821,8 +839,9 @@ msgstr "Nach Datum sortieren"
 #: inc/plugins/elementor/widgets/header-bar/bb-header-bar.php:323
 #: template-parts/content-buddypress.php:31
 #: template-parts/header-profile-menu.php:211
-#: template-parts/notification-dropdown.php:10
-#: template-parts/notification-dropdown.php:19
+#: template-parts/notification-dropdown.php:7
+#: template-parts/notification-dropdown.php:8
+#: template-parts/notification-dropdown.php:17
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
@@ -831,22 +850,22 @@ msgstr "Benachrichtigungen"
 msgid "Sub Menu"
 msgstr "Untermenü"
 
-#: buddypress/members/single/profile/profile-loop.php:89
+#: buddypress/members/single/profile/profile-loop.php:87
 msgid "You have not yet added details to your profile."
 msgstr "Sie haben noch keine Details zu Ihrem Profil hinzugefügt."
 
-#: buddypress/members/single/profile/profile-loop.php:91
+#: buddypress/members/single/profile/profile-loop.php:89
 msgid "This member has not yet added details to their profile."
 msgstr ""
 "Dieses Mitglied hat noch keine Einzelheiten zu seinem Profil hinzugefügt."
 
-#: buddypress/members/single/profile.php:14
+#: buddypress/members/single/profile.php:17
 #: inc/plugins/elementor/widgets/bb-profile-completion.php:271
-#: paid-memberships-pro/pages/account.php:226
+#: paid-memberships-pro/pages/account.php:245
 msgid "Edit Profile"
 msgstr "Profil Bearbeiten"
 
-#: buddypress/members/single/profile.php:15
+#: buddypress/members/single/profile.php:18
 #: buddypress/members/single/settings.php:13
 msgid "View Profile"
 msgstr "Profil ansehen"
@@ -873,9 +892,9 @@ msgstr "Kein Ergebnis für „%s“"
 #: buddypress.php:24 inc/lib/buddyboss-updater/includes/views/package.php:37
 #: inc/plugins/elementor/widgets/bb-profile-completion.php:958
 #: inc/plugins/lifterlms-helper.php:1873 inc/plugins/lifterlms-helper.php:1952
-#: inc/theme/login.php:473 inc/theme/template-functions.php:857
-#: learndash/ld30/learndash-sidebar.php:183
-#: learndash/ld30/learndash-sidebar.php:207
+#: inc/theme/login.php:487 inc/theme/template-functions.php:857
+#: learndash/ld30/learndash-sidebar.php:184
+#: learndash/ld30/learndash-sidebar.php:208
 #: learndash/ld30/shortcodes/course_list_grid_template.php:382
 #: learndash/ld30/template-course-item.php:89
 #: learndash/ld30/template-course-item.php:113
@@ -1186,27 +1205,27 @@ msgstr ""
 msgid "Import / Export"
 msgstr "Importieren / Exportieren"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:77
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:81
 msgid "Import Options"
 msgstr "Optionen importieren"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:83
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:87
 msgid "Import from Clipboard"
 msgstr "Aus der Zwischenablage importieren"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:89
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:93
 msgid "Upload file"
 msgstr "Datei hochladen"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:96
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:100
 msgid "Paste your clipboard data here."
 msgstr "Fügen Sie hier Ihre Zwischenablagedaten ein."
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:109
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:113
 msgid "Import"
 msgstr "Importieren"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:112
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:116
 msgid ""
 "WARNING! This will overwrite all existing option values, please proceed with "
 "caution!"
@@ -1214,11 +1233,11 @@ msgstr ""
 "WARNUNG! Dies überschreibt alle vorhandenen Optionswerte, bitte gehen Sie "
 "damit vorsichtig um!"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:120
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:124
 msgid "Export Options"
 msgstr "Export-Optionen"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:124
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:128
 msgid ""
 "Here you can copy/download your current option settings. Keep this safe as "
 "you can use it as a backup should anything go wrong, or you can use it to "
@@ -1229,42 +1248,42 @@ msgstr ""
 "etwas schief gehen sollte, oder Sie können sie zur Wiederherstellung Ihrer "
 "Einstellungen auf dieser Website (oder einer anderen Website) verwenden."
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:131
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:133
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:135
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:137
 msgid "Copy to Clipboard"
 msgstr "In Zwischenablage kopieren"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:132
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:136
 msgid "Copied!"
 msgstr "Kopiert!"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:136
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:140
 msgid "Export File"
 msgstr "Datei exportieren"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:168
+#: inc/admin/buddyboss-extensions/extensions/bb_import_export/import_export/class-redux-import-export.php:172
 msgid "Your panel has unchanged values, would you like to save them now?"
 msgstr "Ihr Panel hat unveränderte Werte. Möchten Sie diese jetzt speichern?"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:275
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:299
 msgid "Font family"
 msgstr "Schriftfamilie"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:308
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:310
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:331
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:333
 msgid "Backup Font Family"
 msgstr "Schriftfamilie sichern"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:325
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:342
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:348
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:365
 msgid "Font style"
 msgstr "Schriftstil"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:326
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:349
 msgid "Font Weight &amp; Style"
 msgstr "Schriftstärke &amp; Stil"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:340
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:363
 #: inc/plugins/beaver-builder/header-bar/header-bar.php:179
 #: inc/plugins/elementor/widgets/bb-tabs.php:231
 #: inc/plugins/elementor/widgets/bb-tabs.php:246
@@ -1273,131 +1292,131 @@ msgstr "Schriftstärke &amp; Stil"
 msgid "Style"
 msgstr "Stil"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:352
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:375
 msgid "Font subsets"
 msgstr "Schrift-Unterarten"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:359
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:382
 msgid "Font Subsets"
 msgstr "Schrift-Unterarten"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:362
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:385
 msgid "Subsets"
 msgstr "Untergruppen"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:364
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:387
 msgid "Font script"
 msgstr "Schriftart"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:375
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:376
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:378
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:380
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:398
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:399
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:401
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:403
 msgid "Text Align"
 msgstr "Textausrichtung"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:387
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:418
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:439
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:463
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:410
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:441
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:462
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:486
 msgid "inherit"
 msgstr "vererbt"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:388
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:411
 #: inc/plugins/beaver-builder/header-bar/header-bar.php:189
 msgid "left"
 msgstr "links"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:389
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:412
 #: inc/plugins/beaver-builder/header-bar/header-bar.php:191
 msgid "right"
 msgstr "rechts"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:390
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:413
 #: inc/plugins/beaver-builder/header-bar/header-bar.php:190
 msgid "center"
 msgstr "zentriert"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:391
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:414
 msgid "justify"
 msgstr "Blocksatz"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:392
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:417
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:415
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:440
 msgid "initial"
 msgstr "initial"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:401
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:402
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:404
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:406
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:424
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:425
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:427
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:429
 msgid "Text Transform"
 msgstr "Texttransformation"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:413
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:462
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:436
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:485
 msgid "none"
 msgstr "keine"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:414
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:437
 msgid "capitalize"
 msgstr "Nur Großbuchstaben"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:415
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:438
 msgid "uppercase"
 msgstr "Großbuchstaben"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:416
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:439
 msgid "lowercase"
 msgstr "Kleinbuchstaben"
-
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:427
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:428
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:430
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:432
-msgid "Font Variant"
-msgstr "Schriftvariante"
-
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:440
-msgid "normal"
-msgstr "Normal"
-
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:441
-msgid "small-caps"
-msgstr "Kapitälchen"
 
 #: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:450
 #: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:451
 #: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:453
 #: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:455
+msgid "Font Variant"
+msgstr "Schriftvariante"
+
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:463
+msgid "normal"
+msgstr "Normal"
+
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:464
+msgid "small-caps"
+msgstr "Kapitälchen"
+
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:473
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:474
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:476
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:478
 msgid "Text Decoration"
 msgstr "Textverzierung"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:464
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:487
 msgid "underline"
 msgstr "Unterstrichen"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:465
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:488
 msgid "overline"
 msgstr "Überstrich"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:466
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:489
 msgid "line-through"
 msgstr "Durchgestrichen"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:467
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:490
 msgid "blink"
 msgstr "Blinken"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:477
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:482
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:502
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:507
 #: inc/plugins/beaver-builder/header-bar/header-bar.php:455
 #: inc/plugins/beaver-builder/header-bar/header-bar.php:546
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/elusive.php:611
 msgid "Font Size"
 msgstr "Schriftgröße"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:483
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:508
 #: inc/plugins/elementor/widgets/bb-activity.php:376
 #: inc/plugins/elementor/widgets/bb-dashboard-grid.php:362
 #: inc/plugins/elementor/widgets/bb-dashboard-intro.php:170
@@ -1412,35 +1431,35 @@ msgstr "Schriftgröße"
 msgid "Size"
 msgstr "Size"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:495
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:500
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:523
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:528
 msgid "Line Height"
 msgstr "Zeilenhöhe"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:501
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:529
 #: inc/plugins/elementor/widgets/courses/controls/learndash-courses-controls.php:193
 #: inc/plugins/elementor/widgets/courses/controls/lifterlms-courses-controls.php:193
 msgid "Height"
 msgstr "Höhe"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:514
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:519
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:520
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:545
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:550
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:551
 msgid "Word Spacing"
 msgstr "Wortabstand"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:532
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:537
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:538
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:566
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:571
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:572
 msgid "Letter Spacing"
 msgstr "Zeichenabstand"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:556
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:558
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:593
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:598
 msgid "Margin Top"
 msgstr "Abstand oben"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:558
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:599
 #: inc/plugins/buddyboss-menu-icons/includes/settings.php:690
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/genericon.php:758
 #: inc/plugins/elementor/widgets/bb-dashboard-grid.php:654
@@ -1454,12 +1473,12 @@ msgstr "Abstand oben"
 msgid "Top"
 msgstr "Oben"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:567
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:569
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:619
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:624
 msgid "Margin Bottom"
 msgstr "Abstand unten"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:569
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:625
 #: inc/plugins/buddyboss-menu-icons/includes/settings.php:710
 #: inc/plugins/elementor/widgets/bb-tabs.php:883
 #: inc/plugins/elementor/widgets/bb-tabs.php:966
@@ -1471,42 +1490,42 @@ msgstr "Abstand unten"
 msgid "Bottom"
 msgstr "Unten"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:587
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:647
 msgid "Font Color"
 msgstr "Schriftfarbe"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:594
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:654
 msgid "Font color"
 msgstr "Schriftfarbe"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:637
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:698
 msgid "Shadow Color"
 msgstr "Schattenfarbe"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:642
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:703
 msgid "Shadow color"
 msgstr "Schattenfarbe"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:653
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:662
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:714
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:723
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:669
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:678
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:730
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:739
 msgid "Vertical"
 msgstr "Vertikal"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:685
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:694
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:746
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:755
 msgid "Blur"
 msgstr "Unschärfe"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:1082
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:1152
 msgid "Standard Fonts"
 msgstr "Standardschriften"
 
-#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:1165
+#: inc/admin/buddyboss-extensions/extensions/bb_typography/bb_typography/field_bb_typography.php:1209
 msgid "Google Webfonts"
 msgstr "Google-Webfonts"
 
@@ -2294,6 +2313,7 @@ msgstr ""
 #: template-parts/header-profile-menu.php:256
 #: template-parts/header-profile-menu.php:257
 #: template-parts/header-profile-menu.php:269
+#: template-parts/messages-dropdown.php:7
 #: template-parts/messages-dropdown.php:8
 #: template-parts/messages-dropdown.php:17
 msgid "Messages"
@@ -3544,19 +3564,19 @@ msgstr "Theme-Optionen"
 msgid "BuddyBoss Theme"
 msgstr "BuddyBoss Theme"
 
-#: inc/admin/options-init.php:2988
+#: inc/admin/options-init.php:2986
 msgid "Follow BuddyBoss on YouTube"
 msgstr "Folgen Sie BuddyBoss auf YouTube"
 
-#: inc/admin/options-init.php:2993
+#: inc/admin/options-init.php:2991
 msgid "Follow BuddyBoss on Twitter"
 msgstr "Folgen Sie BuddyBoss auf Twitter"
 
-#: inc/admin/options-init.php:2998
+#: inc/admin/options-init.php:2996
 msgid "Like BuddyBoss on Facebook"
 msgstr "BuddyBoss auf Facebook mit einem „Gefällt mir“ versehen"
 
-#: inc/admin/options-init.php:3008
+#: inc/admin/options-init.php:3006
 msgid ""
 "<p>To access any of your saved options from within your code you can use "
 "your global variable: <strong>$%1$s</strong></p>"
@@ -3565,7 +3585,7 @@ msgstr ""
 "zuzugreifen, können Sie Ihre globale Variable verwenden: <strong>$%1$s</"
 "strong></p>"
 
-#: inc/admin/options-init.php:3010
+#: inc/admin/options-init.php:3008
 msgid ""
 "<p>This text is displayed above the options panel. It isn't required, but "
 "more info is always better! The intro_text field accepts all HTML.</p>"
@@ -3588,11 +3608,6 @@ msgstr "Bereich zurücksetzen"
 #: inc/admin/redux-templates/panel/header-stickybar.tpl.php:27
 msgid "Reset All"
 msgstr "Alles zurücksetzen"
-
-#: inc/admin/redux-templates/panel/footer.tpl.php:67
-#: inc/admin/redux-templates/panel/header-stickybar.tpl.php:31
-msgid "Working..."
-msgstr "In Bearbeitung ..."
 
 #: inc/admin/redux-templates/panel/header-stickybar.tpl.php:16
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:1229
@@ -3653,6 +3668,30 @@ msgstr ""
 #: inc/admin/redux-templates/panel/header.tpl.php:57
 msgid "FORCED DEV MODE OFF ENABLED"
 msgstr "ZWANGSENTWICKLUNGSMODUS AUS AKTIVIERT"
+
+#: inc/compatibility/incompatible-themes-helper.php:110
+msgid "Leave a reply"
+msgstr "Hinterlassen Sie eine Antwort"
+
+#: inc/compatibility/incompatible-themes-helper.php:113
+msgid "Cancel reply"
+msgstr "Antwort verwerfen"
+
+#: inc/compatibility/incompatible-themes-helper.php:122
+#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:658
+#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/elusive.php:391
+#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/elusive.php:396
+#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:924
+#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:929
+#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/foundation-icons.php:401
+#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/genericon.php:248
+msgid "Comment"
+msgstr "Kommentar"
+
+#: inc/core/deprecated/deprecated-functions.php:167
+#: inc/theme/template-functions.php:1716
+msgid "You need to be loggedin."
+msgstr "Sie müssen eingeloggt sein."
 
 #: inc/custom-fonts/classes/class-buddyboss-custom-fonts-admin.php:72
 #: inc/custom-fonts/classes/class-buddyboss-custom-fonts-admin.php:175
@@ -4408,7 +4447,7 @@ msgstr "Trennzeichen"
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/dashicons.php:769
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/genericon.php:183
 #: inc/plugins/elementor/widgets/header-bar/bb-header-bar.php:343
-#: template-parts/cart-dropdown.php:3
+#: template-parts/cart-dropdown.php:2 template-parts/cart-dropdown.php:3
 msgid "Cart"
 msgstr "Warenkorb"
 
@@ -4903,7 +4942,7 @@ msgid "Select Icon"
 msgstr "Icon auswählen"
 
 #: inc/plugins/buddyboss-menu-icons/includes/settings.php:903
-#: paid-memberships-pro/pages/account.php:141
+#: paid-memberships-pro/pages/account.php:153
 msgid "Change"
 msgstr "Ändern"
 
@@ -5012,7 +5051,7 @@ msgid "Icon Picker"
 msgstr "Symbol-Picker"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/loader.php:240
-#: inc/plugins/learndash-helper.php:1114 inc/plugins/lifterlms-helper.php:1338
+#: inc/plugins/learndash-helper.php:1112 inc/plugins/lifterlms-helper.php:1338
 msgid "All Categories"
 msgstr "Alle Kategorien"
 
@@ -5270,7 +5309,7 @@ msgid "Award"
 msgstr "Auszeichnung"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:303
-#: inc/theme/functions.php:445
+#: inc/theme/functions.php:450
 msgid "Badge"
 msgstr "Abzeichen"
 
@@ -5623,16 +5662,6 @@ msgstr "Code: Format"
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:653
 msgid "Command"
 msgstr "Befehl"
-
-#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:658
-#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/elusive.php:391
-#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/elusive.php:396
-#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:924
-#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:929
-#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/foundation-icons.php:401
-#: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/genericon.php:248
-msgid "Comment"
-msgstr "Kommentar"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:663
 msgid "Comment: Activity"
@@ -6416,8 +6445,8 @@ msgid "Log In"
 msgstr "Anmelden"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:1518
-#: inc/theme/functions.php:1625 inc/theme/template-functions.php:1544
-#: paid-memberships-pro/pages/account.php:233
+#: inc/theme/functions.php:1675 inc/theme/template-functions.php:1560
+#: paid-memberships-pro/pages/account.php:252
 #: template-parts/header-profile-menu.php:538
 msgid "Log Out"
 msgstr "Abmelden"
@@ -7475,7 +7504,7 @@ msgstr "Customizer"
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/dashicons.php:184
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/elusive.php:416
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:1039
-#: inc/plugins/lifterlms-helper.php:2207 tutor/dashboard/dashboard.php:135
+#: inc/plugins/lifterlms-helper.php:2217 tutor/dashboard/dashboard.php:135
 #: tutor/dashboard.php:47
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -10647,7 +10676,7 @@ msgstr "Mein Bereich"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/foundation-icons.php:951
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/genericon.php:503
-#: inc/plugins/learndash-helper.php:1929
+#: inc/plugins/learndash-helper.php:1874
 #: lifterlms/assignment/template-single-assignment-content.php:97
 #: lifterlms/lesson/template-single-lesson-content.php:154
 #: lifterlms/myaccount/my-notifications.php:42
@@ -10687,7 +10716,7 @@ msgstr "Pfund"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/foundation-icons.php:1061
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/genericon.php:583
-#: inc/plugins/learndash-helper.php:1930
+#: inc/plugins/learndash-helper.php:1875
 #: lifterlms/assignment/template-single-assignment-content.php:93
 #: lifterlms/lesson/template-single-lesson-content.php:144
 #: lifterlms/myaccount/my-notifications.php:41
@@ -11013,7 +11042,7 @@ msgstr[1] ""
 "%d Ergebnisse gefunden. Verwenden Sie zum Navigieren die Tasten Pfeil nach "
 "oben und Pfeil nach unten"
 
-#: inc/plugins/elementor/bb-elementor.php:56
+#: inc/plugins/elementor/bb-elementor.php:58
 msgid ""
 "Elementor Hello World is not working because you are using an old version of "
 "Elementor."
@@ -11021,7 +11050,7 @@ msgstr ""
 "Elementor Hello World funktioniert nicht, weil Sie eine alte Version von "
 "Elementor verwenden."
 
-#: inc/plugins/elementor/bb-elementor.php:57
+#: inc/plugins/elementor/bb-elementor.php:59
 msgid "Update Elementor Now"
 msgstr "Elementor jetzt aktualisieren"
 
@@ -11284,7 +11313,7 @@ msgstr "Typografie Inhalt"
 msgid "Content Color"
 msgstr "Inhaltsfarbe"
 
-#: inc/plugins/elementor/widgets/bb-activity.php:775
+#: inc/plugins/elementor/widgets/bb-activity.php:795
 msgid "Post an Update"
 msgstr "Fügen Sie eine Aktualisierung hinzu"
 
@@ -11837,7 +11866,7 @@ msgid "Profile Photo"
 msgstr "Profilbild"
 
 #: inc/plugins/elementor/widgets/bb-profile-completion.php:158
-#: inc/plugins/learndash-helper.php:583 inc/plugins/lifterlms-helper.php:1624
+#: inc/plugins/learndash-helper.php:585 inc/plugins/lifterlms-helper.php:1624
 #: template-parts/header-profile-menu.php:38
 msgid "Cover Photo"
 msgstr "Titelbild"
@@ -12148,7 +12177,7 @@ msgstr "Autorentitel eingeben"
 
 #: inc/plugins/elementor/widgets/bb-review.php:578
 #: lifterlms/myaccount/my-orders.php:27 lifterlms/myaccount/my-orders.php:40
-#: paid-memberships-pro/pages/account.php:260
+#: paid-memberships-pro/pages/account.php:279
 #: tutor/dashboard/assignments/submitted.php:76 tutor/dashboard/reviews.php:56
 #: woocommerce/myaccount/dashboard.php:78
 #: woocommerce/myaccount/my-orders.php:15
@@ -12723,7 +12752,7 @@ msgstr "Zeittypografie"
 
 #: inc/plugins/elementor/widgets/courses/templates/learndash-activity-template.php:116
 #: inc/plugins/elementor/widgets/courses/templates/lifterlms-activity-template.php:103
-#: learndash/ld30/learndash-sidebar.php:225
+#: learndash/ld30/learndash-sidebar.php:227
 msgid "% Completed"
 msgstr "%  abgeschlossen"
 
@@ -13125,31 +13154,31 @@ msgstr "Keine gültige Option"
 msgid "Not a valid value"
 msgstr "Kein gültiger Wert"
 
-#: inc/plugins/learndash-helper.php:568
+#: inc/plugins/learndash-helper.php:570
 msgid "Course Short Description"
 msgstr "Kurzbeschreibung des Kurses"
 
-#: inc/plugins/learndash-helper.php:573
+#: inc/plugins/learndash-helper.php:575
 msgid "Course Video Preview"
 msgstr "Video-Vorschau des Kurses"
 
-#: inc/plugins/learndash-helper.php:609
+#: inc/plugins/learndash-helper.php:611
 msgid "Remove cover photo"
 msgstr "Titelbild entfernen"
 
-#: inc/plugins/learndash-helper.php:613
+#: inc/plugins/learndash-helper.php:615
 msgid "Set cover photo"
 msgstr "Titelbild einstellen"
 
-#: inc/plugins/learndash-helper.php:658
+#: inc/plugins/learndash-helper.php:660
 msgid "Click for Help!"
 msgstr "Für Hilfe klicken!"
 
-#: inc/plugins/learndash-helper.php:662
+#: inc/plugins/learndash-helper.php:664
 msgid "Preview Video URL"
 msgstr "Vorschau der Video-URL"
 
-#: inc/plugins/learndash-helper.php:681
+#: inc/plugins/learndash-helper.php:683
 msgid ""
 "Enter preview video URL for the course. The video will be added on single "
 "course price box."
@@ -13157,30 +13186,29 @@ msgstr ""
 "Geben Sie die URL des Vorschauvideos für den Kurs ein. Das Video wird in der "
 "Preisliste des Einzelkurses hinzugefügt."
 
-#: inc/plugins/learndash-helper.php:1261 inc/plugins/lifterlms-helper.php:625
+#: inc/plugins/learndash-helper.php:1210 inc/plugins/lifterlms-helper.php:625
 msgid "All Instructors"
 msgstr "Alle Kursleiter"
 
-#: inc/plugins/learndash-helper.php:1364 inc/plugins/lifterlms-helper.php:599
+#: inc/plugins/learndash-helper.php:1309 inc/plugins/lifterlms-helper.php:599
 msgid "Alphabetical"
 msgstr "Alphabetisch"
 
-#: inc/plugins/learndash-helper.php:1365 inc/plugins/lifterlms-helper.php:600
+#: inc/plugins/learndash-helper.php:1310 inc/plugins/lifterlms-helper.php:600
 msgid "Newly Created"
 msgstr "Neu erstellt"
 
-#: inc/plugins/learndash-helper.php:1369 inc/plugins/lifterlms-helper.php:604
+#: inc/plugins/learndash-helper.php:1314 inc/plugins/lifterlms-helper.php:604
 msgid "My Progress"
 msgstr "Mein Fortschritt"
 
-#: inc/plugins/learndash-helper.php:1654
+#: inc/plugins/learndash-helper.php:1599
 msgid "RESUME"
 msgstr "FORTSETZEN"
 
-#: inc/plugins/learndash-helper.php:2625 template-parts/content-bbpress.php:51
+#: inc/plugins/learndash-helper.php:2574 template-parts/content-bbpress.php:57
 #: template-parts/content-buddypress.php:41
 #: template-parts/content-sfwd-assignment.php:18
-#: template-parts/content-sfwd.php:18
 msgid "Pages:"
 msgstr "Seiten:"
 
@@ -13189,21 +13217,21 @@ msgid "Sorry, no memberships were found."
 msgstr "Es wurden leider keine Mitgliedschaften gefunden."
 
 #: inc/plugins/lifterlms-helper.php:1656
-#: learndash/ld30/template-single-course-sidebar.php:270
+#: learndash/ld30/template-single-course-sidebar.php:272
 msgid "Continue"
 msgstr "Fortsetzen"
 
 #: inc/plugins/lifterlms-helper.php:1671
-#: learndash/ld30/learndash-sidebar.php:221
-#: learndash/ld30/learndash-sidebar.php:294
-#: learndash/ld30/learndash-sidebar.php:340
-#: learndash/ld30/learndash-sidebar.php:404
-#: learndash/ld30/learndash-sidebar.php:474
+#: learndash/ld30/learndash-sidebar.php:223
+#: learndash/ld30/learndash-sidebar.php:296
+#: learndash/ld30/learndash-sidebar.php:342
+#: learndash/ld30/learndash-sidebar.php:406
+#: learndash/ld30/learndash-sidebar.php:476
 #: learndash/ld30/shortcodes/course_list_grid_template.php:158
 #: learndash/ld30/shortcodes/course_list_grid_template.php:178
 #: learndash/ld30/shortcodes/course_list_grid_template.php:212
-#: learndash/ld30/shortcodes/profile.php:106
-#: learndash/ld30/template-single-course-sidebar.php:267
+#: learndash/ld30/shortcodes/profile.php:108
+#: learndash/ld30/template-single-course-sidebar.php:269
 msgid "Completed"
 msgstr "Abgeschlossen"
 
@@ -13256,9 +13284,13 @@ msgstr "Ein ausführlicher Text ist für die Bewertung erforderlich."
 msgid "Leave Review"
 msgstr "Hinterlassen Sie eine Bewertung"
 
-#: inc/plugins/lifterlms-helper.php:2207
+#: inc/plugins/lifterlms-helper.php:2217
 msgid "All certificates"
 msgstr "Alle Zertifikate"
+
+#: inc/plugins/related-posts-helper.php:204
+msgid "There is no excerpt because this is a protected post."
+msgstr "Es gibt keinen Auszug, da dies ein geschützter Beitrag ist."
 
 #: inc/plugins/tutorlms-helper.php:87
 msgid "Course Updates"
@@ -13392,51 +13424,51 @@ msgstr "Mobiles Menü - Angemeldet"
 msgid "Mobile Menu - Logged out"
 msgstr "Mobiles Menü - Abgemeldet"
 
-#: inc/theme/functions.php:400
+#: inc/theme/functions.php:404
 msgid "Previous Event"
 msgstr "Vorherige Veranstaltung"
 
-#: inc/theme/functions.php:401
+#: inc/theme/functions.php:405
 msgid "Next Event"
 msgstr "Nächste Veranstaltung"
 
-#: inc/theme/functions.php:437
+#: inc/theme/functions.php:441
 msgid "Share on Facebook"
 msgstr "Auf Facebook teilen"
 
-#: inc/theme/functions.php:438
-msgid "Tweet"
-msgstr "Twittern"
+#: inc/theme/functions.php:443
+msgid "Menu Items"
+msgstr "Menüpunkte"
 
-#: inc/theme/functions.php:440
+#: inc/theme/functions.php:445
 msgid "Your comment has been posted."
 msgstr "Ihr Kommentar wurde veröffentlicht."
 
-#: inc/theme/functions.php:441
+#: inc/theme/functions.php:446
 msgid "Please Wait..."
 msgstr "Bitte warten ..."
 
-#: inc/theme/functions.php:442
+#: inc/theme/functions.php:447
 msgid "Choose a file"
 msgstr "Datei auswählen"
 
-#: inc/theme/functions.php:443
+#: inc/theme/functions.php:448
 msgid "Please enter a valid email address."
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
-#: inc/theme/functions.php:495
+#: inc/theme/functions.php:500
 msgid "Choose or Upload an Image"
 msgstr "Ein Bild auswählen oder hochladen"
 
-#: inc/theme/functions.php:496
+#: inc/theme/functions.php:501
 msgid "Use this image"
 msgstr "Dieses Bild verwenden"
 
-#: inc/theme/functions.php:1482
+#: inc/theme/functions.php:1532
 msgid "Search..."
 msgstr "Suchen ..."
 
-#: inc/theme/functions.php:1535
+#: inc/theme/functions.php:1585
 msgid "Stick to Bottom"
 msgstr "Unten anheften"
 
@@ -13458,7 +13490,7 @@ msgid "Password"
 msgstr "Passwort"
 
 #: inc/theme/login.php:178 learndash/ld30/modules/login-modal.php:400
-#: paid-memberships-pro/pages/account.php:208
+#: paid-memberships-pro/pages/account.php:227
 #: woocommerce/myaccount/form-login.php:93
 msgid "Username"
 msgstr "Benutzername"
@@ -13467,7 +13499,7 @@ msgstr "Benutzername"
 msgid "Add new password"
 msgstr "Neues Passwort hinzufügen"
 
-#: inc/theme/login.php:186 inc/theme/login.php:745
+#: inc/theme/login.php:186 inc/theme/login.php:759
 msgid "Retype new password"
 msgstr "Neues Passwort erneut eingeben"
 
@@ -13499,20 +13531,20 @@ msgstr "Passwort wurde aktualisiert"
 msgid "Back to sign in"
 msgstr "Zurück zur Anmeldung"
 
-#: inc/theme/login.php:398
+#: inc/theme/login.php:412
 msgid "Create an Account"
 msgstr "Konto erstellen"
 
-#: inc/theme/login.php:401 inc/theme/login.php:407
+#: inc/theme/login.php:415 inc/theme/login.php:421
 #: template-parts/content-buddypress.php:20 template-parts/header-aside.php:153
 msgid "Sign in"
 msgstr "Anmelden"
 
-#: inc/theme/login.php:726
+#: inc/theme/login.php:740
 msgid "Forgot Password?"
 msgstr "Passwort vergessen?"
 
-#: inc/theme/login.php:754
+#: inc/theme/login.php:771
 msgid "The passwords do not match."
 msgstr "Die Passwörter stimmen nicht überein."
 
@@ -13698,11 +13730,7 @@ msgstr "Ihr Kommentar wartet auf Freischaltung."
 msgid "Load More"
 msgstr "Mehr anzeigen"
 
-#: inc/theme/template-functions.php:1701 inc/theme/template-functions.php:1728
-msgid "You need to be loggedin."
-msgstr "Sie müssen eingeloggt sein."
-
-#: inc/theme/template-functions.php:2266
+#: inc/theme/template-functions.php:2246
 msgid "Edit Post Privacy"
 msgstr "Datenschutz bearbeiten"
 
@@ -14172,12 +14200,12 @@ msgid "Download Certificate"
 msgstr "Zertifikat herunterladen"
 
 #: learndash/ld30/course.php:284 learndash/ld30/course.php:286
-#: learndash/ld30/shortcodes/profile.php:171
-#: learndash/ld30/shortcodes/profile.php:174
+#: learndash/ld30/shortcodes/profile.php:173
+#: learndash/ld30/shortcodes/profile.php:176
 msgid "Expand All"
 msgstr "Alle aufklappen"
 
-#: learndash/ld30/course.php:284 learndash/ld30/shortcodes/profile.php:172
+#: learndash/ld30/course.php:284 learndash/ld30/shortcodes/profile.php:174
 msgid "Collapse All"
 msgstr "Alle zusammenklappen"
 
@@ -14187,27 +14215,31 @@ msgid "Light Mode"
 msgstr "Helle Betriebsart"
 
 #: learndash/ld30/learndash-sidebar.php:142
-#: learndash/ld30/learndash-sidebar.php:446
+#: learndash/ld30/learndash-sidebar.php:448
 #: learndash/ld30/lesson/partials/row.php:45
 #: learndash/ld30/quiz/partials/row.php:32
 msgid "You don't currently have access to this content"
 msgstr "Sie haben derzeit keinen Zugriff auf diesen Inhalt"
 
-#: learndash/ld30/learndash-sidebar.php:223
-#: learndash/ld30/learndash-sidebar.php:300
-#: learndash/ld30/learndash-sidebar.php:348
-#: learndash/ld30/learndash-sidebar.php:410
-#: learndash/ld30/learndash-sidebar.php:480
+#: learndash/ld30/learndash-sidebar.php:143
+msgid "Course locked"
+msgstr "Kurs gesperrt"
+
+#: learndash/ld30/learndash-sidebar.php:225
+#: learndash/ld30/learndash-sidebar.php:302
+#: learndash/ld30/learndash-sidebar.php:350
+#: learndash/ld30/learndash-sidebar.php:412
+#: learndash/ld30/learndash-sidebar.php:482
 #: learndash/ld30/shortcodes/course_list_grid_template.php:170
 msgid "Not Completed"
 msgstr "Nicht abgeschlossen"
 
-#: learndash/ld30/learndash-sidebar.php:499
+#: learndash/ld30/learndash-sidebar.php:501
 #: lifterlms/lesson/template-single-lesson-sidebar.php:110
 msgid "Participants"
 msgstr "Teilnehmer"
 
-#: learndash/ld30/learndash-sidebar.php:548
+#: learndash/ld30/learndash-sidebar.php:550
 #: lifterlms/lesson/template-single-lesson-sidebar.php:149
 msgid "Show more"
 msgstr "Mehr anzeigen"
@@ -14235,7 +14267,7 @@ msgid "Ended"
 msgstr "Beendet"
 
 #: learndash/ld30/modules/infobar/course.php:190
-#: learndash/ld30/template-single-course-sidebar.php:177
+#: learndash/ld30/template-single-course-sidebar.php:179
 msgid "Pre-order"
 msgstr "Vorbestellung"
 
@@ -14243,9 +14275,9 @@ msgstr "Vorbestellung"
 #: learndash/ld30/modules/infobar/course.php:228
 #: learndash/ld30/shortcodes/course_list_grid_template.php:167
 #: learndash/ld30/template-course-item.php:105
-#: learndash/ld30/template-single-course-sidebar.php:158
-#: learndash/ld30/template-single-course-sidebar.php:194
-#: learndash/ld30/template-single-course-sidebar.php:213
+#: learndash/ld30/template-single-course-sidebar.php:160
+#: learndash/ld30/template-single-course-sidebar.php:196
+#: learndash/ld30/template-single-course-sidebar.php:215
 #: lifterlms/course/course-index-loop.php:68
 msgid "Not Enrolled"
 msgstr "Nicht eingeschrieben"
@@ -14256,8 +14288,8 @@ msgstr "Nicht eingeschrieben"
 #: learndash/ld30/shortcodes/course_list_grid_template.php:164
 #: learndash/ld30/shortcodes/course_list_grid_template.php:181
 #: learndash/ld30/template-course-item.php:101
-#: learndash/ld30/template-single-course-sidebar.php:298
-#: learndash/ld30/template-single-course-sidebar.php:375
+#: learndash/ld30/template-single-course-sidebar.php:300
+#: learndash/ld30/template-single-course-sidebar.php:377
 #: lifterlms/course/lesson-preview.php:178
 msgid "Free"
 msgstr "Frei"
@@ -14280,7 +14312,7 @@ msgid "Get Started"
 msgstr "Jetzt loslegen"
 
 #: learndash/ld30/modules/infobar/course.php:513
-#: learndash/ld30/template-single-course-sidebar.php:286
+#: learndash/ld30/template-single-course-sidebar.php:288
 msgid "Login to Enroll"
 msgstr "Für die Einschreibung bitte anmelden"
 
@@ -14291,7 +14323,7 @@ msgstr "oder"
 
 #: learndash/ld30/modules/infobar/course.php:530
 #: learndash/ld30/modules/login-modal.php:54
-#: learndash/ld30/template-single-course-sidebar.php:349
+#: learndash/ld30/template-single-course-sidebar.php:351
 #: woocommerce/myaccount/form-login.php:29
 #: woocommerce/myaccount/form-login.php:47
 #: woocommerce/myaccount/form-login.php:71
@@ -14388,15 +14420,15 @@ msgstr "0 "
 msgid "%1$s/%2$s Points Awarded "
 msgstr "%1$s / %2$s Vergebene Punkte "
 
-#: learndash/ld30/shortcodes/profile.php:93
+#: learndash/ld30/shortcodes/profile.php:95
 msgid "Edit profile"
 msgstr "Profil bearbeiten"
 
-#: learndash/ld30/shortcodes/profile.php:111
+#: learndash/ld30/shortcodes/profile.php:113
 msgid "Certificates"
 msgstr "Zertifikate"
 
-#: learndash/ld30/shortcodes/profile.php:119
+#: learndash/ld30/shortcodes/profile.php:121
 msgid "Points"
 msgstr "Punkte"
 
@@ -14415,50 +14447,50 @@ msgstr "Start "
 msgid "0 %s"
 msgstr "0 %s"
 
-#: learndash/ld30/template-single-course-sidebar.php:80
-msgid "Preview this"
-msgstr "Vorschau"
+#: learndash/ld30/template-single-course-sidebar.php:81
+msgid "Preview this %s"
+msgstr "Vorschau für %s"
 
-#: learndash/ld30/template-single-course-sidebar.php:117
+#: learndash/ld30/template-single-course-sidebar.php:119
 #: lifterlms/course/template-single-course-sidebar.php:78
 msgid "+"
 msgstr "+"
 
-#: learndash/ld30/template-single-course-sidebar.php:121
+#: learndash/ld30/template-single-course-sidebar.php:123
 #: lifterlms/course/template-single-course-sidebar.php:83
 msgid "enrolled"
 msgstr "Eingeschrieben"
 
-#: learndash/ld30/template-single-course-sidebar.php:263
+#: learndash/ld30/template-single-course-sidebar.php:265
 msgid "Start %s"
 msgstr "%s starten"
 
-#: learndash/ld30/template-single-course-sidebar.php:296
+#: learndash/ld30/template-single-course-sidebar.php:298
 msgid "Open Registration"
 msgstr "Registrierung öffnen"
 
-#: learndash/ld30/template-single-course-sidebar.php:307
+#: learndash/ld30/template-single-course-sidebar.php:309
 msgid "This course is currently closed"
 msgstr "Dieser Kurs ist derzeit noch geschlossen"
 
-#: learndash/ld30/template-single-course-sidebar.php:349
+#: learndash/ld30/template-single-course-sidebar.php:351
 msgid "or "
 msgstr "oder "
 
-#: learndash/ld30/template-single-course-sidebar.php:425
+#: learndash/ld30/template-single-course-sidebar.php:427
 msgid "%s Includes"
 msgstr "%s beinhaltet"
 
-#: learndash/ld30/template-single-course-sidebar.php:444
+#: learndash/ld30/template-single-course-sidebar.php:446
 msgid "%s Certificate"
 msgstr "%s Zertifikat"
 
-#: learndash/ld30/template-single-course-sidebar.php:475
+#: learndash/ld30/template-single-course-sidebar.php:477
 #: lifterlms/course/template-single-course-sidebar.php:179
 msgid "Your browser does not support HTML5 video."
 msgstr "Ihr Browser unterstützt kein HTML5-Video."
 
-#: learndash/ld30/template-single-course-sidebar.php:479
+#: learndash/ld30/template-single-course-sidebar.php:481
 #: lifterlms/course/template-single-course-sidebar.php:183
 msgid "Video format is not supported, use Youtube video or MP4 format."
 msgstr ""
@@ -14666,7 +14698,7 @@ msgstr "Zugangsplan"
 #: lifterlms/myaccount/view-order.php:49
 #: woocommerce/checkout/review-order.php:23
 #: woocommerce/order/order-details-item.php:35
-#: woocommerce/order/order-details.php:53
+#: woocommerce/order/order-details.php:56
 msgid "Product"
 msgstr "Produkt"
 
@@ -14698,7 +14730,7 @@ msgstr "Verkaufsrabatt"
 #: woocommerce/myaccount/dashboard.php:80
 #: woocommerce/myaccount/my-orders.php:17
 #: woocommerce/order/order-details-item.php:64
-#: woocommerce/order/order-details.php:55
+#: woocommerce/order/order-details.php:58
 msgid "Total"
 msgstr "Gesamt"
 
@@ -14777,102 +14809,102 @@ msgstr "Anmerkungen des Kursleiters: "
 msgid ", Quiz"
 msgstr ", Quiz"
 
-#: paid-memberships-pro/pages/account.php:41
+#: paid-memberships-pro/pages/account.php:53
 msgid "My Memberships"
 msgstr "Meine Mitgliedschaften"
 
-#: paid-memberships-pro/pages/account.php:45
-#: paid-memberships-pro/pages/account.php:261
+#: paid-memberships-pro/pages/account.php:57
+#: paid-memberships-pro/pages/account.php:280
 msgid "Level"
 msgstr "Ebene"
 
-#: paid-memberships-pro/pages/account.php:46
+#: paid-memberships-pro/pages/account.php:58
 msgid "Billing"
 msgstr "Rechnungsstellung"
 
-#: paid-memberships-pro/pages/account.php:47
+#: paid-memberships-pro/pages/account.php:59
 msgid "Expiration"
 msgstr "Ablaufdatum"
 
-#: paid-memberships-pro/pages/account.php:73
+#: paid-memberships-pro/pages/account.php:85
 msgid "Your membership is not active. %s"
 msgstr "Ihre Mitgliedschaft ist nicht aktiv. %s"
 
 #. translators: 1. Renew URL 2. Renew Text.
-#: paid-memberships-pro/pages/account.php:78
+#: paid-memberships-pro/pages/account.php:90
 msgid "Renew now."
 msgstr "Jetzt verlängern.Verlängern"
 
-#: paid-memberships-pro/pages/account.php:84
-#: paid-memberships-pro/pages/account.php:95
+#: paid-memberships-pro/pages/account.php:96
+#: paid-memberships-pro/pages/account.php:107
 msgid "You do not have an active membership. %s"
 msgstr "Sie haben keine aktive Mitgliedschaft. %s"
 
 #. translators: 1. Register URL 2. Register Text.
-#: paid-memberships-pro/pages/account.php:89
+#: paid-memberships-pro/pages/account.php:101
 msgid "Register here."
 msgstr "Hier registrieren."
 
 #. translators: 1. Register URL 2. Register Text.
-#: paid-memberships-pro/pages/account.php:100
+#: paid-memberships-pro/pages/account.php:112
 msgid "Choose a membership level."
 msgstr "Wählen Sie eine Mitgliedsstufe."
 
-#: paid-memberships-pro/pages/account.php:122
+#: paid-memberships-pro/pages/account.php:134
 msgid "Renew"
 msgstr "Verlängern"
 
-#: paid-memberships-pro/pages/account.php:136
+#: paid-memberships-pro/pages/account.php:148
 msgid "Update Billing Info"
 msgstr "Rechnungsinformationen aktualisieren"
 
-#: paid-memberships-pro/pages/account.php:186
+#: paid-memberships-pro/pages/account.php:205
 msgid "View all Membership Options"
 msgstr "Alle Mitgliedschaftsoptionen anzeigen"
 
-#: paid-memberships-pro/pages/account.php:197
+#: paid-memberships-pro/pages/account.php:216
 #: template-parts/header-mobile.php:146
 msgid "My Account"
 msgstr "Mein Konto"
 
-#: paid-memberships-pro/pages/account.php:230
+#: paid-memberships-pro/pages/account.php:249
 msgid "Change Password"
 msgstr "Passwort ändern"
 
-#: paid-memberships-pro/pages/account.php:256
+#: paid-memberships-pro/pages/account.php:275
 msgid "Past Invoices"
 msgstr "Letzte Rechnungen"
 
-#: paid-memberships-pro/pages/account.php:262
+#: paid-memberships-pro/pages/account.php:281
 msgid "Amount"
 msgstr "Betrag"
 
-#: paid-memberships-pro/pages/account.php:279
+#: paid-memberships-pro/pages/account.php:298
 msgid "Paid"
 msgstr "Bezahlt"
 
-#: paid-memberships-pro/pages/account.php:282 tutor/dashboard/dashboard.php:152
+#: paid-memberships-pro/pages/account.php:301 tutor/dashboard/dashboard.php:152
 #: tutor/single/course/reviews-loop.php:44
 msgid "Pending"
 msgstr "Ausstehend"
 
-#: paid-memberships-pro/pages/account.php:284
+#: paid-memberships-pro/pages/account.php:303
 msgid "Refunded"
 msgstr "Zurückerstattet"
 
-#: paid-memberships-pro/pages/account.php:298
+#: paid-memberships-pro/pages/account.php:317
 #: woocommerce/order/order-details-customer.php:35
-#: woocommerce/order/order-details-customer.php:57
+#: woocommerce/order/order-details-customer.php:67
 #: woocommerce/order/order-details-item.php:57
 #: woocommerce/single-product/meta.php:39
 msgid "N/A"
 msgstr "Keine"
 
-#: paid-memberships-pro/pages/account.php:315
+#: paid-memberships-pro/pages/account.php:334
 msgid "View All Invoices"
 msgstr "Alle Rechnungen ansehen"
 
-#: paid-memberships-pro/pages/account.php:333
+#: paid-memberships-pro/pages/account.php:352
 msgid "Member Links"
 msgstr "Mitglied Links"
 
@@ -14908,10 +14940,10 @@ msgid "View Cart"
 msgstr "Warenkorb anzeigen"
 
 #. translators: %s: Name of current post. Only visible to screen readers
-#: template-parts/content-bbpress.php:65
+#: template-parts/content-bbpress.php:71
 #: template-parts/content-buddypress.php:54 template-parts/content-page.php:46
 #: template-parts/content-sfwd-assignment.php:31
-#: template-parts/content-sfwd.php:31
+#: template-parts/content-sfwd.php:26
 msgid "Edit <span class=\"screen-reader-text\">%s</span>"
 msgstr "Bearbeiten <span class=\"screen-reader-text\">%s</span>"
 
@@ -15186,11 +15218,15 @@ msgstr "E-Mail-Einladungen"
 msgid "View Inbox"
 msgstr "Posteingang anzeigen"
 
-#: template-parts/notification-dropdown.php:21
+#: template-parts/more-options-view.php:10
+msgid "Options"
+msgstr "Optionen"
+
+#: template-parts/notification-dropdown.php:19
 msgid "Mark all as read"
 msgstr "Alles als gelesen markieren"
 
-#: template-parts/notification-dropdown.php:31
+#: template-parts/notification-dropdown.php:29
 msgid "View Notifications"
 msgstr "Benachrichtigungen anzeigen"
 
@@ -15804,7 +15840,7 @@ msgstr "Rechnungsadresse"
 #: woocommerce/myaccount/dashboard.php:173
 #: woocommerce/myaccount/form-edit-address.php:20
 #: woocommerce/myaccount/my-address.php:27
-#: woocommerce/order/order-details-customer.php:55
+#: woocommerce/order/order-details-customer.php:65
 msgid "Shipping address"
 msgstr "Zustelladresse"
 
@@ -15839,32 +15875,32 @@ msgid ""
 "reviews"
 msgstr "So wird Ihr Name im Kontobereich und in den Rezensionen angezeigt"
 
-#: woocommerce/myaccount/form-edit-account.php:57
+#: woocommerce/myaccount/form-edit-account.php:66
 msgid "Password change"
 msgstr "Passwort ändern"
 
-#: woocommerce/myaccount/form-edit-account.php:60
+#: woocommerce/myaccount/form-edit-account.php:69
 msgid "Current password (leave blank to leave unchanged)"
 msgstr "Aktuelles Passwort (leer lassen für keine Änderung)"
 
-#: woocommerce/myaccount/form-edit-account.php:61
+#: woocommerce/myaccount/form-edit-account.php:70
 msgid "Current password"
 msgstr "Aktuelles Passwort"
 
-#: woocommerce/myaccount/form-edit-account.php:64
+#: woocommerce/myaccount/form-edit-account.php:73
 msgid "New password (leave blank to leave unchanged)"
 msgstr "Neues Passwort (leer lassen für keine Änderung)"
 
-#: woocommerce/myaccount/form-edit-account.php:65
+#: woocommerce/myaccount/form-edit-account.php:74
 msgid "New password"
 msgstr "Neues Passwort"
 
-#: woocommerce/myaccount/form-edit-account.php:68
-#: woocommerce/myaccount/form-edit-account.php:69
+#: woocommerce/myaccount/form-edit-account.php:77
+#: woocommerce/myaccount/form-edit-account.php:78
 msgid "Confirm new password"
 msgstr "Neues Passwort bestätigen"
 
-#: woocommerce/myaccount/form-edit-account.php:78
+#: woocommerce/myaccount/form-edit-account.php:87
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
@@ -15925,15 +15961,19 @@ msgid_plural "%s downloads remaining"
 msgstr[0] "%s Download verbleibt"
 msgstr[1] "%s Downloads verbleibenden"
 
+#: woocommerce/myaccount/navigation.php:25
+msgid "Account pages"
+msgstr "Konto-Seiten"
+
 #: woocommerce/myaccount/orders.php:25
 msgid "Orders"
 msgstr "Bestellungen"
 
-#: woocommerce/myaccount/orders.php:109
+#: woocommerce/myaccount/orders.php:110
 msgid "No order has been made yet."
 msgstr "Es wurde noch keine Bestellung durchgeführt."
 
-#: woocommerce/myaccount/orders.php:111
+#: woocommerce/myaccount/orders.php:112
 msgid "Go to the shop"
 msgstr "Zum Shop"
 
@@ -15961,7 +16001,7 @@ msgid "SKU:"
 msgstr "Art.-Nr.:"
 
 #: woocommerce/order/order-details-item.php:60
-#: woocommerce/order/order-details.php:54
+#: woocommerce/order/order-details.php:57
 msgid "Qty"
 msgstr "Anzahl"
 
@@ -15969,11 +16009,11 @@ msgstr "Anzahl"
 msgid "Notes"
 msgstr "Notizen"
 
-#: woocommerce/order/order-details.php:46
+#: woocommerce/order/order-details.php:49
 msgid "Order details"
 msgstr "Bestelldetails"
 
-#: woocommerce/order/order-details.php:103
+#: woocommerce/order/order-details.php:106
 msgid "Note:"
 msgstr "Hinweis:"
 
@@ -18768,7 +18808,7 @@ msgctxt "button"
 msgid "Search"
 msgstr "Suchen"
 
-#: inc/compatibility/incompatible-themes-helper.php:41
+#: inc/compatibility/incompatible-themes-helper.php:69
 #: memberpress/account/payments.php:13 memberpress/account/payments.php:34
 #: memberpress/account/payments.php:36 memberpress/account/subscriptions.php:15
 #: memberpress/account/subscriptions.php:63
@@ -18776,18 +18816,18 @@ msgctxt "ui"
 msgid "Membership"
 msgstr "Mitgliedschaft"
 
-#: inc/compatibility/incompatible-themes-helper.php:51
+#: inc/compatibility/incompatible-themes-helper.php:79
 msgctxt "ui"
 msgid "Info"
 msgstr "Information"
 
-#: inc/compatibility/incompatible-themes-helper.php:57
+#: inc/compatibility/incompatible-themes-helper.php:84
 #: memberpress/account/nav.php:19 memberpress/account/nav.php:31
 msgctxt "ui"
 msgid "Subscriptions"
 msgstr "Abonnements"
 
-#: inc/compatibility/incompatible-themes-helper.php:62
+#: inc/compatibility/incompatible-themes-helper.php:89
 #: memberpress/account/nav.php:21
 msgctxt "ui"
 msgid "Payments"
@@ -19158,7 +19198,7 @@ msgstr[1] "%1$d %2$s"
 
 #. translators: placeholder: number of places remaining.
 #: learndash/ld30/modules/infobar/course.php:147
-#: learndash/ld30/template-single-course-sidebar.php:140
+#: learndash/ld30/template-single-course-sidebar.php:142
 msgctxt "placeholder: number of places remaining"
 msgid "(%s place remaining)"
 msgid_plural "(%s places remaining)"
@@ -19167,14 +19207,14 @@ msgstr[1] "(%s verbleibende Plätze)"
 
 #. translators: placeholder: course.
 #: learndash/ld30/modules/infobar/course.php:163
-#: learndash/ld30/template-single-course-sidebar.php:154
+#: learndash/ld30/template-single-course-sidebar.php:156
 msgctxt "placeholder: course"
 msgid "This %s has ended"
 msgstr "Diese(r) %s ist beendet"
 
 #. translators: placeholder: course, course start date.
 #: learndash/ld30/modules/infobar/course.php:183
-#: learndash/ld30/template-single-course-sidebar.php:171
+#: learndash/ld30/template-single-course-sidebar.php:173
 msgctxt "placeholder: course"
 msgid "It is a pre-order. Enroll in this %1$s to get access after %2$s"
 msgstr ""
@@ -19184,14 +19224,14 @@ msgstr ""
 #. translators: placeholder: course.
 #: learndash/ld30/modules/infobar/course.php:199
 #: learndash/ld30/modules/infobar/course.php:223
-#: learndash/ld30/template-single-course-sidebar.php:183
+#: learndash/ld30/template-single-course-sidebar.php:185
 msgctxt "placeholder: course"
 msgid "Enroll in this %s to get access"
 msgstr "Melden Sie sich in diesem %s an, um Zugang zu erhalten"
 
 #. translators: placeholder: course.
 #: learndash/ld30/modules/infobar/course.php:205
-#: learndash/ld30/template-single-course-sidebar.php:189
+#: learndash/ld30/template-single-course-sidebar.php:191
 msgctxt "placeholder: course"
 msgid "This %s is not available"
 msgstr "Diese(r) %s ist nicht verfügbar"
@@ -19213,7 +19253,7 @@ msgstr ""
 
 #. translators: placeholder: course, course start date.
 #: learndash/ld30/modules/infobar/course.php:176
-#: learndash/ld30/template-single-course-sidebar.php:164
+#: learndash/ld30/template-single-course-sidebar.php:166
 msgctxt "placeholder: course, course start date"
 msgid "This %1$s starts on %2$s"
 msgstr "Diese(r) %1$s beginnt am %2$s"
@@ -19277,13 +19317,13 @@ msgid "%d Comments"
 msgstr "%d Kommentare"
 
 #. translators: Profile Course Content Label
-#: learndash/ld30/shortcodes/profile.php:160
+#: learndash/ld30/shortcodes/profile.php:162
 msgctxt "Profile Course Content Label"
 msgid "Your %s"
 msgstr "Ihre %s"
 
 #. translators: placeholder: Courses.
-#: learndash/ld30/shortcodes/profile.php:214
+#: learndash/ld30/shortcodes/profile.php:216
 msgctxt "placeholder: Courses"
 msgid "No %s found"
 msgstr "Keine %s gefunden"
@@ -19331,6 +19371,12 @@ msgstr "Anzahl"
 msgctxt "hash before order number"
 msgid "#"
 msgstr "#"
+
+#~ msgid "Tweet"
+#~ msgstr "Twittern"
+
+#~ msgid "Working..."
+#~ msgstr "In Bearbeitung ..."
 
 #~ msgid "Permalink to %s"
 #~ msgstr "Permalink zu %s"
@@ -20033,9 +20079,6 @@ msgstr "#"
 #~ "hinterlassen, um uns mitzuteilen, was Sie denken? Wir würden es wirklich "
 #~ "zu schätzen wissen!"
 
-#~ msgid "Leave a Review"
-#~ msgstr "Hinterlassen Sie eine Bewertung"
-
 #~ msgid "No thanks / I already have"
 #~ msgstr "Nein, danke / Ich habe das bereits getan"
 
@@ -20636,9 +20679,6 @@ msgstr "#"
 
 #~ msgid "Basic Radio Button field."
 #~ msgstr "Einfaches Radio Button-Feld."
-
-#~ msgid "Option 1"
-#~ msgstr "Option 1"
 
 #~ msgid "Option 2"
 #~ msgstr "Option 2"
@@ -22556,9 +22596,6 @@ msgstr "#"
 
 #~ msgid "No new messages!"
 #~ msgstr "Keine neuen Nachrichten!"
-
-#~ msgid "No new notifications"
-#~ msgstr "Keine neuen Benachrichtigungen"
 
 #~ msgid "https://www.buddyboss.com/"
 #~ msgstr "https://www.buddyboss.com/"

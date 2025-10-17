@@ -17,7 +17,7 @@ use LearnDash\Core\App;
 use LearnDash\Core\Provider;
 use LearnDash\Core\API;
 use LearnDash\Core\Utilities\Cast;
-
+use LearnDash\Core\Utilities\File;
 
 if ( ! class_exists( 'SFWD_LMS' ) ) {
 
@@ -136,6 +136,13 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 			$this->name          = 'LMS Options';
 			$this->prefix        = 'sfwd_lms_';
 			$this->parent_option = 'sfwd_lms_options';
+
+			/**
+			 * We need to run this immediately to work around issues where some code
+			 * would attempt to use the text domain before it would have otherwise loaded on a hook.
+			 */
+			$this->i18nize();
+
 			parent::__construct();
 
 			// maybe call the activate function.
@@ -144,9 +151,6 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 				function () {
 					if ( get_option( 'learndash_activation' ) ) {
 						$this->activate();
-
-						// Activate the LearnDash Hub plugin (Licensing & Management).
-						learndash_activate_learndash_hub();
 
 						delete_option( 'learndash_activation' );
 					}
@@ -164,7 +168,6 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 			add_action( 'generate_rewrite_rules', array( $this, 'paypal_rewrite_rules' ) );
 			add_filter( 'sfwd_cpt_loop', array( $this, 'cpt_loop_filter' ) );
 			add_filter( 'edit_term_count', array( $this, 'tax_term_count' ), 10, 3 );
-			add_action( 'plugins_loaded', array( $this, 'i18nize' ) ); // cspell:disable-line.
 			add_action( 'current_screen', array( $this, 'add_telemetry_modal' ) );
 
 			require_once LEARNDASH_LMS_PLUGIN_DIR . 'includes/payments/gateways/init.php';
@@ -456,13 +459,137 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 		 * Loads the plugin's translated strings
 		 *
 		 * @since 2.1.0
+		 * @since 4.18.1.1 Added support for WordPress 6.7.
+		 * @since 4.21.2.1 Added support for WordPress 6.8+.
+		 *
+		 * @return void
 		 */
 		public function i18nize() {
-			if ( ( defined( 'LD_LANG_DIR' ) ) && ( LD_LANG_DIR ) ) {
-				load_plugin_textdomain( LEARNDASH_LMS_TEXT_DOMAIN, false, LD_LANG_DIR );
-			} else {
-				load_plugin_textdomain( LEARNDASH_LMS_TEXT_DOMAIN, false, dirname( plugin_basename( dirname( __FILE__ ) ) ) . '/languages' );
+			$plugin_basename = trailingslashit( plugin_basename( constant( 'LEARNDASH_LMS_PLUGIN_DIR' ) ) );
+			$relative_path   = $plugin_basename . 'languages';
+			$absolute_path   = trailingslashit( constant( 'WP_PLUGIN_DIR' ) ) . $relative_path;
+			$text_domain     = constant( 'LEARNDASH_LMS_TEXT_DOMAIN' );
+
+			/**
+			 * LD_LANG_DIR should always be an absolute path, but for backwards compatibility, we will also update
+			 * the relative path based on it.
+			 */
+			if (
+				defined( 'LD_LANG_DIR' )
+				&& constant( 'LD_LANG_DIR' )
+			) {
+				$absolute_path = constant( 'LD_LANG_DIR' );
+
+				/**
+				 * Construct a relative path based on the absolute path to move from our plugin directory
+				 * out to the LD_LANG_DIR directory
+				 *
+				 * This is necessary for pre-6.7 support.
+				 */
+				$relative_path = File::get_relative_path(
+					constant( 'LEARNDASH_LMS_PLUGIN_DIR' ),
+					$absolute_path
+				);
+
+				if (
+					strpos(
+						$absolute_path,
+						ABSPATH
+					) === false
+					&& strpos(
+						$absolute_path,
+						'../'
+					) === false
+				) {
+					// Accounts for instances where LD_LANG_DIR is pointing to a directory within a plugin.
+					$relative_path = Cast::to_string( preg_replace( '/^\.?\//', '', $relative_path ) );
+					$absolute_path = trailingslashit( constant( 'WP_PLUGIN_DIR' ) ) . $relative_path;
+				} elseif (
+					strpos(
+						$absolute_path,
+						'../'
+					) !== false
+				) {
+					// Ensures a relative path used as the absolute path can find the .mo file.
+					$absolute_path = trailingslashit( constant( 'WP_PLUGIN_DIR' ) ) . $absolute_path;
+				}
 			}
+
+			/**
+			 * If we're running on a version of WordPress prior to 6.7,
+			 * we can use load_plugin_textdomain() at all times without issue.
+			 *
+			 * This will properly load from the global WordPress languages directory instead if a matching file exists.
+			 */
+			if (
+				version_compare(
+					learndash_sanitize_version_string( get_bloginfo( 'version' ) ),
+					'6.7.0',
+					'<'
+				)
+			) {
+				load_plugin_textdomain( $text_domain, false, $relative_path );
+
+				return;
+			}
+
+			$wordpress_languages_directory = trailingslashit( constant( 'WP_LANG_DIR' ) ) . 'plugins/';
+
+			$mo_file_name = $text_domain . '-' . determine_locale() . '.mo';
+
+			// Prioritize the WordPress languages directory.
+			$mo_file_path = $wordpress_languages_directory . $mo_file_name;
+
+			// Fallback to LearnDash plugin location.
+			if ( ! file_exists( $mo_file_path ) ) {
+				$mo_file_path = trailingslashit( $absolute_path ) . $mo_file_name;
+			}
+
+			/**
+			 * Filter the path to the .mo file to use for LearnDash.
+			 *
+			 * @since 4.18.1.1
+			 *
+			 * @param string $mo_file_path Full path to the .mo file.
+			 * @param string $mo_file_name Name of the .mo file.
+			 * @param string $locale       Locale.
+			 *
+			 * @return string
+			 */
+			$mo_file_path = apply_filters(
+				'learndash_mo_file_path',
+				$mo_file_path,
+				$mo_file_name,
+				determine_locale()
+			);
+
+			if ( file_exists( $mo_file_path ) ) {
+				// If the .mo file does not exist, load_plugin_textdomain() will show a PHP notice on WordPress 6.7+.
+				load_plugin_textdomain( $text_domain, false, $relative_path );
+			} else {
+				/**
+				 * This fixes an issue with WordPress 6.8+ support.
+				 *
+				 * If the file doesn't exist, we need to fake a loaded translation to prevent
+				 * _load_textdomain_just_in_time() from running.
+				 *
+				 * Using NOOP_Translations will prevent any translations from running, but if a translation file does
+				 * not exist, this would be expected functionality anyway.
+				 */
+				global $l10n;
+				$l10n[ $text_domain ] = new NOOP_Translations(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Expected, see above.
+			}
+
+			/**
+			 * Workaround for WordPress 6.7+ support.
+			 *
+			 * Pre-WP 6.7, load_plugin_textdomain() would run load_textdomain() for us instead of using
+			 * _load_textdomain_just_in_time().
+			 *
+			 * As we're loading many things that use translation methods such as `__()` prior to the `init` hook,
+			 * we need to do this to ensure our translations are loaded correctly in WordPress 6.7+.
+			 */
+			load_textdomain( $text_domain, $mo_file_path );
 		}
 
 		/**
@@ -2624,7 +2751,7 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 					),
 					'has_archive'           => learndash_post_type_has_archive( 'groups' ),
 					'labels'                => $group_labels,
-					'capability_type'       => 'groups',
+					'capability_type'       => 'group',
 					'hierarchical'          => learndash_is_groups_hierarchical_enabled(),
 					'public'                => ( LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Groups_CPT', 'public' ) === 'yes' ) ? true : false,
 					'exclude_from_search'   => ( LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Groups_CPT', 'include_in_search' ) !== 'yes' ) ? true : false,
@@ -2664,13 +2791,17 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 
 			if ( learndash_is_admin_user() ) {
 				$this->post_args['sfwd-transactions'] = array(
-					'plugin_name'        => esc_html__( 'Transactions', 'learndash' ),
+					'plugin_name'        => LearnDash_Custom_Label::get_label( 'orders' ),
 					'slug_name'          => 'transactions',
 					'post_type'          => 'sfwd-transactions',
 					'template_redirect'  => false,
-					'options_page_title' => esc_html__( 'LearnDash Transactions Options', 'learndash' ),
+					'options_page_title' => sprintf(
+						// translators: placeholder: Orders custom label.
+						esc_html_x( 'LearnDash %s Settings', 'placeholder: Orders', 'learndash' ),
+						LearnDash_Custom_Label::get_label( 'orders' )
+					),
 					'cpt_options'        => array(
-						'supports'              => array( 'title', 'custom-fields', 'page-attributes' ),
+						'supports'              => [ '' ], // Intentionally an empty string to prevent default post type supports from being used.
 						'exclude_from_search'   => true,
 						'publicly_queryable'    => false,
 						'show_in_nav_menus'     => false,
@@ -2678,13 +2809,23 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 						'hierarchical'          => true,
 						'show_in_rest'          => false,
 						'rest_controller_class' => API\Controllers\Transactions::class,
+						'map_meta_cap'          => true, // Ensure all other capabilities are generated.
+						'capabilities'          => [
+							'create_posts' => 'do_not_allow', // Remove the "Add New" button from the admin bar.
+						],
 					),
 					'fields'             => array(),
 					'default_options'    => array(
 						null => array(
 							'type'    => 'html',
 							'save'    => false,
-							'default' => esc_html__( 'Click the Export button below to export the transaction list.', 'learndash' ),
+							'default' => sprintf(
+								// Translators: %s: order label.
+								esc_html__( 'Click the Export button below to export the %s list.', 'learndash' ),
+								esc_html(
+									learndash_get_custom_label_lower( 'order' )
+								)
+							),
 						),
 					),
 				);
@@ -3481,8 +3622,12 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 									'total'     => '',
 								);
 
-								$course_completed_meta                                       = get_user_meta( $user_id, 'course_completed_' . $course->ID, true );
-								( empty( $course_completed_meta ) ) ? $course_completed_date = '' : $course_completed_date = date_i18n( 'F j, Y H:i:s', $course_completed_meta );
+								$course_completed_meta = Cast::to_int(
+									get_user_meta( $user_id, 'course_completed_' . $course->ID, true )
+								);
+								$course_completed_date = ! empty( $course_completed_meta )
+									? learndash_adjust_date_time_display( $course_completed_meta, 'F j, Y H:i:s' )
+									: '';
 
 								$row = array(
 									'user_id'             => $user_id,
@@ -3862,7 +4007,7 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 									'rank'       => $v['rank'],
 									'score'      => $v['score'],
 									'total'      => $v['question_show_count'],
-									'date'       => date_i18n( DATE_RSS, $v['time'] ),
+									'date'       => learndash_adjust_date_time_display( Cast::to_int( $v['time'] ), DATE_RSS ),
 								);
 							}
 						} else {
@@ -5285,10 +5430,6 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 
 			$hub_upgrade_notice = get_option( 'learndash_show_hub_upgrade_admin_notice' );
 			if ( ! $hub_upgrade_notice ) {
-				return;
-			}
-
-			if ( ! learndash_is_learndash_hub_active() ) {
 				return;
 			}
 

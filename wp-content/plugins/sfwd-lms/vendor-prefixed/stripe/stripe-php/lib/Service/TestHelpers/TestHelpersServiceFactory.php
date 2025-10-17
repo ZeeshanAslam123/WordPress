@@ -14,10 +14,6 @@ namespace StellarWP\Learndash\Stripe\Service\TestHelpers;
  * @property Terminal\TerminalServiceFactory $terminal
  * @property TestClockService $testClocks
  * @property Treasury\TreasuryServiceFactory $treasury
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class TestHelpersServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

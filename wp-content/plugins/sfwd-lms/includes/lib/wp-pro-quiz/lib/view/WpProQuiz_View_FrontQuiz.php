@@ -31,6 +31,24 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 
 	private $_shortcode_atts = array();
 
+	/**
+	 * Questions associated with the Quiz.
+	 *
+	 * @since 4.2.1.2
+	 *
+	 * @var WpProQuiz_Model_Question[]
+	 */
+	public $question = [];
+
+	/**
+	 * Categories that the Quiz's Questions belong to.
+	 *
+	 * @since 4.2.1.2
+	 *
+	 * @var WpProQuiz_Model_Category[]
+	 */
+	public $category = [];
+
 	public function set_shortcode_atts( $atts = array() ) {
 		$this->_shortcode_atts = $atts;
 	}
@@ -61,6 +79,15 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 		return array_values( $t );
 	}
 
+	/**
+	 * Outputs the view.
+	 *
+	 * @since 4.2.1.2
+	 *
+	 * @param bool $preview Whether this is a preview. Defaults to false.
+	 *
+	 * @return void
+	 */
 	public function show( $preview = false ) {
 
 		$question_count = count( $this->question );
@@ -100,15 +127,21 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 							! empty( $quiz_resume_data['randomOrder'] ) &&
 							count( $this->question ) > 0
 						) {
-							$questionPostIdProIdHash = array();
+							$question_post_id_pro_id_hash = [];
 							foreach ( $this->question as $question ) {
 								/** @var WpProQuiz_Model_Question $question Question. */
-								$questionPostIdProIdHash[ $question->getId() ] = $question->getQuestionPostId();
+								$question_post_id_pro_id_hash[ $question->getId() ] = $question->getQuestionPostId();
+
+								// If the Question has since been updated,
+								// ensure we have a reference to the old Pro Quiz ID.
+								if ( $question->getPreviousId() ) {
+									$question_post_id_pro_id_hash[ $question->getPreviousId() ] = $question->getQuestionPostId();
+								}
 							}
 
 							$questions = array();
 							foreach ( $quiz_resume_data['randomOrder'] as $question_id ) {
-								$question = $this->question[ $questionPostIdProIdHash[ $question_id ] ];
+								$question = $this->question[ $question_post_id_pro_id_hash[ $question_id ] ];
 
 								$questions[ $question->getQuestionPostId() ] = $question;
 							}
@@ -334,8 +367,6 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 			}
 		}
 
-		$quiz_resume_data = learndash_prepare_quiz_resume_data_to_js( $quiz_resume_data );
-
 		echo " <script type='text/javascript'>
 		function load_wpProQuizFront" . esc_attr( $this->quiz->getId() ) . "() {
 			jQuery('#wpProQuiz_" . esc_attr( $this->quiz->getId() ) . "').wpProQuizFront({
@@ -437,16 +468,24 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 				quiz_resume_id: '" . (int) $quiz_resume_id . "',
 				quiz_resume_quiz_started: '" . (int) $quiz_resume_quiz_started . "',
 				quiz_resume_data: '" .
-				/**
-				 * Filters quiz resume data sent to the front-end
-				 *
-				 * @since 3.5.0
-				 *
-				 * @param int $quiz_resume_data Saved data sent to the front-end.
-				 * @param int $quiz_post_id     Quiz ID
-				 * @param int $user_id          User ID
-				 */
-				wp_json_encode( apply_filters( 'learndash_quiz_resume_data', $quiz_resume_data, $quiz_post_id, $user_id ), JSON_HEX_APOS ) . "',
+				// phpcs:ignore- WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_js() is more suited for onClick() attributes and similar where the passed in data is a String. This is safe for outputting an Array/Object in a script tag.
+				addslashes(
+					(string) wp_json_encode(
+						/**
+						 * Filters quiz resume data sent to the front-end
+						 *
+						 * @since 3.5.0
+						 *
+						 * @param array<string, mixed> $quiz_resume_data Saved data sent to the front-end.
+						 * @param int                  $quiz_post_id     Quiz ID
+						 * @param int                  $user_id          User ID
+						 *
+						 * @return array<string, mixed>
+						 */
+						apply_filters( 'learndash_quiz_resume_data', $quiz_resume_data, $quiz_post_id, $user_id ),
+						JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+					)
+				) . "',
 				quiz_resume_cookie_expiration: '" .
 				/**
 				 * Filters the quiz resume cookie expiration.
@@ -483,6 +522,13 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 		</script> ';
 	}
 
+	/**
+	 * Outputs the question script if max question setting enabled.
+	 *
+	 * @since 1.5.3
+	 *
+	 * @return void
+	 */
 	public function max_question_script() {
 		$question_count = count( $this->question );
 
@@ -578,8 +624,6 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 			}
 		}
 
-		$quiz_resume_data = learndash_prepare_quiz_resume_data_to_js( $quiz_resume_data );
-
 		echo "<script type='text/javascript'>
 		jQuery( function($) {
 			$('#wpProQuiz_" . (int) $this->quiz->getId() . "').wpProQuizFront({
@@ -611,8 +655,14 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 				quiz_resume_id: '" . (int) $quiz_resume_id . "',
 				quiz_resume_quiz_started: '" . (int) $quiz_resume_quiz_started . "',
 				quiz_resume_data: '" .
-				/** This filter is documented in includes/lib/wp-pro-quiz/lib/view/WpProQuiz_ViewFrontQuiz.php */
-				wp_json_encode( apply_filters( 'learndash_quiz_resume_data', $quiz_resume_data, $quiz_post_id, $user_id ) ) . "',
+				// phpcs:ignore- WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_js() is more suited for onClick() attributes and similar where the passed in data is a String. This is safe for outputting an Array/Object in a script tag.
+				addslashes(
+					(string) wp_json_encode(
+						/** This filter is documented in includes/lib/wp-pro-quiz/lib/view/WpProQuiz_ViewFrontQuiz.php */
+						apply_filters( 'learndash_quiz_resume_data', $quiz_resume_data, $quiz_post_id, $user_id ),
+						JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+					)
+				) . "',
 				quiz_resume_cookie_expiration: '" .
 				/** This filter is documented in includes/lib/wp-pro-quiz/lib/view/WpProQuiz_ViewFrontQuiz.php */
 				(int) apply_filters( 'learndash_quiz_resume_cookie_expiration', $quiz_resume_cookie_expiration, $quiz_post_id, $user_id ) . "',

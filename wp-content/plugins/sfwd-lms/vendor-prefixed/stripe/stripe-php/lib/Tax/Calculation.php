@@ -16,17 +16,13 @@ namespace StellarWP\Learndash\Stripe\Tax;
  * @property null|string $customer The ID of an existing <a href="https://stripe.com/docs/api/customers/object">Customer</a> used for the resource.
  * @property \StellarWP\Learndash\Stripe\StripeObject $customer_details
  * @property null|int $expires_at Timestamp of date at which the tax calculation will expire.
- * @property null|\StellarWP\Learndash\Stripe\Collection<\Stripe\Tax\CalculationLineItem> $line_items The list of items the customer is purchasing.
+ * @property null|\StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Tax\CalculationLineItem> $line_items The list of items the customer is purchasing.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $shipping_cost The shipping cost details for the calculation.
  * @property int $tax_amount_exclusive The amount of tax to be collected on top of the line item prices.
  * @property int $tax_amount_inclusive The amount of tax already included in the line item prices.
  * @property \StellarWP\Learndash\Stripe\StripeObject[] $tax_breakdown Breakdown of individual tax amounts that add up to the total.
  * @property int $tax_date Timestamp of date at which the tax rules and rates in effect applies for the calculation.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Calculation extends \StellarWP\Learndash\Stripe\ApiResource
 {
@@ -41,7 +37,7 @@ class Calculation extends \StellarWP\Learndash\Stripe\ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Tax\CalculationLineItem> list of calculation line items
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Tax\CalculationLineItem> list of calculation line items
      */
     public static function allLineItems($id, $params = null, $opts = null)
     {

@@ -15,10 +15,6 @@ namespace StellarWP\Learndash\Stripe\Billing;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property string $meter The meter associated with this usage summary.
  * @property int $start_time Start timestamp for this usage summary (inclusive).
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class MeterEventSummary extends \StellarWP\Learndash\Stripe\ApiResource
 {

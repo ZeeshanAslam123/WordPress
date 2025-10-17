@@ -72,7 +72,7 @@ class Dashboard extends View {
 			$view_slug,
 			[
 				'section'            => $section,
-				'propanel_is_active' => defined( 'LD_PP_VERSION' ),
+				'propanel_is_active' => is_plugin_active( 'learndash-propanel/learndash_propanel.php' ),
 				'is_enabled'         => $this->is_enabled,
 			]
 		);

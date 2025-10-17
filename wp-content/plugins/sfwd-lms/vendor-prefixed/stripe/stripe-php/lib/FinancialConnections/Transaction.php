@@ -19,10 +19,6 @@ namespace StellarWP\Learndash\Stripe\FinancialConnections;
  * @property int $transacted_at Time at which the transaction was transacted. Measured in seconds since the Unix epoch.
  * @property string $transaction_refresh The token of the transaction refresh that last updated or created this transaction.
  * @property int $updated Time at which the object was last updated. Measured in seconds since the Unix epoch.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Transaction extends \StellarWP\Learndash\Stripe\ApiResource
 {

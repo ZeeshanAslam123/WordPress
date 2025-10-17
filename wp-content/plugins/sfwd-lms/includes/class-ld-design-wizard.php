@@ -90,64 +90,10 @@ if ( ! class_exists( 'LearnDash_Design_Wizard' ) ) {
 		 *
 		 * @return array<string, array<string, array<string, string>|string>>
 		 */
-		public function register_templates() : array {
+		public function register_templates(): array {
+			// Kadence Pro templates are not supported. We need to make sure the following templates are available in the free Kadence starter templates.
 			$this->templates = array(
-				'kadence_life_coach'        => array(
-					'id'                => 'kadence_life_coach',
-					'label'             => 'Life Coach',
-					'theme'             => 'kadence',
-					'theme_label'       => 'Kadence',
-					'theme_template_id' => 'g46',
-					'plugins'           => array(
-						'kadence-starter-templates' => __( 'Starter Templates by Kadence WP', 'learndash' ),
-					),
-					'preview_url'       => 'https://startertemplatecloud.com/g46/?cache=bust',
-				),
-				'kadence_homesteading'      => array(
-					'id'                => 'kadence_homesteading',
-					'label'             => 'HomeSteading',
-					'theme'             => 'kadence',
-					'theme_label'       => 'Kadence',
-					'theme_template_id' => 'g74',
-					'plugins'           => array(
-						'kadence-starter-templates' => __( 'Starter Templates by Kadence WP', 'learndash' ),
-					),
-					'preview_url'       => 'https://startertemplatecloud.com/g74/?cache=bust',
-				),
-				'kadence_meditation_course' => array(
-					'id'                => 'kadence_meditation_course',
-					'label'             => 'Meditation Course',
-					'theme'             => 'kadence',
-					'theme_label'       => 'Kadence',
-					'theme_template_id' => 'g73',
-					'plugins'           => array(
-						'kadence-starter-templates' => __( 'Starter Templates by Kadence WP', 'learndash' ),
-					),
-					'preview_url'       => 'https://startertemplatecloud.com/g73/?cache=bust',
-				),
-				'kadence_cooking_course'    => array(
-					'id'                => 'kadence_cooking_course',
-					'label'             => 'Cooking Course',
-					'theme'             => 'kadence',
-					'theme_label'       => 'Kadence',
-					'theme_template_id' => 'g63',
-					'plugins'           => array(
-						'kadence-starter-templates' => __( 'Starter Templates by Kadence WP', 'learndash' ),
-					),
-					'preview_url'       => 'https://startertemplatecloud.com/g63/?cache=bust',
-				),
-				'kadence_baking_course'     => array(
-					'id'                => 'kadence_baking_course',
-					'label'             => 'Baking Course',
-					'theme'             => 'kadence',
-					'theme_label'       => 'Kadence',
-					'theme_template_id' => 'g64',
-					'plugins'           => array(
-						'kadence-starter-templates' => __( 'Starter Templates by Kadence WP', 'learndash' ),
-					),
-					'preview_url'       => 'https://startertemplatecloud.com/g64/?cache=bust',
-				),
-				'kadence_sewing_course'     => array(
+				'kadence_sewing_course'    => array(
 					'id'                => 'kadence_sewing_course',
 					'label'             => 'Sewing Course',
 					'theme'             => 'kadence',
@@ -158,7 +104,7 @@ if ( ! class_exists( 'LearnDash_Design_Wizard' ) ) {
 					),
 					'preview_url'       => 'https://startertemplatecloud.com/g42/?cache=bust',
 				),
-				'kadence_writing_course'    => array(
+				'kadence_writing_course'   => array(
 					'id'                => 'kadence_writing_course',
 					'label'             => 'Writing Course',
 					'theme'             => 'kadence',
@@ -267,17 +213,6 @@ if ( ! class_exists( 'LearnDash_Design_Wizard' ) ) {
 						'kadence-starter-templates' => __( 'Starter Templates by Kadence WP', 'learndash' ),
 					),
 					'preview_url'       => 'https://startertemplatecloud.com/g03/?cache=bust',
-				),
-				'kadence_get_income'        => array(
-					'id'                => 'kadence_get_income',
-					'label'             => 'Get Income',
-					'theme'             => 'kadence',
-					'theme_label'       => 'Kadence',
-					'theme_template_id' => 'member_g01',
-					'plugins'           => array(
-						'kadence-starter-templates' => __( 'Starter Templates by Kadence WP', 'learndash' ),
-					),
-					'preview_url'       => 'https://startertemplatecloud.com/member-g01/?cache=bust',
 				),
 				'kadence_online_course'     => array(
 					'id'                => 'kadence_online_course',

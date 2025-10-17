@@ -24,10 +24,6 @@ namespace StellarWP\Learndash\Stripe\Apps;
  * @property string $name A name for the secret that's unique within the scope.
  * @property null|string $payload The plaintext secret value to be stored.
  * @property \StellarWP\Learndash\Stripe\StripeObject $scope
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Secret extends \StellarWP\Learndash\Stripe\ApiResource
 {

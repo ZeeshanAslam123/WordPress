@@ -17,10 +17,6 @@ namespace StellarWP\Learndash\Stripe\Climate;
  * @property string $metric_tons_available The quantity of metric tons available for reservation.
  * @property string $name The Climate product's name.
  * @property \StellarWP\Learndash\Stripe\Climate\Supplier[] $suppliers The carbon removal suppliers that fulfill orders for this Climate product.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Product extends \StellarWP\Learndash\Stripe\ApiResource
 {

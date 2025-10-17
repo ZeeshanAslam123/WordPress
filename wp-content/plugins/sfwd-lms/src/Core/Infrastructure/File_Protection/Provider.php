@@ -41,7 +41,15 @@ class Provider extends ServiceProvider {
 	 * @return void
 	 */
 	public function hooks() {
-		add_action( 'init', $this->container->callback( File_Download_Handler::class, 'init' ) );
 		add_action( 'init', $this->container->callback( Path_Protection_Handler::class, 'init' ) );
+
+		add_action(
+			'init',
+			$this->container->callback(
+				File_Download_Handler::class,
+				'download'
+			),
+			20 // Runs after Path_Protection_Handler::init().
+		);
 	}
 }

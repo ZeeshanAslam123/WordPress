@@ -39,14 +39,14 @@ if ( ( class_exists( 'LearnDash_Settings_Section' ) ) && ( ! class_exists( 'Lear
 			$this->settings_section_key = 'settings_paypal';
 
 			// Section label/header.
-			$this->settings_section_label = esc_html__( 'PayPal Settings', 'learndash' );
+			$this->settings_section_label = esc_html__( 'PayPal Standard Settings', 'learndash' );
 
 			$this->reset_confirm_message = esc_html__( 'Are you sure want to reset the PayPal values?', 'learndash' );
 
 			// Used to associate this section with the parent section.
 			$this->settings_parent_section_key = 'settings_payments_list';
 
-			$this->settings_section_listing_label = esc_html__( 'PayPal', 'learndash' );
+			$this->settings_section_listing_label = Learndash_Paypal_IPN_Gateway::get_label();
 
 			parent::__construct();
 		}

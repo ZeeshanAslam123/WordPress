@@ -7,6 +7,8 @@
  * @package LearnDash
  */
 
+use LearnDash\Core\Utilities\Cast;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -91,6 +93,7 @@ function learndash_get_currency_code(): string {
  *
  * @since 4.1.0
  * @since 4.2.0 Added $currency_code parameter.
+ * @since 4.16.0   Enforce string return type.
  *
  * @param mixed  $price         The price to format.
  * @param string $currency_code Optional. The country currency code (@since 4.2.0).
@@ -107,12 +110,12 @@ function learndash_get_price_formatted( $price, string $currency_code = '' ): st
 
 	// Price is shown as is if no currency set.
 	if ( empty( $currency_code ) ) {
-		return $price;
+		return Cast::to_string( $price );
 	}
 
 	// Price is shown as is if non-numeric.
 	if ( ! is_numeric( $price ) ) {
-		return $price;
+		return Cast::to_string( $price );
 	}
 
 	if ( class_exists( 'NumberFormatter' ) ) {

@@ -1,13 +1,9 @@
 <?php
 /**
- * Port utilities for Learndash_Core_Requests
+ * Port utilities for Requests
  *
  * @package Requests\Utilities
  * @since   2.0.0
- *
- * @license ISC
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 
 namespace StellarWP\Learndash\WpOrg\Requests;

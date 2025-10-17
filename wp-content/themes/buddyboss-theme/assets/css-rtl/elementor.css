@@ -284,32 +284,39 @@ body:not(.register) .elementor-header + #content {
   font-size: 12px;
 }
 
-.elementor-widget-wrap #groups-list {
+.elementor-widget-wrap #groups-list,
+.elementor-element #groups-list {
   list-style: none;
   margin: 0;
 }
-.elementor-widget-wrap #groups-list .item-avatar {
+.elementor-widget-wrap #groups-list .item-avatar,
+.elementor-element #groups-list .item-avatar {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 40px;
           flex: 0 0 40px;
   margin-left: 12px;
 }
-.elementor-widget-wrap #groups-list .item-avatar img {
+.elementor-widget-wrap #groups-list .item-avatar img,
+.elementor-element #groups-list .item-avatar img {
   border-radius: 3px;
 }
-.elementor-widget-wrap #groups-list .item {
+.elementor-widget-wrap #groups-list .item,
+.elementor-element #groups-list .item {
   line-height: 1;
 }
-.elementor-widget-wrap #groups-list .item-title {
+.elementor-widget-wrap #groups-list .item-title,
+.elementor-element #groups-list .item-title {
   margin-bottom: 3px;
 }
-.elementor-widget-wrap #groups-list .item-title a {
+.elementor-widget-wrap #groups-list .item-title a,
+.elementor-element #groups-list .item-title a {
   font-size: 0.9375rem;
   font-weight: 500;
   color: var(--bb-headings-color);
   letter-spacing: -0.24px;
 }
-.elementor-widget-wrap #groups-list span.activity {
+.elementor-widget-wrap #groups-list span.activity,
+.elementor-element #groups-list span.activity {
   color: var(--bb-alternate-text-color);
   font-size: 12px;
   letter-spacing: -0.26px;
@@ -545,6 +552,9 @@ body.rtl .bb-block-header__extra a.count-more i {
 .bb-no-data img.bb-no-data__image {
   max-width: 50%;
   margin: 0 0 25px;
+}
+.bb-no-data .bp-feedback.info {
+  border: 0;
 }
 .bb-no-data .bp-feedback.info .bp-icon {
   display: none;
@@ -874,6 +884,10 @@ div.elementor-price-table__ribbon-inner {
 .elementor-widget-search-form .elementor-search-form__input {
   height: auto;
   outline: none;
+}
+
+.elementor-nav-menu--main li.menu-item {
+  z-index: 0;
 }
 
 /** header bar widget */
@@ -6582,6 +6596,9 @@ body.rtl .bb-gallery .slick-arrow.bb-slide-next {
   background-color: #fff;
   position: relative;
 }
+.bb-activity .bbel-list-flow {
+  overflow-x: hidden;
+}
 .bb-activity .activity-list.item-list {
   padding: 0;
 }
@@ -6664,14 +6681,17 @@ html .bb-activity .activity-lists.item-list.elementor-activity-widget.grid > li 
   font-style: normal;
 }
 
-.bb-activity .activity-content {
+.bb-activity .activity-content,
+.activity-modal .activity-content {
   padding: 0;
   font-size: 14px;
 }
-.bb-activity .activity-content.no-media .bb-activity-media-wrap {
+.bb-activity .activity-content.no-media .bb-activity-media-wrap,
+.activity-modal .activity-content.no-media .bb-activity-media-wrap {
   display: none;
 }
-.bb-activity .activity-content .activity-read-more {
+.bb-activity .activity-content .activity-read-more,
+.activity-modal .activity-content .activity-read-more {
   display: block;
   margin: 3px 0 7px;
 }
@@ -6710,8 +6730,8 @@ html .bb-activity .activity-lists.item-list.elementor-activity-widget.grid > li 
   border-bottom-style: none;
 }
 
-.bb-activity .activity-content > p:first-of-type {
-  /* line-height: 1.6; */
+.elementor .found-media-item img {
+  height: 100%;
 }
 
 .bb-activity ul.activity-lists.bp-list {
@@ -6748,32 +6768,82 @@ html .bb-activity .activity-lists.item-list.elementor-activity-widget.grid > li 
   background-color: transparent;
 }
 
-.bb-activity #buddypress .activity-actions {
+.bb-activity #buddypress .activity-actions,
+#buddypress .activity-modal .activity-actions {
   display: none;
 }
-.bb-activity #buddypress .activity-actions.activity-actions--show {
+.bb-activity #buddypress .activity-actions.activity-actions--show,
+#buddypress .activity-modal .activity-actions.activity-actions--show {
   display: block;
 }
-.bb-activity #buddypress .activity-actions.activity-actions--show .generic-button {
+.bb-activity #buddypress .activity-actions.activity-actions--show .generic-button,
+#buddypress .activity-modal .activity-actions.activity-actions--show .generic-button {
   margin: 0 !important;
 }
-.bb-activity #buddypress .activity-actions.activity-actions--show .generic-button a {
+.bb-activity #buddypress .activity-actions.activity-actions--show .generic-button a,
+#buddypress .activity-modal .activity-actions.activity-actions--show .generic-button a {
   margin-left: 15px !important;
 }
-.bb-activity #buddypress .activity-actions.activity-actions--show .bp-generic-meta.action .generic-button a {
+.bb-activity #buddypress .activity-actions.activity-actions--show .bb-activity-more-options-wrap--idle,
+#buddypress .activity-modal .activity-actions.activity-actions--show .bb-activity-more-options-wrap--idle {
   display: none;
 }
-.bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.has-emotion, .bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.has-like, .bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.fav, .bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.unfav {
-  display: inline-block;
+.bb-activity #buddypress .activity-actions.activity-actions--show .bp-generic-meta.action .generic-button a,
+.bb-activity #buddypress .activity-actions.activity-actions--show .bb-activity-more-options-wrap.action .generic-button a,
+#buddypress .activity-modal .activity-actions.activity-actions--show .bp-generic-meta.action .generic-button a,
+#buddypress .activity-modal .activity-actions.activity-actions--show .bb-activity-more-options-wrap.action .generic-button a {
+  display: none;
 }
-.bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--comment .bp-generic-meta.action .generic-button a.acomment-reply {
-  display: inline-block;
+.bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.has-emotion, .bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.has-like, .bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.fav, .bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.unfav,
+#buddypress .activity-modal .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.has-emotion,
+#buddypress .activity-modal .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.has-like,
+#buddypress .activity-modal .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.fav,
+#buddypress .activity-modal .activity-actions.activity-actions--show.activity-actions--fav .bp-generic-meta.action .generic-button a.unfav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
-.bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--edit .bp-generic-meta.action .generic-button a.edit-activity {
-  display: inline-block;
+.bb-activity #buddypress .activity-actions.activity-actions--show .bb-activity-more-options.open,
+#buddypress .activity-modal .activity-actions.activity-actions--show .bb-activity-more-options.open {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
-.bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--delete .bp-generic-meta.action .generic-button a.delete-activity {
-  display: inline-block;
+@media screen and (max-width: 980px) {
+  .bb-activity #buddypress .activity-actions.activity-actions--show .bb-activity-more-options-wrap,
+  #buddypress .activity-modal .activity-actions.activity-actions--show .bb-activity-more-options-wrap {
+    -webkit-transform: none;
+        -ms-transform: none;
+            transform: none;
+  }
+}
+.bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--comment .bp-generic-meta.action .generic-button a.acomment-reply,
+#buddypress .activity-modal .activity-actions.activity-actions--show.activity-actions--comment .bp-generic-meta.action .generic-button a.acomment-reply {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+.bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--edit .bb-activity-more-options-wrap.action .generic-button a.acomment-edit, .bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--edit .bb-activity-more-options-wrap.action .generic-button a.edit-activity,
+#buddypress .activity-modal .activity-actions.activity-actions--show.activity-actions--edit .bb-activity-more-options-wrap.action .generic-button a.acomment-edit,
+#buddypress .activity-modal .activity-actions.activity-actions--show.activity-actions--edit .bb-activity-more-options-wrap.action .generic-button a.edit-activity {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--delete .bb-activity-more-options-wrap.action .generic-button a.acomment-delete, .bb-activity #buddypress .activity-actions.activity-actions--show.activity-actions--delete .bb-activity-more-options-wrap.action .generic-button a.delete-activity,
+#buddypress .activity-modal .activity-actions.activity-actions--show.activity-actions--delete .bb-activity-more-options-wrap.action .generic-button a.acomment-delete,
+#buddypress .activity-modal .activity-actions.activity-actions--show.activity-actions--delete .bb-activity-more-options-wrap.action .generic-button a.delete-activity {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.bb-activity #buddypress .activity-actions.activity-actions--show:not(.activity-actions--edit, .activity-actions--delete) .bb-activity-more-options-wrap.action,
+#buddypress .activity-modal .activity-actions.activity-actions--show:not(.activity-actions--edit, .activity-actions--delete) .bb-activity-more-options-wrap.action {
+  display: none;
 }
 
 .bb-activity #buddypress .activity-content .comment-reactions,
@@ -6814,22 +6884,12 @@ html .bb-activity .activity-lists.item-list.elementor-activity-widget.grid > li 
   display: inline-block;
 }
 
-.bb-activity .buddypress-wrap .activity-comments ul ul .acomment-content {
-  margin-right: 51px;
-}
-.bb-activity #buddypress .bp-list .comment-item .comment-item .action {
-  margin-right: 51px;
-}
-
 .elementor-widget-bbp-activity .bb-media-info-section .activity-comments .acomment-content p,
 .elementor-widget-bbp-activity .bb-media-info-section .activity-comments .acomment-meta {
   font-size: 13px;
 }
 .elementor-widget-bbp-activity .bb-media-info-section .activity-state a {
   color: #555;
-}
-.elementor-widget-bbp-activity .bb-media-info-section .activity-comments > ul > li > ul {
-  margin-right: 51px;
 }
 .elementor-widget-bbp-activity .bb-media-info-section .activity-comments ul li ul {
   margin-top: 0;
@@ -6844,17 +6904,8 @@ html .bb-activity .activity-lists.item-list.elementor-activity-widget.grid > li 
 .elementor-widget-bbp-activity .bb-media-info-section .activity-comments ul li ul li {
   padding-bottom: 0;
 }
-.elementor-widget-bbp-activity .bb-media-info-section .activity-comments .acomment-content {
-  margin-right: 51px;
-}
-.elementor-widget-bbp-activity .bb-media-info-section .activity-comments ul ul .acomment-content {
-  margin-right: 43px;
-}
 .elementor-widget-bbp-activity .bb-media-info-section .activity-comments .acomment-content p {
   margin-bottom: 0;
-}
-.elementor-widget-bbp-activity .bb-media-info-section .activity-comments ul li ul li:first-child {
-  margin-top: 15px;
 }
 
 .bb-media-privacy-wrap.bb-media-privacy-wrap--el-activity .activity-privacy {
@@ -7168,6 +7219,13 @@ div.item-options .bb-members__tab.selected {
 
 .bb-forums--blank {
   min-height: 300px;
+}
+.bb-forums--blank .bb-no-data .bs-item-list.list-view .bs-item-wrap {
+  margin: 0 1px;
+  border: 0;
+}
+.bb-forums--blank .bb-no-data .bs-item-list.list-view .bs-item-wrap.bs-header-item {
+  display: none;
 }
 
 .list-view .bb-forums__avatar .avatar {

@@ -21,10 +21,6 @@ namespace StellarWP\Learndash\Stripe\Issuing;
  * @property string $status Current status of the dispute.
  * @property string|\StellarWP\Learndash\Stripe\Issuing\Transaction $transaction The transaction being disputed.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $treasury <a href="https://stripe.com/docs/api/treasury">Treasury</a> details related to this dispute if it was created on a [FinancialAccount](/docs/api/treasury/financial_accounts
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Dispute extends \StellarWP\Learndash\Stripe\ApiResource
 {

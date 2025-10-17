@@ -8,10 +8,6 @@ namespace StellarWP\Learndash\Stripe\Service\Sigma;
  * Service factory class for API resources in the Sigma namespace.
  *
  * @property ScheduledQueryRunService $scheduledQueryRuns
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class SigmaServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

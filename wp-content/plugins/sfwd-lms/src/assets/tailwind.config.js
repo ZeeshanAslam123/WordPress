@@ -12,7 +12,7 @@ module.exports = {
 	safelist: [
 		{
 			pattern: /col-span-([1-9]|1[0-2])/, // For dashboard sections.
-			variants: ['lg'],
+			variants: ['lg', 'md'],
 		},
 	],
 };

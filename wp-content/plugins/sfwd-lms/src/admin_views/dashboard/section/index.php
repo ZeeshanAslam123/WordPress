@@ -23,7 +23,7 @@ if (
 	return;
 }
 ?>
-<div class="ld-dashboard-section ld-col-span-full lg:ld-col-span-<?php echo esc_attr( (string) $section->get_size() ); ?>">
+<div class="ld-dashboard-section ld-col-span-<?php echo esc_attr( (string) $section->get_size( Section::$screen_small ) ); ?> md:ld-col-span-<?php echo esc_attr( (string) $section->get_size( Section::$screen_medium ) ); ?> lg:ld-col-span-<?php echo esc_attr( (string) $section->get_size() ); ?>">
 	<?php $this->template( 'dashboard/section/header' ); ?>
 
 	<?php if ( $section->has_sections() ) : ?>

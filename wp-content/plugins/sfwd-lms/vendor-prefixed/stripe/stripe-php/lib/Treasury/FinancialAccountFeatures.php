@@ -16,10 +16,6 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $intra_stripe_flows Toggle settings for enabling/disabling a feature
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $outbound_payments Settings related to Outbound Payments features on a Financial Account
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $outbound_transfers OutboundTransfers contains outbound transfers features for a FinancialAccount.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class FinancialAccountFeatures extends \StellarWP\Learndash\Stripe\ApiResource
 {

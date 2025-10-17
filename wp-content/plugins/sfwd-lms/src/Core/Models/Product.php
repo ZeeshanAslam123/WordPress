@@ -11,10 +11,10 @@ namespace LearnDash\Core\Models;
 
 use Exception;
 use LDLMS_Post_Types;
-use LearnDash\Core\Models\Traits\Has_Materials;
 use LearnDash\Core\Utilities\Cast;
 use LearnDash_Custom_Label;
 use Learndash_Pricing_DTO;
+use StellarWP\Learndash\StellarWP\Arrays\Arr;
 use StellarWP\Learndash\StellarWP\DB\DB;
 use WP_User;
 
@@ -24,7 +24,14 @@ use WP_User;
  * @since 4.6.0
  */
 class Product extends Post {
-	use Has_Materials;
+	/**
+	 * Has trial.
+	 *
+	 * @since 4.16.0
+	 *
+	 * @var bool|null Whether the product has a trial or not.
+	 */
+	protected $has_trial = null;
 
 	/**
 	 * Returns allowed post types.
@@ -122,6 +129,29 @@ class Product extends Post {
 	}
 
 	/**
+	 * Returns whether the product supports coupons.
+	 *
+	 * @since 4.20.2.1
+	 *
+	 * @return bool
+	 */
+	public function supports_coupon(): bool {
+		$supports_coupon = $this->is_price_type_paynow();
+
+		/**
+		 * Filters whether the product supports coupons.
+		 *
+		 * @since 4.20.2.1
+		 *
+		 * @param bool    $supports_coupon Whether the product supports coupons.
+		 * @param Product $product         Product model.
+		 *
+		 * @return bool Whether the product supports coupons.
+		 */
+		return apply_filters( 'learndash_model_product_supports_coupon', $supports_coupon, $this );
+	}
+
+	/**
 	 * Returns true when the product has a trial.
 	 *
 	 * @since 4.6.0
@@ -129,9 +159,13 @@ class Product extends Post {
 	 * @return bool
 	 */
 	public function has_trial(): bool {
-		$pricing = $this->get_pricing();
+		if ( $this->has_trial === null ) {
+			$pricing = $this->get_pricing();
 
-		return $pricing->trial_duration_value > 0 && ! empty( $pricing->trial_duration_length );
+			$this->has_trial = $pricing->trial_duration_value > 0 && ! empty( $pricing->trial_duration_length );
+		}
+
+		return $this->has_trial;
 	}
 
 	/**
@@ -205,7 +239,7 @@ class Product extends Post {
 	}
 
 	/**
-	 * Returns whether a product has ended. If the product has not a end date or is open, it returns false.
+	 * Returns whether a product has ended. If the product has no end date or is open, it returns false.
 	 *
 	 * @since 4.7.0
 	 * @since 4.8.0 Added $user parameter.
@@ -487,6 +521,68 @@ class Product extends Post {
 	}
 
 	/**
+	 * Returns the product final price, after applying the coupon.
+	 *
+	 * @since 4.25.0
+	 *
+	 * @param WP_User|int|null $user The user ID or WP_User. If null or empty, the current user is used.
+	 *
+	 * @return float
+	 */
+	public function get_final_price( $user = null ): float {
+		$user = $this->map_user( $user, false );
+
+		/**
+		 * Filters course/group price.
+		 *
+		 * @since 4.1.0
+		 *
+		 * @param float    $price   Course/Group Price.
+		 * @param int      $post_id Course/Group ID.
+		 * @param int|null $user_id User ID.
+		 *
+		 * @return float Course/Group Price.
+		 */
+		$price = apply_filters(
+			'learndash_get_price_by_coupon',
+			$this->get_pricing( $user )->price,
+			$this->get_id(),
+			$user instanceof WP_User ? $user->ID : $user
+		);
+
+		/**
+		 * Filters the product final price, after applying the coupon.
+		 *
+		 * @since 4.25.0
+		 *
+		 * @param float       $price    Product final price, after applying the coupon.
+		 * @param WP_User|int $user     The WP_User by default or the user ID if a user ID was passed explicitly to the filter's caller.
+		 * @param Product     $product  Product model.
+		 *
+		 * @return float Product final price, after applying the coupon.
+		 */
+		return apply_filters(
+			'learndash_model_product_final_price',
+			$price,
+			$user,
+			$this
+		);
+	}
+
+	/**
+	 * Returns the numeric price.
+	 *
+	 * If the price cannot be converted to a float, it returns 0.
+	 *
+	 * @since 4.25.0
+	 *
+	 * @return float
+	 */
+	public function get_price(): float {
+		return learndash_get_price_as_float( (string) ( $this->get_pricing_settings()['price'] ?? 0.0 ) );
+	}
+
+	/**
 	 * Returns the display price.
 	 *
 	 * @since 4.6.0
@@ -513,6 +609,19 @@ class Product extends Post {
 			$price,
 			$this
 		);
+	}
+
+	/**
+	 * Returns the numeric trial price.
+	 *
+	 * If the trial price cannot be converted to a float, it returns 0.
+	 *
+	 * @since 4.25.0
+	 *
+	 * @return float
+	 */
+	public function get_trial_price(): float {
+		return learndash_get_price_as_float( (string) ( $this->get_pricing_settings()['trial_price'] ?? 0.0 ) );
 	}
 
 	/**
@@ -556,34 +665,283 @@ class Product extends Post {
 	private function get_formatted_display_price( string $price ): string {
 		$float_price = learndash_get_price_as_float( $price );
 
-		return learndash_get_price_formatted( ! empty( $float_price ) ? $float_price : $price );
+		if (
+			empty( $float_price )
+			&& empty( $price )
+		) {
+			return __( 'Free', 'learndash' );
+		}
+
+		if ( empty( $float_price ) ) {
+			return learndash_get_price_formatted( $price );
+		}
+
+		/** This filter is documented in src/Core/Models/Product.php */
+		$float_price = apply_filters(
+			'learndash_get_price_by_coupon',
+			$float_price,
+			$this->get_id(),
+			get_current_user_id()
+		);
+
+		return learndash_get_price_formatted( $float_price );
+	}
+
+	/**
+	 * Returns the trial interval message.
+	 *
+	 * @since 4.16.0
+	 *
+	 * @param array<string, mixed> $pricing Pricing settings.
+	 *
+	 * @return string
+	 */
+	private function get_trial_interval_message( $pricing ): string {
+		$repeats          = absint( Cast::to_int( Arr::get( $pricing, 'repeats', 0 ) ) );
+		$interval         = absint( Cast::to_int( Arr::get( $pricing, 'interval', 0 ) ) );
+		$frequency        = esc_html( Cast::to_string( Arr::get( $pricing, 'frequency', '' ) ) );
+		$repeat_frequency = esc_html( Cast::to_string( Arr::get( $pricing, 'repeat_frequency', '' ) ) );
+		$price            = esc_html( learndash_get_price_formatted( Arr::get( $pricing, 'price', 0 ) ) );
+		$trial_price      = esc_html( learndash_get_price_formatted( Arr::get( $pricing, 'trial_price', 0 ) ) );
+		$trial_interval   = absint( Cast::to_int( Arr::get( $pricing, 'trial_interval', 0 ) ) );
+		$trial_frequency  = esc_html( Cast::to_string( Arr::get( $pricing, 'trial_frequency', '' ) ) );
+
+		$data   = [];
+		$data[] = $trial_interval;  // 1.
+		$data[] = $trial_frequency; // 2.
+		$data[] = $trial_price;     // 3.
+		$data[] = $price;           // 4.
+
+		if ( ! $repeats ) {
+			$data[] = $interval;  // 5.
+			$data[] = $frequency; // 6.
+
+			if (
+				$trial_interval === 1
+				&& $interval === 1
+			) {
+				return vsprintf(
+					// translators: placeholder: %1$s = trial interval, %2$s = trial frequency, %3$s = trial price, %4$s = price, %5$s = interval, %6$s = frequency.
+					_x(
+						'First %2$s %3$s, then %4$s every %6$s',
+						'If the trial interval and subscription interval are both 1. Example: First week $10, then $20 every week',
+						'learndash'
+					),
+					$data
+				);
+			} elseif (
+				$trial_interval === 1
+				&& $interval > 1
+			) {
+				return vsprintf(
+					// translators: placeholder: %1$s = trial interval, %2$s = trial frequency, %3$s = trial price, %4$s = price, %5$s = interval, %6$s = frequency.
+					_x(
+						'First %2$s %3$s, then %4$s every %5$s %6$s',
+						'If the trial interval is 1 and subscription interval > 1. Example: First week $10, then $20 every 2 weeks',
+						'learndash'
+					),
+					$data
+				);
+			} elseif (
+				$trial_interval > 1
+				&& $interval === 1
+			) {
+				return vsprintf(
+					// translators: placeholder: %1$s = trial interval, %2$s = trial frequency, %3$s = trial price, %4$s = price, %5$s = interval, %6$s = frequency.
+					_x(
+						'First %1$s %2$s %3$s, then %4$s every %6$s',
+						'If the trial interval > 1 and subscription interval is 1. Example: First 2 weeks $10, then $20 every week',
+						'learndash'
+					),
+					$data
+				);
+			}
+
+			return vsprintf(
+				// translators: placeholder: %1$s = trial interval, %2$s = trial frequency, %3$s = trial price, %4$s = price, %5$s = interval, %6$s = frequency.
+				_x(
+					'First %1$s %2$s %3$s, then %4$s every %5$s %6$s',
+					'If the trial interval > 1 and subscription interval > 1. Example: First 2 weeks $10, then $20 every 2 weeks',
+					'learndash'
+				),
+				$data
+			);
+		}
+
+		$data[] = $interval;            // 5.
+		$data[] = $frequency;           // 6.
+		$data[] = $interval * $repeats; // 7.
+		$data[] = $repeat_frequency;    // 8.
+
+		if (
+			$trial_interval === 1
+			&& $interval === 1
+		) {
+			return vsprintf(
+				// translators: placeholder: %1$s = trial interval, %2$s = trial frequency, %3$s = trial price, %4$s = price, %5$s = interval, %6$s = frequency, %s$7 = entire duration, %8$s = repeat frequency.
+				_x(
+					'First %2$s %3$s, then %4$s every %6$s for %7$s %8$s',
+					'If the trial interval and subscription interval are both 1. Example: First week $10, then $20 every week for 20 weeks',
+					'learndash'
+				),
+				$data
+			);
+		} elseif (
+			$trial_interval === 1
+			&& $interval > 1
+		) {
+			return vsprintf(
+				// translators: placeholder: %1$s = trial interval, %2$s = trial frequency, %3$s = trial price, %4$s = price, %5$s = interval, %6$s = frequency, %s$7 = entire duration, %8$s = repeat frequency.
+				_x(
+					'First %2$s %3$s, then %4$s every %5$s %6$s for %7$s %8$s',
+					'If the trial interval is 1 and subscription interval > 1. Example: First week $10, then $20 every 2 weeks for 20 weeks',
+					'learndash'
+				),
+				$data
+			);
+		} elseif (
+			$trial_interval > 1
+			&& $interval === 1
+		) {
+			return vsprintf(
+				// translators: placeholder: %1$s = trial interval, %2$s = trial frequency, %3$s = trial price, %4$s = price, %5$s = interval, %6$s = frequency, %s$7 = entire duration, %8$s = repeat frequency.
+				_x(
+					'First %1$s %2$s %3$s, then %4$s every %6$s for %7$s %8$s',
+					'If the trial interval > 1 and subscription interval is 1. Example: First 2 weeks $10, then $20 every week for 20 weeks',
+					'learndash'
+				),
+				$data
+			);
+		}
+
+		return vsprintf(
+			// translators: placeholder: %1$s = trial interval, %2$s = trial frequency, %3$s = trial price, %4$s = price, %5$s = interval, %6$s = frequency, %s$7 = entire duration, %8$s = repeat frequency.
+			_x(
+				'First %1$s %2$s %3$s, then %4$s every %5$s %6$s for %7$s %8$s',
+				'Example: First 2 weeks $20, then $20 every 2 weeks for 20 weeks',
+				'learndash'
+			),
+			$data
+		);
+	}
+
+	/**
+	 * Returns the interval message.
+	 *
+	 * @since 4.16.0
+	 *
+	 * @return string
+	 */
+	public function get_interval_message(): string {
+		$pricing  = $this->get_pricing_settings();
+		$interval = absint( Cast::to_int( Arr::get( $pricing, 'interval', 0 ) ) );
+		$message  = '';
+
+		if ( $this->has_trial() ) {
+			$message = $this->get_trial_interval_message( $pricing );
+		} elseif ( $interval ) {
+			$repeats          = absint( Cast::to_int( Arr::get( $pricing, 'repeats', 0 ) ) );
+			$frequency        = esc_html( Cast::to_string( Arr::get( $pricing, 'frequency', '' ) ) );
+			$repeat_frequency = esc_html( Cast::to_string( Arr::get( $pricing, 'repeat_frequency', '' ) ) );
+			$price            = esc_html( learndash_get_price_formatted( Arr::get( $pricing, 'price', 0 ) ) );
+
+			$data   = [];
+			$data[] = $price;     // 1.
+			$data[] = $interval;  // 2.
+			$data[] = $frequency; // 3.
+
+			if ( ! $repeats ) {
+				if ( $interval === 1 ) {
+					$message = vsprintf(
+						// translators: placeholder: %1$s = price, %2$s = interval, %3$s = frequency.
+						_x( '%1$s every %3$s', 'Subscribe with an interval of 1. Example: $20 every month', 'learndash' ),
+						$data
+					);
+				} else {
+					$message = vsprintf(
+						// translators: placeholder: %1$s = price, %2$s = interval, %3$s = frequency.
+						_x( '%1$s every %2$s %3$s', 'Subscribe with an interval > 1. Example: $20 every 2 weeks', 'learndash' ),
+						$data
+					);
+				}
+			} else {
+				$data[] = $interval * $repeats; // 4.
+				$data[] = $repeat_frequency;    // 5.
+
+				if ( $interval === 1 ) {
+					$message = vsprintf(
+						// translators: placeholder: %1$s = price, %2$s = interval, %3$s = frequency, %4$s = entire duration, %5$s = repeat frequency.
+						_x( '%1$s every %3$s for %4$s %5$s', 'Repeating subscription with an interval of 1. Example: $20 every week for 20 weeks', 'learndash' ),
+						$data
+					);
+				} else {
+					$message = vsprintf(
+						// translators: placeholder: %1$s = price, %2$s = interval, %3$s = frequency, %4$s = entire duration, %5$s = repeat frequency.
+						_x( '%1$s every %2$s %3$s for %4$s %5$s', 'Repeating subscription with an interval > 1. Example: $20 every 2 weeks for 20 weeks', 'learndash' ),
+						$data
+					);
+				}
+			}
+		}
+
+		/**
+		 * Filters the product interval message.
+		 *
+		 * @since 4.16.0
+		 *
+		 * @param string  $message Product interval message.
+		 * @param Product $product Product model.
+		 *
+		 * @return string Product interval message.
+		 */
+		$message = apply_filters( 'learndash_model_product_interval_message', $message, $this );
+
+		return Cast::to_string( $message );
+	}
+
+	/**
+	 * Returns the product type.
+	 *
+	 * @since 4.16.0
+	 *
+	 * @return string
+	 */
+	public function get_type(): string {
+		return LDLMS_Post_Types::get_post_type_key( $this->post->post_type );
 	}
 
 	/**
 	 * Returns a product type label. Usually "Course" or "Group".
 	 *
 	 * @since 4.5.0
+	 * @since 4.21.0 Added optional $force_lowercase parameter. Default is false.
+	 *
+	 * @param bool $force_lowercase Whether to return the label in lowercase.
 	 *
 	 * @return string
 	 */
-	public function get_type_label(): string {
+	public function get_type_label( bool $force_lowercase = false ): string {
+		$post_type_key = LDLMS_Post_Types::get_post_type_key( $this->post->post_type );
+
+		if ( $force_lowercase ) {
+			$label = LearnDash_Custom_Label::label_to_lower( $post_type_key );
+		} else {
+			$label = LearnDash_Custom_Label::get_label( $post_type_key );
+		}
+
 		/**
 		 * Filters product type label.
 		 *
 		 * @since 4.5.0
+		 * @since 4.21.0 Added the $force_lowercase argument.
 		 *
-		 * @param string  $type_label Product type label. Course/Group.
-		 * @param Product $product    Product model.
+		 * @param string  $label           Product type label. Course/Group.
+		 * @param Product $product         Product model.
+		 * @param bool    $force_lowercase Whether to return the label in lowercase.
 		 *
 		 * @return string Product type label.
 		 */
-		return apply_filters(
-			'learndash_model_product_type_label',
-			LearnDash_Custom_Label::get_label(
-				LDLMS_Post_Types::get_post_type_key( $this->post->post_type )
-			),
-			$this
-		);
+		return apply_filters( 'learndash_model_product_type_label', $label, $this, $force_lowercase );
 	}
 
 	/**
@@ -659,8 +1017,7 @@ class Product extends Post {
 		$has_access = false;
 
 		if (
-			$user_id > 0
-			&& $this->has_started()
+			$this->has_started()
 			&& ! $this->has_ended( $user )
 		) {
 			if ( learndash_is_course_post( $this->post ) ) {
@@ -920,10 +1277,25 @@ class Product extends Post {
 	}
 
 	/**
+	 * Returns the materials content.
+	 *
+	 * @since 4.6.0
+	 * @deprecated 4.21.0 Use the `Course::get_materials` or `Group::get_materials` methods instead.
+	 *
+	 * @return string
+	 */
+	public function get_materials(): string {
+		_deprecated_function( __METHOD__, '4.21.0', 'Course::get_materials or Group::get_materials' );
+
+		return '';
+	}
+
+	/**
 	 * Returns formatted post pricing data.
 	 *
 	 * @since 4.5.0
 	 * @since 4.8.0 Changed the $user parameter to accept an int or a WP_User object.
+	 * @since 4.21.0 Changed visibility from private to public.
 	 *
 	 * @param WP_User|int|null $user The user ID or WP_User.
 	 *
@@ -941,7 +1313,7 @@ class Product extends Post {
 	 *     trial_frequency_raw?: string
 	 * }
 	 */
-	private function get_pricing_settings( $user = null ): array {
+	public function get_pricing_settings( $user = null ): array {
 		$pricing_settings = array();
 
 		$user    = $this->map_user( $user );

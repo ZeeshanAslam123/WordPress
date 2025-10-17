@@ -16,10 +16,6 @@ namespace StellarWP\Learndash\Stripe\Radar;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property string $value The value of the item.
  * @property string $value_list The identifier of the value list this item belongs to.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class ValueListItem extends \StellarWP\Learndash\Stripe\ApiResource
 {

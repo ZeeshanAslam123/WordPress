@@ -56,10 +56,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $us_bank_account
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $wechat_pay
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $zip
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class PaymentMethod extends ApiResource
 {

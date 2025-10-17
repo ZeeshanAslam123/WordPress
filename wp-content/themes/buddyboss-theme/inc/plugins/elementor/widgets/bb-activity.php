@@ -581,19 +581,21 @@ class BBP_Activity extends Widget_Base {
 			}
 		}
 
+		$is_media_active = bp_is_active( 'media' );
+
 		$media = false;
-		if ( bp_is_active( 'media' ) && ( bp_is_profile_media_support_enabled() || bp_is_group_media_support_enabled() || bp_is_forums_media_support_enabled() ) ) {
+		if ( $is_media_active && ( bp_is_profile_media_support_enabled() || bp_is_group_media_support_enabled() || bp_is_forums_media_support_enabled() ) ) {
 			$media = true;
 		}
-		if ( bp_is_active( 'media' ) && ( bp_is_profile_document_support_enabled() || bp_is_group_document_support_enabled() || bp_is_forums_document_support_enabled() ) ) {
+		if ( $is_media_active && ( bp_is_profile_document_support_enabled() || bp_is_group_document_support_enabled() || bp_is_forums_document_support_enabled() ) ) {
 			$media = true;
 		}
 
-		if ( bp_is_active( 'media' ) && ( bp_is_profiles_gif_support_enabled() || bp_is_groups_gif_support_enabled() || bp_is_forums_gif_support_enabled() ) ) {
+		if ( $is_media_active && ( bp_is_profiles_gif_support_enabled() || bp_is_groups_gif_support_enabled() || bp_is_forums_gif_support_enabled() ) ) {
 			wp_enqueue_script( 'giphy' );
 		}
 
-		if ( bp_is_active( 'media' ) && ( bp_is_profiles_emoji_support_enabled() || bp_is_groups_emoji_support_enabled() || bp_is_forums_emoji_support_enabled() ) ) {
+		if ( $is_media_active && ( bp_is_profiles_emoji_support_enabled() || bp_is_groups_emoji_support_enabled() || bp_is_forums_emoji_support_enabled() ) ) {
 			wp_enqueue_script( 'emojionearea' );
 			wp_enqueue_style( 'emojionearea' );
 		}
@@ -606,7 +608,7 @@ class BBP_Activity extends Widget_Base {
 			wp_enqueue_script( 'bp-exif' );
 		}
 
-		if ( bp_is_active( 'media' ) && bp_is_active( 'video' ) && ( bp_is_profile_video_support_enabled() || bp_is_group_video_support_enabled() || bp_is_forums_video_support_enabled() ) ) {
+		if ( $is_media_active && bp_is_active( 'video' ) && ( bp_is_profile_video_support_enabled() || bp_is_group_video_support_enabled() || bp_is_forums_video_support_enabled() ) ) {
 			wp_enqueue_style( 'bp-media-videojs-css' );
 			wp_enqueue_script( 'bp-media-videojs' );
 			wp_enqueue_script( 'bp-media-videojs-seek-buttons' );
@@ -616,12 +618,16 @@ class BBP_Activity extends Widget_Base {
 			bp_get_template_part( 'video/theatre' );
 		}
 
-		if ( bp_is_active( 'media' ) && ( bp_is_profile_media_support_enabled() || bp_is_group_media_support_enabled() || bp_is_forums_media_support_enabled() ) ) {
+		if ( $is_media_active && ( bp_is_profile_media_support_enabled() || bp_is_group_media_support_enabled() || bp_is_forums_media_support_enabled() ) ) {
 			bp_get_template_part( 'media/theatre' );
 		}
-		if ( bp_is_active( 'media' ) && ( bp_is_profile_document_support_enabled() || bp_is_group_document_support_enabled() || bp_is_forums_document_support_enabled() ) ) {
+		if ( $is_media_active && ( bp_is_profile_document_support_enabled() || bp_is_group_document_support_enabled() || bp_is_forums_document_support_enabled() ) ) {
 			bp_get_template_part( 'document/theatre' );
 		}
+
+		bp_get_template_part( 'activity/emojionearea-popup' );
+		bp_get_template_part( 'activity/gifpicker-popup' );
+		bp_get_template_part( 'activity/activity-modal' );
 
 		$this->add_render_attribute( 'actions', 'class', 'activity-actions' );
 
@@ -670,7 +676,7 @@ class BBP_Activity extends Widget_Base {
 					<div class="bb-block-header__title"><h3><?php echo esc_html( $settings['heading_text'] ); ?></h3></div>
 					<?php if ( $settings['switch_more'] ) : ?>
 						<div class="bb-block-header__extra push-right">
-							<?php if( '' != $settings['activity_link_text'] ) { ?>
+							<?php if ( '' != $settings['activity_link_text'] ) { ?>
 								<a href="<?php bp_activity_directory_permalink(); ?>" class="count-more"><?php echo esc_html( $settings['activity_link_text'] ); ?><i class="bb-icon-l bb-icon-angle-right"></i></a>
 							<?php } ?>
 						</div>
@@ -683,11 +689,43 @@ class BBP_Activity extends Widget_Base {
 							<div class="screen-content">
 								<div id="activity-stream" class="activity" data-ajax="false" data-bp-list="activity">
 									<ul class="activity-list item-list bp-list elementor-activity-widget">
-										<?php while ( bp_activities() ) : bp_the_activity(); ?>
-											<li class="<?php bp_activity_css_class(); ?>" id="activity-<?php bp_activity_id(); ?>" data-bp-activity-id="<?php bp_activity_id(); ?>" data-bp-timestamp="<?php bp_nouveau_activity_timestamp(); ?>" data-bp-activity="<?php ( function_exists('bp_nouveau_edit_activity_data') ) ? bp_nouveau_edit_activity_data() : ''; ?>" >
+										<?php
+										while ( bp_activities() ) :
+											bp_the_activity();
 
+											$bp_activity_id = bp_get_activity_id();
+											$activity_popup_title = sprintf( esc_html__( '%s\'s Post', 'buddyboss-theme' ), bp_core_get_user_displayname( bp_get_activity_user_id() ) );
+											?>
+											<li class="<?php bp_activity_css_class(); ?> elementor-activity-item" id="activity-<?php echo esc_attr( $bp_activity_id ); ?>" data-bp-activity-id="<?php echo esc_attr( $bp_activity_id ); ?>" data-bp-timestamp="<?php bp_nouveau_activity_timestamp(); ?>" data-bp-activity="<?php ( function_exists('bp_nouveau_edit_activity_data') ) ? bp_nouveau_edit_activity_data() : ''; ?>" data-activity-popup-title='<?php echo empty( $activity_popup_title ) ? '' : esc_html( $activity_popup_title ); ?>'>
+												<span <?php echo $this->get_render_attribute_string( 'actions' ); ?>>
+													<?php
+														if ( function_exists( 'bb_nouveau_activity_entry_bubble_buttons' ) ) {
+															bb_nouveau_activity_entry_bubble_buttons();
+														}
+													?>
+												</span>
+												<?php
+												if (
+													function_exists( 'bb_pro_activity_post_feature_image_instance' ) &&
+													bb_pro_activity_post_feature_image_instance() &&
+													method_exists( bb_pro_activity_post_feature_image_instance(), 'bb_get_feature_image_data' )
+												) {
+													?>
+													<div class="activity-feature-image">
+														<?php
+														$feature_image_data = bb_pro_activity_post_feature_image_instance()->bb_get_feature_image_data( $bp_activity_id );
+														if ( ! empty( $feature_image_data ) ) {
+															?>
+															<img class="activity-feature-image-media" src="<?php echo esc_url( $feature_image_data['url'] ); ?>" alt="<?php echo esc_attr( $feature_image_data['title'] ); ?>" />
+															<?php
+														}
+														?>
+													</div>
+													<?php
+												}
+												?>
 												<div class="bp-activity-head">
-													<?php if ($settings['switch_avatar']) : ?>
+													<?php if ( $settings['switch_avatar'] ) : ?>
 														<div class="activity-avatar item-avatar">
 															<a href="<?php bp_activity_user_link(); ?>">
 																<?php bp_activity_avatar( array( 'type' => 'full' ) ); ?>
@@ -697,12 +735,13 @@ class BBP_Activity extends Widget_Base {
 													<div class="activity-header">
 														<?php bp_activity_action(); ?>
 														<p class="activity-date">
-															<a href="<?php echo esc_url( bp_activity_get_permalink( bp_get_activity_id() ) ); ?>">
+															<a href="<?php echo esc_url( bp_activity_get_permalink( $bp_activity_id ) ); ?>">
 																<?php
+																$bp_activity_date_recorded = bp_get_activity_date_recorded();
 																printf(
 																	'<span class="time-since" data-livestamp="%1$s">%2$s</span>',
-																	bp_core_get_iso8601_date( bp_get_activity_date_recorded() ),
-																	bp_core_time_since( bp_get_activity_date_recorded() )
+																	bp_core_get_iso8601_date( $bp_activity_date_recorded ),
+																	bp_core_time_since( $bp_activity_date_recorded )
 																);
 																?>
 															</a>
@@ -720,43 +759,59 @@ class BBP_Activity extends Widget_Base {
 													</div>
 												</div>
 
-												<?php if ( bp_nouveau_activity_has_content() && $settings['switch_content'] ) : ?>
+												<?php
+												$bp_nouveau_activity_has_content = bp_nouveau_activity_has_content();
+												if ( $bp_nouveau_activity_has_content && $settings['switch_content'] ) { ?>
 													<div class="activity-content <?php echo $settings['switch_media'] ? '' : 'no-media'; ?>">
 														<?php bp_nouveau_activity_hook( 'before', 'activity_content' ); ?>
-														<?php if ( bp_nouveau_activity_has_content() ) : ?>
-															<div class="activity-inner"><?php bp_nouveau_activity_content(); ?></div>
-														<?php endif; ?>
+														<?php
+														if ( function_exists( 'bb_activity_has_post_title' ) && bb_activity_has_post_title() ) {
+															?>
+															<div class="activity-title">
+																<h2><?php echo wp_kses_post( bb_activity_post_title() ); ?></h2>
+															</div>
+															<?php
+														}
+														?>
+														<div class="activity-inner"><?php bp_nouveau_activity_content(); ?></div>
 														<?php bp_nouveau_activity_hook( 'after', 'activity_content' ); ?>
-														<div <?php echo $this->get_render_attribute_string('do-state'); ?>>
+														<div <?php echo $this->get_render_attribute_string( 'do-state' ); ?>>
 															<?php bp_nouveau_activity_state(); ?>
 														</div>
-														<div <?php echo $this->get_render_attribute_string('actions'); ?>>
+														<div <?php echo $this->get_render_attribute_string( 'actions' ); ?>>
 															<?php bp_nouveau_activity_entry_buttons(); ?>
 														</div>
 													</div>
-												<?php endif; ?>
+													<?php
+												}
 
-												<?php if ( $settings['switch_comments'] ) { ?>
+												if ( $settings['switch_comments'] ) {
+													bp_nouveau_activity_hook( 'before', 'entry_comments' );
 
-													<?php bp_nouveau_activity_hook( 'before', 'entry_comments' ); ?>
-
-
-													<?php if ( bp_activity_get_comment_count() || ( is_user_logged_in() && ( bp_activity_can_comment() || bp_is_single_activity() ) ) ) : ?>
-
-														<div class="activity-comments">
-
-															<div <?php echo $this->get_render_attribute_string('actions'); ?>>
-																<?php bp_activity_comments(); ?>
+													if ( bp_activity_can_comment() ) {
+														?>
+														<div <?php echo $this->get_render_attribute_string( 'actions' ); ?>>
+															<div class="activity-comments <?php echo get_option( 'thread_comments' ) ? 'threaded-comments threaded-level-' . get_option( 'thread_comments_depth' ) : ''; ?>">
+																<?php
+																if ( bp_activity_get_comment_count() ) {
+																	?>
+																	<div <?php echo $this->get_render_attribute_string( 'actions' ); ?>>
+																		<?php bp_activity_comments(); ?>
+																	</div>
+																	<?php
+																}
+																if ( is_user_logged_in() ) {
+																	bp_nouveau_activity_comment_form();
+																}
+																?>
 															</div>
-															<?php bp_nouveau_activity_comment_form(); ?>
-
 														</div>
+														<?php
+													}
 
-													<?php endif; ?>
-
-													<?php bp_nouveau_activity_hook( 'after', 'entry_comments' ); ?>
-
-												<?php } ?>
+													bp_nouveau_activity_hook( 'after', 'entry_comments' );
+												}
+												?>
 
 											</li>
 										<?php endwhile; ?>
@@ -778,11 +833,7 @@ class BBP_Activity extends Widget_Base {
 			<?php endif; ?>
 
 		</div>
-		<?php
-
-		remove_filter( 'bp_excerpt_length', array( $this, 'bb_elementor_change_activity_content_excerpt_length' ), 99, 1 );
-
-		?>
+		<?php remove_filter( 'bp_excerpt_length', array( $this, 'bb_elementor_change_activity_content_excerpt_length' ), 99, 1 ); ?>
 		<script>
 			jQuery( document ).ready(
 				function ( $ ) {

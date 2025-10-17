@@ -119,6 +119,14 @@ if ( ( ! class_exists( 'LDLMS_Course_Steps' ) ) && ( class_exists( 'LDLMS_Model'
 				if ( true === $this->meta['empty'] ) {
 					// Note here since we are loading the steps via legacy methods we don't need to validate.
 					$this->steps['h'] = $this->load_steps_legacy();
+
+					// I don't want to affect the default flow, so this is a safe way to do this step after it was imported only.
+					if ( get_post_meta( $this->course_id, 'course_steps_update_after_import_is_needed', true ) ) {
+						// This is necessary to rebuild the steps after the import.
+						$steps_h = $this->steps['h'];
+
+						delete_post_meta( $this->course_id, 'course_steps_update_after_import_is_needed' );
+					}
 				}
 
 				$this->build_steps();
@@ -256,7 +264,6 @@ if ( ( ! class_exists( 'LDLMS_Course_Steps' ) ) && ( class_exists( 'LDLMS_Model'
 
 			$this->set_steps_count_meta();
 		}
-
 
 		/**
 		 * Sets the Course steps dirty flag and will force the steps to be

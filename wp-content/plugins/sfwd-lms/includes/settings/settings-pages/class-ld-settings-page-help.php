@@ -202,89 +202,79 @@ if ( class_exists( 'LearnDash_Settings_Page' ) && ! class_exists( 'LearnDash_Set
 		}
 
 		/**
-		 * Get categories
+		 * Returns Help categories.
 		 *
 		 * @since 4.4.0
+		 * @since 4.20.2 Removed the 'helpScoutId' key from categories. And added the 'url' key.
 		 *
-		 * @return array<string, array<string, string>>
+		 * @return array<string, array{id: string, url: string, label: string, description: string, icon: string}>
 		 */
 		public static function get_categories() : array {
-			$categories = array(
-				'getting-started'     => array(
+			return [
+				'getting-started'     => [
 					'id'          => 'getting-started',
-					'helpScoutId' => '',
+					'url'         => 'https://go.learndash.com/getstarted',
 					'label'       => __( 'Getting Started', 'learndash' ),
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
 					'description' => __( 'Not sure what to do next? Read our top articles to get more information.', 'learndash' ),
 					'icon'        => 'getting-started',
-				),
-				'learndash-core'      => array(
+				],
+				'learndash-core'      => [
 					'id'          => 'learndash-core',
-					'helpScoutId' => '',
+					'url'         => 'https://go.learndash.com/core',
 					'label'       => __( 'LearnDash Core', 'learndash' ),
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
 					'description' => __( 'Everything about LearnDash LMS core plugin.', 'learndash' ),
 					'icon'        => 'core',
-				),
-				'add-ons'             => array(
+				],
+				'add-ons'             => [
 					'id'          => 'add-ons',
-					'helpScoutId' => '',
+					'url'         => 'https://go.learndash.com/addons',
 					'label'       => __( 'Add-Ons', 'learndash' ),
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
 					'description' => __( 'Course Grid, Stripe, WooCommerce, Zapier, and other official add-ons documentations.', 'learndash' ),
 					'icon'        => 'addons',
-				),
-				'users-and-groups'    => array(
+				],
+				'users-and-groups'    => [
 					'id'          => 'users-and-groups',
-					'helpScoutId' => '',
+					'url'         => 'https://go.learndash.com/usermanagement',
 					'label'       => __( 'Users & Groups', 'learndash' ),
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
 					'description' => __( 'Have questions about users & groups? Our articles may help.', 'learndash' ),
 					'icon'        => 'users-groups',
-				),
-				'reporting'           => array(
+				],
+				'reporting'           => [
 					'id'          => 'reporting',
-					'helpScoutId' => '',
+					'url'         => 'https://go.learndash.com/reporting',
 					'label'       => __( 'Reporting', 'learndash' ),
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
 					'description' => __( 'LearnDash reporting guides.', 'learndash' ),
 					'icon'        => 'reporting',
-				),
-				'user-guides'         => array(
+				],
+				'user-guides'         => [
 					'id'          => 'user-guides',
-					'helpScoutId' => '',
+					'url'         => 'https://go.learndash.com/guides',
 					'label'       => __( 'User Guides', 'learndash' ),
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
 					'description' => __( 'Collection of guides that will help you accomplish certain tasks.', 'learndash' ),
 					'icon'        => 'user-guides',
-				),
-				'troubleshooting'     => array(
+				],
+				'troubleshooting'     => [
 					'id'          => 'troubleshooting',
-					'helpScoutId' => '',
+					'url'         => 'https://go.learndash.com/troubleshooting',
 					'label'       => __( 'Troubleshooting', 'learndash' ),
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
 					'description' => __( 'Have issues? Follow our troubleshooting guides to resolve them.', 'learndash' ),
 					'icon'        => 'troubleshooting',
-				),
-				'faqs'                => array(
+				],
+				'faqs'                => [
 					'id'          => 'faqs',
-					'helpScoutId' => '',
+					'url'         => 'https://go.learndash.com/faq',
 					'label'       => __( 'FAQs', 'learndash' ),
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
 					'description' => __( 'Have a question? See if it\'s already been answered.', 'learndash' ),
 					'icon'        => 'faqs',
-				),
-				'account-and-billing' => array(
+				],
+				'account-and-billing' => [
 					'id'          => 'account-and-billing',
-					'helpScoutId' => '',
+					'url'         => 'https://go.learndash.com/accounthelp',
 					'label'       => __( 'Accounts & Billing', 'learndash' ),
-                    // phpcs:ignore Generic.Files.LineLength.TooLong
 					'description' => __( 'Accounts & Billing related articles.', 'learndash' ),
 					'icon'        => 'accounts-billing',
-				),
-			);
-
-			return $categories;
+				],
+			];
 		}
 
 		/**
@@ -330,9 +320,9 @@ if ( class_exists( 'LearnDash_Settings_Page' ) && ! class_exists( 'LearnDash_Set
 		public static function get_articles( string $category = null, array $exclude_categories = array() ) : array {
 			$articles = array(
 				array(
-					'type'       => 'youtube_video',
+					'type'       => 'vimeo_video',
 					'title'      => __( 'Welcome to LearnDash', 'learndash' ),
-					'youtube_id' => 'hcSTaMhZi64',
+					'youtube_id' => '797750743',
 					'category'   => 'overview_video',
 				),
 				array(
@@ -342,36 +332,39 @@ if ( class_exists( 'LearnDash_Settings_Page' ) && ! class_exists( 'LearnDash_Set
 					'category' => 'overview_article',
 				),
 				array(
-					'type'     => 'url',
+					'category' => 'additional_resources',
+					'target'   => '_blank',
 					'title'    => __( 'LearnDash 101', 'learndash' ),
-					'url'      => 'https://academy.learndash.com/courses/learndash-101/',
-					'category' => 'additional_resources',
-				),
-				array(
 					'type'     => 'url',
+					'url'      => 'https://go.learndash.com/101',
+				),
+				array(
+					'category' => 'additional_resources',
+					'target'   => '_blank',
 					'title'    => __( 'WordPress 101', 'learndash' ),
-					'url'      => 'https://academy.learndash.com/courses/wordpress-101/',
-					'category' => 'additional_resources',
+					'type'     => 'url',
+					'url'      => 'https://go.learndash.com/wp101',
 				),
 				array(
-					'type'     => 'helpscout_action',
+					'category' => 'additional_resources',
+					'target'   => '_blank',
 					'title'    => __( 'LearnDash Documentation', 'learndash' ),
-					'action'   => 'open_doc',
-					'keyword'  => '',
+					'type'     => 'url',
+					'url'      => 'https://go.learndash.com/docs',
+				),
+				array(
 					'category' => 'additional_resources',
+					'target'   => '_blank',
+					'title'    => __( 'Getting Started', 'learndash' ),
+					'type'     => 'url',
+					'url'      => 'https://go.learndash.com/gettingstarted',
 				),
 				array(
-					'type'         => 'article',
-					'title'        => __( 'Getting Started', 'learndash' ),
-					'helpscout_id' => '62a0e4f0e1d2cf0eac00f2bb',
-					'category'     => 'additional_resources',
-				),
-				array(
-					'type'     => 'helpscout_action',
+					'category' => 'additional_resources',
+					'target'   => '_blank',
 					'title'    => __( 'Contact Support', 'learndash' ),
-					'action'   => 'open_chat',
-					'keyword'  => '',
-					'category' => 'additional_resources',
+					'type'     => 'url',
+					'url'      => 'https://go.learndash.com/support',
 				),
 				array(
 					'type'     => 'vimeo_video',
@@ -404,10 +397,11 @@ if ( class_exists( 'LearnDash_Settings_Page' ) && ! class_exists( 'LearnDash_Set
 					'category' => 'sell_courses',
 				),
 				array(
-					'type'         => 'article',
-					'title'        => __( 'WooCommerce Integration [Article]', 'learndash' ),
-					'helpscout_id' => '6216b293aca5bb2b753c5c7f',
-					'category'     => 'sell_courses',
+					'category' => 'sell_courses',
+					'target'   => '_blank',
+					'title'    => __( 'WooCommerce Integration', 'learndash' ),
+					'type'     => 'url',
+					'url'      => 'https://go.learndash.com/woo',
 				),
 				array(
 					'type'     => 'vimeo_video',
@@ -422,16 +416,18 @@ if ( class_exists( 'LearnDash_Settings_Page' ) && ! class_exists( 'LearnDash_Set
 					'category' => 'manage_students',
 				),
 				array(
-					'type'         => 'article',
-					'title'        => __( 'Adding a User Profile Page', 'learndash' ),
-					'helpscout_id' => '6216c2961173d072c69fb37a',
-					'category'     => 'manage_students',
+					'category' => 'manage_students',
+					'target'   => '_blank',
+					'title'    => __( 'Adding a User Profile Page', 'learndash' ),
+					'type'     => 'url',
+					'url'      => 'https://go.learndash.com/userprofilesetup',
 				),
 				array(
-					'type'         => 'article',
-					'title'        => __( 'LearnDash Login & Registration [Guide]', 'learndash' ),
-					'helpscout_id' => '6217ffea1173d072c69fba4d',
-					'category'     => 'manage_students',
+					'category' => 'manage_students',
+					'target'   => '_blank',
+					'title'    => __( 'LearnDash Login & Registration', 'learndash' ),
+					'type'     => 'url',
+					'url'      => 'https://go.learndash.com/registrationsetup',
 				),
 			);
 

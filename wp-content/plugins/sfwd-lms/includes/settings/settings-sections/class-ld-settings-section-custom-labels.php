@@ -17,7 +17,6 @@ if ( ( class_exists( 'LearnDash_Settings_Section' ) ) && ( ! class_exists( 'Lear
 	 * @since 2.4.0
 	 */
 	class LearnDash_Settings_Section_Custom_Labels extends LearnDash_Settings_Section {
-
 		/**
 		 * Protected constructor for class
 		 *
@@ -248,28 +247,61 @@ if ( ( class_exists( 'LearnDash_Settings_Section' ) ) && ( ! class_exists( 'Lear
 				'button_click_here_to_continue'            => array(
 					'name'      => 'button_click_here_to_continue',
 					'type'      => 'text',
-					'label'     => esc_html__( 'Click Here to Continue (Button)', 'learndash' ),
-					'help_text' => esc_html__( 'Label to replace "Click Here to Continue" button.', 'learndash' ),
+					'label'     => esc_html__( 'Continue (Button)', 'learndash' ),
+					'help_text' => esc_html__( 'Label to replace "Continue" button.', 'learndash' ),
 					'value'     => isset( $this->setting_option_values['button_click_here_to_continue'] ) ? $this->setting_option_values['button_click_here_to_continue'] : '',
 					'class'     => 'regular-text',
 				),
 				'transaction'                              => array(
 					'name'      => 'transaction',
 					'type'      => 'text',
-					'label'     => esc_html__( 'Transaction', 'learndash' ),
-					'help_text' => esc_html__( 'Label to replace "transaction" (singular).', 'learndash' ),
+					'label'     => esc_html__( 'Order', 'learndash' ),
+					'help_text' => esc_html__( 'Label to replace "order" (singular).', 'learndash' ),
 					'value'     => isset( $this->setting_option_values['transaction'] ) ? $this->setting_option_values['transaction'] : '',
 					'class'     => 'regular-text',
 				),
 				'transactions'                             => array(
 					'name'      => 'transactions',
 					'type'      => 'text',
-					'label'     => esc_html__( 'Transactions', 'learndash' ),
-					'help_text' => esc_html__( 'Label to replace "transactions" (plural).', 'learndash' ),
+					'label'     => esc_html__( 'Orders', 'learndash' ),
+					'help_text' => esc_html__( 'Label to replace "orders" (plural).', 'learndash' ),
 					'value'     => isset( $this->setting_option_values['transactions'] ) ? $this->setting_option_values['transactions'] : '',
 					'class'     => 'regular-text',
 				),
+				'virtual_instructor'                       => [
+					'name'      => 'virtual_instructor',
+					'type'      => 'text',
+					'label'     => esc_html__( 'Virtual Instructor', 'learndash' ),
+					'help_text' => esc_html__( 'Label to replace "virtual instructor" (singular).', 'learndash' ),
+					'value'     => $this->setting_option_values['virtual_instructor'] ?? '',
+					'class'     => 'regular-text',
+				],
+				'virtual_instructors'                      => [
+					'name'      => 'virtual_instructors',
+					'type'      => 'text',
+					'label'     => esc_html__( 'Virtual Instructors', 'learndash' ),
+					'help_text' => esc_html__( 'Label to replace "virtual instructors" (plural).', 'learndash' ),
+					'value'     => $this->setting_option_values['virtual_instructors'] ?? '',
+					'class'     => 'regular-text',
+				],
+				'terms_of_service'                         => [
+					'name'      => 'terms_of_service',
+					'type'      => 'text',
+					'label'     => esc_html__( 'Terms of Service', 'learndash' ),
+					'help_text' => esc_html__( 'Label to replace "Terms of Service".', 'learndash' ),
+					'value'     => $this->setting_option_values['terms_of_service'] ?? '',
+					'class'     => 'regular-text',
+				],
+				'privacy_policy'                           => [
+					'name'      => 'privacy_policy',
+					'type'      => 'text',
+					'label'     => esc_html__( 'Privacy Policy', 'learndash' ),
+					'help_text' => esc_html__( 'Label to replace "Privacy Policy".', 'learndash' ),
+					'value'     => $this->setting_option_values['privacy_policy'] ?? '',
+					'class'     => 'regular-text',
+				],
 			);
+
 			// Legacy custom labels filter.
 			/**
 			 * Filters custom labels setting fields.

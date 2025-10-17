@@ -34,10 +34,6 @@ namespace StellarWP\Learndash\Stripe\Identity;
  * @property null|string $url The short-lived URL that you use to redirect a user to Stripe to submit their identity information. This URL expires after 48 hours and can only be used once. Don’t store it, log it, send it in emails or expose it to anyone other than the user. Refer to our docs on <a href="https://stripe.com/docs/identity/verify-identity-documents?platform=web&amp;type=redirect">verifying identity documents</a> to learn how to redirect users to Stripe.
  * @property null|string $verification_flow The configuration token of a Verification Flow from the dashboard.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $verified_outputs The user’s verified data.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class VerificationSession extends \StellarWP\Learndash\Stripe\ApiResource
 {

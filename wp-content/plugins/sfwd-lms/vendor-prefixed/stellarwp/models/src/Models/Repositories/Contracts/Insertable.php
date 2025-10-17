@@ -1,10 +1,4 @@
 <?php
-/**
- * @license GPL-3.0-or-later
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
 
 namespace StellarWP\Learndash\StellarWP\Models\Repositories\Contracts;
 

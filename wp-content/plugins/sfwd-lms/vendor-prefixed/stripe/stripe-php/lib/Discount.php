@@ -22,10 +22,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property int $start Date that the coupon was applied.
  * @property null|string $subscription The subscription that this coupon is applied to, if it is applied to a particular subscription.
  * @property null|string $subscription_item The subscription item that this coupon is applied to, if it is applied to a particular subscription item.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Discount extends ApiResource
 {

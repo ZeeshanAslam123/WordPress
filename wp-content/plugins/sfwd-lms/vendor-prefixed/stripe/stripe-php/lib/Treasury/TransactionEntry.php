@@ -20,10 +20,6 @@ namespace StellarWP\Learndash\Stripe\Treasury;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property string|\StellarWP\Learndash\Stripe\Treasury\Transaction $transaction The Transaction associated with this object.
  * @property string $type The specific money movement that generated the TransactionEntry.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class TransactionEntry extends \StellarWP\Learndash\Stripe\ApiResource
 {

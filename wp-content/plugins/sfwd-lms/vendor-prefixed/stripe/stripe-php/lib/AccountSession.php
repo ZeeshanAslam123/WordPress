@@ -19,10 +19,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property \StellarWP\Learndash\Stripe\StripeObject $components
  * @property int $expires_at The timestamp at which this AccountSession will expire.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class AccountSession extends ApiResource
 {

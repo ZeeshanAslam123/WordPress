@@ -500,13 +500,7 @@ if ( ( class_exists( 'Learndash_Admin_Post_Edit' ) ) && ( ! class_exists( 'Learn
 				<input name="points" class="small-text" value="<?php echo esc_attr( (string) $question_points ); ?>" type="number" min="0" step="any"> <?php esc_html_e( 'Points', 'learndash' ); ?>
 			</label>
 			<p class="description">
-				<?php
-					printf(
-						// translators: placeholder: question.
-						esc_html_x( 'These points will be rewarded, only if the user chooses the %s correctly', 'placeholder: question', 'learndash' ),
-						esc_html( learndash_get_custom_label( 'question' ) )
-					)
-				?>
+				<?php esc_html_e( 'These points will be rewarded, only if the user chooses the answer correctly.', 'learndash' ); ?>
 			</p>
 
 			<div style="margin-top: 10px;" id="wpProQuiz_answerPointsActivated">

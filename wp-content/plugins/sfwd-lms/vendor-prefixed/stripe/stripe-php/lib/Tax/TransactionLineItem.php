@@ -18,10 +18,6 @@ namespace StellarWP\Learndash\Stripe\Tax;
  * @property string $tax_behavior Specifies whether the <code>amount</code> includes taxes. If <code>tax_behavior=inclusive</code>, then the amount includes taxes.
  * @property string $tax_code The <a href="https://stripe.com/docs/tax/tax-categories">tax code</a> ID used for this resource.
  * @property string $type If <code>reversal</code>, this line item reverses an earlier transaction.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class TransactionLineItem extends \StellarWP\Learndash\Stripe\ApiResource
 {

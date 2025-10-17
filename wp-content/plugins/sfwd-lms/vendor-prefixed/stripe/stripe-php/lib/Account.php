@@ -26,7 +26,7 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|string $default_currency Three-letter ISO currency code representing the default currency for the account. This must be a currency that <a href="https://stripe.com/docs/payouts">Stripe supports in the account's country</a>.
  * @property null|bool $details_submitted Whether account details have been submitted. Standard accounts cannot receive payouts before this is true.
  * @property null|string $email An email address associated with the account. It's not used for authentication and Stripe doesn't market to this field without explicit approval from the platform.
- * @property null|\StellarWP\Learndash\Stripe\Collection<\Stripe\BankAccount|\StellarWP\Learndash\Stripe\Card> $external_accounts External accounts (bank accounts and debit cards) currently attached to this account. External accounts are only returned for requests where <code>controller[is_controller]</code> is true.
+ * @property null|\StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\BankAccount|\StellarWP\Learndash\Stripe\Card> $external_accounts External accounts (bank accounts and debit cards) currently attached to this account. External accounts are only returned for requests where <code>controller[is_controller]</code> is true.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $future_requirements
  * @property null|\StellarWP\Learndash\Stripe\Person $individual <p>This is an object representing a person associated with a Stripe account.</p><p>A platform cannot access a Standard or Express account's persons after the account starts onboarding, such as after generating an account link for the account. See the <a href="https://stripe.com/docs/connect/standard-accounts">Standard onboarding</a> or <a href="https://stripe.com/docs/connect/express-accounts">Express onboarding documentation</a> for information about platform prefilling and account onboarding steps.</p><p>Related guide: <a href="https://stripe.com/docs/connect/handling-api-verification#person-information">Handling identity verification with the API</a></p>
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $metadata Set of <a href="https://stripe.com/docs/api/metadata">key-value pairs</a> that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
@@ -35,10 +35,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $settings Options for customizing how the account functions within Stripe.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $tos_acceptance
  * @property null|string $type The Stripe account type. Can be <code>standard</code>, <code>express</code>, or <code>custom</code>.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Account extends ApiResource
 {
@@ -200,7 +196,7 @@ class Account extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Capability> the list of capabilities
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Capability> the list of capabilities
      */
     public static function allCapabilities($id, $params = null, $opts = null)
     {
@@ -245,7 +241,7 @@ class Account extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\BankAccount|\StellarWP\Learndash\Stripe\Card> the list of external accounts (BankAccount or Card)
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\BankAccount|\StellarWP\Learndash\Stripe\Card> the list of external accounts (BankAccount or Card)
      */
     public static function allExternalAccounts($id, $params = null, $opts = null)
     {
@@ -334,7 +330,7 @@ class Account extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Person> the list of persons
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Person> the list of persons
      */
     public static function allPersons($id, $params = null, $opts = null)
     {

@@ -18,11 +18,7 @@ namespace StellarWP\Learndash\Stripe;
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property null|string|\StellarWP\Learndash\Stripe\Charge $originating_transaction ID of the corresponding charge on the platform account, if this fee was the result of a charge using the <code>destination</code> parameter.
  * @property bool $refunded Whether the fee has been fully refunded. If the fee is only partially refunded, this attribute will still be false.
- * @property \StellarWP\Learndash\Stripe\Collection<\Stripe\ApplicationFeeRefund> $refunds A list of refunds that have been applied to the fee.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * @property \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\ApplicationFeeRefund> $refunds A list of refunds that have been applied to the fee.
  */
 class ApplicationFee extends ApiResource
 {
@@ -41,7 +37,7 @@ class ApplicationFee extends ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\ApplicationFeeRefund> the list of application fee refunds
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\ApplicationFeeRefund> the list of application fee refunds
      */
     public static function allRefunds($id, $params = null, $opts = null)
     {

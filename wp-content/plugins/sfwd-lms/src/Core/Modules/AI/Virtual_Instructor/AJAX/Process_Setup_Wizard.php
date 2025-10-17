@@ -15,6 +15,7 @@ use LearnDash\Core\Modules\AI\Virtual_Instructor\Settings\Page_Section;
 use LearnDash\Core\Modules\AJAX\Request_Handler;
 use LearnDash\Core\Utilities\Cast;
 use LearnDash\Core\Utilities\Sanitize;
+use LearnDash_Custom_Label;
 use LearnDash_Settings_Section_AI_Integrations;
 
 /**
@@ -110,7 +111,11 @@ class Process_Setup_Wizard extends Request_Handler {
 
 		$this->results = [
 			'status'  => 'success',
-			'message' => __( 'Your virtual instructor has been created and configured.', 'learndash' ),
+			'message' => sprintf(
+				// translators: %s: virtual instructor.
+				esc_html__( 'Your %s has been created and configured.', 'learndash' ),
+				LearnDash_Custom_Label::label_to_lower( LDLMS_Post_Types::VIRTUAL_INSTRUCTOR )
+			),
 		];
 	}
 

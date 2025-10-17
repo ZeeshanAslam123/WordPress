@@ -20,10 +20,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property string[] $supported_payment_methods Payment methods available in the specified country. You may need to enable some payment methods (e.g., <a href="https://stripe.com/docs/ach">ACH</a>) on your account before they appear in this list. The <code>stripe</code> payment method refers to <a href="https://stripe.com/docs/connect/destination-charges">charging through your platform</a>.
  * @property string[] $supported_transfer_countries Countries that can accept transfers from the specified country.
  * @property \StellarWP\Learndash\Stripe\StripeObject $verification_fields
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class CountrySpec extends ApiResource
 {

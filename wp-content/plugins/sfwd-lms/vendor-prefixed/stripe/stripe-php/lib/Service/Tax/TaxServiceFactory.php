@@ -11,10 +11,6 @@ namespace StellarWP\Learndash\Stripe\Service\Tax;
  * @property RegistrationService $registrations
  * @property SettingsService $settings
  * @property TransactionService $transactions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class TaxServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

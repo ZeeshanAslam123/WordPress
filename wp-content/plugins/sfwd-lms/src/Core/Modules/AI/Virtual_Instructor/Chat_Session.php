@@ -11,12 +11,14 @@ namespace LearnDash\Core\Modules\AI\Virtual_Instructor;
 
 use Exception;
 use InvalidArgumentException;
+use LDLMS_Post_Types;
 use LearnDash\Core\App;
 use LearnDash\Core\Models\Virtual_Instructor;
 use LearnDash\Core\Modules\AI\Chat_Message;
 use LearnDash\Core\Modules\AI\ChatGPT_Summarizer;
 use LearnDash\Core\Services\ChatGPT;
 use LearnDash\Core\Utilities\Cast;
+use LearnDash_Custom_Label;
 use WP_Post;
 use WP_User;
 
@@ -486,9 +488,10 @@ class Chat_Session {
 		$message = apply_filters(
 			'learndash_module_ai_virtual_instructor_chat_session_initial_message',
 			sprintf(
-			// translators: %s: Virtual instructor name.
-				__( 'Hello! My name is %s. I am your virtual instructor. How can I help you?', 'learndash' ),
-				$this->model->get_name()
+				// translators: %1$s: Virtual instructor name, %2$s: virtual instructor label.
+				__( 'Hello! My name is %1$s. I am your %2$s. How can I help you?', 'learndash' ),
+				$this->model->get_name(),
+				LearnDash_Custom_Label::label_to_lower( LDLMS_Post_Types::VIRTUAL_INSTRUCTOR )
 			),
 			$this->model
 		);

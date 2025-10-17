@@ -14,10 +14,6 @@ namespace StellarWP\Learndash\Stripe\Issuing;
  * @property string $name Friendly display name.
  * @property string $status Whether this physical bundle can be used to create cards.
  * @property string $type Whether this physical bundle is a standard Stripe offering or custom-made for you.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class PhysicalBundle extends \StellarWP\Learndash\Stripe\ApiResource
 {

@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -25,7 +21,7 @@ class CustomerService extends \StellarWP\Learndash\Stripe\Service\AbstractServic
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Customer>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Customer>
      */
     public function all($params = null, $opts = null)
     {
@@ -42,7 +38,7 @@ class CustomerService extends \StellarWP\Learndash\Stripe\Service\AbstractServic
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\CustomerBalanceTransaction>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\CustomerBalanceTransaction>
      */
     public function allBalanceTransactions($parentId, $params = null, $opts = null)
     {
@@ -59,7 +55,7 @@ class CustomerService extends \StellarWP\Learndash\Stripe\Service\AbstractServic
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\CustomerCashBalanceTransaction>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\CustomerCashBalanceTransaction>
      */
     public function allCashBalanceTransactions($parentId, $params = null, $opts = null)
     {
@@ -91,7 +87,7 @@ class CustomerService extends \StellarWP\Learndash\Stripe\Service\AbstractServic
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Account|\StellarWP\Learndash\Stripe\BankAccount|\StellarWP\Learndash\Stripe\Card|\StellarWP\Learndash\Stripe\Source>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Account|\StellarWP\Learndash\Stripe\BankAccount|\StellarWP\Learndash\Stripe\Card|\StellarWP\Learndash\Stripe\Source>
      */
     public function allSources($parentId, $params = null, $opts = null)
     {
@@ -107,7 +103,7 @@ class CustomerService extends \StellarWP\Learndash\Stripe\Service\AbstractServic
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\TaxId>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\TaxId>
      */
     public function allTaxIds($parentId, $params = null, $opts = null)
     {
@@ -403,7 +399,7 @@ class CustomerService extends \StellarWP\Learndash\Stripe\Service\AbstractServic
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\SearchResult<\Stripe\Customer>
+     * @return \StellarWP\Learndash\Stripe\SearchResult<\StellarWP\Learndash\Stripe\Customer>
      */
     public function search($params = null, $opts = null)
     {

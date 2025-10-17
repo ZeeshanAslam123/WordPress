@@ -15,10 +15,6 @@ namespace StellarWP\Learndash\Stripe\FinancialConnections;
  * @property null|string $phone The raw phone number of the owner.
  * @property null|string $raw_address The raw physical address of the owner.
  * @property null|int $refreshed_at The timestamp of the refresh that updated this owner.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class AccountOwner extends \StellarWP\Learndash\Stripe\ApiResource
 {

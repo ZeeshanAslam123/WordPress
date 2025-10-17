@@ -10,6 +10,7 @@
 namespace LearnDash\Core\Modules\AI\Virtual_Instructor\Settings;
 
 use LDLMS_Post_Types;
+use LearnDash_Custom_Label;
 use LearnDash_Settings_Section;
 
 /**
@@ -74,7 +75,11 @@ class Page_Section extends LearnDash_Settings_Section {
 
 		$this->settings_section_label = __( 'Global Settings', 'learndash' );
 
-		$this->settings_section_description = __( 'Some settings can be overridden by individual virtual instructor settings.', 'learndash' );
+		$this->settings_section_description = sprintf(
+			// translators: placeholder: virtual instructor.
+			esc_html_x( 'Some settings can be overridden by individual %s settings.', 'placeholder: virtual instructor', 'learndash' ),
+			LearnDash_Custom_Label::get_label( 'virtual_instructor' )
+		);
 
 		$this->default_values = [
 			'banned_words'          => '',
@@ -137,7 +142,11 @@ class Page_Section extends LearnDash_Settings_Section {
 				'name'      => 'error_message',
 				'type'      => 'textarea',
 				'label'     => __( 'Error Message', 'learndash' ),
-				'help_text' => __( 'Set a message that is returned to your students when they try and use banned words with the Virtual instructor.', 'learndash' ),
+				'help_text' => sprintf(
+					// translators: placeholder: virtual instructor.
+					esc_html_x( 'Set a message that is returned to your students when they try and use banned words with the %s.', 'placeholder: virtual instructor', 'learndash' ),
+					LearnDash_Custom_Label::get_label( 'virtual_instructor' )
+				),
 				'value'     => $this->setting_option_values['error_message'],
 			],
 		];

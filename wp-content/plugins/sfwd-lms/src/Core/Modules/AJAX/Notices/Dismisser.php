@@ -9,6 +9,7 @@
 
 namespace LearnDash\Core\Modules\AJAX\Notices;
 
+use LearnDash\Core\Utilities\Cast;
 use WP_Error;
 
 /**
@@ -116,6 +117,25 @@ class Dismisser {
 			'user',
 			get_current_user_id(),
 			self::prefix_id( $id )
+		);
+	}
+
+	/**
+	 * Gets the time when a notice was dismissed.
+	 *
+	 * @since 4.15.2
+	 *
+	 * @param string $id Notice ID.
+	 *
+	 * @return int
+	 */
+	public static function get_dismissed_time( string $id ): int {
+		return Cast::to_int(
+			get_user_meta(
+				get_current_user_id(),
+				self::prefix_id( $id ),
+				true
+			)
 		);
 	}
 

@@ -10,10 +10,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property string $account The Connected account that incurred this charge.
  * @property string $source_transaction The payment object that caused this tax to be inflicted.
  * @property string $type The type of tax (VAT).
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class PlatformTaxFee extends ApiResource
 {

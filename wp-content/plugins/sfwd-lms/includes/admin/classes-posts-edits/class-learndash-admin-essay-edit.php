@@ -264,7 +264,7 @@ if ( ( class_exists( 'Learndash_Admin_Post_Edit' ) ) && ( ! class_exists( 'Learn
 						// translators: Publish box date format, see https://secure.php.net/date.
 						$date_format = esc_html__( 'M j, Y @ H:i', 'learndash' );
 						if ( 0 != $essay->ID ) {
-							$date = date_i18n( $date_format, strtotime( $essay->post_date ) );
+							$date = learndash_adjust_date_time_display( (int) strtotime( $essay->post_date_gmt ), $date_format );
 						} else {
 							$date = '';
 						}

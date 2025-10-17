@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -25,7 +21,7 @@ class AccountService extends \StellarWP\Learndash\Stripe\Service\AbstractService
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Account>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Account>
      */
     public function all($params = null, $opts = null)
     {
@@ -43,7 +39,7 @@ class AccountService extends \StellarWP\Learndash\Stripe\Service\AbstractService
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Capability>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Capability>
      */
     public function allCapabilities($parentId, $params = null, $opts = null)
     {
@@ -59,7 +55,7 @@ class AccountService extends \StellarWP\Learndash\Stripe\Service\AbstractService
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\BankAccount|\StellarWP\Learndash\Stripe\Card>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\BankAccount|\StellarWP\Learndash\Stripe\Card>
      */
     public function allExternalAccounts($parentId, $params = null, $opts = null)
     {
@@ -77,7 +73,7 @@ class AccountService extends \StellarWP\Learndash\Stripe\Service\AbstractService
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\Person>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\Person>
      */
     public function allPersons($parentId, $params = null, $opts = null)
     {

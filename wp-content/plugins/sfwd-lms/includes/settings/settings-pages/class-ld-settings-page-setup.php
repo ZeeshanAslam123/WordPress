@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use LearnDash_Settings_Page_Help as Help_Page;
 use LearnDash_Settings_Section_Stripe_Connect as Stripe_Connect;
+use StellarWP\Learndash\StellarWP\Arrays\Arr;
+use LearnDash\Core\Modules\AJAX\Notices\Dismisser;
 
 if ( class_exists( 'LearnDash_Settings_Page' ) && ! class_exists( 'LearnDash_Settings_Page_Setup' ) ) {
 	/**
@@ -289,6 +291,8 @@ if ( class_exists( 'LearnDash_Settings_Page' ) && ! class_exists( 'LearnDash_Set
 				Learndash_Admin_Import_Handler::SCHEDULER_ACTION_NAME
 			);
 
+			$paypal_settings = LearnDash_Settings_Section::get_section_settings_all( 'LearnDash_Settings_Section_PayPal' );
+
 			/**
 			 * Filters steps shown on setup page.
 			 *
@@ -362,16 +366,37 @@ if ( class_exists( 'LearnDash_Settings_Page' ) && ! class_exists( 'LearnDash_Set
 						'button_text'        => null,
 						'content_path'       => 'setup/components/content-documentation',
 					),
+					'web_development' => [
+						'class'              => 'learndash-web-development-upsell',
+						'completed'          => null,
+						'time_in_minutes'    => null,
+						'url'                => null,
+						'title'              => __( 'Get Help Launching Your Site', 'learndash' ),
+						'description'        => sprintf(
+							// Translators: placeholder: course label.
+							__( 'Get Hands-on assistance launching your %s website.', 'learndash' ),
+							learndash_get_custom_label_lower( 'course' )
+						),
+						'action_label'       => null,
+						'action_description' => null,
+						'icon_url'           => null,
+						'button_type'        => null,
+						'button_class'       => null,
+						'button_text'        => null,
+						'content_path'       => 'setup/components/content-web-development',
+					],
 				)
 			);
 
 			SFWD_LMS::get_view(
 				'setup/setup',
 				array(
-					'steps'            => $steps,
-					'setup_wizard'     => $this,
-					'overview_video'   => Help_Page::get_articles( 'overview_video' )[0],
-					'overview_article' => Help_Page::get_articles( 'overview_article' )[0],
+					'steps'                => $steps,
+					'setup_wizard'         => $this,
+					'overview_video'       => Help_Page::get_articles( 'overview_video' )[0],
+					'overview_article'     => Help_Page::get_articles( 'overview_article' )[0],
+					'paypal_ipn_enabled'   => Arr::get( $paypal_settings, 'enabled' ) === 'on',
+					'paypal_ipn_dismissed' => time() - Dismisser::get_dismissed_time( 'paypal_ipn_deprecated' ) < DAY_IN_SECONDS,
 				),
 				true
 			);

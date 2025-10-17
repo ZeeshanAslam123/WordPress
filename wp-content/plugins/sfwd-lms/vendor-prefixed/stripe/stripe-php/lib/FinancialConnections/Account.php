@@ -26,10 +26,6 @@ namespace StellarWP\Learndash\Stripe\FinancialConnections;
  * @property null|string[] $subscriptions The list of data refresh subscriptions requested on this account.
  * @property string[] $supported_payment_method_types The <a href="https://stripe.com/docs/api/payment_methods/object#payment_method_object-type">PaymentMethod type</a>(s) that can be created from this account.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $transaction_refresh The state of the most recent attempt to refresh the account transactions.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Account extends \StellarWP\Learndash\Stripe\ApiResource
 {
@@ -78,7 +74,7 @@ class Account extends \StellarWP\Learndash\Stripe\ApiResource
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\FinancialConnections\AccountOwner> list of account owners
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\FinancialConnections\AccountOwner> list of account owners
      */
     public static function allOwners($id, $params = null, $opts = null)
     {

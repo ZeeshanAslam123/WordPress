@@ -10,10 +10,6 @@ namespace StellarWP\Learndash\Stripe\Service\FinancialConnections;
  * @property AccountService $accounts
  * @property SessionService $sessions
  * @property TransactionService $transactions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class FinancialConnectionsServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

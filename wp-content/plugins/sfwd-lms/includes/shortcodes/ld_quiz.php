@@ -324,7 +324,7 @@ function learndash_quiz_shortcode_function( $atts = array(), $content = '', $sho
 			$quiz_content = apply_filters( 'learndash_quiz_content', $quiz_content, $quiz_post );
 		}
 
-		if ( LearnDash_Theme_Register::get_active_theme_instance()->supports_views() ) {
+		if ( LearnDash_Theme_Register::get_active_theme_instance()->supports_views( LDLMS_Post_Types::QUIZ ) ) {
 			// TODO: This $show_content mapping was inside a template file. I would prefer us to review the logic.
 			$show_content         = true;
 			$last_incomplete_step = null;

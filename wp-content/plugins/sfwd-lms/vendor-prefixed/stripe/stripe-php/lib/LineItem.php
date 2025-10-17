@@ -19,10 +19,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property null|\StellarWP\Learndash\Stripe\Price $price The price used to generate the line item.
  * @property null|int $quantity The quantity of products being purchased.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject[] $taxes The taxes applied to the line item.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class LineItem extends ApiResource
 {

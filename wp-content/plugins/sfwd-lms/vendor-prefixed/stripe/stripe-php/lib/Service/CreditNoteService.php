@@ -6,10 +6,6 @@ namespace StellarWP\Learndash\Stripe\Service;
 
 /**
  * @phpstan-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 /**
  * @psalm-import-type RequestOptionsArray from \Stripe\Util\RequestOptions
@@ -24,7 +20,7 @@ class CreditNoteService extends \StellarWP\Learndash\Stripe\Service\AbstractServ
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\CreditNote>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\CreditNote>
      */
     public function all($params = null, $opts = null)
     {
@@ -42,7 +38,7 @@ class CreditNoteService extends \StellarWP\Learndash\Stripe\Service\AbstractServ
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\CreditNoteLineItem>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\CreditNoteLineItem>
      */
     public function allLines($parentId, $params = null, $opts = null)
     {
@@ -108,7 +104,7 @@ class CreditNoteService extends \StellarWP\Learndash\Stripe\Service\AbstractServ
      *
      * @throws \StellarWP\Learndash\Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \StellarWP\Learndash\Stripe\Collection<\Stripe\CreditNoteLineItem>
+     * @return \StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\CreditNoteLineItem>
      */
     public function previewLines($params = null, $opts = null)
     {

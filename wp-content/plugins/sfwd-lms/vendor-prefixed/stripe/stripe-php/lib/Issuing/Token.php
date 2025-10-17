@@ -19,10 +19,6 @@ namespace StellarWP\Learndash\Stripe\Issuing;
  * @property int $network_updated_at Time at which the token was last updated by the card network. Measured in seconds since the Unix epoch.
  * @property string $status The usage state of the token.
  * @property null|string $wallet_provider The digital wallet for this token, if one was used.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Token extends \StellarWP\Learndash\Stripe\ApiResource
 {

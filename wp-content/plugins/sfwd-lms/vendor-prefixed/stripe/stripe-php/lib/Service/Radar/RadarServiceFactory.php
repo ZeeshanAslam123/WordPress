@@ -10,10 +10,6 @@ namespace StellarWP\Learndash\Stripe\Service\Radar;
  * @property EarlyFraudWarningService $earlyFraudWarnings
  * @property ValueListItemService $valueListItems
  * @property ValueListService $valueLists
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class RadarServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

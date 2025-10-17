@@ -33,10 +33,6 @@ namespace StellarWP\Learndash\Stripe\Forwarding;
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $request_details The request that was sent to the destination endpoint. We redact any sensitive fields.
  * @property null|\StellarWP\Learndash\Stripe\StripeObject $response_details The response that the destination endpoint returned to us. We redact any sensitive fields.
  * @property null|string $url The destination URL for the forwarded request. Must be supported by the config.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class Request extends \StellarWP\Learndash\Stripe\ApiResource
 {

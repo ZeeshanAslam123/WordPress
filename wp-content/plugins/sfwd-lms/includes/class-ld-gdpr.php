@@ -89,7 +89,11 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 		 */
 		public function add_exporters( array $exporters = array() ): array {
 			$exporters['learndash-transactions'] = array(
-				'exporter_friendly_name' => esc_html__( 'LearnDash LMS Transactions', 'learndash' ),
+				'exporter_friendly_name' => sprintf(
+					// Translators: %s: Orders label.
+					esc_html__( 'LearnDash LMS %s', 'learndash' ),
+					learndash_get_custom_label( 'orders' )
+				),
 				'callback'               => array( $this, 'export_transactions' ),
 			);
 
@@ -217,6 +221,10 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 			$transaction_to_export = array();
 
 			foreach ( $transactions_query->posts as $transaction ) {
+				if ( ! $transaction instanceof WP_Post ) {
+					continue;
+				}
+
 				$transaction_meta_data   = array();
 				$transaction_meta_fields = array();
 
@@ -224,7 +232,11 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 
 				if ( 'stripe' === $transaction_type ) {
 					$transaction_meta_data[] = array(
-						'name'  => __( 'Transaction Type', 'learndash' ),
+						'name'  => sprintf(
+							// Translators: %s: Order label.
+							esc_html__( '%s Type', 'learndash' ),
+							learndash_get_custom_label( 'order' )
+						),
 						'value' => __( 'Stripe', 'learndash' ),
 					);
 
@@ -249,7 +261,11 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 					if ( ! empty( $transaction_type ) ) {
 
 						$transaction_meta_data[] = array(
-							'name'  => __( 'Transaction Type', 'learndash' ),
+							'name'  => sprintf(
+								// Translators: %s: Order label.
+								esc_html__( '%s Type', 'learndash' ),
+								learndash_get_custom_label( 'order' )
+							),
 							'value' => __( 'PayPal', 'learndash' ),
 						);
 
@@ -284,7 +300,11 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 
 					if ( '2co' === $transaction_type ) {
 						$transaction_meta_data[] = array(
-							'name'  => __( 'Transaction Type', 'learndash' ),
+							'name'  => sprintf(
+								// Translators: %s: Order label.
+								esc_html__( '%s Type', 'learndash' ),
+								learndash_get_custom_label( 'order' )
+							),
 							'value' => __( '2Checkout', 'learndash' ),
 						);
 
@@ -352,7 +372,11 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 
 					if ( ! empty( $order_ip_address ) ) {
 						$transaction_meta_data[] = array(
-							'name'  => __( 'Transaction Type', 'learndash' ),
+							'name'  => sprintf(
+								// Translators: %s: Order label.
+								esc_html__( '%s Type', 'learndash' ),
+								learndash_get_custom_label( 'order' )
+							),
 							'value' => __( 'Samcart', 'learndash' ),
 						);
 
@@ -405,7 +429,7 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 
 					$transaction_meta_data[] = array(
 						'name'  => __( 'Order Date', 'learndash' ),
-						'value' => learndash_adjust_date_time_display( strtotime( $transaction->post_date ) ),
+						'value' => learndash_adjust_date_time_display( (int) strtotime( $transaction->post_date_gmt ) ),
 					);
 
 					foreach ( $transaction_meta_fields as $meta_key => $meta_set ) {
@@ -420,7 +444,11 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 
 					$transaction_to_export[] = array(
 						'group_id'    => 'ld-transactions',
-						'group_label' => __( 'LearnDash LMS Purchase Transactions', 'learndash' ),
+						'group_label' => sprintf(
+							// Translators: %s: Orders label.
+							__( 'LearnDash LMS %s', 'learndash' ),
+							learndash_get_custom_label( 'orders' )
+						),
 						'item_id'     => "ld-transactions-{$transaction->ID}",
 						'data'        => $transaction_meta_data,
 					);
@@ -475,6 +503,10 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 			$assignments_to_export = array();
 
 			foreach ( $assignments_query->posts as $assignment ) {
+				if ( ! $assignment instanceof WP_Post ) {
+					continue;
+				}
+
 				$assignment_meta_data = array();
 
 				$assignment_url         = get_permalink( $assignment->ID );
@@ -485,7 +517,7 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 
 				$assignment_meta_data[] = array(
 					'name'  => __( 'Date', 'learndash' ),
-					'value' => learndash_adjust_date_time_display( strtotime( $assignment->post_date ) ),
+					'value' => learndash_adjust_date_time_display( (int) strtotime( $assignment->post_date_gmt ) ),
 				);
 
 				$course_id = get_post_meta( $assignment->ID, 'course_id', true );
@@ -571,6 +603,10 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 			$essays_to_export = array();
 
 			foreach ( $essays_query->posts as $essay ) {
+				if ( ! $essay instanceof WP_Post ) {
+					continue;
+				}
+
 				$essay_meta_data = array();
 
 				$essay_url = get_permalink( $essay->ID );
@@ -584,7 +620,7 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 
 				$essay_meta_data[] = array(
 					'name'  => __( 'Date', 'learndash' ),
-					'value' => learndash_adjust_date_time_display( strtotime( $essay->post_date ) ),
+					'value' => learndash_adjust_date_time_display( (int) strtotime( $essay->post_date_gmt ) ),
 				);
 
 				$course_id = get_post_meta( $essay->ID, 'course_id', true );
@@ -1282,7 +1318,11 @@ if ( ! class_exists( 'LearnDash_GDPR' ) ) {
 		 */
 		public function add_erasers( array $erasers = array() ): array {
 			$erasers[] = array(
-				'eraser_friendly_name' => esc_html__( 'LearnDash LMS Transactions', 'learndash' ),
+				'eraser_friendly_name' => sprintf(
+					// Translators: %s: Orders label.
+					esc_html__( 'LearnDash LMS %s', 'learndash' ),
+					learndash_get_custom_label( 'orders' )
+				),
 				'callback'             => array( $this, 'erase_transactions' ),
 			);
 

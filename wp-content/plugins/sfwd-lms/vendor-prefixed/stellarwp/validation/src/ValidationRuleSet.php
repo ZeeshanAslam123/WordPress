@@ -1,10 +1,4 @@
 <?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
 
 declare(strict_types=1);
 
@@ -21,17 +15,17 @@ use StellarWP\Learndash\StellarWP\Validation\Contracts\ValidatesOnFrontEnd;
 use StellarWP\Learndash\StellarWP\Validation\Contracts\ValidationRule;
 use Traversable;
 
+/**
+ * @implements IteratorAggregate<int, ValidationRule|Closure>
+ */
 class ValidationRuleSet implements IteratorAggregate, JsonSerializable
 {
-    /**
-     * @var ValidationRulesRegistrar
-     */
-    private $register;
+    private ValidationRulesRegistrar $register;
 
     /**
      * @var array<int, ValidationRule|Closure>
      */
-    private $rules = [];
+    private array $rules = [];
 
     /**
      * @since 1.0.0
@@ -159,7 +153,7 @@ class ValidationRuleSet implements IteratorAggregate, JsonSerializable
      *
      * @since 1.0.0
      *
-     * @return void
+     * @return self
      */
     public function removeRuleWithId(string $id): self
     {
@@ -174,6 +168,8 @@ class ValidationRuleSet implements IteratorAggregate, JsonSerializable
      * Returns the validation rules.
      *
      * @since 1.0.0
+     *
+     * @return array<int, ValidationRule|Closure>
      */
     public function getRules(): array
     {
@@ -264,14 +260,14 @@ class ValidationRuleSet implements IteratorAggregate, JsonSerializable
             return $rule;
         } elseif (is_string($rule)) {
             return $this->getRuleFromString($rule);
-        } else {
-            Config::throwInvalidArgumentException(
-                sprintf(
-                    'Validation rule must be a string, instance of %s, or a closure',
-                    ValidationRule::class
-                )
-            );
         }
+
+        Config::throwInvalidArgumentException(
+            sprintf(
+                'Validation rule must be a string, instance of %s, or a closure',
+                ValidationRule::class
+            )
+        );
     }
 
     /**
@@ -283,6 +279,7 @@ class ValidationRuleSet implements IteratorAggregate, JsonSerializable
      */
     private function validateClosureRule(Closure $closure)
     {
+        $reflection = null;
         try {
             $reflection = new ReflectionFunction($closure);
         } catch (ReflectionException $e) {

@@ -318,3 +318,44 @@ function bb_theme_get_directory_layout_preference( $action ) {
 
 	return ! empty( $existing_layouts ) && ! empty( $existing_layouts[ $action ] ) ? $existing_layouts[ $action ] : $default_value;
 }
+
+/**
+ * Collect BuddyBoss Theme options data for telemetry reporting.
+ *
+ * @since 2.7.30
+ *
+ * @param array $bb_telemetry_data BuddyBoss Theme options data.
+ *
+ * @return array BuddyBoss Theme options data.
+ */
+function bb_telemetry_theme_data( $bb_telemetry_data ) {
+	global $wpdb;
+	$bb_telemetry_data = ! empty( $bb_telemetry_data ) ? $bb_telemetry_data : array();
+
+	// Filterable list of BuddyBoss Theme options to fetch from the database.
+	$theme_db_options = apply_filters(
+		'bb_telemetry_theme_options',
+		array(
+			'bboss_updater_saved_licenses',
+			'buddyboss_theme_version',
+		)
+	);
+
+	// Added those options that are not available in the option table.
+	$bb_telemetry_data['theme_template'] = function_exists( 'buddyboss_theme_get_option' ) ? buddyboss_theme_get_option( 'theme_template' ) : '';
+
+	// Fetch options from the database.
+	$bp_prefix = $wpdb->base_prefix;
+	$query     = "SELECT option_name, option_value FROM {$bp_prefix}options WHERE option_name IN ('" . implode( "','", $theme_db_options ) . "');";
+
+	$results = $wpdb->get_results( $query, ARRAY_A );
+	if ( ! empty( $results ) ) {
+		foreach ( $results as $result ) {
+			$bb_telemetry_data[ $result['option_name'] ] = $result['option_value'];
+		}
+	}
+
+	unset( $bp_prefix, $query, $results, $theme_db_options );
+
+	return $bb_telemetry_data;
+}

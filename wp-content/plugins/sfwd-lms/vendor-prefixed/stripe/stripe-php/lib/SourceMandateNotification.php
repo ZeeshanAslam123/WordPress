@@ -21,10 +21,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property \StellarWP\Learndash\Stripe\Source $source <p><code>Source</code> objects allow you to accept a variety of payment methods. They represent a customer's payment instrument, and can be used with the Stripe API just like a <code>Card</code> object: once chargeable, they can be charged, or can be attached to customers.</p><p>Stripe doesn't recommend using the deprecated <a href="https://stripe.com/docs/api/sources">Sources API</a>. We recommend that you adopt the <a href="https://stripe.com/docs/api/payment_methods">PaymentMethods API</a>. This newer API provides access to our latest features and payment method types.</p><p>Related guides: <a href="https://stripe.com/docs/sources">Sources API</a> and <a href="https://stripe.com/docs/sources/customers">Sources &amp; Customers</a>.</p>
  * @property string $status The status of the mandate notification. Valid statuses are <code>pending</code> or <code>submitted</code>.
  * @property string $type The type of source this mandate notification is attached to. Should be the source type identifier code for the payment method, such as <code>three_d_secure</code>.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class SourceMandateNotification extends ApiResource
 {

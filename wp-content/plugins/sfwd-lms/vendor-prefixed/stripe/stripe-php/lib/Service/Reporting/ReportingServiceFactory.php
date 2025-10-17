@@ -9,10 +9,6 @@ namespace StellarWP\Learndash\Stripe\Service\Reporting;
  *
  * @property ReportRunService $reportRuns
  * @property ReportTypeService $reportTypes
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class ReportingServiceFactory extends \StellarWP\Learndash\Stripe\Service\AbstractServiceFactory
 {

@@ -57,10 +57,42 @@ abstract class Experiment {
 	 * URL. Url can be empty. Default empty string.
 	 *
 	 * @since 4.13.0
+	 * @deprecated 4.15.2
 	 *
 	 * @var string
 	 */
 	protected $url = '';
+
+	/**
+	 * Action items.
+	 *
+	 * @since 4.15.2
+	 *
+	 * @var Action_Item[]
+	 */
+	protected array $action_items = [];
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 4.15.2
+	 */
+	public function __construct() {
+		// Backward compatibility for the $url property.
+		if (
+			! empty( $this->url )
+			&& empty( $this->action_items )
+		) {
+			$this->action_items = [
+				new Action_Item(
+					[
+						'label' => __( 'Give Feedback', 'learndash' ),
+						'url'   => $this->url,
+					]
+				),
+			];
+		}
+	}
 
 	/**
 	 * Sets up the experiment hooks.
@@ -108,11 +140,31 @@ abstract class Experiment {
 	 * Gets the experiment url.
 	 *
 	 * @since 4.13.0
+	 * @deprecated 4.15.2
 	 *
 	 * @return string Experiment url.
 	 */
 	public function get_url(): string {
+		// Deprecate the method as the $url property is also deprecated.
+		_deprecated_function( __METHOD__, '4.15.2' );
+
 		return $this->url;
+	}
+
+	/**
+	 * Gets action items.
+	 *
+	 * @since 4.15.2
+	 *
+	 * @return Action_Item[]
+	 */
+	public function get_action_items(): array {
+		return array_filter(
+			$this->action_items,
+			static function ( $action_item ) {
+				return $action_item->is_enabled();
+			}
+		);
 	}
 
 	/**

@@ -74,39 +74,39 @@ class Course_Outline {
 	/**
 	 * Add the course wizard button to the course list table.
 	 *
-	 * @since 4.6.0
+	 * @since 4.23.1
 	 *
-	 * return void
+	 * @param array<string,mixed> $buttons Array of header buttons.
+	 *
+	 * @return array<int|string,mixed> Modified array of header buttons.
 	 */
-	public function add_button(): void {
+	public function add_header_buttons( $buttons = [] ) {
 		$screen = get_current_screen();
 
 		if ( is_object( $screen ) && 'edit-' . learndash_get_post_type_slug( LDLMS_Post_Types::COURSE ) === $screen->id ) {
-			$label = wp_sprintf(
-				// translators: Course label.
-				__( 'Create %s Outline from AI', 'learndash' ),
-				learndash_get_custom_label( 'course' )
-			);
-			?>
-			<script>
-				( function() {
-					window.addEventListener( 'load', function() {
-						const settingsElem  = document.getElementsByClassName( 'ld-global-header-new-settings' );
-						const newEntityElem =  document.getElementsByClassName( 'global-new-entity-button' );
-
-						const link = document.createElement( 'a' );
-						const text = document.createTextNode( '<?php echo esc_html( $label ); ?>' );
-						link.setAttribute( 'href', '<?php echo esc_url( admin_url( 'admin.php?page=' . static::$slug ) ); ?>' );
-						link.setAttribute( 'class', 'global-new-entity-button' );
-						link.setAttribute( 'style', 'margin-right: 10px;' );
-						link.appendChild( text );
-
-						settingsElem[0].insertBefore( link, newEntityElem[0] );
-					});
-				} )();
-			</script>
-			<?php
+			$buttons[] = [
+				'text' => wp_sprintf(
+					// translators: Course label.
+					__( 'Create %s Outline from AI', 'learndash' ),
+					learndash_get_custom_label( 'course' )
+				),
+				'href' => esc_url( admin_url( 'admin.php?page=' . static::$slug ) ),
+			];
 		}
+
+		return $buttons;
+	}
+
+	/**
+	 * Add the course wizard button to the course list table.
+	 *
+	 * @since 4.6.0
+	 * @deprecated 4.23.1
+	 *
+	 * @return void
+	 */
+	public function add_button() {
+		_deprecated_function( __METHOD__, '4.23.1', 'Course_Outline::add_header_buttons' );
 	}
 
 	/**

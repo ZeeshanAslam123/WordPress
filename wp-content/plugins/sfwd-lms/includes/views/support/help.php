@@ -2,9 +2,12 @@
 /**
  * Template page for LearnDash in-app help page.
  *
- * @package LearnDash_Settings_Page_Help
+ * @since 4.4.0.1
+ * @version 4.20.2
  *
- * @var array<string, array<string, string>> $categories
+ * @var array<string, array{id: string, url: string, label: string, description: string, icon: string}> $categories Categories.
+ *
+ * @package LearnDash\Core
  */
 
 use LearnDash\Core\Modules\Support\TrustedLogin\TrustedLogin;
@@ -18,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap learndash-support">
 	<div class="logo">
 		<img
-			src="<?php echo esc_url( LEARNDASH_LMS_PLUGIN_URL . '/assets/images/support/learndash-logo.svg' ); ?>"
+			src="<?php echo esc_url( LEARNDASH_LMS_PLUGIN_URL . 'assets/images/support/learndash-logo.svg' ); ?>"
 			alt="LearnDash"
 		>
 	</div>
@@ -42,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<input
 						type="text"
 						name="keyword"
-						placeholder="<?php esc_html_e( 'Search Our Knowledge Base', 'learndash' ); ?>"
+						placeholder="<?php esc_html_e( 'Ask the DocsBot', 'learndash' ); ?>"
 					>
 					<button
 						type="submit"
@@ -54,6 +57,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 	</div>
+
+	<section class="learndash-web-development-upsell box">
+		<div class="headline-wrapper">
+			<div class="headline">
+				<h2>
+					<?php esc_html_e( 'Get Professional Help Launching Your Site', 'learndash' ); ?>
+				</h2>
+
+				<p class="description">
+					<?php
+					printf(
+						// Translators: %1$s is the opening anchor tag, %2$s is the closing anchor tag.
+						esc_html__(
+							'Launch your website in as little as two weeks with the help of our dedicated Professional Services Team. %1$sLearn More About our Professional Services Team%2$s',
+							'learndash'
+						),
+						'<a href="https://go.learndash.com/sitedev" target="_blank" rel="noreferrer noopener">',
+						'</a>'
+					);
+					?>
+				</p>
+			</div>
+		</div>
+	</section>
 
 	<div class="answers box">
 		<div class="headline-wrapper">
@@ -98,10 +125,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="grid">
 			<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound?>
 			<?php foreach ( $categories as $category_id => $category ) : ?>
-			<div
+			<a
 				class="item"
 				id="item-<?php echo esc_attr( $category['id'] ); ?>"
-				data-id="<?php echo esc_attr( $category['id'] ); ?>"
+				href="<?php echo esc_url( $category['url'] ); ?>"
+				target="_blank"
 			>
 				<div class="label-wrapper">
 					<span class="icon">
@@ -114,7 +142,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php if ( ! empty( $category['description'] ) ) : ?>
 					<p class="description"><?php echo esc_html( $category['description'] ); ?></p>
 				<?php endif; ?>
-			</div>
+			</a>
 			<?php endforeach; ?>
 		</div>
 	</div>

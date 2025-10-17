@@ -20,10 +20,6 @@ namespace StellarWP\Learndash\Stripe;
  * @property \StellarWP\Learndash\Stripe\StripeObject $link Indicates the status of a specific payment method on a payment method domain.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
  * @property \StellarWP\Learndash\Stripe\StripeObject $paypal Indicates the status of a specific payment method on a payment method domain.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class PaymentMethodDomain extends ApiResource
 {

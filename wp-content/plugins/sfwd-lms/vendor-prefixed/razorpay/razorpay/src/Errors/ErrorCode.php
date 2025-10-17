@@ -1,10 +1,4 @@
 <?php
-/**
- * @license MIT
- *
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
 
 namespace StellarWP\Learndash\Razorpay\Api\Errors;
 
@@ -18,6 +12,6 @@ class ErrorCode
     {
         $code = strtoupper($code);
 
-        return defined(get_class() . '::' . $code);
+        return defined(__CLASS__ . '::' . $code);
     }
 }

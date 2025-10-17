@@ -18,16 +18,12 @@ namespace StellarWP\Learndash\Stripe;
  * @property int $created Time at which the object was created. Measured in seconds since the Unix epoch.
  * @property null|int $expires_at The file expires and isn't available at this time in epoch seconds.
  * @property null|string $filename The suitable name for saving the file to a filesystem.
- * @property null|\StellarWP\Learndash\Stripe\Collection<\Stripe\FileLink> $links A list of <a href="https://stripe.com/docs/api#file_links">file links</a> that point at this file.
+ * @property null|\StellarWP\Learndash\Stripe\Collection<\StellarWP\Learndash\Stripe\FileLink> $links A list of <a href="https://stripe.com/docs/api#file_links">file links</a> that point at this file.
  * @property string $purpose The <a href="https://stripe.com/docs/file-upload#uploading-a-file">purpose</a> of the uploaded file.
  * @property int $size The size of the file object in bytes.
  * @property null|string $title A suitable title for the document.
  * @property null|string $type The returned file type (for example, <code>csv</code>, <code>pdf</code>, <code>jpg</code>, or <code>png</code>).
  * @property null|string $url Use your live secret API key to download the file from this URL.
- *
- * @license MIT
- * Modified by learndash on 06-May-2024 using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
  */
 class File extends ApiResource
 {
