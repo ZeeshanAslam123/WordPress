@@ -44,7 +44,7 @@ export default function FeaturesSection({ attributes, setAttributes, isInspector
 		const newItems = [...featureItems, {
 			icon: '✅',
 			title: 'New Feature',
-			description: 'Describe the feature here'
+			description: 'Describe this amazing feature'
 		}];
 		setAttributes({ featureItems: newItems });
 	};
@@ -78,7 +78,7 @@ export default function FeaturesSection({ attributes, setAttributes, isInspector
 					onChange={(value) => setAttributes({ featuresIcon: value })}
 					help={__('Choose an icon for this section', 'swrice-gutenberg-page-builder')}
 				/>
-				
+
 				<div className="sgpb-repeater-field">
 					<div className="sgpb-repeater-header">
 						<strong>{__('Feature Items', 'swrice-gutenberg-page-builder')}</strong>
@@ -88,10 +88,10 @@ export default function FeaturesSection({ attributes, setAttributes, isInspector
 							size="small"
 							onClick={addFeatureItem}
 						>
-							{__('Add Item', 'swrice-gutenberg-page-builder')}
+							{__('Add Feature', 'swrice-gutenberg-page-builder')}
 						</Button>
 					</div>
-					
+
 					{featureItems.map((item, index) => (
 						<div key={index} className="sgpb-repeater-item">
 							<div className="sgpb-repeater-item-header">
@@ -139,11 +139,11 @@ export default function FeaturesSection({ attributes, setAttributes, isInspector
 					{featuresHeading}
 				</h2>
 			</div>
-			
+
 			<div className="sppm-features-grid">
 				{featureItems.map((item, index) => (
 					<div key={index} className="sppm-feature-card">
-						<div className="sppm-feature-card-header">
+						<div className="sppm-feature-header">
 							{item.icon && <div className="sppm-feature-icon">{item.icon}</div>}
 							<h3 className="sppm-feature-title">{item.title}</h3>
 						</div>
