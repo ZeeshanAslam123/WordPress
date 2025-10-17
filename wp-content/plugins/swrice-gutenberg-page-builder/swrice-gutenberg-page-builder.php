@@ -84,6 +84,7 @@ class SwriceGutenbergPageBuilder {
             'editor_script' => 'swrice-plugin-page-builder-block',
             'render_callback' => array($this, 'render_plugin_page_builder'),
             'attributes' => array(
+                // Basic Info
                 'pluginName' => array(
                     'type' => 'string',
                     'default' => 'My Awesome Plugin'
@@ -96,13 +97,237 @@ class SwriceGutenbergPageBuilder {
                     'type' => 'string',
                     'default' => '49'
                 ),
-                'rating' => array(
-                    'type' => 'number',
-                    'default' => 5
-                ),
-                'ratingCount' => array(
+                'pluginOriginalPrice' => array(
                     'type' => 'string',
-                    'default' => '5.0'
+                    'default' => '99'
+                ),
+                'buyNowShortcode' => array(
+                    'type' => 'string',
+                    'default' => ''
+                ),
+                'demoLink' => array(
+                    'type' => 'string',
+                    'default' => ''
+                ),
+                'heroImageId' => array(
+                    'type' => 'number',
+                    'default' => 0
+                ),
+                'heroImageUrl' => array(
+                    'type' => 'string',
+                    'default' => ''
+                ),
+                
+                // Section Management
+                'sectionOrder' => array(
+                    'type' => 'array',
+                    'default' => array('problem', 'solution', 'how_it_works', 'features', 'testimonials', 'faq', 'bonuses', 'guarantee', 'why_choose', 'about', 'final_cta')
+                ),
+                'sectionEnabled' => array(
+                    'type' => 'object',
+                    'default' => array(
+                        'problem' => true,
+                        'solution' => true,
+                        'how_it_works' => true,
+                        'features' => true,
+                        'testimonials' => true,
+                        'faq' => true,
+                        'bonuses' => true,
+                        'guarantee' => true,
+                        'why_choose' => true,
+                        'about' => true,
+                        'final_cta' => true
+                    )
+                ),
+                
+                // Section Headings and Icons
+                'problemHeading' => array(
+                    'type' => 'string',
+                    'default' => 'The Problem'
+                ),
+                'problemIcon' => array(
+                    'type' => 'string',
+                    'default' => '⚠️'
+                ),
+                'solutionHeading' => array(
+                    'type' => 'string',
+                    'default' => 'The Solution'
+                ),
+                'solutionIcon' => array(
+                    'type' => 'string',
+                    'default' => '✅'
+                ),
+                'solutionDescription' => array(
+                    'type' => 'string',
+                    'default' => ''
+                ),
+                'howItWorksHeading' => array(
+                    'type' => 'string',
+                    'default' => 'How It Works'
+                ),
+                'howItWorksIcon' => array(
+                    'type' => 'string',
+                    'default' => '⚙️'
+                ),
+                'featuresHeading' => array(
+                    'type' => 'string',
+                    'default' => 'Features'
+                ),
+                'featuresIcon' => array(
+                    'type' => 'string',
+                    'default' => '🚀'
+                ),
+                'testimonialsHeading' => array(
+                    'type' => 'string',
+                    'default' => 'Testimonials'
+                ),
+                'testimonialsIcon' => array(
+                    'type' => 'string',
+                    'default' => '💬'
+                ),
+                'faqHeading' => array(
+                    'type' => 'string',
+                    'default' => 'FAQ'
+                ),
+                'faqIcon' => array(
+                    'type' => 'string',
+                    'default' => '❓'
+                ),
+                'bonusesHeading' => array(
+                    'type' => 'string',
+                    'default' => 'Bonuses'
+                ),
+                'bonusesIcon' => array(
+                    'type' => 'string',
+                    'default' => '🎁'
+                ),
+                'guaranteeHeading' => array(
+                    'type' => 'string',
+                    'default' => 'Guarantee'
+                ),
+                'guaranteeIcon' => array(
+                    'type' => 'string',
+                    'default' => '🛡️'
+                ),
+                'guaranteeText' => array(
+                    'type' => 'string',
+                    'default' => ''
+                ),
+                'whyChooseHeading' => array(
+                    'type' => 'string',
+                    'default' => 'Why Choose Us'
+                ),
+                'whyChooseIcon' => array(
+                    'type' => 'string',
+                    'default' => '⭐'
+                ),
+                'aboutHeading' => array(
+                    'type' => 'string',
+                    'default' => 'About'
+                ),
+                'aboutIcon' => array(
+                    'type' => 'string',
+                    'default' => 'ℹ️'
+                ),
+                'aboutDescription' => array(
+                    'type' => 'string',
+                    'default' => ''
+                ),
+                'ctaTitle' => array(
+                    'type' => 'string',
+                    'default' => 'Get Started Today'
+                ),
+                'ctaSubtitle' => array(
+                    'type' => 'string',
+                    'default' => 'Join thousands of satisfied customers'
+                ),
+                'finalCtaHeading' => array(
+                    'type' => 'string',
+                    'default' => 'Ready to Get Started?'
+                ),
+                'finalCtaIcon' => array(
+                    'type' => 'string',
+                    'default' => '🚀'
+                ),
+                
+                // Repeater Fields
+                'problemItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'title' => 'Problem 1',
+                            'description' => 'Description of the problem',
+                            'icon' => '❌'
+                        )
+                    )
+                ),
+                'stepsItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'title' => 'Step 1',
+                            'description' => 'Description of the step'
+                        )
+                    )
+                ),
+                'featureItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'title' => 'Feature 1',
+                            'description' => 'Description of the feature',
+                            'icon' => '✨'
+                        )
+                    )
+                ),
+                'testimonialItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'name' => 'John Doe',
+                            'title' => 'CEO, Company',
+                            'content' => 'This plugin is amazing!',
+                            'rating' => '5'
+                        )
+                    )
+                ),
+                'faqItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'question' => 'How does it work?',
+                            'answer' => 'It works great!'
+                        )
+                    )
+                ),
+                'bonusItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'title' => 'Bonus 1',
+                            'description' => 'Description of the bonus',
+                            'value' => '$50',
+                            'icon' => '🎁'
+                        )
+                    )
+                ),
+                'whyChooseItems' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'title' => 'Reason 1',
+                            'description' => 'Why you should choose us',
+                            'icon' => '⭐'
+                        )
+                    )
+                ),
+                'guaranteePoints' => array(
+                    'type' => 'array',
+                    'default' => array(
+                        array(
+                            'point' => '30-day money back guarantee'
+                        )
+                    )
                 )
             )
         ));
@@ -114,20 +339,8 @@ class SwriceGutenbergPageBuilder {
     public function render_plugin_page_builder($attributes) {
         ob_start();
         
-        // Extract attributes
-        $plugin_name = isset($attributes['pluginName']) ? $attributes['pluginName'] : 'My Awesome Plugin';
-        $hero_subtitle = isset($attributes['heroSubtitle']) ? $attributes['heroSubtitle'] : 'Transform your WordPress experience';
-        $plugin_price = isset($attributes['pluginPrice']) ? $attributes['pluginPrice'] : '49';
-        $rating = isset($attributes['rating']) ? $attributes['rating'] : 5;
-        $rating_count = isset($attributes['ratingCount']) ? $attributes['ratingCount'] : '5.0';
-        
-        // Simple output for now
-        echo '<div class="swrice-plugin-page-builder">';
-        echo '<h1>' . esc_html($plugin_name) . '</h1>';
-        echo '<p>' . esc_html($hero_subtitle) . '</p>';
-        echo '<div class="price">$' . esc_html($plugin_price) . '</div>';
-        echo '<div class="rating">Rating: ' . esc_html($rating_count) . '/5</div>';
-        echo '</div>';
+        // Include the template file
+        include SGPB_PLUGIN_DIR . 'templates/block-template.php';
         
         return ob_get_clean();
     }
