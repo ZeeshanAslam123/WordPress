@@ -10,6 +10,8 @@ $final_cta_icon = isset($attributes['finalCtaIcon']) ? $attributes['finalCtaIcon
 $cta_title = isset($attributes['ctaTitle']) ? $attributes['ctaTitle'] : 'Get Started Today';
 $cta_subtitle = isset($attributes['ctaSubtitle']) ? $attributes['ctaSubtitle'] : 'Join thousands of satisfied customers';
 $buy_now_shortcode = isset($attributes['buyNowShortcode']) ? $attributes['buyNowShortcode'] : '';
+$demo_link = isset($attributes['demoLink']) ? $attributes['demoLink'] : '';
+$plugin_price = isset($attributes['pluginPrice']) ? $attributes['pluginPrice'] : '29';
 
 if (empty($cta_title) && empty($final_cta_heading)) return;
 ?>
