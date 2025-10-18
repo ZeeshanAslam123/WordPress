@@ -116,6 +116,47 @@ const FINAL_CTA_ICON_OPTIONS = [
     { label: '🔥 Fire', value: '🔥' }
 ];
 
+// Icon options for repeater field items
+const PROBLEM_ITEM_ICON_OPTIONS = [
+    { label: 'No Icon', value: ''},
+    { label: '❌ Cross Mark', value: '❌' },
+    { label: '😤 Frustrated Face', value: '😤' },
+    { label: '🚫 Prohibited', value: '🚫' },
+    { label: '⚠️ Warning', value: '⚠️' },
+    { label: '💸 Money Loss', value: '💸' },
+    { label: '📉 Declining', value: '📉' }
+];
+
+const FEATURES_ITEM_ICON_OPTIONS = [
+    { label: 'No Icon', value: ''},
+    { label: '✨ Sparkles', value: '✨' },
+    { label: '⭐ Star', value: '⭐' },
+    { label: '🌟 Glowing Star', value: '🌟' },
+    { label: '🚀 Rocket', value: '🚀' },
+    { label: '💎 Diamond', value: '💎' },
+    { label: '🎯 Target', value: '🎯' }
+];
+
+const BONUSES_ITEM_ICON_OPTIONS = [
+    { label: 'No Icon', value: ''},
+    { label: '🎁 Gift', value: '🎁' },
+    { label: '🎉 Party', value: '🎉' },
+    { label: '💎 Diamond', value: '💎' },
+    { label: '⭐ Star', value: '⭐' },
+    { label: '🏆 Trophy', value: '🏆' },
+    { label: '💰 Money Bag', value: '💰' }
+];
+
+const WHY_CHOOSE_ITEM_ICON_OPTIONS = [
+    { label: 'No Icon', value: ''},
+    { label: '⭐ Star', value: '⭐' },
+    { label: '✅ Check Mark', value: '✅' },
+    { label: '🏆 Trophy', value: '🏆' },
+    { label: '💎 Diamond', value: '💎' },
+    { label: '🎯 Target', value: '🎯' },
+    { label: '🚀 Rocket', value: '🚀' }
+];
+
 // Repeater Field Component
 const RepeaterField = ({ items, onChange, fields, addButtonText = 'Add Item' }) => {
     const addItem = () => {
@@ -165,23 +206,34 @@ const RepeaterField = ({ items, onChange, fields, addButtonText = 'Add Item' }) 
                         onClick: () => removeItem(index)
                     }, 'Remove')
                 ),
-                ...fields.map(field =>
-                    field.type === 'textarea' 
-                        ? createElement(TextareaControl, {
+                ...fields.map(field => {
+                    if (field.type === 'textarea') {
+                        return createElement(TextareaControl, {
                             key: field.key,
                             label: field.label,
                             value: item[field.key] || '',
                             onChange: (value) => updateItem(index, field.key, value),
                             rows: 3
-                        })
-                        : createElement(TextControl, {
+                        });
+                    } else if (field.type === 'select') {
+                        return createElement(SelectControl, {
+                            key: field.key,
+                            label: field.label,
+                            value: item[field.key] || '',
+                            options: field.options || [],
+                            onChange: (value) => updateItem(index, field.key, value),
+                            help: field.help || ''
+                        });
+                    } else {
+                        return createElement(TextControl, {
                             key: field.key,
                             label: field.label,
                             value: item[field.key] || '',
                             onChange: (value) => updateItem(index, field.key, value),
                             placeholder: field.placeholder || ''
-                        })
-                )
+                        });
+                    }
+                })
             )
         ),
         createElement(Button, {
@@ -421,7 +473,7 @@ registerBlockType('swrice/problem-section', {
                         fields: [
                             { key: 'title', label: 'Problem Title', type: 'text' },
                             { key: 'description', label: 'Problem Description', type: 'textarea' },
-                            { key: 'icon', label: 'Icon', type: 'text', placeholder: '❌' }
+                            { key: 'icon', label: 'Icon', type: 'select', options: PROBLEM_ITEM_ICON_OPTIONS, help: 'Choose an icon for this problem' }
                         ],
                         addButtonText: 'Add Problem'
                     })
@@ -579,7 +631,7 @@ registerBlockType('swrice/features-section', {
                         fields: [
                             { key: 'title', label: 'Feature Title', type: 'text' },
                             { key: 'description', label: 'Feature Description', type: 'textarea' },
-                            { key: 'icon', label: 'Icon', type: 'text', placeholder: '✨' }
+                            { key: 'icon', label: 'Icon', type: 'select', options: FEATURES_ITEM_ICON_OPTIONS, help: 'Choose an icon for this feature' }
                         ],
                         addButtonText: 'Add Feature'
                     })
@@ -985,7 +1037,7 @@ registerBlockType('swrice/bonuses-section', {
                             { key: 'title', label: 'Bonus Title', type: 'text' },
                             { key: 'description', label: 'Bonus Description', type: 'textarea' },
                             { key: 'value', label: 'Bonus Value', type: 'text', placeholder: '$50' },
-                            { key: 'icon', label: 'Icon', type: 'text', placeholder: '🎁' }
+                            { key: 'icon', label: 'Icon', type: 'select', options: BONUSES_ITEM_ICON_OPTIONS, help: 'Choose an icon for this bonus' }
                         ],
                         addButtonText: 'Add Bonus'
                     })
@@ -1187,7 +1239,7 @@ registerBlockType('swrice/why-choose-section', {
                         fields: [
                             { key: 'title', label: 'Reason Title', type: 'text' },
                             { key: 'description', label: 'Reason Description', type: 'textarea' },
-                            { key: 'icon', label: 'Icon', type: 'text', placeholder: '⭐' }
+                            { key: 'icon', label: 'Icon', type: 'select', options: WHY_CHOOSE_ITEM_ICON_OPTIONS, help: 'Choose an icon for this reason' }
                         ],
                         addButtonText: 'Add Reason'
                     })
