@@ -443,8 +443,8 @@ class Swrice_Gutenberg_Page_Builder {
             array(
                 array(
                     'slug' => 'swrice-blocks',
-                    'title' => __('Swrice Plugin Page Builder', 'swrice-gutenberg-page-builder'),
-                    'icon' => 'admin-page'
+                    'title' => __('Swrice Plugin Sell Page Builder', 'swrice-gutenberg-page-builder'),
+                    'icon' => '📄'
                 )
             ),
             $categories
