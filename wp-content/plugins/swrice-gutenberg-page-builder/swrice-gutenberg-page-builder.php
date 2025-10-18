@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Swrice Gutenberg Page Builder
+ * Plugin Name: Swrice Plugin Sell Page Builder
  * Plugin URI: https://swrice.com
  * Description: Modern Gutenberg blocks for creating professional plugin landing pages. Individual blocks for each section with complete customization.
  * Version: 2.0.0
@@ -443,8 +443,8 @@ class Swrice_Gutenberg_Page_Builder {
             array(
                 array(
                     'slug' => 'swrice-blocks',
-                    'title' => __('Swrice Plugin Page Builder', 'swrice-gutenberg-page-builder'),
-                    'icon' => 'admin-page'
+                    'title' => __('Swrice Plugin Sell Page Builder', 'swrice-gutenberg-page-builder'),
+                    'icon' => '📄'
                 )
             ),
             $categories
