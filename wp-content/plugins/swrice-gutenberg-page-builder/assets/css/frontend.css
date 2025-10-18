@@ -54,7 +54,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.45;
-    margin: 70px 0;
+    margin: 20px 0;
     padding: 0 50px;
 }
 
@@ -74,7 +74,7 @@
 }
 
 .sppm-container {
-    margin: 70px 0;
+    margin: 20px 0;
     padding: 0 50px;
 }
 
