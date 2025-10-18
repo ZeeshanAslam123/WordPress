@@ -511,30 +511,23 @@ registerBlockType('swrice/solution-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-solution-preview',
-                style: {
-                    background: '#d4edda',
-                    border: '1px solid #c3e6cb',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#155724',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('solutionIcon')),
-                    getAttr('solutionHeading', 'The Solution')
-                ),
-                createElement('p', { style: { color: '#155724', margin: 0 } },
-                    getAttr('solutionDescription') || 'Configure your solution description in the sidebar.'
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-solution-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('solutionIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('solutionIcon')) : null,
+                                getAttr('solutionHeading', 'The Solution')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-solution-content' },
+                            createElement('p', null, 
+                                getAttr('solutionDescription', 'Our plugin solves all your problems with an elegant solution.')
+                            )
+                        )
+                    )
                 )
             )
         );
@@ -593,30 +586,52 @@ registerBlockType('swrice/features-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-features-preview',
-                style: {
-                    background: '#e3f2fd',
-                    border: '1px solid #bbdefb',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#0d47a1',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('featuresIcon')),
-                    getAttr('featuresHeading', 'Features')
-                ),
-                createElement('div', { style: { color: '#0d47a1' } },
-                    `${getAttr('featureItems', []).length} feature(s) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-features-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('featuresIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('featuresIcon')) : null,
+                                getAttr('featuresHeading', 'Features')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-features-grid' },
+                            getAttr('featureItems', []).length > 0 ?
+                                getAttr('featureItems', []).slice(0, 3).map((feature, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-feature-card' 
+                                    },
+                                        createElement('div', { className: 'sppm-feature-card-header' },
+                                            feature.icon ? 
+                                                createElement('div', { className: 'sppm-feature-icon' }, feature.icon) : null,
+                                            createElement('h3', { className: 'sppm-feature-title' }, 
+                                                feature.title || 'Feature Title'
+                                            )
+                                        ),
+                                        createElement('div', { className: 'sppm-feature-card-body' },
+                                            createElement('p', { className: 'sppm-feature-desc' }, 
+                                                feature.description || 'Feature description'
+                                            )
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-feature-card',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-feature-card-header' },
+                                        createElement('div', { className: 'sppm-feature-icon' }, '✨'),
+                                        createElement('h3', { className: 'sppm-feature-title' }, 'Sample Feature')
+                                    ),
+                                    createElement('div', { className: 'sppm-feature-card-body' },
+                                        createElement('p', { className: 'sppm-feature-desc' }, 'Add features in the sidebar to see them here.')
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -673,30 +688,48 @@ registerBlockType('swrice/faq-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-faq-preview',
-                style: {
-                    background: '#f3e5f5',
-                    border: '1px solid #e1bee7',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#4a148c',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('faqIcon')),
-                    getAttr('faqHeading', 'FAQ')
-                ),
-                createElement('div', { style: { color: '#4a148c' } },
-                    `${getAttr('faqItems', []).length} FAQ(s) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-faq-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('faqIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('faqIcon')) : null,
+                                getAttr('faqHeading', 'FAQ')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-faq-list' },
+                            getAttr('faqItems', []).length > 0 ?
+                                getAttr('faqItems', []).slice(0, 3).map((faq, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-faq-item',
+                                        'data-faq': index
+                                    },
+                                        createElement('div', { className: 'sppm-faq-question' },
+                                            faq.question || 'FAQ Question',
+                                            createElement('span', null, '+')
+                                        ),
+                                        createElement('div', { className: 'sppm-faq-answer' }, 
+                                            faq.answer || 'FAQ Answer'
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-faq-item',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-faq-question' },
+                                        'Sample FAQ Question',
+                                        createElement('span', null, '+')
+                                    ),
+                                    createElement('div', { className: 'sppm-faq-answer' }, 
+                                        'Add FAQ items in the sidebar to see them here.'
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -837,30 +870,51 @@ registerBlockType('swrice/testimonials-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-testimonials-preview',
-                style: {
-                    background: '#e8f5e8',
-                    border: '1px solid #c3e6cb',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#155724',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('testimonialsIcon')),
-                    getAttr('testimonialsHeading', 'Testimonials')
-                ),
-                createElement('div', { style: { color: '#155724' } },
-                    `${getAttr('testimonialItems', []).length} testimonial(s) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-testimonials-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('testimonialsIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('testimonialsIcon')) : null,
+                                getAttr('testimonialsHeading', 'Testimonials')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-testimonials-grid' },
+                            getAttr('testimonialItems', []).length > 0 ?
+                                getAttr('testimonialItems', []).slice(0, 3).map((testimonial, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-testimonial-card' 
+                                    },
+                                        createElement('div', { className: 'sppm-testimonial-rating' },
+                                            '⭐'.repeat(testimonial.rating || 5)
+                                        ),
+                                        createElement('div', { className: 'sppm-testimonial-content' }, 
+                                            '"' + (testimonial.content || 'Testimonial content') + '"'
+                                        ),
+                                        createElement('div', { className: 'sppm-testimonial-author' },
+                                            createElement('strong', null, testimonial.name || 'Customer Name'),
+                                            createElement('span', null, testimonial.title || 'Customer Title')
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-testimonial-card',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-testimonial-rating' }, '⭐⭐⭐⭐⭐'),
+                                    createElement('div', { className: 'sppm-testimonial-content' }, 
+                                        '"Add testimonials in the sidebar to see them here."'
+                                    ),
+                                    createElement('div', { className: 'sppm-testimonial-author' },
+                                        createElement('strong', null, 'Sample Customer'),
+                                        createElement('span', null, 'CEO, Company')
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
