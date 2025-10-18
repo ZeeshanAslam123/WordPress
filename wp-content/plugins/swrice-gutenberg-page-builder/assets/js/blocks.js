@@ -247,7 +247,7 @@ const RepeaterField = ({ items, onChange, fields, addButtonText = 'Add Item' }) 
 // Hero Section Block
 registerBlockType('swrice/hero-section', {
     title: 'Hero Section',
-    icon: '🚀',
+    icon: 'superhero',
     category: 'swrice-blocks',
     attributes: {
         pluginName: { type: 'string', default: 'My Awesome Plugin' },
@@ -432,7 +432,7 @@ registerBlockType('swrice/hero-section', {
 // Problem Section Block
 registerBlockType('swrice/problem-section', {
     title: 'Problem Section',
-    icon: '⚠️',
+    icon: 'warning',
     category: 'swrice-blocks',
     attributes: {
         problemHeading: { type: 'string', default: 'The Problem' },
@@ -528,7 +528,7 @@ registerBlockType('swrice/problem-section', {
 // Solution Section Block
 registerBlockType('swrice/solution-section', {
     title: 'Solution Section',
-    icon: '✅',
+    icon: 'yes',
     category: 'swrice-blocks',
     attributes: {
         solutionHeading: { type: 'string', default: 'The Solution' },
@@ -590,7 +590,7 @@ registerBlockType('swrice/solution-section', {
 // Features Section Block
 registerBlockType('swrice/features-section', {
     title: 'Features Section',
-    icon: '🚀',
+    icon: 'superhero',
     category: 'swrice-blocks',
     attributes: {
         featuresHeading: { type: 'string', default: 'Features' },
@@ -694,7 +694,7 @@ registerBlockType('swrice/features-section', {
 // FAQ Section Block
 registerBlockType('swrice/faq-section', {
     title: 'FAQ Section',
-    icon: '❓',
+    icon: 'editor-help',
     category: 'swrice-blocks',
     attributes: {
         faqHeading: { type: 'string', default: 'FAQ' },
@@ -792,7 +792,7 @@ registerBlockType('swrice/faq-section', {
 // How It Works Section Block
 registerBlockType('swrice/how-it-works-section', {
     title: 'How It Works Section',
-    icon: '⚙️',
+    icon: 'admin-tools',
     category: 'swrice-blocks',
     attributes: {
         howItWorksHeading: { type: 'string', default: 'How It Works' },
@@ -889,7 +889,7 @@ registerBlockType('swrice/how-it-works-section', {
 // Testimonials Section Block
 registerBlockType('swrice/testimonials-section', {
     title: 'Testimonials Section',
-    icon: '💬',
+    icon: 'format-chat',
     category: 'swrice-blocks',
     attributes: {
         testimonialsHeading: { type: 'string', default: 'Testimonials' },
@@ -994,7 +994,7 @@ registerBlockType('swrice/testimonials-section', {
 // Bonuses Section Block
 registerBlockType('swrice/bonuses-section', {
     title: 'Bonuses Section',
-    icon: '🎁',
+    icon: 'awards',
     category: 'swrice-blocks',
     attributes: {
         bonusesHeading: { type: 'string', default: 'Bonuses' },
@@ -1099,7 +1099,7 @@ registerBlockType('swrice/bonuses-section', {
 // Guarantee Section Block
 registerBlockType('swrice/guarantee-section', {
     title: 'Guarantee Section',
-    icon: '🛡️',
+    icon: 'shield',
     category: 'swrice-blocks',
     attributes: {
         guaranteeHeading: { type: 'string', default: 'Guarantee' },
@@ -1198,7 +1198,7 @@ registerBlockType('swrice/guarantee-section', {
 // Why Choose Section Block
 registerBlockType('swrice/why-choose-section', {
     title: 'Why Choose Section',
-    icon: '⭐',
+    icon: 'star-filled',
     category: 'swrice-blocks',
     attributes: {
         whyChooseHeading: { type: 'string', default: 'Why Choose Us' },
@@ -1296,7 +1296,7 @@ registerBlockType('swrice/why-choose-section', {
 // About Section Block
 registerBlockType('swrice/about-section', {
     title: 'About Section',
-    icon: 'ℹ️',
+    icon: 'info',
     category: 'swrice-blocks',
     attributes: {
         aboutHeading: { type: 'string', default: 'About' },
@@ -1358,7 +1358,7 @@ registerBlockType('swrice/about-section', {
 // Final CTA Section Block
 registerBlockType('swrice/final-cta-section', {
     title: 'Final CTA Section',
-    icon: '🎯',
+    icon: 'location',
     category: 'swrice-blocks',
     attributes: {
         finalCtaHeading: { type: 'string', default: 'Ready to Get Started?' },
