@@ -70,7 +70,7 @@ class Swrice_Gutenberg_Page_Builder {
             'swrice-plugin-page-builder-editor',
             SGPB_PLUGIN_URL . 'assets/css/editor.css',
             array(),
-            SGPB_VERSION
+            SGPB_VERSION . '-' . time() // Cache busting for development
         );
     }
     

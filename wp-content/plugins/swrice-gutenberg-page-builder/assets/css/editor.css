@@ -78,13 +78,13 @@
     font-size: 36px;
 }
 
-/* Hero Section Styles */
+/* Hero Section Styles - FORCE OVERRIDE */
 .sgpb-plugin-page-editor .sppm-hero {
-    display: flex;
-    gap: 60px;
-    align-items: center;
-    padding: 40px 28px;
-    min-height: 400px;
+    display: flex !important;
+    gap: 60px !important;
+    align-items: center !important;
+    padding: 40px 28px !important;
+    min-height: 400px !important;
 }
 
 .sgpb-plugin-page-editor .sppm-hero-left {
@@ -492,13 +492,13 @@
 
 /* Responsive Design - Mobile First */
 @media (max-width: 768px) {
-    /* Hero Section - Mobile Responsive */
+    /* Hero Section - Mobile Responsive - FORCE OVERRIDE */
     .sgpb-plugin-page-editor .sppm-hero {
-        flex-direction: column;
-        gap: 30px;
-        padding: 30px 20px;
-        text-align: center;
-        min-height: auto;
+        flex-direction: column !important;
+        gap: 30px !important;
+        padding: 30px 20px !important;
+        text-align: center !important;
+        min-height: auto !important;
     }
     
     .sgpb-plugin-page-editor .sppm-hero-left,
@@ -528,10 +528,10 @@
         justify-content: center;
     }
     
-    /* Final CTA Section - Mobile Responsive */
+    /* Final CTA Section - Mobile Responsive - FORCE OVERRIDE */
     .sgpb-plugin-page-editor .sppm-final-cta {
-        margin: 0 10px; /* Reduce spacing on mobile */
-        padding: 20px 16px;
+        margin: 0 10px !important; /* Reduce spacing on mobile */
+        padding: 20px 16px !important;
     }
     
     .sgpb-plugin-page-editor .sppm-final-cta .sppm-cta {
@@ -648,17 +648,17 @@
     align-items: center;
 }
 
-/* Final CTA Section - Exact Frontend Match with Proper Spacing */
+/* Final CTA Section - Exact Frontend Match with Proper Spacing - FORCE OVERRIDE */
 .sgpb-plugin-page-editor .sppm-final-cta {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 12px;
-    padding: 24px 32px;
-    margin: 0 20px; /* Add left/right spacing */
-    text-align: center;
-    border: none;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
-    position: relative;
-    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-radius: 12px !important;
+    padding: 24px 32px !important;
+    margin: 0 20px !important; /* Add left/right spacing */
+    text-align: center !important;
+    border: none !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25) !important;
+    position: relative !important;
+    overflow: hidden !important;
 }
 
 .sgpb-plugin-page-editor .sppm-final-cta::before {
