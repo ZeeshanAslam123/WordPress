@@ -1,7 +1,23 @@
 /**
  * Swrice Gutenberg Page Builder - Editor CSS
- * Styles for the block editor interface
+ * Styles for the block editor interface with frontend styling
  */
+
+/* Import Google Fonts - Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+/* CSS Variables - Frontend Color Scheme */
+:root {
+    --page-bg: #fbfdff;
+    --card-bg: #ffffff;
+    --muted: #6b747b;
+    --accent: #5fa0d8;
+    --accent-dark: #4a8bbd;
+    --text: #1f2b33;
+    --soft: #f3f7fb;
+    --shadow: 0 10px 30px rgba(29,42,63,0.06);
+    --glass: linear-gradient(180deg, rgba(243,247,251,1) 0%, rgba(255,255,255,1) 100%);
+}
 
 /* Editor-specific styles */
 .sgpb-plugin-page-editor {
@@ -10,13 +26,368 @@
     padding: 20px;
     margin: 20px 0;
     background: #f9f9f9;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial !important;
 }
 
 .sgpb-plugin-page-editor .sppm-plugin-page {
-    background: white;
+    background: var(--page-bg);
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.45;
+}
+
+/* Ensure all elements in editor use proper font */
+.sgpb-plugin-page-editor * {
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial !important;
+}
+
+/* Frontend Styles for Editor Preview */
+.sgpb-plugin-page-editor .sppm-section {
+    margin-top: 48px;
+    padding: 30px 0;
+    border-top: 1px solid rgba(16,24,32,0.02);
+}
+
+.sgpb-plugin-page-editor .sppm-section:first-child {
+    margin-top: 0;
+    border-top: none;
+}
+
+.sgpb-plugin-page-editor .sppm-section-title {
+    font-size: 32px;
+    margin: 4px 0 18px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.sgpb-plugin-page-editor .sppm-section-icon {
+    margin-right: 8px;
+}
+
+/* Hero Section Styles */
+.sgpb-plugin-page-editor .sppm-hero {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    padding: 40px 28px;
+    min-height: 400px;
+}
+
+.sgpb-plugin-page-editor .sppm-hero-left {
+    flex: 1;
+    width: 50%;
+}
+
+.sgpb-plugin-page-editor .sppm-logo-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.sgpb-plugin-page-editor .sppm-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.sgpb-plugin-page-editor .sppm-rating {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.sgpb-plugin-page-editor .sppm-hero-title {
+    font-size: 48px;
+    font-weight: 800;
+    margin: 0 0 16px;
+    line-height: 1.1;
+    color: var(--text);
+}
+
+.sgpb-plugin-page-editor .sppm-hero-subtitle {
+    font-size: 20px;
+    color: var(--muted);
+    margin: 0 0 32px;
+    line-height: 1.4;
+}
+
+.sgpb-plugin-page-editor .sppm-hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* Button Styles */
+.sgpb-plugin-page-editor .sppm-btn {
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.sgpb-plugin-page-editor .sppm-btn-primary {
+    background: var(--accent);
+    color: white;
+}
+
+.sgpb-plugin-page-editor .sppm-btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 2px solid rgba(16,24,32,0.1);
+}
+
+/* Grid Layouts */
+.sgpb-plugin-page-editor .sppm-features-grid,
+.sgpb-plugin-page-editor .sppm-problems-grid,
+.sgpb-plugin-page-editor .sppm-steps-grid,
+.sgpb-plugin-page-editor .sppm-bonuses-grid,
+.sgpb-plugin-page-editor .sppm-why-choose-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+/* Card Styles */
+.sgpb-plugin-page-editor .sppm-feature-card,
+.sgpb-plugin-page-editor .sppm-problem-card,
+.sgpb-plugin-page-editor .sppm-step-card,
+.sgpb-plugin-page-editor .sppm-bonus-card,
+.sgpb-plugin-page-editor .sppm-benefit-card {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(16,24,32,0.04);
+}
+
+.sgpb-plugin-page-editor .sppm-feature-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.sgpb-plugin-page-editor .sppm-feature-icon,
+.sgpb-plugin-page-editor .sppm-problem-icon,
+.sgpb-plugin-page-editor .sppm-bonus-icon,
+.sgpb-plugin-page-editor .sppm-benefit-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 12px;
+    background: var(--soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+    font-size: 24px;
+}
+
+.sgpb-plugin-page-editor .sppm-step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.sgpb-plugin-page-editor .sppm-feature-title,
+.sgpb-plugin-page-editor .sppm-problem-title,
+.sgpb-plugin-page-editor .sppm-step-title,
+.sgpb-plugin-page-editor .sppm-bonus-title,
+.sgpb-plugin-page-editor .sppm-benefit-title {
+    font-weight: 700;
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: var(--text);
+}
+
+.sgpb-plugin-page-editor .sppm-feature-desc,
+.sgpb-plugin-page-editor .sppm-problem-desc,
+.sgpb-plugin-page-editor .sppm-step-desc,
+.sgpb-plugin-page-editor .sppm-bonus-desc,
+.sgpb-plugin-page-editor .sppm-benefit-desc {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.sgpb-plugin-page-editor .sppm-bonus-value {
+    font-weight: 600;
+    color: var(--accent);
+    margin: 8px 0;
+}
+
+/* FAQ Styles */
+.sgpb-plugin-page-editor .sppm-faq-list {
+    margin-top: 24px;
+}
+
+.sgpb-plugin-page-editor .sppm-faq-item {
+    background: var(--card-bg);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(16,24,32,0.04);
+}
+
+.sgpb-plugin-page-editor .sppm-faq-question {
+    padding: 20px 24px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+}
+
+.sgpb-plugin-page-editor .sppm-faq-toggle {
+    font-size: 20px;
+    color: var(--accent);
+}
+
+/* Testimonials */
+.sgpb-plugin-page-editor .sppm-testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.sgpb-plugin-page-editor .sppm-testimonial-card {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(16,24,32,0.04);
+}
+
+.sgpb-plugin-page-editor .sppm-testimonial-rating {
+    color: #fbbf24;
+    margin-bottom: 12px;
+}
+
+.sgpb-plugin-page-editor .sppm-testimonial-text {
+    margin: 0 0 16px;
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.sgpb-plugin-page-editor .sppm-testimonial-author {
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+}
+
+/* CTA Section */
+.sgpb-plugin-page-editor .sppm-cta {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.sgpb-plugin-page-editor .sppm-cta-title {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 0 0 12px;
+    color: var(--text);
+}
+
+.sgpb-plugin-page-editor .sppm-cta-subtitle {
+    font-size: 18px;
+    color: var(--muted);
+    margin: 0 0 32px;
+}
+
+.sgpb-plugin-page-editor .sppm-cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Guarantee Styles */
+.sgpb-plugin-page-editor .sppm-guarantee-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.sgpb-plugin-page-editor .sppm-guarantee-text {
+    font-size: 18px;
+    color: var(--text);
+    margin: 0 0 24px;
+    line-height: 1.6;
+}
+
+.sgpb-plugin-page-editor .sppm-guarantee-points {
+    text-align: left;
+}
+
+.sgpb-plugin-page-editor .sppm-guarantee-point {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: var(--text);
+}
+
+.sgpb-plugin-page-editor .sppm-guarantee-check {
+    font-size: 18px;
+}
+
+/* About Section */
+.sgpb-plugin-page-editor .sppm-about-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.sgpb-plugin-page-editor .sppm-about-content p {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Solution Section */
+.sgpb-plugin-page-editor .sppm-solution-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.sgpb-plugin-page-editor .sppm-solution-content p {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
 }
 
 /* Section Manager Styles */
