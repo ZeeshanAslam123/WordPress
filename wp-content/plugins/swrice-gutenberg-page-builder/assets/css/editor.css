@@ -92,6 +92,13 @@
     width: 50%;
 }
 
+.sgpb-plugin-page-editor .sppm-hero-right {
+    flex: 1;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
 .sgpb-plugin-page-editor .sppm-logo-row {
     display: flex;
     gap: 12px;
@@ -483,6 +490,131 @@
     margin: 0;
 }
 
+/* Responsive Design - Mobile First */
+@media (max-width: 768px) {
+    /* Hero Section - Mobile Responsive */
+    .sgpb-plugin-page-editor .sppm-hero {
+        flex-direction: column;
+        gap: 30px;
+        padding: 30px 20px;
+        text-align: center;
+        min-height: auto;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-hero-left,
+    .sgpb-plugin-page-editor .sppm-hero-right {
+        width: 100%;
+        flex: none;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-hero-title {
+        font-size: 28px;
+        line-height: 1.2;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-hero-subtitle {
+        font-size: 16px;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+    }
+    
+    /* Final CTA Section - Mobile Responsive */
+    .sgpb-plugin-page-editor .sppm-final-cta {
+        margin: 0 10px; /* Reduce spacing on mobile */
+        padding: 20px 16px;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-final-cta .sppm-cta {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-final-cta .sppm-cta-heading {
+        text-align: center;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-final-cta .sppm-cta-content {
+        text-align: center;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-final-cta .sppm-cta-buttons {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-final-cta .sppm-btn {
+        min-width: 120px;
+        flex: 1;
+        max-width: 150px;
+    }
+    
+    /* Section Titles - Mobile */
+    .sgpb-plugin-page-editor .sppm-section-title {
+        font-size: 24px;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    /* Grid Layouts - Mobile */
+    .sgpb-plugin-page-editor .sppm-problems-grid,
+    .sgpb-plugin-page-editor .sppm-features-grid,
+    .sgpb-plugin-page-editor .sppm-steps-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    /* Testimonials - Mobile */
+    .sgpb-plugin-page-editor .sppm-testimonials {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    /* Section Padding - Mobile */
+    .sgpb-plugin-page-editor .sppm-problem-section,
+    .sgpb-plugin-page-editor .sppm-solution-section,
+    .sgpb-plugin-page-editor .sppm-steps-section,
+    .sgpb-plugin-page-editor .sppm-features-section {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    .sgpb-plugin-page-editor .sppm-hero {
+        padding: 20px 15px;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-hero-title {
+        font-size: 24px;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-final-cta {
+        margin: 0 5px;
+        padding: 16px 12px;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-final-cta .sppm-cta-title {
+        font-size: 18px;
+    }
+    
+    .sgpb-plugin-page-editor .sppm-final-cta .sppm-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        min-width: 100px;
+    }
+}
+
 /* CTA Section - Regular */
 .sgpb-plugin-page-editor .sppm-cta {
     padding: 26px;
@@ -516,11 +648,12 @@
     align-items: center;
 }
 
-/* Final CTA Section - Exact Frontend Match */
+/* Final CTA Section - Exact Frontend Match with Proper Spacing */
 .sgpb-plugin-page-editor .sppm-final-cta {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 12px;
     padding: 24px 32px;
+    margin: 0 20px; /* Add left/right spacing */
     text-align: center;
     border: none;
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
