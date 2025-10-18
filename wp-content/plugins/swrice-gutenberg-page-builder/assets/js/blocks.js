@@ -302,60 +302,75 @@ registerBlockType('swrice/hero-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-hero-preview',
-                style: {
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    color: 'white',
-                    padding: '30px',
-                    borderRadius: '8px',
-                    textAlign: 'center'
-                }
-            },
-                createElement('h2', { 
-                    style: { 
-                        margin: '0 0 15px 0', 
-                        fontSize: '28px',
-                        fontWeight: 'bold'
-                    } 
-                }, getAttr('pluginName', 'My Awesome Plugin')),
-                createElement('p', { 
-                    style: { 
-                        margin: '0 0 20px 0', 
-                        fontSize: '16px',
-                        opacity: 0.9
-                    } 
-                }, getAttr('heroSubtitle') || 'Configure your hero section settings in the sidebar.'),
-                createElement('div', { 
-                    style: { 
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: '15px',
-                        marginBottom: '20px'
-                    }
-                },
-                    getAttr('pluginOriginalPrice') && createElement('span', { 
-                        style: { 
-                            fontSize: '18px', 
-                            textDecoration: 'line-through',
-                            opacity: 0.7
-                        } 
-                    }, '$' + getAttr('pluginOriginalPrice')),
-                    createElement('span', { 
-                        style: { 
-                            fontSize: '32px', 
-                            fontWeight: 'bold'
-                        } 
-                    }, '$' + getAttr('pluginPrice', '49'))
-                ),
-                createElement('div', { 
-                    style: { 
-                        fontSize: '14px',
-                        opacity: 0.8
-                    } 
-                }, '🚀 Hero Section - Configure settings in the sidebar')
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('div', { className: 'sppm-container' },
+                        createElement('section', { className: 'sppm-hero' },
+                            createElement('div', { className: 'sppm-hero-left' },
+                                createElement('div', { className: 'sppm-logo-row' },
+                                    createElement('div', { className: 'sppm-logo-mark' },
+                                        createElement('svg', { 
+                                            width: '28', 
+                                            height: '24', 
+                                            viewBox: '0 0 28 24', 
+                                            fill: 'none',
+                                            xmlns: 'http://www.w3.org/2000/svg'
+                                        },
+                                            createElement('rect', { x: '2', y: '2', width: '20', height: '4', rx: '2', fill: '#5fa0d8' }),
+                                            createElement('rect', { x: '2', y: '10', width: '16', height: '4', rx: '2', fill: '#82bfe4' }),
+                                            createElement('rect', { x: '2', y: '18', width: '12', height: '4', rx: '2', fill: '#bcdff6' })
+                                        )
+                                    ),
+                                    createElement('div', { className: 'sppm-logo-text' }, 
+                                        getAttr('pluginName', 'My Awesome Plugin')
+                                    )
+                                ),
+                                createElement('div', { className: 'sppm-rating' },
+                                    createElement('div', { className: 'sppm-rating-stars' }, '★ ★ ★ ★ ★'),
+                                    createElement('div', null, '5.0')
+                                ),
+                                createElement('h1', { className: 'sppm-hero-title' }, 
+                                    getAttr('pluginName', 'My Awesome Plugin')
+                                ),
+                                createElement('p', { className: 'sppm-hero-subtitle' }, 
+                                    getAttr('heroSubtitle', 'Transform your WordPress experience with our powerful plugin solution')
+                                ),
+                                createElement('div', { className: 'sppm-hero-ctas' },
+                                    getAttr('buyNowShortcode') ? 
+                                        createElement('div', { 
+                                            dangerouslySetInnerHTML: { __html: '[Shortcode Preview]' }
+                                        }) :
+                                        createElement('button', { className: 'sppm-btn sppm-btn-primary' }, 
+                                            'Buy Now - $' + getAttr('pluginPrice', '49')
+                                        ),
+                                    getAttr('demoLink') && getAttr('demoLink') !== '#' && getAttr('demoLink') !== '' ?
+                                        createElement('a', { 
+                                            className: 'sppm-btn sppm-btn-ghost',
+                                            href: '#',
+                                            onClick: (e) => e.preventDefault()
+                                        }, 'Live Demo') : null
+                                )
+                            ),
+                            createElement('div', { className: 'sppm-hero-right' },
+                                getAttr('heroImageUrl') ?
+                                    createElement('img', { 
+                                        src: getAttr('heroImageUrl'),
+                                        alt: getAttr('pluginName', 'Plugin Preview'),
+                                        className: 'sppm-hero-image'
+                                    }) :
+                                    createElement('div', { className: 'sppm-device' },
+                                        createElement('div', { className: 'sppm-device-inner' },
+                                            createElement('h3', null, 'Plugin Preview'),
+                                            createElement('div', { className: 'sppm-section-row' }, 'Getting Started ', createElement('span', null, '▾')),
+                                            createElement('div', { className: 'sppm-section-row' }, 'Configuration ', createElement('span', null, '▾')),
+                                            createElement('div', { className: 'sppm-section-row' }, 'Advanced Features ', createElement('span', null, '▾'))
+                                        )
+                                    )
+                            )
+                        )
+                    )
+                )
             )
         );
     },
@@ -413,30 +428,44 @@ registerBlockType('swrice/problem-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-problem-preview',
-                style: {
-                    background: '#fff3cd',
-                    border: '1px solid #ffeaa7',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#856404',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('problemIcon')),
-                    getAttr('problemHeading', 'The Problem')
-                ),
-                createElement('div', { style: { color: '#856404' } },
-                    `${getAttr('problemItems', []).length} problem(s) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-problem-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('problemIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('problemIcon')) : null,
+                                getAttr('problemHeading', 'The Problem')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-problem-grid' },
+                            getAttr('problemItems', []).length > 0 ?
+                                getAttr('problemItems', []).map((problem, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-problem-card' 
+                                    },
+                                        problem.icon ? 
+                                            createElement('div', { className: 'sppm-problem-icon' }, problem.icon) : null,
+                                        createElement('h3', { className: 'sppm-problem-title' }, 
+                                            problem.title || 'Problem Title'
+                                        ),
+                                        createElement('p', { className: 'sppm-problem-desc' }, 
+                                            problem.description || 'Problem description'
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-problem-card',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-problem-icon' }, '⚠️'),
+                                    createElement('h3', { className: 'sppm-problem-title' }, 'Sample Problem'),
+                                    createElement('p', { className: 'sppm-problem-desc' }, 'Add problems in the sidebar to see them here.')
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -482,30 +511,23 @@ registerBlockType('swrice/solution-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-solution-preview',
-                style: {
-                    background: '#d4edda',
-                    border: '1px solid #c3e6cb',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#155724',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('solutionIcon')),
-                    getAttr('solutionHeading', 'The Solution')
-                ),
-                createElement('p', { style: { color: '#155724', margin: 0 } },
-                    getAttr('solutionDescription') || 'Configure your solution description in the sidebar.'
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-solution-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('solutionIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('solutionIcon')) : null,
+                                getAttr('solutionHeading', 'The Solution')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-solution-content' },
+                            createElement('p', null, 
+                                getAttr('solutionDescription', 'Our plugin solves all your problems with an elegant solution.')
+                            )
+                        )
+                    )
                 )
             )
         );
@@ -564,30 +586,52 @@ registerBlockType('swrice/features-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-features-preview',
-                style: {
-                    background: '#e3f2fd',
-                    border: '1px solid #bbdefb',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#0d47a1',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('featuresIcon')),
-                    getAttr('featuresHeading', 'Features')
-                ),
-                createElement('div', { style: { color: '#0d47a1' } },
-                    `${getAttr('featureItems', []).length} feature(s) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-features-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('featuresIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('featuresIcon')) : null,
+                                getAttr('featuresHeading', 'Features')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-features-grid' },
+                            getAttr('featureItems', []).length > 0 ?
+                                getAttr('featureItems', []).slice(0, 3).map((feature, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-feature-card' 
+                                    },
+                                        createElement('div', { className: 'sppm-feature-card-header' },
+                                            feature.icon ? 
+                                                createElement('div', { className: 'sppm-feature-icon' }, feature.icon) : null,
+                                            createElement('h3', { className: 'sppm-feature-title' }, 
+                                                feature.title || 'Feature Title'
+                                            )
+                                        ),
+                                        createElement('div', { className: 'sppm-feature-card-body' },
+                                            createElement('p', { className: 'sppm-feature-desc' }, 
+                                                feature.description || 'Feature description'
+                                            )
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-feature-card',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-feature-card-header' },
+                                        createElement('div', { className: 'sppm-feature-icon' }, '✨'),
+                                        createElement('h3', { className: 'sppm-feature-title' }, 'Sample Feature')
+                                    ),
+                                    createElement('div', { className: 'sppm-feature-card-body' },
+                                        createElement('p', { className: 'sppm-feature-desc' }, 'Add features in the sidebar to see them here.')
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -644,30 +688,48 @@ registerBlockType('swrice/faq-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-faq-preview',
-                style: {
-                    background: '#f3e5f5',
-                    border: '1px solid #e1bee7',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#4a148c',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('faqIcon')),
-                    getAttr('faqHeading', 'FAQ')
-                ),
-                createElement('div', { style: { color: '#4a148c' } },
-                    `${getAttr('faqItems', []).length} FAQ(s) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-faq-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('faqIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('faqIcon')) : null,
+                                getAttr('faqHeading', 'FAQ')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-faq-list' },
+                            getAttr('faqItems', []).length > 0 ?
+                                getAttr('faqItems', []).slice(0, 3).map((faq, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-faq-item',
+                                        'data-faq': index
+                                    },
+                                        createElement('div', { className: 'sppm-faq-question' },
+                                            faq.question || 'FAQ Question',
+                                            createElement('span', null, '+')
+                                        ),
+                                        createElement('div', { className: 'sppm-faq-answer' }, 
+                                            faq.answer || 'FAQ Answer'
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-faq-item',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-faq-question' },
+                                        'Sample FAQ Question',
+                                        createElement('span', null, '+')
+                                    ),
+                                    createElement('div', { className: 'sppm-faq-answer' }, 
+                                        'Add FAQ items in the sidebar to see them here.'
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -724,30 +786,47 @@ registerBlockType('swrice/how-it-works-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-how-it-works-preview',
-                style: {
-                    background: '#f8f9fa',
-                    border: '1px solid #dee2e6',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#495057',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('howItWorksIcon')),
-                    getAttr('howItWorksHeading', 'How It Works')
-                ),
-                createElement('div', { style: { color: '#495057' } },
-                    `${getAttr('stepsItems', []).length} step(s) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-how-it-works-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('howItWorksIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('howItWorksIcon')) : null,
+                                getAttr('howItWorksHeading', 'How It Works')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-steps-grid' },
+                            getAttr('stepsItems', []).length > 0 ?
+                                getAttr('stepsItems', []).slice(0, 3).map((step, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-step-card' 
+                                    },
+                                        createElement('div', { className: 'sppm-step-number' }, 
+                                            (index + 1).toString()
+                                        ),
+                                        createElement('h3', { className: 'sppm-step-title' }, 
+                                            step.title || 'Step Title'
+                                        ),
+                                        createElement('p', { className: 'sppm-step-desc' }, 
+                                            step.description || 'Step description'
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-step-card',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-step-number' }, '1'),
+                                    createElement('h3', { className: 'sppm-step-title' }, 'Sample Step'),
+                                    createElement('p', { className: 'sppm-step-desc' }, 
+                                        'Add steps in the sidebar to see them here.'
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -808,30 +887,51 @@ registerBlockType('swrice/testimonials-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-testimonials-preview',
-                style: {
-                    background: '#e8f5e8',
-                    border: '1px solid #c3e6cb',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#155724',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('testimonialsIcon')),
-                    getAttr('testimonialsHeading', 'Testimonials')
-                ),
-                createElement('div', { style: { color: '#155724' } },
-                    `${getAttr('testimonialItems', []).length} testimonial(s) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-testimonials-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('testimonialsIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('testimonialsIcon')) : null,
+                                getAttr('testimonialsHeading', 'Testimonials')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-testimonials-grid' },
+                            getAttr('testimonialItems', []).length > 0 ?
+                                getAttr('testimonialItems', []).slice(0, 3).map((testimonial, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-testimonial-card' 
+                                    },
+                                        createElement('div', { className: 'sppm-testimonial-rating' },
+                                            '⭐'.repeat(testimonial.rating || 5)
+                                        ),
+                                        createElement('div', { className: 'sppm-testimonial-content' }, 
+                                            '"' + (testimonial.content || 'Testimonial content') + '"'
+                                        ),
+                                        createElement('div', { className: 'sppm-testimonial-author' },
+                                            createElement('strong', null, testimonial.name || 'Customer Name'),
+                                            createElement('span', null, testimonial.title || 'Customer Title')
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-testimonial-card',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-testimonial-rating' }, '⭐⭐⭐⭐⭐'),
+                                    createElement('div', { className: 'sppm-testimonial-content' }, 
+                                        '"Add testimonials in the sidebar to see them here."'
+                                    ),
+                                    createElement('div', { className: 'sppm-testimonial-author' },
+                                        createElement('strong', null, 'Sample Customer'),
+                                        createElement('span', null, 'CEO, Company')
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -892,30 +992,51 @@ registerBlockType('swrice/bonuses-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-bonuses-preview',
-                style: {
-                    background: '#fff3cd',
-                    border: '1px solid #ffeaa7',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#856404',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('bonusesIcon')),
-                    getAttr('bonusesHeading', 'Bonuses')
-                ),
-                createElement('div', { style: { color: '#856404' } },
-                    `${getAttr('bonusItems', []).length} bonus(es) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-bonuses-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('bonusesIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('bonusesIcon')) : null,
+                                getAttr('bonusesHeading', 'Bonuses')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-bonuses-grid' },
+                            getAttr('bonusItems', []).length > 0 ?
+                                getAttr('bonusItems', []).slice(0, 3).map((bonus, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-bonus-card' 
+                                    },
+                                        bonus.icon ? 
+                                            createElement('div', { className: 'sppm-bonus-icon' }, bonus.icon) : null,
+                                        createElement('h3', { className: 'sppm-bonus-title' }, 
+                                            bonus.title || 'Bonus Title'
+                                        ),
+                                        bonus.value ? 
+                                            createElement('div', { className: 'sppm-bonus-value' }, 
+                                                'Value: ' + bonus.value
+                                            ) : null,
+                                        createElement('p', { className: 'sppm-bonus-desc' }, 
+                                            bonus.description || 'Bonus description'
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-bonus-card',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-bonus-icon' }, '🎁'),
+                                    createElement('h3', { className: 'sppm-bonus-title' }, 'Sample Bonus'),
+                                    createElement('div', { className: 'sppm-bonus-value' }, 'Value: $99'),
+                                    createElement('p', { className: 'sppm-bonus-desc' }, 
+                                        'Add bonuses in the sidebar to see them here.'
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -977,33 +1098,44 @@ registerBlockType('swrice/guarantee-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-guarantee-preview',
-                style: {
-                    background: '#d1ecf1',
-                    border: '1px solid #bee5eb',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#0c5460',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('guaranteeIcon')),
-                    getAttr('guaranteeHeading', 'Guarantee')
-                ),
-                createElement('p', { style: { color: '#0c5460', margin: '0 0 10px 0' } },
-                    getAttr('guaranteeText') || 'Configure your guarantee text in the sidebar.'
-                ),
-                createElement('div', { style: { color: '#0c5460' } },
-                    `${getAttr('guaranteePoints', []).length} guarantee point(s) configured.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-guarantee-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('guaranteeIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('guaranteeIcon')) : null,
+                                getAttr('guaranteeHeading', 'Guarantee')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-guarantee-content' },
+                            createElement('p', { className: 'sppm-guarantee-text' }, 
+                                getAttr('guaranteeText', 'We guarantee your satisfaction with our product.')
+                            ),
+                            getAttr('guaranteePoints', []).length > 0 ?
+                                createElement('div', { className: 'sppm-guarantee-points' },
+                                    getAttr('guaranteePoints', []).map((point, index) =>
+                                        createElement('div', { 
+                                            key: index,
+                                            className: 'sppm-guarantee-point' 
+                                        },
+                                            createElement('span', { className: 'sppm-guarantee-check' }, '✅'),
+                                            point.point || 'Guarantee point'
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-guarantee-points',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-guarantee-point' },
+                                        createElement('span', { className: 'sppm-guarantee-check' }, '✅'),
+                                        'Add guarantee points in the sidebar'
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -1062,30 +1194,46 @@ registerBlockType('swrice/why-choose-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-why-choose-preview',
-                style: {
-                    background: '#ffeaa7',
-                    border: '1px solid #fdcb6e',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#8b6914',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('whyChooseIcon')),
-                    getAttr('whyChooseHeading', 'Why Choose Us')
-                ),
-                createElement('div', { style: { color: '#8b6914' } },
-                    `${getAttr('whyChooseItems', []).length} reason(s) configured. Configure in the sidebar.`
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-why-choose-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('whyChooseIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('whyChooseIcon')) : null,
+                                getAttr('whyChooseHeading', 'Why Choose Us')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-why-choose-grid' },
+                            getAttr('whyChooseItems', []).length > 0 ?
+                                getAttr('whyChooseItems', []).slice(0, 3).map((benefit, index) =>
+                                    createElement('div', { 
+                                        key: index,
+                                        className: 'sppm-benefit-card' 
+                                    },
+                                        benefit.icon ? 
+                                            createElement('div', { className: 'sppm-benefit-icon' }, benefit.icon) : null,
+                                        createElement('h3', { className: 'sppm-benefit-title' }, 
+                                            benefit.title || 'Benefit Title'
+                                        ),
+                                        createElement('p', { className: 'sppm-benefit-desc' }, 
+                                            benefit.description || 'Benefit description'
+                                        )
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    className: 'sppm-benefit-card',
+                                    style: { opacity: 0.6 }
+                                },
+                                    createElement('div', { className: 'sppm-benefit-icon' }, '⭐'),
+                                    createElement('h3', { className: 'sppm-benefit-title' }, 'Sample Benefit'),
+                                    createElement('p', { className: 'sppm-benefit-desc' }, 
+                                        'Add benefits in the sidebar to see them here.'
+                                    )
+                                )
+                        )
+                    )
                 )
             )
         );
@@ -1131,30 +1279,23 @@ registerBlockType('swrice/about-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-about-preview',
-                style: {
-                    background: '#e2e3e5',
-                    border: '1px solid #d6d8db',
-                    padding: '20px',
-                    borderRadius: '8px'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        color: '#383d41',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('aboutIcon')),
-                    getAttr('aboutHeading', 'About')
-                ),
-                createElement('p', { style: { color: '#383d41', margin: 0 } },
-                    getAttr('aboutDescription') || 'Configure your about description in the sidebar.'
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-about-section' },
+                        createElement('div', { className: 'sppm-section-header' },
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('aboutIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('aboutIcon')) : null,
+                                getAttr('aboutHeading', 'About')
+                            )
+                        ),
+                        createElement('div', { className: 'sppm-about-content' },
+                            createElement('p', null, 
+                                getAttr('aboutDescription', 'Learn more about our company and mission.')
+                            )
+                        )
+                    )
                 )
             )
         );
@@ -1223,37 +1364,45 @@ registerBlockType('swrice/final-cta-section', {
                 )
             ),
             
-            // Block Preview
-            createElement('div', { 
-                className: 'swrice-final-cta-preview',
-                style: {
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    color: 'white',
-                    padding: '30px',
-                    borderRadius: '8px',
-                    textAlign: 'center'
-                }
-            },
-                createElement('h3', { 
-                    style: { 
-                        margin: '0 0 15px 0',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '10px'
-                    } 
-                }, 
-                    createElement('span', null, getAttr('finalCtaIcon')),
-                    getAttr('finalCtaHeading', 'Ready to Get Started?')
-                ),
-                createElement('h4', { style: { margin: '0 0 10px 0' } }, 
-                    getAttr('ctaTitle', 'Get Started Today')
-                ),
-                createElement('p', { style: { margin: '0 0 15px 0', opacity: 0.9 } },
-                    getAttr('ctaSubtitle', 'Join thousands of satisfied customers')
-                ),
-                createElement('div', { style: { fontSize: '14px', opacity: 0.8 } },
-                    '🎯 Final CTA Section - Configure settings in the sidebar'
+            // Block Preview - Exact Frontend Match
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-final-cta' },
+                        createElement('div', { className: 'sppm-cta' },
+                            createElement('div', { className: 'sppm-cta-content' },
+                                getAttr('finalCtaHeading') ?
+                                    createElement('h2', { className: 'sppm-section-title' },
+                                        getAttr('finalCtaIcon') ? 
+                                            createElement('span', { className: 'sppm-section-icon' }, getAttr('finalCtaIcon')) : null,
+                                        getAttr('finalCtaHeading', 'Ready to Get Started?')
+                                    ) : null,
+                                getAttr('ctaTitle') ?
+                                    createElement('h3', { className: 'sppm-cta-title' }, 
+                                        getAttr('ctaTitle', 'Get Started Today')
+                                    ) : null,
+                                getAttr('ctaSubtitle') ?
+                                    createElement('p', { className: 'sppm-cta-subtitle' },
+                                        getAttr('ctaSubtitle', 'Join thousands of satisfied customers')
+                                    ) : null
+                            ),
+                            createElement('div', { className: 'sppm-cta-buttons' },
+                                getAttr('buyNowShortcode') ? 
+                                    createElement('div', { 
+                                        dangerouslySetInnerHTML: { __html: '[Shortcode Preview]' }
+                                    }) :
+                                    getAttr('pluginPrice') ?
+                                        createElement('button', { className: 'sppm-btn sppm-btn-primary' }, 
+                                            'Buy Now - $' + getAttr('pluginPrice', '29')
+                                        ) : null,
+                                getAttr('demoLink') && getAttr('demoLink') !== '#' && getAttr('demoLink') !== '' ?
+                                    createElement('a', { 
+                                        className: 'sppm-btn sppm-btn-ghost',
+                                        href: '#',
+                                        onClick: (e) => e.preventDefault()
+                                    }, 'Live Demo') : null
+                            )
+                        )
+                    )
                 )
             )
         );
