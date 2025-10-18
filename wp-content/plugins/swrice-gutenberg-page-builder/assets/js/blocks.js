@@ -1,5 +1,5 @@
 /**
- * Swrice Plugin Page Builder - Individual Section Blocks
+ * Swrice Plugin Sell Page Builder - Individual Section Blocks
  * Modern Gutenberg blocks for each section
  */
 

@@ -1,5 +1,5 @@
 /**
- * Swrice Gutenberg Page Builder - Frontend JavaScript
+ * Swrice Plugin Sell Page Builder - Frontend JavaScript
  * Handles interactive elements on the frontend
  */
 
