@@ -72,6 +72,15 @@ class Swrice_Gutenberg_Page_Builder {
             array(),
             SGPB_VERSION . '-' . time() // Cache busting for development
         );
+        
+        // Enqueue rich text enhancements
+        wp_enqueue_script(
+            'swrice-plugin-page-builder-rich-text',
+            SGPB_PLUGIN_URL . 'assets/js/rich-text-enhancements.js',
+            array('wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-dom-ready'),
+            SGPB_VERSION . '-' . time(), // Cache busting for development
+            true
+        );
     }
     
     /**
