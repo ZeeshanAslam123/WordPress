@@ -27,18 +27,26 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     </div>
     
     <!-- Current Version Display -->
-    <div class="sppm-current-version-card">
-        <div class="sppm-version-badge">
-            <span class="sppm-version-icon">🆕</span>
-            <span class="sppm-version-label">Current Version</span>
+    <div class="sppm-current-version-wrapper">
+        <div class="sppm-current-version-card">
+            <div class="sppm-version-header">
+                <div class="sppm-version-badge">
+                    <span class="sppm-version-icon">🆕</span>
+                    <span class="sppm-version-label">Current Version</span>
+                </div>
+                <div class="sppm-version-number"><?php echo esc_html($current_version); ?></div>
+            </div>
+            
+            <?php if ($upgrade_notice): ?>
+            <div class="sppm-upgrade-notice">
+                <div class="sppm-notice-icon">⚠️</div>
+                <div class="sppm-notice-content">
+                    <div class="sppm-notice-title">Important Notice</div>
+                    <div class="sppm-notice-text"><?php echo esc_html($upgrade_notice); ?></div>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
-        <div class="sppm-version-number"><?php echo esc_html($current_version); ?></div>
-        <?php if ($upgrade_notice): ?>
-        <div class="sppm-upgrade-notice">
-            <div class="sppm-notice-icon">⚠️</div>
-            <div class="sppm-notice-text"><?php echo esc_html($upgrade_notice); ?></div>
-        </div>
-        <?php endif; ?>
     </div>
     
     <?php if (is_array($changelog_items) && !empty($changelog_items)): ?>
@@ -108,19 +116,28 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
 </section>
 
 <style>
+/* Version & Changelog Section - Themed Design */
 .sppm-version-changelog-section {
-    max-width: 1000px;
-    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: var(--shadow);
+    margin: 40px 0;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sppm-current-version-wrapper {
+    margin-bottom: 40px;
 }
 
 .sppm-current-version-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
     color: white;
-    padding: 40px;
+    padding: 30px;
     border-radius: 16px;
-    text-align: center;
-    margin-bottom: 50px;
-    box-shadow: 0 10px 30px rgba(29,42,63,0.06);
+    box-shadow: 0 8px 25px rgba(95,160,216,0.25);
     position: relative;
     overflow: hidden;
 }
@@ -133,7 +150,7 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     width: 200%;
     height: 200%;
     background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    animation: shimmer 3s ease-in-out infinite;
+    animation: shimmer 4s ease-in-out infinite;
 }
 
 @keyframes shimmer {
@@ -141,55 +158,72 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     50% { transform: rotate(180deg); }
 }
 
-.sppm-version-badge {
+.sppm-version-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    font-size: 18px;
-    font-weight: 500;
-    opacity: 0.9;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    position: relative;
+    z-index: 1;
 }
 
-.sppm-version-icon {
-    font-size: 24px;
+.sppm-version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .sppm-version-number {
-    font-size: 48px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    font-size: 42px;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .sppm-upgrade-notice {
+    margin-top: 20px;
     background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 8px;
     padding: 20px;
+    border-radius: 12px;
     display: flex;
     align-items: flex-start;
     gap: 15px;
-    text-align: left;
-    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
 }
 
 .sppm-notice-icon {
-    font-size: 20px;
+    font-size: 24px;
     flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.sppm-notice-content {
+    flex: 1;
+}
+
+.sppm-notice-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
 .sppm-notice-text {
-    line-height: 1.6;
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 0.95;
 }
 
 .sppm-changelog-container {
-    background: #fff;
+    background: var(--soft);
     border-radius: 16px;
     padding: 40px;
-    box-shadow: 0 10px 30px rgba(29,42,63,0.06);
+    box-shadow: inset 0 2px 8px rgba(29,42,63,0.04);
 }
 
 .sppm-changelog-title {
@@ -197,11 +231,11 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     align-items: center;
     gap: 15px;
     font-size: 28px;
-    font-weight: 600;
-    color: #1f2b33;
+    font-weight: 700;
+    color: var(--text);
     margin: 0 0 40px 0;
     padding-bottom: 20px;
-    border-bottom: 2px solid #f3f7fb;
+    border-bottom: 2px solid rgba(95,160,216,0.2);
 }
 
 .sppm-changelog-icon {
@@ -210,17 +244,18 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
 
 .sppm-changelog-timeline {
     position: relative;
-    padding-left: 40px;
+    padding-left: 50px;
 }
 
 .sppm-changelog-timeline::before {
     content: '';
     position: absolute;
-    left: 20px;
+    left: 25px;
     top: 0;
     bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, #e9ecef, #dee2e6);
+    width: 3px;
+    background: linear-gradient(to bottom, var(--accent), var(--soft));
+    border-radius: 2px;
 }
 
 .sppm-changelog-item {
@@ -236,7 +271,7 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
 
 .sppm-changelog-marker {
     position: absolute;
-    left: -28px;
+    left: -33px;
     top: 8px;
     width: 40px;
     height: 40px;
@@ -246,6 +281,7 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     justify-content: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     z-index: 2;
+    border: 3px solid var(--card-bg);
 }
 
 .sppm-marker-icon {
@@ -254,16 +290,17 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
 }
 
 .sppm-changelog-content {
-    background: #f8f9fa;
-    border-radius: 12px;
+    background: var(--card-bg);
+    border-radius: 16px;
     padding: 30px;
-    border-left: 4px solid #e9ecef;
+    border: 1px solid rgba(95,160,216,0.1);
     transition: all 0.3s ease;
+    box-shadow: var(--shadow);
 }
 
 .sppm-changelog-content:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(29,42,63,0.08);
+    box-shadow: 0 12px 35px rgba(29,42,63,0.1);
 }
 
 .sppm-changelog-header {
@@ -277,15 +314,18 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
 
 .sppm-version-info h4 {
     font-size: 22px;
-    font-weight: 600;
-    color: #1f2b33;
+    font-weight: 700;
+    color: var(--text);
     margin: 0 0 8px 0;
 }
 
 .sppm-release-date {
-    color: #6b747b;
+    color: var(--muted);
     font-size: 14px;
     font-weight: 500;
+    background: var(--soft);
+    padding: 4px 10px;
+    border-radius: 6px;
 }
 
 .sppm-release-type {
@@ -293,25 +333,37 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     padding: 8px 16px;
     border-radius: 20px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .sppm-changelog-changes {
-    color: #555;
+    color: var(--text);
     line-height: 1.8;
     font-size: 16px;
 }
 
 .sppm-bullet {
-    color: #5fa0d8;
+    color: var(--accent);
     font-weight: bold;
     margin-right: 8px;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
-    .sppm-current-version-card {
+    .sppm-version-changelog-section {
         padding: 30px 20px;
+    }
+    
+    .sppm-current-version-card {
+        padding: 25px 20px;
+    }
+    
+    .sppm-version-header {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
     }
     
     .sppm-version-number {
@@ -327,11 +379,15 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     }
     
     .sppm-changelog-timeline {
-        padding-left: 30px;
+        padding-left: 40px;
+    }
+    
+    .sppm-changelog-timeline::before {
+        left: 20px;
     }
     
     .sppm-changelog-marker {
-        left: -23px;
+        left: -28px;
         width: 32px;
         height: 32px;
     }
@@ -341,12 +397,13 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     }
     
     .sppm-changelog-content {
-        padding: 20px;
+        padding: 25px 20px;
     }
     
     .sppm-changelog-header {
         flex-direction: column;
         align-items: flex-start;
+        gap: 10px;
     }
     
     .sppm-version-info h4 {
@@ -356,8 +413,17 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
 
 @media (max-width: 480px) {
     .sppm-upgrade-notice {
+        padding: 15px;
         flex-direction: column;
-        text-align: center;
+        gap: 10px;
+    }
+    
+    .sppm-notice-title {
+        font-size: 14px;
+    }
+    
+    .sppm-notice-text {
+        font-size: 13px;
     }
     
     .sppm-changelog-timeline::before {
@@ -365,11 +431,11 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     }
     
     .sppm-changelog-timeline {
-        padding-left: 25px;
+        padding-left: 30px;
     }
     
     .sppm-changelog-marker {
-        left: -18px;
+        left: -23px;
         width: 28px;
         height: 28px;
     }
@@ -377,6 +443,9 @@ $changelog_items = isset($attributes['changelogItems']) ? $attributes['changelog
     .sppm-marker-icon {
         font-size: 12px;
     }
+    
+    .sppm-changelog-changes {
+        font-size: 14px;
+    }
 }
 </style>
-
