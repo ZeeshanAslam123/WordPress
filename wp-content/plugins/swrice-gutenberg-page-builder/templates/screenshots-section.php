@@ -104,29 +104,36 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <style>
-/* Simple Screenshots Slider */
+/* Professional Screenshots Slider */
 .sppm-screenshots-container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
 .sppm-screenshots-slider {
     position: relative;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(29,42,63,0.06);
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
     overflow: hidden;
     margin-bottom: 30px;
+    border: 1px solid rgba(95,160,216,0.1);
 }
 
 .sppm-slides-wrapper {
     position: relative;
-    min-height: 400px;
+    min-height: 450px;
+    background: var(--soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .sppm-screenshot-slide {
     display: none;
     text-align: center;
+    padding: 30px;
+    width: 100%;
 }
 
 .sppm-screenshot-slide.active {
@@ -136,25 +143,33 @@ document.addEventListener('DOMContentLoaded', () => {
 .sppm-screenshot-image {
     width: 100%;
     height: auto;
-    max-height: 500px;
+    max-height: 400px;
     object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(29,42,63,0.1);
+    background: white;
+    padding: 10px;
 }
 
-/* Simple Arrows */
+/* Professional Arrows */
 .sppm-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0,0,0,0.7);
-    color: white;
+    background: var(--card-bg);
+    color: var(--accent);
     border: none;
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 10;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .sppm-arrow-left {
@@ -166,16 +181,19 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 .sppm-arrow:hover {
-    background: rgba(0,0,0,0.9);
+    background: var(--accent);
+    color: white;
     transform: translateY(-50%) scale(1.1);
 }
 
-/* Simple Dots */
+/* Professional Dots */
 .sppm-dots {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     justify-content: center;
     align-items: center;
+    padding: 20px;
+    background: var(--card-bg);
 }
 
 .sppm-dot {
@@ -183,26 +201,79 @@ document.addEventListener('DOMContentLoaded', () => {
     height: 12px;
     border-radius: 50%;
     border: none;
-    background: rgba(0,0,0,0.3);
+    background: rgba(107,116,123,0.3);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .sppm-dot.active {
-    background: #5fa0d8;
-    transform: scale(1.2);
+    background: var(--accent);
+    transform: scale(1.3);
+    box-shadow: 0 2px 8px rgba(95,160,216,0.4);
 }
 
 .sppm-dot:hover {
-    background: #4a8bbd;
+    background: var(--accent-dark);
+    transform: scale(1.1);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+    .sppm-screenshots-container {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+    
+    .sppm-slides-wrapper {
+        min-height: 350px;
+    }
+    
+    .sppm-screenshot-slide {
+        padding: 20px;
+    }
+    
+    .sppm-screenshot-image {
+        max-height: 300px;
+        padding: 8px;
+    }
+    
     .sppm-arrow {
         width: 40px;
         height: 40px;
-        font-size: 20px;
+        font-size: 18px;
+    }
+    
+    .sppm-arrow-left {
+        left: 15px;
+    }
+    
+    .sppm-arrow-right {
+        right: 15px;
+    }
+    
+    .sppm-dots {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sppm-slides-wrapper {
+        min-height: 280px;
+    }
+    
+    .sppm-screenshot-slide {
+        padding: 15px;
+    }
+    
+    .sppm-screenshot-image {
+        max-height: 250px;
+        padding: 6px;
+    }
+    
+    .sppm-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
     }
     
     .sppm-arrow-left {
