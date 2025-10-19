@@ -1490,7 +1490,8 @@ const VERSION_CHANGELOG_ICON_OPTIONS = [
     { label: '🆕 New Button', value: '🆕' }
 ];
 
-// Screenshots Section Block
+
+// Updated Screenshots Section Block with Media Library Support
 registerBlockType('swrice/screenshots-section', {
     title: 'Screenshots Section',
     icon: 'format-gallery',
@@ -1529,17 +1530,164 @@ registerBlockType('swrice/screenshots-section', {
                     })
                 ),
                 createElement(PanelBody, { title: 'Screenshot Gallery', initialOpen: false },
-                    createElement(RepeaterField, {
-                        items: getAttr('screenshotItems', []),
-                        onChange: (items) => setAttributes({ screenshotItems: items }),
-                        fields: [
-                            { key: 'title', label: 'Screenshot Title', type: 'text', placeholder: 'e.g., Dashboard Overview' },
-                            { key: 'description', label: 'Screenshot Description', type: 'textarea', placeholder: 'Brief description of what this screenshot shows' },
-                            { key: 'imageUrl', label: 'Image URL', type: 'text', placeholder: 'https://example.com/screenshot.jpg' },
-                            { key: 'imageId', label: 'Image ID', type: 'text', default: '0' }
-                        ],
-                        addButtonText: 'Add Screenshot'
-                    })
+                    // Custom Screenshots Repeater with Media Library Support
+                    createElement('div', { className: 'screenshots-repeater' },
+                        getAttr('screenshotItems', []).map((item, index) =>
+                            createElement('div', { 
+                                key: index, 
+                                className: 'screenshot-item',
+                                style: { 
+                                    border: '1px solid #ddd', 
+                                    padding: '20px', 
+                                    marginBottom: '15px',
+                                    borderRadius: '8px',
+                                    backgroundColor: '#f9f9f9'
+                                }
+                            },
+                                createElement('div', { 
+                                    style: { 
+                                        display: 'flex', 
+                                        justifyContent: 'space-between', 
+                                        alignItems: 'center',
+                                        marginBottom: '15px'
+                                    }
+                                },
+                                    createElement('strong', null, `Screenshot ${index + 1}`),
+                                    createElement(Button, {
+                                        isDestructive: true,
+                                        isSmall: true,
+                                        onClick: () => {
+                                            const newItems = getAttr('screenshotItems', []).filter((_, i) => i !== index);
+                                            setAttributes({ screenshotItems: newItems });
+                                        }
+                                    }, 'Remove')
+                                ),
+                                
+                                // Screenshot Title
+                                createElement(TextControl, {
+                                    label: 'Screenshot Title',
+                                    value: item.title || '',
+                                    onChange: (value) => {
+                                        const newItems = [...getAttr('screenshotItems', [])];
+                                        newItems[index] = { ...newItems[index], title: value };
+                                        setAttributes({ screenshotItems: newItems });
+                                    },
+                                    placeholder: 'e.g., Dashboard Overview'
+                                }),
+                                
+                                // Screenshot Description
+                                createElement(TextareaControl, {
+                                    label: 'Screenshot Description',
+                                    value: item.description || '',
+                                    onChange: (value) => {
+                                        const newItems = [...getAttr('screenshotItems', [])];
+                                        newItems[index] = { ...newItems[index], description: value };
+                                        setAttributes({ screenshotItems: newItems });
+                                    },
+                                    rows: 3,
+                                    placeholder: 'Brief description of what this screenshot shows'
+                                }),
+                                
+                                // Image Selection - URL Input
+                                createElement(TextControl, {
+                                    label: 'Image URL (Optional)',
+                                    value: item.imageUrl || '',
+                                    onChange: (value) => {
+                                        const newItems = [...getAttr('screenshotItems', [])];
+                                        newItems[index] = { ...newItems[index], imageUrl: value };
+                                        setAttributes({ screenshotItems: newItems });
+                                    },
+                                    placeholder: 'https://example.com/screenshot.jpg',
+                                    help: 'Enter image URL directly or use Media Library button below'
+                                }),
+                                
+                                // Media Library Button
+                                createElement('div', { style: { marginTop: '10px', marginBottom: '15px' } },
+                                    createElement(Button, {
+                                        isPrimary: true,
+                                        onClick: () => {
+                                            if (typeof wp !== 'undefined' && wp.media) {
+                                                const frame = wp.media({
+                                                    title: 'Select Screenshot Image',
+                                                    button: { text: 'Use This Image' },
+                                                    multiple: false,
+                                                    library: { type: 'image' }
+                                                });
+                                                
+                                                frame.on('select', () => {
+                                                    const attachment = frame.state().get('selection').first().toJSON();
+                                                    const newItems = [...getAttr('screenshotItems', [])];
+                                                    newItems[index] = { 
+                                                        ...newItems[index], 
+                                                        imageId: attachment.id,
+                                                        imageUrl: attachment.url 
+                                                    };
+                                                    setAttributes({ screenshotItems: newItems });
+                                                });
+                                                
+                                                frame.open();
+                                            }
+                                        }
+                                    }, '📁 Select from Media Library')
+                                ),
+                                
+                                // Image Preview
+                                (item.imageUrl) && createElement('div', { 
+                                    style: { 
+                                        marginTop: '10px',
+                                        padding: '10px',
+                                        border: '1px solid #ddd',
+                                        borderRadius: '4px',
+                                        backgroundColor: '#fff'
+                                    }
+                                },
+                                    createElement('div', { style: { marginBottom: '10px', fontWeight: '500' } }, 'Preview:'),
+                                    createElement('img', { 
+                                        src: item.imageUrl, 
+                                        alt: item.title || 'Screenshot preview',
+                                        style: { 
+                                            maxWidth: '100%', 
+                                            height: 'auto', 
+                                            maxHeight: '200px',
+                                            border: '1px solid #ddd', 
+                                            borderRadius: '4px' 
+                                        }
+                                    }),
+                                    createElement('div', { style: { marginTop: '8px' } },
+                                        createElement(Button, {
+                                            isDestructive: true,
+                                            isSmall: true,
+                                            onClick: () => {
+                                                const newItems = [...getAttr('screenshotItems', [])];
+                                                newItems[index] = { 
+                                                    ...newItems[index], 
+                                                    imageId: 0, 
+                                                    imageUrl: '' 
+                                                };
+                                                setAttributes({ screenshotItems: newItems });
+                                            }
+                                        }, 'Remove Image')
+                                    )
+                                )
+                            )
+                        ),
+                        
+                        // Add New Screenshot Button
+                        createElement(Button, {
+                            isPrimary: true,
+                            onClick: () => {
+                                const newItem = {
+                                    title: '',
+                                    description: '',
+                                    imageUrl: '',
+                                    imageId: 0
+                                };
+                                const newItems = [...getAttr('screenshotItems', []), newItem];
+                                setAttributes({ screenshotItems: newItems });
+                            },
+                            style: { marginTop: '15px' }
+                        }, '➕ Add Screenshot')
+                    )
                 )
             ),
             
@@ -1608,6 +1756,7 @@ registerBlockType('swrice/screenshots-section', {
     },
     save: () => null
 });
+
 
 // Video Tutorial Section Block
 registerBlockType('swrice/video-tutorial-section', {
