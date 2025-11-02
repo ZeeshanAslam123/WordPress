@@ -57,4 +57,4 @@ function gamipress_average_points_shortcode( $atts ) {
     return '<span class="gamipress-average-points">Average: ' . $average_points . '</span>';
 }
 
-add_shortcode( 'gamipress_average_points', 'gamipress_average_points_shortcode' );
+// add_shortcode( 'gamipress_average_points', 'gamipress_average_points_shortcode' );
