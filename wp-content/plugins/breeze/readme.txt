@@ -2,9 +2,9 @@
 Contributors: Cloudways
 Tags: cache,caching, performance, wp-cache, cdn
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.8.2
 Requires PHP: 7.4
-Stable tag: 2.2.10
+Stable tag: 2.2.20
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -160,13 +160,62 @@ Using Gzip, Breeze compresses the request files, further reducing the size of th
 
 == Changelog ==
 
+= 2.2.20 =
+
+* Improved: Added proper verification process for Varnish cache purge.
+* Improved: Updated CSS minification library and refined CSS cleaning rules for better optimization.
+* Added: Cloudflare cache now automatically purges when the "Clear Cache" action is triggered from post edit links.
+
+= 2.2.19 =
+
+* Fixed: Video lazy loading conflicts by ensuring compatibility with native lazy load and excluding WordPress [video] short codes from lazy loading.
+* Improved: File and folder permission handling logic – missing file/folder checks will no longer appear when the cache system is disabled.
+
+= 2.2.18 =
+
+* Improved: Security handling for JavaScript fetch and XHR requests to ensure safer data communication.
+* Added: Lazy Load library instance is now available on the window object for users with custom setups.
+* Improved: Purge Cron Job now also clears Cloudflare cache to ensure complete cache invalidation
+
+= 2.2.17 =
+
+* Enhancement: Added a Purge Progress notification to clearly inform users when a purge action is actively running.
+
+= 2.2.16 =
+
+* Improved: Increased expected API response timeout from 4 seconds to 30 seconds to better handle delayed responses.
+
+= 2.2.15 =
+
+* Improved: Updated handling and response messages for Cloudflare cache purge requests to provide clearer feedback and improve transparency.
+
+= 2.2.14 =
+
+* Fix: Resolved a critical Cross-Site Request Forgery (CSRF) vulnerability by implementing nonce validation.
+* Fix: Patched a Broken Access Control (BAC) vulnerability to ensure users cannot perform actions outside of their assigned capabilities.
+
+= 2.2.13 =
+
+* Fix: Addressed compatibility issues with Elementor and WooCommerce variable products. Also resolved issues caused by improper HTML entity decoding to ensure correct JavaScript content rendering and improved plugin stability.
+
+= 2.2.12 =
+
+* Fix: Resolved an issue where Lazy Load and Cross-Origin options caused HTML entities to remain encoded on the front-end.
+* Fix: Corrected a bug where the breeze_clear_remote_gravatar cron event was not removed upon Breeze plugin uninstallation.
+
+= 2.2.11 =
+
+* Fix: Cache was not purged automatically during Breeze plugin updates.
+* Add: Clearing Elementor cache will also clear Breeze cache.
+* Changed: Updated lazy load initialization and improved iframe handling to better align with browser-native lazy loading behavior.
+
 = 2.2.10 =
 
 * Added: native lazy loading support for iframe elements.
 * Added: Implemented lazy load support for video elements with multiple source tags.
 * Added: Introduced .webp format support for lazy loading images.
 * Changed: Switched from lazysizes to Vanilla LazyLoad, reducing the lazy load library's footprint.
-* Improved: Updated lazy load placeholders to use Base64-encoded inline images for improved performance
+* Improved: Updated lazy load placeholders to use Base64-encoded inline images for improved performance.
 
 = 2.2.9 =
 
@@ -756,5 +805,6 @@ Update Breeze through WordPress Admin > Dashboard >Updates. The settings will re
 
 
 == Requirements ==
+
 
 PHP 7.4, PHP 8 recommended for better performance, WordPress 6.0+

@@ -4,7 +4,7 @@ Tags: Schema, Structured Data, Rich Snippets, SEO, AMP
 Requires at least: 4.5
 Tested up to: 6.8
 Requires PHP: 5.6.20
-Stable tag: 1.45
+Stable tag: 1.52
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Schema & Structured Data adds Google Rich Snippets markup according to Schema.org guidelines to structure your site for SEO.
@@ -86,6 +86,9 @@ Schema & Structured Data for WP & AMP adds Google Rich Snippets markup according
 * VacationalRental
 * CriticReview
 * ProfilePage
+* Game
+* Certification
+* Guide
 * [View All](https://structured-data-for-wp.com/docs/article/how-many-schema-types-do-we-support/)
 
 ### Extensions
@@ -128,6 +131,68 @@ Yes, Absolutely! We would suggest you send your feature request by creating an i
 You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 
 == Changelog ==
+
+= 1.52 (30 October 2025) =
+* Fixed: Time issue with LiveBlogPosting schema #2371
+* Enhancement: Duplicate schema issue in the review collection #2372
+* Fixed: Code improvement #2376
+* Fixed: Vulnerability reported by Wordfence Security
+
+= 1.51 (07 October 2025) =
+* Feature: Add Guide schema type #2313
+* Enhancement: Improvement in JobPosting schema #2347
+* Enhancement: Added organization type "General" in knowledge graph #2356
+* Enhancement: Added award schema for book #2361
+* Fixed: Improvement in Person schema #2363
+* Fixed: Global schema modification issue in Person schema #2365
+* Enhancement: Improvement in SiteNavigationElement Schema #2369
+
+= 1.50 (02 September 2025) =
+* Enhancement: Fetch YouTube API Data from post's ACF Oembed field #2311
+* Feature: Added Certification schema type #2338
+* Feature: WPML compatibility with language wise menu translation #2348
+* Enhancement: width and height of image appears as a strings #2350
+* Fixed: Issue with FAQ schema on Woocommerce brands #2351
+* Enhancement: Microdata clean up improvement #2352
+* Fixed: Vulnerability reported by WPScan Security
+* Fixed: Code improvement with polylang add-on #2353
+
+= 1.49 (13 August 2025) =
+* Fixed: Improvement for AIO SEO compatibility #2314
+* Fixed: Incompatibility with PublishPress Permissions Due to Conflicting Select2 Library Usage #2327
+* Fixed: Unable to modify ItemList schema #2333
+* Fixed: Undefined array key saswp_eop_provider_address_locality in class-saswp-output-service.php #2337
+* Fixed: Picking wrong url when manually adding Author image URL #2339
+* Enhancement: Improvement in elementor faq block #2340
+* Feature: LiveBLogPosting Gutenberg block youTube shorts styling #2341
+* Feature: Added a Filter To Disable Schema For a specific Page and Post #2344
+
+= 1.48 (16 July 2025) =
+* Enhancement: Added the offer URL field to the product schema #2308
+* Fixed: Review schema displays incorrect item type in pages #2309
+* Enhancement: Updated 'Return Type' Property in Product Merchant Schema Markup #2319
+* Enhancement: Review schema date published improvement #2320
+* Feature: Strong testimonials avada builder improvement #2324
+* Fixed: Added image property in Recipe and BlogPost Schema #2332
+* Feature: Added new properties to vehicle schema #2329
+* Fixed: Markup code improvement #2334
+
+= 1.47 (13 June 2025) =
+* Feature: Added Place schema type #2272
+* Feature: Added Game schema type #2294
+* Fixed: Fatal Error After Upgrading to v1.46 (wp_is_block_theme Undefined) #2305
+* Fixed: Job location delete issue with JobPosting schema #2306
+* Feature: Course schema compatible with Amelia #2307
+* Enhancement: Added a new field to newsArticle schema #2310
+* Fixed: Issue with free google reviews with location code #2316
+
+= 1.46 (13 May 2025) =
+* Feature: Comments Review Module #2260
+* Fixed: Issue in associatedMedia property of NewsArticle  schema #2299
+* Enhancement: Added new properties StreetAddress and AddressRegion to Service schema #2300
+* Enhancement: Added filter hook for image attachment for custom url handling #2301
+* Enhancement: Added Support for mainEntityOfPage property in VideoObject schema #2302
+* Enhancement: Code improvement #2303
 
 = 1.45 (5 May 2025) =
 * Enhancement: Added about and sameAs property in WebPage schema #2049
@@ -252,61 +317,5 @@ You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 * Enhancement: Delete files after importing settings #2176
 * Enhancement: Fixed GTIN12 issue with the product schema for variable products #2180
 * Fixed: Comments was not appears in Recipes #2182
-
-= 1.35 (02 August 2024) =
-* Enhancement: Added new properties in LodgingBusiness > Hotel schema #2105
-* Fixed: Feature image size duplicate issue in schema markup #2140
-* Fixed: Issue with country field missing in the schema markup while modifying the schema output (Local Business) #2147
-* Fixed: A fatal error issue in the latest update of 1.34.2 #2148
-* Fixed: FAQ Block not working on Divi Builder #2149
-* Fixed: PHP warnings on schema types page #2150
-* Fixed: ACF fields are unclickable when the plugin is activated and an error appears in the Console #2152
-* Fixed: The ReturnFeesCustomerResponsibility field is missing in the product schema #2153
-
-= 1.34.2 (18 July 2024) =
-* Fixed: Error after version 1.34.1 update #2144
-* Fixed: Tested with new version of wordpress i.e. 6.6v #2145
-
-= 1.34.1 (16 July 2024) =
-* Fixed: Fatal error after recent update #2142 
-
-= 1.34 (16 July 2024) =
-
-* Bug: Fixed vulnerability repoted by Wordfence
-
-= 1.33 (27 June 2024) =
-
-* Enhancement: Schema markup is being added to the post types even if set to "Draft" #2118
-* Feature: Added an option to enable only custom schema #2121
-* Fixed: Warning messages when trying to preview pages after making changes #2126
-* Fixed: Warning of Realestate Schema #2127
-* Fixed: Conflict issues with WP-Multilang Plugin #2128
-* Enhancement: Added an educationalAlignment property to Learning Resource Schema. #2131
-* Enhancement: Added Event Schedule repeater property to Event Schema #2133
-* Fixed: A warning Undefined array key "saswp_product_schema_rp_country_code" #2134
-
-= 1.32 (01 June 2024) =
-
-* Fixed: Fix PHP warning #2111
-* Fixed: Line Breaks issue in schema using FAQ block #2112
-* Fixed: Mapping issue with ACF Google Map type for VacationalRental Schema type #2113
-* Fixed: Issue with comments url in schema #2114
-* Feature: Added compatibility with EventPrime #2115
-* Fixed: Issue with HotelRoom Schema #2116
-* Fixed: Issue with LocalBusiness schema #2120
-* Feature: Added compatibility with the plugin Joli FAQ SEO #2122
-* Enhancement: Added changes related to Product schema Return Policy #2124
-
-= 1.31 (29 April 2024) =
-
-* Fixed: Warning appearing on the website #2089
-* Feature: Added compatibility with dreams.co.uk to fetch reviews #2102
-* Feature: Added schema markup compatibility with attachments #2103
-* Fixed: PHP warning appearing in extension manager #2104
-* Fixed: A <strong> HTML tag appears on the frontend while using FAQ Block #2106
-
-= 1.30 (16 April 2024) =
-
-* Fixed: Security vulnerability issues raised by Wordfence
 
 All changelog available on [GitHub](https://github.com/ahmedkaludi/schema-and-structured-data-for-wp/releases).

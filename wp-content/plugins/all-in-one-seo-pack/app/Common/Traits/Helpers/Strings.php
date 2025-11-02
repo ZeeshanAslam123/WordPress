@@ -305,9 +305,35 @@ trait Strings {
 
 		// We must manually decode non-breaking spaces since html_entity_decode doesn't do this.
 		$string                        = $this->pregReplace( '/&nbsp;/', ' ', $string );
-		$decodeHtmlEntities[ $string ] = html_entity_decode( (string) $string, ENT_QUOTES );
+		$decodeHtmlEntities[ $string ] = html_entity_decode( (string) $string, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401 );
 
 		return $decodeHtmlEntities[ $string ];
+	}
+
+	/**
+	 * Recursively decode HTML entities until no more decoding is possible.
+	 *
+	 * @since 4.8.7
+	 *
+	 * @param  string $string        The string to decode.
+	 * @param  int    $maxIterations The maximum number of iterations.
+	 * @return string                The decoded string.
+	 */
+	public function decodeHtmlEntitiesRecursive( $string, $maxIterations = 10 ) {
+		if ( ! is_string( $string ) ) {
+			return '';
+		}
+
+		$decodedValue = $string;
+		$iterations   = 0;
+		do {
+			$previousValue = $decodedValue;
+			$decodedValue  = $this->decodeHtmlEntities( $decodedValue );
+
+			$iterations++;
+		} while ( $previousValue !== $decodedValue && $iterations < $maxIterations );
+
+		return $decodedValue;
 	}
 
 	/**

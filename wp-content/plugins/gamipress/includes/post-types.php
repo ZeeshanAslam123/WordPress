@@ -281,6 +281,12 @@ function gamipress_register_rank_type( $rank_type_id = 0, $rank_name_singular = 
  */
 function gamipress_register_post_types() {
 
+    // Requirement types with a translatable name (due to WP change to move translations to init)
+    gamipress_register_requirement_type( __( 'Points Award', 'gamipress' ), __( 'Points Awards', 'gamipress' ), 'points-award' );
+    gamipress_register_requirement_type( __( 'Points Deduction', 'gamipress' ), __( 'Points Deductions', 'gamipress' ), 'points-deduct' );
+    gamipress_register_requirement_type( __( 'Step', 'gamipress' ), __( 'Steps', 'gamipress' ), 'step' );
+    gamipress_register_requirement_type( __( 'Rank Requirement', 'gamipress' ), __( 'Rank Requirements', 'gamipress' ), 'rank-requirement' );
+    
     // Register Points Type
     register_post_type( 'points-type', array(
         'labels' => array(

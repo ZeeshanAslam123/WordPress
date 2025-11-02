@@ -63,7 +63,7 @@ class Sign_In_With_Google_Block {
 			'init',
 			function () {
 				register_block_type(
-					dirname( GOOGLESITEKIT_PLUGIN_MAIN_FILE ) . '/dist/assets/js/blocks/sign-in-with-google/block.json',
+					dirname( GOOGLESITEKIT_PLUGIN_MAIN_FILE ) . '/dist/assets/blocks/sign-in-with-google/block.json',
 					array(
 						'render_callback' => array( $this, 'render_callback' ),
 					)
@@ -86,6 +86,15 @@ class Sign_In_With_Google_Block {
 			return '';
 		}
 
-		return '<div class="googlesitekit-sign-in-with-google__frontend-output-button"></div>';
+		ob_start();
+		/**
+		 * Display the Sign in with Google button.
+		 *
+		 * @since 1.164.0
+		 *
+		 * @param array $args Optional arguments to customize button attributes.
+		 */
+		do_action( 'googlesitekit_render_sign_in_with_google_button' );
+		return ob_get_clean();
 	}
 }

@@ -129,7 +129,7 @@ if (!function_exists( 'wctg_custom_child_theme_form' ) ) :
 				           						</label>
 				           						<br>
 				           						<label for="new_license_uri">
-				             						<input type="text" id="license-uri" name="license-uri" placeholder ="<?php _e('license URI','wp-child-theme-generator');?>"> 
+				             						<input type="text" id="license-uri" name="license-uri" placeholder ="<?php _e('License URI','wp-child-theme-generator');?>"> 
 				           						</label>
 				           						<br>
 				           						<label for="tags">

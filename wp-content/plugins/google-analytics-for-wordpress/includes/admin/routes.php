@@ -57,7 +57,7 @@ class MonsterInsights_Rest_Routes {
 		) );
 		add_action( 'wp_ajax_monsterinsights_vue_update_included_metrics', array( $this, 'update_included_metrics' ) );
 		add_action( 'wp_ajax_monsterinsights_vue_get_user_included_metrics', array( $this, 'get_user_included_metrics' ) );
-
+		add_action( 'wp_ajax_monsterinsights_vue_capture_last_used_report', array( $this, 'capture_last_used_report' ) );
 	}
 
 	/**
@@ -144,6 +144,10 @@ class MonsterInsights_Rest_Routes {
 			if ( ! isset( $options[ $array_field ] ) ) {
 				$options[ $array_field ] = array();
 			}
+		}
+
+		if (class_exists('MonsterInsights_Google_Ads')) {
+			$options['google_ads'] = MonsterInsights_Google_Ads::get_settings();
 		}
 
 		//add email summaries options
@@ -413,7 +417,7 @@ class MonsterInsights_Rest_Routes {
 			'installed' => array_key_exists( 'wpconsent-cookies-banner-privacy-suite/wpconsent.php', $installed_plugins ),
 			'basename'  => 'wpconsent-cookies-banner-privacy-suite/wpconsent.php',
 			'slug'      => 'wpconsent-cookies-banner-privacy-suite',
-			'settings'  => admin_url( 'admin.php?page=wpconsent_dashboard' ),
+			'settings'  => admin_url( 'admin.php?page=wpconsent' ),
 		);
 
 		// Duplicator
@@ -446,7 +450,7 @@ class MonsterInsights_Rest_Routes {
 		);
 		// Complianz.
 		$parsed_addons['complianz'] = array(
-			'active' => defined( 'cmplz_plugin' ) || defined( 'cmplz_premium' ),
+			'active' => defined( 'cmplz_plugin' ) || defined( 'cmplz_premium' ) || defined( 'cmplz_free' ),
 		);
 		// Cookie Yes
 		$parsed_addons['cookie_yes'] = array(
@@ -947,7 +951,7 @@ class MonsterInsights_Rest_Routes {
 		$api->set_additional_data( array(
 			'mp_token' => $value,
 		) );
-			
+
 		// Even if there's an error from Relay, we can still return a successful json
 		// payload because we can try again with Relay token push in the future
 		$data   = array();
@@ -1199,6 +1203,11 @@ class MonsterInsights_Rest_Routes {
 			wp_send_json( array(
 				'message' => esc_html__( 'Missing plugin name.', 'google-analytics-for-wordpress' ),
 			) );
+		}
+
+		// Check plugin diectory already available.
+		if ( is_dir( WP_PLUGIN_DIR . '/' . $slug ) ) {
+			wp_send_json_success(__( 'Plugin already installed.', 'google-analytics-for-wordpress' ));
 		}
 
 		include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
@@ -1666,6 +1675,7 @@ class MonsterInsights_Rest_Routes {
 				delete_site_option( 'monsterinsights_network_report_data_overview' );
 				delete_site_option( 'monsterinsights_report_data_compare_overview' );
 				delete_transient( 'monsterinsights_report_data_compare_overview' );
+
 			}
 			update_user_meta( get_current_user_id(), 'monsterinsights_included_metrics', $selected_metrics );
 		}
@@ -1704,5 +1714,22 @@ class MonsterInsights_Rest_Routes {
 			$included_metrics = str_replace( ',,', ',', $included_metrics ); // Clear the extra commas to avoid an empty iteration.
 		}
 		return $included_metrics;
+	}
+
+	/**
+	 * Captures the last visited report by the user.
+	 */
+	public function capture_last_used_report() {
+		check_ajax_referer( 'mi-admin-nonce', 'nonce' );
+
+		if ( ! current_user_can( 'monsterinsights_save_settings' ) || empty( $_POST['report'] ) ) {
+			return;
+		}
+
+		$report = sanitize_text_field( wp_unslash( $_POST['report'] ) );
+		update_option( 'monsterinsights_last_visited_report_name', $report );
+		update_option( 'monsterinsights_last_visited_report_date', time() );
+
+		wp_send_json_success();
 	}
 }

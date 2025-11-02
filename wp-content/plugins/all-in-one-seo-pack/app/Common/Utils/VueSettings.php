@@ -120,7 +120,9 @@ class VueSettings {
 			'queryArgLogs'                 => true,
 			'aiContentSettings'            => true,
 			'writingAssistantSettings'     => true,
-			'writingAssistantCta'          => true
+			'writingAssistantCta'          => true,
+			'llmsSitemap'                  => true,
+			'llmsSitemapAdvancedSettings'  => true,
 		],
 		'toggledRadio'    => [
 			'breadcrumbsShowMoreSeparators' => false,
@@ -133,10 +135,9 @@ class VueSettings {
 			'searchConsoleSitemapErrors'      => false
 		],
 		'internalTabs'    => [
-			'authorArchives'    => 'title-description',
-			'dateArchives'      => 'title-description',
-			'searchArchives'    => 'title-description',
-			'seoAuditChecklist' => 'all-items'
+			'authorArchives' => 'title-description',
+			'dateArchives'   => 'title-description',
+			'searchArchives' => 'title-description',
 		],
 		'tablePagination' => [
 			'networkDomains'                         => 20,
@@ -155,7 +156,8 @@ class VueSettings {
 			'searchStatisticsKrtGroups'              => 20,
 			'searchStatisticsKrtGroupsTableKeywords' => 10,
 			'searchStatisticsIndexStatus'            => 20,
-			'queryArgs'                              => 20
+			'queryArgs'                              => 20,
+			'seoAnalysis'                            => 20
 		],
 		'semrushCountry'  => 'US'
 	];

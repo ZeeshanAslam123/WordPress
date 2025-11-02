@@ -1175,10 +1175,12 @@ jQuery(document).ready(function($){
                             if ($(this).is(':checked')) { 
                               $(".saswp-stars-post-table").removeClass('saswp_hide');  
                               $(this).parent().parent().next().removeClass('saswp_hide');           
+                              $('.saswp-rf-page-settings-container').removeClass('saswp_hide');           
                               $("#saswp-stars-rating").val(1);             
                             }else{
                               $(this).parent().parent().next().addClass('saswp_hide');
                               $(".saswp-stars-post-table").addClass('saswp_hide');
+                              $('.saswp-rf-page-settings-container').addClass('saswp_hide'); 
                               $("#saswp-stars-rating").val(0);           
                             }
                       break;
@@ -4108,7 +4110,12 @@ jQuery(document).ready(function($){
                 var platform_id = $(this).attr('platform-id');                                                
                 saswp_collection.splice(platform_id, 1);                                      
                 $(this).parent().remove();
-                saswp_on_collection_design_change();  
+                saswp_on_collection_design_change();
+                
+                if ( saswp_total_collection.length === 0 ) {
+                    var html = '<input type="hidden" id="saswp_total_reviews_list" name="saswp_total_reviews" value="">';
+                    $(".saswp-total-reviews-list").html(html);   
+                } 
                                                
             });            
                                   

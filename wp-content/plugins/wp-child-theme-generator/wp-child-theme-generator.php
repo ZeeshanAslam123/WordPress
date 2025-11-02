@@ -5,10 +5,10 @@
  * Plugin URI:      http://wensolutions.com/plugins/wp-child-theme-generator
  * Author:          WEN Solutions
  * Author URI:      http://wensolutions.com
- * Version:           1.1.3
+ * Version:           1.1.4
  * Requires at least: 3.5
- * Requires PHP: 5.6
- * Tested up to: 6.6
+ * Requires PHP: 7.4
+ * Tested up to: 6.8
  * License:         GPL2
  * Text Domain:     wp-child-theme-generator
  * Domain Path:     /languages

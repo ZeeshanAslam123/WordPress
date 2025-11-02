@@ -3,7 +3,7 @@ Contributors: gamipress, rubengc, eneribs, dioni00, tinocalvo, pacogon, flaberna
 Tags: gamification, points, achievements, ranks, badges
 Requires at least: 4.4
 Tested up to: 6.8
-Stable tag: 7.4.2
+Stable tag: 7.5.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,7 @@ GamiPress integrates with a large number of plugins allowing you to add gamifica
 
 = Forms integrations =
 
+* [BBForms](https://gamipress.com/add-ons/bbforms-integration/)
 * [Gravity Forms](https://gamipress.com/add-ons/gravity-forms-integration/)
 * [Contact Form 7](https://gamipress.com/add-ons/contact-form-7-integration/)
 * [Ninja Forms](https://gamipress.com/add-ons/ninja-forms-integration/)
@@ -122,10 +123,12 @@ GamiPress integrates with a large number of plugins allowing you to add gamifica
 * [wpDiscuz](https://gamipress.com/add-ons/wpdiscuz-integration/)
 * [ARMember](https://gamipress.com/add-ons/armember-integration/)
 * [FluentCommunity](https://gamipress.com/add-ons/fluentcommunity-integration/)
+* [Asgaros Forum](https://gamipress.com/add-ons/asgaros-forum-integration/)
 
 = Other integrations =
 
 * [AutomatorWP](https://gamipress.com/add-ons/automatorwp-integration/)
+* [ShortLinks Pro](https://gamipress.com/add-ons/shortlinkspro-integration/)
 * [WooCommerce](https://gamipress.com/add-ons/woocommerce-integration/)
 * [Easy Digital Downloads](https://gamipress.com/add-ons/easy-digital-downloads-integration/)
 * [AffiliateWP](https://gamipress.com/add-ons/affiliatewp-integration/)
@@ -145,6 +148,7 @@ GamiPress integrates with a large number of plugins allowing you to add gamifica
 * [Eventin](https://gamipress.com/add-ons/eventin-integration/)
 * [Events Manager](https://gamipress.com/add-ons/events-manager-integration/)
 * [Favorites](https://gamipress.com/add-ons/favorites-integration/)
+* [FluentBooking](https://gamipress.com/add-ons/fluentbooking-integration/)
 * [Fluent Support](https://gamipress.com/add-ons/fluent-support-integration/)
 * [FluentCRM](https://gamipress.com/add-ons/fluentcrm-integration/)
 * [Give](https://gamipress.com/add-ons/give-integration/)
@@ -221,9 +225,11 @@ Other teams have integrated GamiPress into their products like plugins, apps and
 
 = More plugins from the GamiPress team =
 
-If you like GamiPress, you will love [AutomatorWP](https://wordpress.org/plugins/automatorwp/)! The most powerful no-code automator plugin that lets you connect +200 plugins together or with apps, platforms with webhooks plus other WordPress sites.
+If you like GamiPress, you will love our other plugins!
 
-[More about AutomatorWP](https://wordpress.org/plugins/automatorwp/)
+* [AutomatorWP](https://wordpress.org/plugins/automatorwp/) - The most powerful no-code automator plugin that lets you connect +200 plugins together or with apps, platforms with webhooks plus other WordPress sites.
+* [ShortLinks Pro](https://wordpress.org/plugins/shortlinkspro/) - The most complete link management plugin that not only powers WordPress websites with shortened URLs, also empowers site owners to create clean, branded and unique affiliate links easily.
+* [BBForms](https://wordpress.org/plugins/bbforms/) - BBForms is a code form plugin designed to help you build multipurpose forms in seconds!
 
 == Installation ==
 
@@ -342,6 +348,131 @@ No, We're unable to provide custom development services, as our focus is develop
 Also, you can check [our customize section](https://gamipress.com/customize/) where you can find a huge number of code snippets to help you customize GamiPress!
 
 == Changelog ==
+
+= 7.5.5 =
+
+* **New Features**
+* New integration: Eventin.
+* Eventin: Purchase a ticket for any event.
+* Eventin: Purchase a ticket for specific event.
+* Eventin: Create an event.
+* Eventin: Delete any event.
+* Eventin: Delete a specific event.
+* Eventin: Update any event.
+* Eventin: Update a specific event.
+
+= 7.5.4 =
+
+* **Improvements**
+* Improved add-ons section view.
+
+= 7.5.3 =
+
+* **New Features**
+* New integration: Asgaros Forum.
+* Asgaros Forum: Reply to a topic.
+* Asgaros Forum: Reply to a specific topic.
+* Asgaros Forum: Reply to a topic on a specific forum.
+* Asgaros Forum: Create a new topic.
+* Asgaros Forum: Create a new topic on a specific forum.
+* Asgaros Forum: Like a post.
+* Asgaros Forum: Like a post on a specific topic.
+* Asgaros Forum: Like a post on a specific forum.
+* Asgaros Forum: Get a like on a post.
+* Asgaros Forum: Dislike a post.
+* Asgaros Forum: Dislike a post on a specific topic.
+* Asgaros Forum: Dislike a post on a specific forum.
+* Asgaros Forum: Get a dislike on a post.
+* Asgaros Forum: Delete a reply.
+* Asgaros Forum: Delete a topic.
+* **New Features**
+* New integration: FluentBooking.
+* FluentBooking: Schedule a one-to-one meeting.
+* FluentBooking: Schedule a specific one-to-one meeting.
+* FluentBooking: Schedule one-to-one meeting with specific host.
+* FluentBooking: Cancel a one-to-one meeting.
+* FluentBooking: Cancel a specific one-to-one meeting.
+* FluentBooking: Cancel one-to-one meeting with specific host.
+* FluentBooking: Schedule a team meeting.
+* FluentBooking: Schedule a specific team meeting.
+* FluentBooking: Schedule team meeting with specific host.
+* FluentBooking: Cancel a team meeting.
+* FluentBooking: Cancel a specific team meeting.
+* FluentBooking: Cancel team meeting with specific host.
+
+= 7.5.2 =
+
+* **New Features**
+* New integration: BBForms.
+* BBForms: Submit a form.
+* BBForms: Submit a specific form.
+* BBForms: Submit a form of a category.
+* BBForms: Submit a form of a tag.
+* BBForms: Submit a specific field value.
+* BBForms: Submit a specific field value on a specific form.
+
+= 7.5.1 =
+
+* **Improvements**
+* Fixed typo.
+
+= 7.5.0 =
+
+* **Improvements**
+* Improved how to display add-on information.
+* Improved logs for points importation.
+* Fixed warning related to point type key when creating a new item. 
+
+= 7.4.9 =
+
+* **Improvements**
+* ACF: Improved events when meta value is added first time.
+* Improved CT library.
+* Improved events Daily visit to avoid archives.
+
+= 7.4.8 =
+
+* **New Features**
+* H5P: Complete any interactive content of a tag.
+* H5P: Complete any interactive content at maximum score of a tag.
+* H5P: Complete any interactive content with a minimum score of a tag.
+* H5P: Complete any interactive content with a maximum score of a tag.
+* H5P: Complete any interactive content on a range of scores of a tag.
+* H5P: Complete any interactive content with a minimum percentage score of a tag.
+* H5P: Complete any interactive content with a maximum percentage score of a tag.
+* H5P: Complete any interactive content on a range of percentages scores of a tag.
+
+= 7.4.7 =
+
+* **Improvements**
+* Advanced Ads: Support to Advanced Ads latest version.
+* Improved ajax functions to get Achievements and Ranks.
+
+= 7.4.6 =
+
+* **Improvements**
+* Improved load text.
+* **Bug Fixes**
+* Vulnerability Fixed.
+
+= 7.4.5 =
+
+* **Improvements**
+* ACF: Improved query for ACF events.
+
+= 7.4.4 =
+
+* **New Features**
+* New integration: ShortLinks Pro.
+* ShortLinks Pro: User clicks a link.
+* ShortLinks Pro: User clicks a specific link.
+* ShortLinks Pro: User clicks a link of a category.
+* ShortLinks Pro: User clicks a link of a tag.
+
+= 7.4.3 =
+
+* **Improvements**
+* Improved hook related to triggers.
 
 = 7.4.2 =
 
@@ -723,224 +854,3 @@ Also, you can check [our customize section](https://gamipress.com/customize/) wh
 * WordPress: Improved check on comments related events.
 * BuddyBoss: Improved check on topic replies events.
 * bbPress: Improved check on topic replies events.
-
-= 6.9.9.1 =
-
-* **Bug Fixes**
-* Fixed typo in H5P generated labels.
-
-= 6.9.9 =
-
-* **Improvements**
-* Prevent PHP errors when a post gets trashed.
-* Improved the functionality of advanced selectors.
-* Style improvements for the requirements UI.
-* **Bug Fixes**
-* Fixed the Javascript error "gamipress_admin_functions is not defined".
-
-= 6.9.8 =
-
-* **Improvements**
-* Save requirements when post gets saved and there are unsaved requirements changes.
-* Added new internal filters to allow extend GamiPress.
-* Removed log pattern settings and turned into filters.
-* Removed style settings.
-* Removed automatic update settings.
-
-= 6.9.7 =
-
-* **Improvements**
-* Check for achievement and rank types.
-* **Bug Fixes**
-* BuddyBoss: Fixed reordering of elements in add-on settings.
-
-= 6.9.6.2 =
-
-* **Bug Fixes**
-* Fixed bug related to get user points.
-
-= 6.9.6.1 =
-
-* **Bug Fixes**
-* Fixed progress bar for upgrade performance.
-
-= 6.9.6 =
-
-* **Improvements**
-* Added support for PHP latest version.
-
-= 6.9.5 =
-
-* **Improvements**
-* WordPress: Check for delete post events.
-
-= 6.9.4.1 =
-
-* **Bug Fixes**
-* Fixed bug related to required file.
-
-= 6.9.4 =
-
-* **Improvements**
-* Performance improvements on logs for large database queries.
-
-= 6.9.3 =
-
-* **Improvements**
-* PeepSo: Correctly display user points on profile with the correct formatting.
-
-= 6.9.2 =
-
-* **Improvements**
-* Improved recount activity for comments.
-
-= 6.9.1 =
-
-* **Improvements**
-* Added new security checks to template rendering.
-
-= 6.9.0 =
-
-* **Improvements**
-* Added new security checks to shortcode parameters.
-
-= 6.8.9 =
-
-* **Improvements**
-* Improved functions related to multisites to improve site loading performance.
-* **Bug Fixes**
-* Fixed bug related to administration rights.
-
-= 6.8.8 =
-
-* **Bug Fixes**
-* Fixed deprecated function to adapt to latest version of PHP.
-* WP User Manager: Fixed event "Remove profile avatar".
-
-= 6.8.7 =
-
-* **Improvements**
-* Improved function to obtain sites ID in multisites.
-* **Bug Fixes**
-* Added security to shortcodes.
-
-= 6.8.6 =
-
-* **Bug Fixes**
-* Added security to clear cache action.
-
-= 6.8.5 =
-
-* **Improvements**
-* Added registration of points obtained from import points in User Earnings.
-
-= 6.8.4 =
-
-* **New Features**
-* BuddyBoss: New event: Reply a comment in a group.
-* BuddyBoss: New event: Reply a comment in a specific group.
-* BuddyBoss: New event: Get a reply on a comment in a group.
-* BuddyBoss: New event: Get a reply on a comment in a specific group.
-* BuddyPress: New event: Reply a comment in a group.
-* BuddyPress: New event: Reply a comment in a specific group.
-* BuddyPress: New event: Get a reply on a comment in a group.
-* BuddyPress: New event: Get a reply on a comment in a specific group.
-* **Improvements**
-* BuddyBoss: New option to hide point types in forums if they have not been earned.
-* BuddyBoss: New option to hide default rank in forums if it is the only earned rank.
-* bbPress: New option to hide point types in forums if they have not been earned.
-* bbPress: New option to hide default rank in forums if it is the only earned rank.
-* **Bug Fixes**
-* BuddyPress: Ensure Hide unearned Ranks compatibility with most themes.
-* BuddyBoss: Ensure Hide unearned Ranks compatibility with most themes.
-
-= 6.8.3 =
-
-* **Bug Fixes**
-* Fixed bug related to show rank earners in multisite.
-
-= 6.8.2 =
-
-* **Bug Fixes**
-* Fixed bug related to JetEngine classes.
-
-= 6.8.1 =
-
-* **Improvements**
-* Code optimization for Ajax calls.
-
-= 6.8.0 =
-
-* **New Features**
-* ARForms: Successful submit a form.
-* ARForms: Successful submit a specific form.
-* ARForms: Submit a specific field value.
-* ARForms: Submit a specific field value on a specific form.
-
-= 6.7.0 =
-
-* **Bug Fixes**
-* WooCommerce: Fixed specific review check.
-
-= 6.6.1 =
-
-* **Bug Fixes**
-* Fixed typo in meta boxes post type check.
-
-= 6.6.0 =
-
-* **Improvements**
-* Prevent PHP warnings related to post types.
-* Ensure compatibility with PHP 8.2.
-* Improved performance for daily visits events.
-
-= 6.5.0 =
-
-* **Improvements**
-* Added filter for requirement field label.
-* BuddyBoss: New option to hide point types in profile and tab if they have not been earned.
-* BuddyBoss: New option to hide default rank if it is the only earned rank.
-* BuddyPress: New option to hide point types in profile and tab if they have not been earned.
-* BuddyPress: New option to hide default rank if it is the only earned rank.
-
-= 6.4.0 =
-
-* **Bug Fixes**
-* BuddyBoss: Fixed recount activity for activity replies.
-
-= 6.3.0 =
-
-* **New Features**
-* LearnDash: New event: Complete a quiz of a category.
-* LearnDash: New event: Complete a quiz of a tag.
-* LearnDash: New event: Successfully pass a quiz of a category.
-* LearnDash: New event: Successfully pass a quiz of a tag.
-* LearnDash: New event: Fail a quiz of a category.
-* LearnDash: New event: Fail a quiz of a tag.
-* LearnDash: New event: Complete a quiz of a category with a minimum percent grade.
-* LearnDash: New event: Complete a quiz of a tag with a minimum percent grade.
-* LearnDash: New event: Complete a quiz of a category with a maximum percent grade.
-* LearnDash: New event: Complete a quiz of a tag with a maximum percent grade.
-* LearnDash: New event: Complete a quiz of a category on a range of percent grade.
-* LearnDash: New event: Complete a quiz of a tag on a range of percent grade.
-* **Bug Fixes**
-* BuddyBoss: Fixed reordering of elements in add-on settings.
-* BuddyBoss: Fixed displaying points and ranks tabs in profile.
-* BuddyPress: Fixed reordering of elements in add-on settings.
-* BuddyPress: Fixed displaying points and ranks tabs in profile.
-
-= 6.2.0 =
-
-* **Improvements**
-* Improved SQL queries to add indexes.
-
-= 6.1.0 =
-
-* **Bug Fixes**
-* BuddyBoss: Fixed recount activity for groups.
-* BuddyPress: Fixed recount activity for groups.
-
-= 6.0.0 =
-
-* **Bug Fixes**
-* Events Manager: Fixed triggers for specific events.

@@ -8,6 +8,11 @@
 declare (strict_types=1);
 namespace WooCommerce\PayPalCommerce\CardFields;
 
+use DomainException;
+use WooCommerce\PayPalCommerce\Vendor\Psr\Log\LoggerInterface;
+use WooCommerce\PayPalCommerce\ApiClient\Entity\Order;
+use WooCommerce\PayPalCommerce\ApiClient\Factory\ExperienceContextBuilder;
+use WooCommerce\PayPalCommerce\CardFields\Service\CardCaptureValidator;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
@@ -79,7 +84,10 @@ class CardFieldsModule implements ServiceModule, ExtendingModule, ExecutableModu
                 if (!$c->get('wcgateway.configuration.card-configuration')->is_enabled()) {
                     return $default_fields;
                 }
-                if (CreditCardGateway::ID === $id && apply_filters('woocommerce_paypal_payments_enable_cardholder_name_field', \false)) {
+                $card_payments_configuration = $c->get('wcgateway.configuration.card-configuration');
+                assert($card_payments_configuration instanceof CardPaymentsConfiguration);
+                $should_show_card_holder_name = apply_filters('woocommerce_paypal_payments_enable_cardholder_name_field', $card_payments_configuration->show_name_on_card() === 'yes');
+                if (CreditCardGateway::ID === $id && $should_show_card_holder_name) {
                     $default_fields['card-name-field'] = '<p class="form-row form-row-wide">
 						<label for="ppcp-credit-card-gateway-card-name">' . esc_attr__('Cardholder Name', 'woocommerce-paypal-payments') . '</label>
 						<input id="ppcp-credit-card-gateway-card-name" class="input-text wc-credit-card-form-card-expiry" type="text" placeholder="' . esc_attr__('Cardholder Name (optional)', 'woocommerce-paypal-payments') . '" name="ppcp-credit-card-gateway-card-name">
@@ -110,12 +118,31 @@ class CardFieldsModule implements ServiceModule, ExtendingModule, ExecutableModu
             }
             $settings = $c->get('wcgateway.settings');
             assert($settings instanceof Settings);
+            $experience_context_builder = $c->get('wcgateway.builder.experience-context');
+            assert($experience_context_builder instanceof ExperienceContextBuilder);
+            $payment_source_data = array('experience_context' => $experience_context_builder->with_endpoint_return_urls()->build()->to_array());
             $three_d_secure_contingency = $settings->has('3d_secure_contingency') ? apply_filters('woocommerce_paypal_payments_three_d_secure_contingency', $settings->get('3d_secure_contingency')) : '';
             if ($three_d_secure_contingency === 'SCA_ALWAYS' || $three_d_secure_contingency === 'SCA_WHEN_REQUIRED') {
-                $data['payment_source']['card'] = array('attributes' => array('verification' => array('method' => $three_d_secure_contingency)));
+                $payment_source_data['attributes'] = array('verification' => array('method' => $three_d_secure_contingency));
             }
+            $data['payment_source'] = array('card' => $payment_source_data);
             return $data;
         }, 10, 2);
+        // Validates if an order with card payment source can be captured.
+        add_action('woocommerce_paypal_payments_before_capture_order', function (Order $order) use ($c) {
+            $validator = $c->get('card-fields.service.card-capture-validator');
+            assert($validator instanceof CardCaptureValidator);
+            if (!$validator->is_valid($order)) {
+                $logger = $c->get('woocommerce.logger.woocommerce');
+                assert($logger instanceof LoggerInterface);
+                $logger->warning("Could not capture order {$order->id()}");
+                if (apply_filters('woocommerce_paypal_payments_force_delete_wc_order_on_failed_capture', \true)) {
+                    // Add delete order flag in WC session to force delete on process payment failure handler.
+                    WC()->session->set('ppcp_delete_wc_order_on_payment_failure', \true);
+                }
+                throw new DomainException(esc_html__('Could not capture the PayPal order.', 'woocommerce-paypal-payments'));
+            }
+        });
         return \true;
     }
 }

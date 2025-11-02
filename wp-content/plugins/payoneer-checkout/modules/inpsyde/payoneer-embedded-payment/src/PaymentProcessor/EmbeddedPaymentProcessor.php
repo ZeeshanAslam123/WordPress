@@ -1,49 +1,47 @@
 <?php
 
-declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\PaymentProcessor;
 
 use Exception;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\Authentication\TokenGeneratorInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\MisconfigurationDetector\MisconfigurationDetectorInterface;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Checkout\PaymentProcessor\AbstractPaymentProcessor;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionPersistor;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\Api\Gateway\CommandFactory\WcOrderBasedUpdateCommandFactoryInterface;
 use Syde\Vendor\Inpsyde\PaymentGateway\PaymentGateway;
+use Syde\Vendor\Inpsyde\PaymentGateway\PaymentProcessorInterface;
+use Syde\Vendor\Inpsyde\PaymentGateway\PaymentRequestValidatorInterface;
+use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\PaymentMethods\PaymentProcessor\PayoneerCommonPaymentProcessor;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\CommandExceptionInterface;
 use Syde\Vendor\Inpsyde\PayoneerSdk\Api\Command\Exception\InteractionExceptionInterface;
 use WC_Order;
 /**
- * @psalm-import-type PaymentResult from AbstractPaymentProcessor
+ * @psalm-import-type PaymentResult from PayoneerCommonPaymentProcessor
  */
-class EmbeddedPaymentProcessor extends AbstractPaymentProcessor
+class EmbeddedPaymentProcessor implements PaymentProcessorInterface
 {
-    /**
-     * @var string
-     */
-    protected $hostedModeOverrideFlag;
-    protected bool $isRestRequest;
-    public function __construct(WcOrderBasedUpdateCommandFactoryInterface $updateCommandFactory, ListSessionProvider $sessionProvider, ListSessionPersistor $sessionPersistor, TokenGeneratorInterface $tokenGenerator, string $tokenKey, string $transactionIdFieldName, string $hostedModeOverrideFlag, MisconfigurationDetectorInterface $misconfigurationDetector, string $checkoutSessionHashKey, bool $isRestRequest)
+    protected PaymentRequestValidatorInterface $paymentRequestValidator;
+    private PayoneerCommonPaymentProcessor $commonProcessor;
+    private string $hostedModeOverrideFlag;
+    private bool $isRestRequest;
+    public function __construct(PayoneerCommonPaymentProcessor $commonProcessor, string $hostedModeOverrideFlag, bool $isRestRequest, PaymentRequestValidatorInterface $paymentRequestValidator)
     {
-        parent::__construct($misconfigurationDetector, $sessionProvider, $sessionPersistor, $updateCommandFactory, $tokenGenerator, $tokenKey, $transactionIdFieldName, $checkoutSessionHashKey);
+        $this->commonProcessor = $commonProcessor;
         $this->hostedModeOverrideFlag = $hostedModeOverrideFlag;
         $this->isRestRequest = $isRestRequest;
+        $this->paymentRequestValidator = $paymentRequestValidator;
     }
     public function processPayment(WC_Order $order, PaymentGateway $gateway): array
     {
-        /**
-         * Transfer the checkout-based LIST to the WC_Order.
-         * From there, the parent AbstractPaymentProcessor can take over.
-         */
-        $list = $this->sessionProvider->provide(ListSessionManager::determineContextFromGlobals($order));
-        $this->sessionPersistor->persist($list, new PaymentContext($order));
         try {
-            $result = parent::processPayment($order, $gateway);
+            $result = $this->commonProcessor->processPayment($order, $gateway);
+            /**
+             * Hopefully, this is a temporary solution.
+             *
+             * Normally, PaymentRequestValidator is used earlier, in the PaymentGateway class,
+             * before this method is called. But the problem is with current LIST handling we cannot
+             * be sure that the LIST we are validating there is the same we are going to use here.
+             * In both cases, we call $provider->provide(), but there is no guarantee the same LIST
+             * will be returned. So the actual validation happens here so far.
+             */
+            $this->paymentRequestValidator->assertIsValid($order, $gateway);
         } catch (InteractionExceptionInterface $exception) {
-            return $this->handleInteractionException($order, $exception);
+            return $this->commonProcessor->handleInteractionException($order, $exception);
         } catch (CommandExceptionInterface $exception) {
             $exceptionWrapper = new Exception(
                 /* translators: An unexpected error during the final List UPDATE before the CHARGE */
@@ -51,7 +49,7 @@ class EmbeddedPaymentProcessor extends AbstractPaymentProcessor
                 $exception->getCode(),
                 $exception
             );
-            return $this->handleFailedPaymentProcessing($order, $exceptionWrapper);
+            return $this->commonProcessor->handleFailedPaymentProcessing($order, $exceptionWrapper);
         }
         /**
          * We always signal success: The actual payment is supposed to be handled by the JS WebSDK
@@ -66,6 +64,9 @@ class EmbeddedPaymentProcessor extends AbstractPaymentProcessor
         if (!$this->isRestRequest) {
             $result['redirect'] = add_query_arg([$this->hostedModeOverrideFlag => \true], $order->get_checkout_payment_url());
         }
+        /* translators: Order note added when processing an order in embedded flow */
+        $note = __('Backend processing finished, frontend processing is about to start.', 'payoneer-checkout');
+        $this->commonProcessor->putOrderOnHold($order, $note . \PHP_EOL);
         return $result;
     }
 }

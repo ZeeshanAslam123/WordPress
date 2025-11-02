@@ -264,11 +264,8 @@ function breeze_cache( $buffer, $flags ) {
 	// Filter to modify cache buffer before caching
 	$buffer = apply_filters( 'breeze_cache_buffer_before_processing', $buffer );
 
-	global $wp_filesystem, $breeze_current_url_path;
-	if ( empty( $wp_filesystem ) ) {
-		require_once( ABSPATH . '/wp-admin/includes/file.php' );
-		WP_Filesystem();
-	}
+	global $breeze_current_url_path;
+	$wp_filesystem = breeze_get_filesystem();
 
 	$blog_id_requested = isset( $GLOBALS['breeze_config']['blog_id'] ) ? $GLOBALS['breeze_config']['blog_id'] : 0;
 	$cache_base_path   = breeze_get_cache_base_path( false, $blog_id_requested );
@@ -283,6 +280,10 @@ function breeze_cache( $buffer, $flags ) {
 
 	$modified_time = time(); // Make sure modified time is consistent
 
+	$is_cross_origin_activated = false;
+	if ( isset( $GLOBALS['breeze_config']['cache_options']['breeze-cross-origin'] ) && filter_var( $GLOBALS['breeze_config']['cache_options']['breeze-cross-origin'], FILTER_VALIDATE_BOOLEAN ) ) {
+		$is_cross_origin_activated = filter_var( $GLOBALS['breeze_config']['cache_options']['breeze-cross-origin'], FILTER_VALIDATE_BOOLEAN );
+	}
 	// Lazy load implementation
 	if ( class_exists( 'Breeze_Lazy_Load' ) ) {
 		if ( isset( $GLOBALS['breeze_config'] ) ) {
@@ -303,7 +304,7 @@ function breeze_cache( $buffer, $flags ) {
 	}
 
 	// Cross-origin safe link functionality
-	if ( isset( $GLOBALS['breeze_config']['cache_options']['breeze-cross-origin'] ) && filter_var( $GLOBALS['breeze_config']['cache_options']['breeze-cross-origin'], FILTER_VALIDATE_BOOLEAN ) ) {
+	if ( true === $is_cross_origin_activated ) {
 
 		// Buffer encoding
 		if ( version_compare( PHP_VERSION, '8.2.0', '<' ) ) {
@@ -619,7 +620,6 @@ function check_exclude_page( $opts_config, $current_url ) {
 						return true;
 					}
 				} else { // Whole path
-
 
 					$exclude_url = ltrim( $exclude_url, 'https:' );
 					$current_url = ltrim( $current_url, 'https:' );

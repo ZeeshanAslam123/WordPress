@@ -25,17 +25,26 @@ class Settings {
 	public static $importFile = [];
 
 	/**
-	 * Update the settings.
+	 * Retrieves the plugin options.
 	 *
 	 * @since 4.0.0
 	 *
-	 * @return \WP_REST_Response The response.
+	 * @param  \WP_REST_Request  $request The REST Request.
+	 * @return \WP_REST_Response          The response containing all plugin options.
 	 */
-	public static function getOptions() {
-		return new \WP_REST_Response( [
-			'options'  => aioseo()->options->all(),
-			'settings' => aioseo()->settings->all()
-		], 200 );
+	public static function getOptions( $request ) {
+		$siteId = (int) $request->get_param( 'siteId' );
+		if ( $siteId ) {
+			aioseo()->helpers->switchToBlog( $siteId );
+
+			// Re-initialize the options for this site.
+			aioseo()->options->init();
+		}
+
+		return new \WP_REST_Response([
+			'success' => true,
+			'options' => aioseo()->options->all()
+		], 200);
 	}
 
 	/**
@@ -442,10 +451,10 @@ class Settings {
 			'postOptions' => null
 		];
 
-		$rows = str_getcsv( $fileContent, "\n" );
+		$rows = str_getcsv( $fileContent, "\n", '"', '\\' );
 
 		// Get the first row to check if the file has post_id or term_id.
-		$header = str_getcsv( $rows[0], ',' );
+		$header = str_getcsv( $rows[0], ',', '"', '\\' );
 		$header = aioseo()->helpers->sanitizeOption( $header );
 
 		// Check if the file has post_id or term_id.
@@ -473,7 +482,7 @@ class Settings {
 
 		foreach ( $rows as $row ) {
 			$row = str_replace( '\\""', '\\"', $row );
-			$row = str_getcsv( $row, ',' );
+			$row = str_getcsv( $row, ',', '"', '\\' );
 
 			foreach ( $row as $key => $value ) {
 				$key = aioseo()->helpers->sanitizeOption( $key );
@@ -760,7 +769,7 @@ class Settings {
 				break;
 			case 'reset-data':
 				aioseo()->uninstall->dropData( true );
-				aioseo()->internalOptions->database->installedTables = '';
+				aioseo()->core->cache->delete( 'db_schema' );
 				aioseo()->internalOptions->internal->lastActiveVersion = '4.0.0';
 				aioseo()->internalOptions->save( true );
 				aioseo()->updates->addInitialCustomTablesForV4();
@@ -771,12 +780,12 @@ class Settings {
 				break;
 			// Migrations
 			case 'rerun-migrations':
-				aioseo()->internalOptions->database->installedTables   = '';
+				aioseo()->core->cache->delete( 'db_schema' );
 				aioseo()->internalOptions->internal->lastActiveVersion = '4.0.0';
 				aioseo()->internalOptions->save( true );
 				break;
 			case 'rerun-addon-migrations':
-				aioseo()->internalOptions->database->installedTables = '';
+				aioseo()->core->cache->delete( 'db_schema' );
 
 				foreach ( $data as $sku ) {
 					$convertedSku = aioseo()->helpers->dashesToCamelCase( $sku );

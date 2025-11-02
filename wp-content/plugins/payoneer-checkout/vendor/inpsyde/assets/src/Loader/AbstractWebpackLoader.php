@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets\Loader;
 
@@ -21,10 +13,7 @@ use Syde\Vendor\Inpsyde\Assets\Style;
 abstract class AbstractWebpackLoader implements LoaderInterface
 {
     use ConfigureAutodiscoverVersionTrait;
-    /**
-     * @var string
-     */
-    protected $directoryUrl = '';
+    protected string $directoryUrl = '';
     /**
      * @param string $directoryUrl optional directory URL which will be used for the Asset
      *
@@ -39,28 +28,28 @@ abstract class AbstractWebpackLoader implements LoaderInterface
      * @param array<string, string> $data
      * @param string $resource
      *
-     * @return array
+     * @return Asset[]
      */
     abstract protected function parseData(array $data, string $resource): array;
     /**
      * @param mixed $resource
      *
-     * @return array
+     * @return Asset[]
      *
-     * phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration
+     * phpcs:disable Syde.Functions.ArgumentTypeDeclaration.NoArgumentType
      * @psalm-suppress MixedArgument
      */
     public function load($resource): array
     {
         if (!is_string($resource) || !is_readable($resource)) {
-            throw new FileNotFoundException(sprintf('The given file "%s" does not exists or is not readable.', (string) $resource));
+            throw new FileNotFoundException(sprintf('The given file "%s" does not exists or is not readable.', esc_html($resource)));
         }
         $data = @file_get_contents($resource) ?: '';
         // phpcs:ignore
         $data = json_decode($data, \true);
         $errorCode = json_last_error();
         if (0 < $errorCode) {
-            throw new InvalidResourceException(sprintf('Error parsing JSON - %s', $this->getJSONErrorMessage($errorCode)));
+            throw new InvalidResourceException(sprintf('Error parsing JSON - %s', esc_html($this->getJSONErrorMessage($errorCode))));
         }
         return $this->parseData($data, $resource);
     }
@@ -106,7 +95,7 @@ abstract class AbstractWebpackLoader implements LoaderInterface
             return null;
         }
         $class = $extensionsToClass[$extension];
-        /** @var Asset|BaseAsset $asset */
+        /** @var Style|Script $asset */
         $asset = new $class($handle, $fileUrl, $this->resolveLocation($filename));
         $asset->withFilePath($filePath);
         $asset->canEnqueue(\true);

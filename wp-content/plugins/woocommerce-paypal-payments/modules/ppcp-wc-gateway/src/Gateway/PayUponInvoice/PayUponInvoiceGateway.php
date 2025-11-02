@@ -89,6 +89,54 @@ class PayUponInvoiceGateway extends WC_Payment_Gateway
      */
     private $module_url;
     /**
+     * ID of the class extending the settings API. Used in option names.
+     *
+     * @var string
+     */
+    public $id;
+    /**
+     * Gateway title.
+     *
+     * @var string
+     */
+    public $method_title = '';
+    /**
+     * Gateway description.
+     *
+     * @var string
+     */
+    public $method_description = '';
+    /**
+     * Payment method title for the frontend.
+     *
+     * @var string
+     */
+    public $title;
+    /**
+     * Payment method description for the frontend.
+     *
+     * @var string
+     */
+    public $description;
+    /**
+     * Form option fields.
+     *
+     * @var array
+     */
+    public $form_fields = array();
+    /**
+     * Icon for the gateway.
+     *
+     * @var string
+     */
+    public $icon;
+    /**
+     * Supported features such as 'default_credit_card_form', 'refunds'.
+     *
+     * @var array
+     */
+    public $supports = array('products');
+    /**
      * PayUponInvoiceGateway constructor.
      *
      * @param PayUponInvoiceOrderEndpoint $order_endpoint The order endpoint.
@@ -145,9 +193,8 @@ class PayUponInvoiceGateway extends WC_Payment_Gateway
     public function process_payment($order_id)
     {
         $wc_order = wc_get_order($order_id);
-        // phpcs:disable WordPress.Security.NonceVerification.Missing
+        // phpcs:disable WordPress.Security.NonceVerification
         $birth_date = wc_clean(wp_unslash($_POST['billing_birth_date'] ?? ''));
-        // phpcs:disable WordPress.Security.NonceVerification.Recommended
         $pay_for_order = wc_clean(wp_unslash($_GET['pay_for_order'] ?? ''));
         if ('true' === $pay_for_order) {
             if (!$this->checkout_helper->validate_birth_date($birth_date)) {
@@ -156,7 +203,7 @@ class PayUponInvoiceGateway extends WC_Payment_Gateway
             }
         }
         $phone_number = wc_clean(wp_unslash($_POST['billing_phone'] ?? ''));
-        // phpcs:enable WordPress.Security.NonceVerification.Missing
+        // phpcs:enable WordPress.Security.NonceVerification
         if ($phone_number) {
             $wc_order->set_billing_phone($phone_number);
             $wc_order->save();

@@ -129,7 +129,7 @@ function gamipress_render_plugin_card( $plugin ) {
 
         $class = 'gamipress-third-party-add-on';
 
-        $details_link = esc_url( 'https://gamipress.com/add-ons/' . $plugin->info->slug );
+        $details_link = '';
 
         // "More Information" action
         $action_links[] = '<a href="https://gamipress.com/add-ons/' . $plugin->info->slug . '" class="button" target="_blank">' . __( 'More Information', 'gamipress' ) . '</a>';
@@ -137,7 +137,7 @@ function gamipress_render_plugin_card( $plugin ) {
     } else if( gamipress_plugin_has_category( $plugin, 'integrations' ) ) {
         $class = 'gamipress-integration-add-on';
 
-        $details_link = esc_url( 'https://gamipress.com/add-ons/' . $plugin->info->slug );
+        $details_link = '';
 
         // "More Information" action
         $action_links[] = '<a href="https://gamipress.com/add-ons/' . $plugin->info->slug . '" class="button" target="_blank">' . __( 'More Information', 'gamipress' ) . '</a>';

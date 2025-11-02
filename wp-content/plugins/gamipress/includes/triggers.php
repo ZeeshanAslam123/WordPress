@@ -454,39 +454,61 @@ function gamipress_get_specific_activity_trigger_permalink( $specific_id, $trigg
 }
 
 /**
- * Load up our activity triggers so we can add actions to them
+ * Load activity triggers to hook them
+ *
+ * @since 1.0.0
+ */
+function gamipress_hook_activity_triggers() {
+
+    // GamiPress requires to load activity triggers early to hook them
+    // To prevent any errors and since in this function labels are not required
+    // Lets to prevent load text domains and avoid warnings
+    // Next, gamipress_load_activity_triggers will load them again with their labels at the init hook
+
+    // Prevent to load text domains here
+    add_filter( 'lang_dir_for_domain', 'gamipress_prevent_load_textdoamin' );
+
+    // Grab our activity triggers
+    $activity_triggers = gamipress_get_activity_triggers();
+    $excluded_to_load = gamipress_get_activity_triggers_excluded_to_load();
+
+    // Restore text domains load
+    remove_filter( 'lang_dir_for_domain', 'gamipress_prevent_load_textdoamin' );
+
+    // Loop through each achievement type and add triggers for unlocking/revoking them
+    foreach ( gamipress_get_achievement_types() as $achievement_type => $data ) {
+        // Add trigger for unlocking/revoking ANY and ALL posts for each achievement type
+        $activity_triggers['GamiPress']['gamipress_unlock_' . $achievement_type] = ''; // Label not required here
+        $activity_triggers['GamiPress']['gamipress_unlock_all_' . $achievement_type] = ''; // Label not required here
+        $activity_triggers['GamiPress']['gamipress_revoke_' . $achievement_type] = ''; // Label not required here
+    }
+
+    // Loop through each trigger and add our trigger event to the hook
+    foreach ( $activity_triggers as $group => $group_triggers ) {
+        foreach( $group_triggers as $trigger => $label ) {
+            // Hook if trigger is not excluded to be loaded
+            if( ! in_array( $trigger, $excluded_to_load ) ) {
+                add_action( $trigger, 'gamipress_trigger_event', 10, 20 );
+            }
+        }
+    }
+
+}
+add_action( 'gamipress_init', 'gamipress_hook_activity_triggers' );
+
+// Just a return false function to hook it on text domains
+function gamipress_prevent_load_textdoamin() {
+    return false;
+}
+
+/**
+ * Load activity triggers text domains
  *
  * @since 1.0.0
  */
 function gamipress_load_activity_triggers() {
 
-	// Grab our activity triggers
-	$activity_triggers = gamipress_get_activity_triggers();
-    $excluded_to_load = gamipress_get_activity_triggers_excluded_to_load();
-
-	// Loop through each achievement type and add triggers for unlocking/revoking them
-	foreach ( gamipress_get_achievement_types() as $achievement_type => $data ) {
-
-		// Add trigger for unlocking/revoking ANY and ALL posts for each achievement type
-		$activity_triggers['GamiPress']['gamipress_unlock_' . $achievement_type] = sprintf( __( 'Unlocked a %s', 'gamipress' ), $data['singular_name'] );
-		$activity_triggers['GamiPress']['gamipress_unlock_all_' . $achievement_type] = sprintf( __( 'Unlocked all %s', 'gamipress' ), $data['plural_name'] );
-        $activity_triggers['GamiPress']['gamipress_revoke_' . $achievement_type] = sprintf( __( 'Revoked a %s', 'gamipress' ), $data['singular_name'] );
-
-	}
-
-	// Loop through each trigger and add our trigger event to the hook
-	foreach ( $activity_triggers as $group => $group_triggers ) {
-
-		foreach( $group_triggers as $trigger => $label ) {
-
-            // Hook if trigger is not excluded to be loaded
-            if( ! in_array( $trigger, $excluded_to_load ) ) {
-			    add_action( $trigger, 'gamipress_trigger_event', 10, 20 );
-            }
-
-		}
-
-	}
+    gamipress_get_activity_triggers();
 
 }
 add_action( 'init', 'gamipress_load_activity_triggers' );

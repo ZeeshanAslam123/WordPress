@@ -20,6 +20,7 @@ use WooCommerce\PayPalCommerce\WcGateway\Helper\Environment;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
 use WooCommerce\PayPalCommerce\WcGateway\Helper\ConnectionState;
 use WooCommerce\PayPalCommerce\Settings\Data\GeneralSettings;
+use WooCommerce\PayPalCommerce\WcGateway\Helper\MerchantDetails;
 return array(
     'api.paypal-host' => function (ContainerInterface $container): string {
         $environment = $container->get('settings.environment');
@@ -92,13 +93,18 @@ return array(
         assert($state instanceof ConnectionState);
         return $state->get_environment();
     },
+    'settings.merchant-details' => static function (ContainerInterface $container): MerchantDetails {
+        $woo_country = $container->get('api.shop.country');
+        $eligibility_checks = $container->get('wcgateway.feature-eligibility.list');
+        return new MerchantDetails($woo_country, $woo_country, $eligibility_checks);
+    },
     'onboarding.assets' => function (ContainerInterface $container): OnboardingAssets {
         $state = $container->get('onboarding.state');
         $login_seller_endpoint = $container->get('onboarding.endpoint.login-seller');
         return new OnboardingAssets($container->get('onboarding.url'), $container->get('ppcp.asset-version'), $state, $container->get('settings.environment'), $login_seller_endpoint, $container->get('wcgateway.current-ppcp-settings-page-id'));
     },
     'onboarding.url' => static function (ContainerInterface $container): string {
-        return plugins_url('/modules/ppcp-onboarding/', dirname(realpath(__FILE__), 3) . '/woocommerce-paypal-payments.php');
+        return plugins_url('/modules/ppcp-onboarding/', $container->get('ppcp.path-to-plugin-main-file'));
     },
     'onboarding.endpoint.login-seller' => static function (ContainerInterface $container): LoginSellerEndpoint {
         $request_data = $container->get('button.request-data');

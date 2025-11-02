@@ -13,12 +13,13 @@ use Syde\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use Syde\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\AjaxPayAction;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\EmbeddedPayment\AjaxOrderPay\OrderPayload;
-use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\CheckoutContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionManager;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\ListSessionProvider;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\ListSession\ListSession\PaymentContext;
 use Syde\Vendor\Inpsyde\PayoneerForWoocommerce\WebSdk\Security\SdkIntegrityService;
+use Syde\Vendor\Psr\Container\ContainerExceptionInterface;
 use Syde\Vendor\Psr\Container\ContainerInterface;
+use Syde\Vendor\Psr\Container\NotFoundExceptionInterface;
 use WC_Data_Exception;
 use WC_Order;
 /**
@@ -46,6 +47,7 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
          * out of $this->setupModuleActions() method call.
          */
         $this->registerSendingListDataToFrontend($container);
+        $this->registerPaymentUnsuccessfulListener($container);
         return \true;
     }
     /**
@@ -103,7 +105,6 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
         $interactionCode = filter_input(\INPUT_GET, 'interactionCode', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
         $onBeforeServerError = filter_input(\INPUT_GET, $onBeforeServerErrorFlag, \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
         if ($onBeforeServerError) {
-            $listSessionManager->persist(null, new PaymentContext($order));
             /**
              * Safely redirect without the $onBeforeServerError flag.
              */
@@ -113,8 +114,6 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
         if (!$interactionCode || $order->is_paid()) {
             return;
         }
-        $listSessionManager->persist(null, new CheckoutContext());
-        $listSessionManager->persist(null, new PaymentContext($order));
         if (!in_array($interactionCode, ['RETRY', 'ABORT'], \true)) {
             return;
         }
@@ -172,7 +171,7 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             }
             woocommerce_store_api_register_endpoint_data(['endpoint' => CartSchema::IDENTIFIER, 'namespace' => 'payoneer-checkout', 'data_callback' => function () use ($container): array {
                 return $this->provideCartExtensionData($container);
-            }, 'schema_callback' => fn() => ['longId' => ['description' => 'LongId of the LIST session', 'type' => 'string', 'readonly' => \true], 'environment' => ['description' => 'The current environment', 'type' => 'string', 'readonly' => \true], 'sdkVersion' => ['description' => 'Pinned WebSDK script version', 'type' => 'string', 'readonly' => \true], 'sdkIntegrity' => ['description' => 'WebSDK integrity hash', 'type' => 'string', 'readonly' => \true]], 'schema_type' => \ARRAY_A]);
+            }, 'schema_callback' => fn() => ['longId' => ['description' => 'LongId of the LIST session', 'type' => 'string', 'readonly' => \true], 'environment' => ['description' => 'The current environment', 'type' => 'string', 'readonly' => \true], 'sdkVersion' => ['description' => 'Pinned WebSDK script version', 'type' => 'string', 'readonly' => \true], 'sdkIntegrity' => ['description' => 'WebSDK integrity hash', 'type' => 'string', 'readonly' => \true], 'comment' => ['description' => 'Arbitrary text with debugging info, error description, etc.', 'type' => 'string', 'readonly' => \true]], 'schema_type' => \ARRAY_A]);
         });
     }
     private function provideCartExtensionData(ContainerInterface $container): array
@@ -192,14 +191,21 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
          * @see \Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry::hydrate_api_request
          */
         $isStoreApi = $container->get('wc.is_store_api_request');
+        $emptyResponse = ['longId' => null, 'environment' => null, 'sdkVersion' => null, 'sdkIntegrity' => null];
         if (!$isStoreApi) {
-            return ['longId' => null, 'environment' => null, 'sdkVersion' => null, 'sdkIntegrity' => null];
+            $emptyResponse['comment'] = 'Current request is not Store REST API request';
+            return $emptyResponse;
         }
         $listProvider = $container->get('list_session.manager');
         assert($listProvider instanceof ListSessionProvider);
         $envExtractor = $container->get('embedded_payment.list_url_environment_extractor');
         assert($envExtractor instanceof ListUrlEnvironmentExtractor);
-        $list = $listProvider->provide(ListSessionManager::determineContextFromGlobals());
+        try {
+            $list = $listProvider->provide(new PaymentContext());
+        } catch (\Throwable $throwable) {
+            $emptyResponse['comment'] = 'Cannot get List, throwable caught: ' . $throwable->getMessage();
+            return $emptyResponse;
+        }
         // TODO: Refactor the environment detection to use the current WP options.
         // Extract the environment name from the LIST response.
         $environment = $envExtractor->extract($list->getLinks()['self'] ?? '');
@@ -254,6 +260,71 @@ class EmbeddedPaymentModule implements ExecutableModule, ServiceModule, Extendin
             wp_send_json_success(['result' => 'success'], 200);
         }
         wp_send_json_error(['result' => 'failure'], 500);
+    }
+    protected function registerPaymentUnsuccessfulListener(ContainerInterface $container): void
+    {
+        add_action('wc_ajax_payoneer-checkout-payment-unsuccessful', function () use ($container) {
+            $nonceAction = (string) $container->get('embedded_payment.nonce.action.on_payment_unsuccessful');
+            check_ajax_referer($nonceAction);
+            try {
+                $orderId = $this->getOrderIdForPaymentUnsuccessfulRequest($container);
+            } catch (\Throwable $exception) {
+                wp_send_json_error('Failed to change order status in payment unsuccessful request.');
+            }
+            $order = wc_get_order($orderId);
+            if (!$order instanceof WC_Order) {
+                //Typecast $orderId to make psalm happy.
+                wp_send_json_error(sprintf('Cannot get order by ID %s', $orderId));
+            }
+            if (!$this->isSupportedPaymentMethod($order, $container)) {
+                wp_send_json_error('Unexpected payment method');
+            }
+            $paymentResult = (string) filter_input(\INPUT_POST, 'paymentResult', \FILTER_CALLBACK, ['options' => 'sanitize_key']);
+            /**
+             * This may be not needed as webhook notifying about failed payment already arrived
+             * in most cases. But it may be delayed, and we need to have an order in failed
+             * state for the next try immediately.
+             */
+            $order->update_status('failed', sprintf('Setting order failed after payment %1$s.%2$s', $paymentResult, \PHP_EOL));
+            $order->save();
+            $errorTitle = (string) filter_input(\INPUT_POST, 'errorTitleToDisplay', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
+            $errorText = (string) filter_input(\INPUT_POST, 'errorTextToDisplay', \FILTER_CALLBACK, ['options' => 'sanitize_text_field']);
+            if ($errorTitle || $errorText) {
+                wc_add_notice(sprintf('<b>%1$s</b></br>%2$s', $errorTitle, $errorText), 'error');
+            }
+            wp_send_json_success(['message' => 'Order status was set to failed.', 'nonce' => wp_create_nonce($nonceAction)]);
+        });
+    }
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function getOrderIdForPaymentUnsuccessfulRequest(ContainerInterface $container): int
+    {
+        $orderKey = (string) filter_input(\INPUT_POST, 'orderKey', \FILTER_CALLBACK, ['options' => fn($rawInput) => sanitize_text_field((string) wp_unslash($rawInput))]);
+        /**
+         * We need a way of getting order ID directly from post for the block checkout.
+         *
+         * Block checkout doesn't keep the order ID under the `order_awaiting_payment` key
+         * in WC Session. We still could get the order ID from the `store_api_draft_order` session
+         * key, but is not so reliable. Also, this creates problems in potential corner cases when
+         * both block and classic checkouts are configured in the store and both session keys have
+         * some order IDs.
+         *
+         * Sending order ID directly from frontend is less secure than getting it from a WC Session
+         * on backend, but we are compensating it by comparing longId and verifying nonce.
+         */
+        $orderId = filter_input(\INPUT_POST, 'payoneerOrderId', \FILTER_SANITIZE_NUMBER_INT);
+        if (!$orderId) {
+            $orderId = $orderKey ? wc_get_order_id_by_order_key($orderKey) : $container->get('wc.order_under_payment');
+        }
+        return (int) $orderId;
+    }
+    protected function isSupportedPaymentMethod(WC_Order $order, ContainerInterface $container): bool
+    {
+        $payoneerMethods = $container->get('payment_methods.all');
+        assert(is_array($payoneerMethods));
+        return in_array($order->get_payment_method(), $payoneerMethods, \true);
     }
     /**
      * @inheritDoc

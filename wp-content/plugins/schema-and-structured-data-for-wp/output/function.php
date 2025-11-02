@@ -895,14 +895,20 @@ function saswp_reading_time_and_word_count() {
 
     // Count the words in the content.
     $word_count      = 0;
+    $seconds         = 0;
     $text            = trim( wp_strip_all_tags( @get_the_content() ) );
     
     if(!$text && is_object($post) ) {
         $text = $post->post_content;
-    }    
-    $word_count      = substr_count( "$text ", ' ' );
-    // How many seconds (total)?
-    $seconds = floor( $word_count / $words_per_second );
+    }  
+
+    if ( ! empty( $text ) ) {  
+        $word_count      = substr_count( "$text ", ' ' );
+    }
+    if ( $word_count > 0 ) {
+        // How many seconds (total)?
+        $seconds = floor( $word_count / $words_per_second );
+    }
     
     $timereq = '';
 
@@ -1690,27 +1696,25 @@ function saswp_remove_microdata($content){
     global $sd_data;
     
     if(saswp_global_option() ) {
-        //Clean MicroData
-        $content = preg_replace("/itemtype=(\"?)http(s?):\/\/schema.org\/(Person|Mosque|SearchAction|Church|HinduTemple|LandmarksOrHistoricalBuildings|TouristDestination|TouristAttraction|TouristTrip|Place|LocalBusiness|MedicalCondition|VideoObject|AudioObject|Trip|Service|JobPosting|VideoGame|Game|TechArticle|SoftwareApplication|TVSeries|Recipe|Review|HowTo|DiscussionForumPosting|Course|SingleFamilyResidence|House|Apartment|EventPosting|Event|Article|BlogPosting|Blog|BreadcrumbList|AggregateRating|WebPage|Person|Organization|NewsArticle|Product|CreativeWork|ImageObject|UserComments|WPHeader|WPSideBar|WPFooter|WPAdBlock|SiteNavigationElement|Rating|worstRating|ratingValue|bestRating)(\"?)/", "", $content);
-        $content = preg_replace("/itemscope[\n|\s|]*itemtype=(\"?)http(s?):\/\/schema.org\/(Person|Mosque|SearchAction|Church|HinduTemple|LandmarksOrHistoricalBuildings|TouristDestination|TouristAttraction|TouristTrip|Place|LocalBusiness|MedicalCondition|VideoObject|AudioObject|Trip|Service|JobPosting|VideoGame|Game|TechArticle|SoftwareApplication|TVSeries|Recipe|Review|HowTo|DiscussionForumPosting|Course|SingleFamilyResidence|House|Apartment|EventPosting|Event|Article|BlogPosting|Blog|BreadcrumbList|AggregateRating|WebPage|Person|Organization|NewsArticle|Product|CreativeWork|ImageObject|UserComments|WPHeader|WPSideBar|WPFooter|WPAdBlock|SiteNavigationElement|Rating|worstRating|ratingValue|bestRating)(\"?)/", "", $content);
-        $content = preg_replace("/itemscope[\n|\s|]*itemtype=(\'?)http(s?):\/\/schema.org\/(Person|Mosque|SearchAction|Church|HinduTemple|LandmarksOrHistoricalBuildings|TouristDestination|TouristAttraction|TouristTrip|Place|LocalBusiness|MedicalCondition|VideoObject|AudioObject|Trip|Service|JobPosting|VideoGame|Game|TechArticle|SoftwareApplication|TVSeries|Recipe|Review|HowTo|DiscussionForumPosting|Course|SingleFamilyResidence|House|Apartment|EventPosting|Event|Article|BlogPosting|Blog|BreadcrumbList|AggregateRating|WebPage|Person|Organization|NewsArticle|Product|CreativeWork|ImageObject|UserComments|WPHeader|WPSideBar|WPFooter|WPAdBlock|SiteNavigationElement|Rating|worstRating|ratingValue|bestRating)(\'?)/", "", $content);
-        $content = preg_replace("/itemscope=(\"?)itemscope(\"?) itemtype=(\"?)http(s?):\/\/schema.org\/(Person|Mosque|SearchAction|Church|HinduTemple|LandmarksOrHistoricalBuildings|TouristDestination|TouristAttraction|TouristTrip|Place|LocalBusiness|MedicalCondition|VideoObject|AudioObject|Trip|Service|JobPosting|VideoGame|Game|TechArticle|SoftwareApplication|TVSeries|Recipe|Review|HowTo|DiscussionForumPosting|Course|SingleFamilyResidence|House|Apartment|EventPosting|Event|Article|BlogPosting|Blog|BreadcrumbList|AggregateRating|WebPage|Person|Organization|NewsArticle|Product|CreativeWork|ImageObject|UserComments|WPHeader|WPSideBar|WPFooter|WPAdBlock|SiteNavigationElement|Rating|worstRating|ratingValue|bestRating)(\"?)/", "", $content);    
-        $content = preg_replace("/itemscope=(\"?)itemprop(\"?) itemType=(\"?)http(s?):\/\/schema.org\/(Person|Mosque|SearchAction|Church|HinduTemple|LandmarksOrHistoricalBuildings|TouristDestination|TouristAttraction|TouristTrip|Place|LocalBusiness|MedicalCondition|VideoObject|AudioObject|Trip|Service|JobPosting|VideoGame|Game|TechArticle|SoftwareApplication|TVSeries|Recipe|Review|HowTo|DiscussionForumPosting|Course|SingleFamilyResidence|House|Apartment|EventPosting|Event|Article|BlogPosting|Blog|BreadcrumbList|AggregateRating|WebPage|Person|Organization|NewsArticle|Product|CreativeWork|ImageObject|UserComments|WPHeader|WPSideBar|WPFooter|WPAdBlock|SiteNavigationElement|Rating|worstRating|ratingValue|bestRating)(\"?)/", "", $content);    
-        $content = preg_replace("/itemscope itemprop=\"(.*?)\" itemType=(\"?)http(s?):\/\/schema.org\/(Person|Mosque|SearchAction|Church|HinduTemple|LandmarksOrHistoricalBuildings|TouristDestination|TouristAttraction|TouristTrip|Place|LocalBusiness|MedicalCondition|VideoObject|AudioObject|Trip|Service|JobPosting|VideoGame|Game|TechArticle|SoftwareApplication|TVSeries|Recipe|Review|HowTo|DiscussionForumPosting|Course|SingleFamilyResidence|House|Apartment|EventPosting|Event|Article|BlogPosting|Blog|BreadcrumbList|AggregateRating|WebPage|Person|Organization|NewsArticle|Product|CreativeWork|ImageObject|UserComments|WPHeader|WPSideBar|WPFooter|WPAdBlock|SiteNavigationElement|Rating|worstRating|ratingValue|bestRating)(\"?)/", "", $content);           
-        $content = preg_replace("/itemprop='logo' itemscope itemtype='https:\/\/schema.org\/ImageObject'/", "", $content);
-        $content = preg_replace('/itemprop="logo" itemscope="" itemtype="https:\/\/schema.org\/ImageObject"/', "", $content);
-        $content = preg_replace('/itemprop=\"(worstRating|ratingValue|bestRating|aggregateRating|ratingCount|reviewBody|review|name|datePublished|author|reviewRating)\"/', "", $content);
-        $content = preg_replace('/itemscope\=\"(.*?)\"/', "", $content);
-        $content = preg_replace("/itemscope\='(.*?)\'/", "", $content);
-        $content = preg_replace('/itemscope/', "", $content);        
-        $content = preg_replace('/itemprop\=\"(.*?)\"/', "", $content);
-        $content = preg_replace("/itemprop\='(.*?)\'/", "", $content);
-        $content = preg_replace('/itemprop/', "", $content);
-        $content = preg_replace('/itemtype\=\"(.*?)\"/', "", $content);
-        $content = preg_replace("/itemtype\='(.*?)\'/", "", $content);
-        $content = preg_replace('/itemtype/', "", $content);
-        $content = preg_replace('/hreview-aggregate/', "", $content);
-        $content = preg_replace('/hrecipe/', "", $content);
+       
+       //  WP_HTML_Tag_Processor class works on wordpress grater than wordpress 6.2
+        if ( class_exists( 'WP_HTML_Tag_Processor' ) ) {
+            $processor = new WP_HTML_Tag_Processor( $content );
+            while ( $processor->next_tag() ) {
+                $processor->remove_attribute( 'itemscope' );
+                $processor->remove_attribute( 'itemtype' );
+                $processor->remove_attribute( 'itemprop' );
+
+                $class = $processor->get_attribute( 'class' );
+                if ( $class && preg_match( '/\b(hreview-aggregate|hrecipe)\b/i', $class ) ) {
+                    $processor->set_attribute(
+                        'class',
+                        preg_replace( '/\b(hreview-aggregate|hrecipe)\b/i', '', $class )
+                    );
+                }
+            }
+            $content = $processor->get_updated_html();
+        }
         
         if ( isset( $sd_data['saswp-ratency']) && $sd_data['saswp-ratency'] == 1 ){
             
@@ -2364,9 +2368,16 @@ function saswp_get_strong_testimonials_data($testimonial){
 
                 foreach ( $testimonial as $value){
                     
-                     $rating       = 5; 
+                     $rating       = get_post_meta($value->ID, $key='star_rating', true);
+                     if ( ! is_numeric( $rating ) ) {
+                        $rating    = 5;      
+                     }  
                      $author       = get_post_meta($value->ID, $key='client_name', true);
                      
+                     // User specific condition, user has named the label in polish language
+                     if ( empty( $author ) ) {
+                        $author       = get_post_meta($value->ID, $key='imie', true);
+                     }
                      $sumofrating += $rating;
 
                      $reviews[] = array(
@@ -2575,6 +2586,18 @@ function saswp_get_strong_testimonials() {
            
            if(in_array( 'testimonial_view', $matches[2] ) ) {
                $testimo_str = 'testimonial_view';
+           }else{
+                if ( function_exists( 'is_plugin_active' ) &&  is_plugin_active('fusion-builder/fusion-builder.php') ) {
+                    $content = preg_replace_callback('/\[fusion_code\](.*?)\[\/fusion_code\]/s', function ($matches) {
+                            $decoded = base64_decode($matches[1]);
+                            return $decoded;
+                    }, $post->post_content);
+
+                    preg_match_all('/\[testimonial_view[^\]]*\]/', $content, $matches);
+                    if ( is_array( $matches ) && ! empty( $matches[0] ) && is_array($matches[0]) && count( $matches[0] ) > 0 ) {
+                        $testimo_str = 'testimonial_view';    
+                    }
+                }
            }
            
         if($testimo_str){

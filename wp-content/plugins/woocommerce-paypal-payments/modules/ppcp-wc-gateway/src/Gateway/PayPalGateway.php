@@ -40,18 +40,30 @@ use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
  */
 class PayPalGateway extends \WC_Payment_Gateway
 {
-    use \WooCommerce\PayPalCommerce\WcGateway\Gateway\ProcessPaymentTrait, FreeTrialHandlerTrait, \WooCommerce\PayPalCommerce\WcGateway\Gateway\GatewaySettingsRendererTrait, OrderMetaTrait, TransactionIdHandlingTrait, PaymentsStatusHandlingTrait;
-    const ID = 'ppcp-gateway';
-    const INTENT_META_KEY = '_ppcp_paypal_intent';
-    const ORDER_ID_META_KEY = '_ppcp_paypal_order_id';
-    const ORDER_PAYMENT_MODE_META_KEY = '_ppcp_paypal_payment_mode';
-    const ORDER_PAYMENT_SOURCE_META_KEY = '_ppcp_paypal_payment_source';
-    const ORDER_PAYER_EMAIL_META_KEY = '_ppcp_paypal_payer_email';
-    const FEES_META_KEY = '_ppcp_paypal_fees';
-    const REFUND_FEES_META_KEY = '_ppcp_paypal_refund_fees';
-    const REFUNDS_META_KEY = '_ppcp_refunds';
-    const THREE_D_AUTH_RESULT_META_KEY = '_ppcp_paypal_3DS_auth_result';
-    const FRAUD_RESULT_META_KEY = '_ppcp_paypal_fraud_result';
+    use \WooCommerce\PayPalCommerce\WcGateway\Gateway\ProcessPaymentTrait;
+    use FreeTrialHandlerTrait;
+    use \WooCommerce\PayPalCommerce\WcGateway\Gateway\GatewaySettingsRendererTrait;
+    use OrderMetaTrait;
+    use TransactionIdHandlingTrait;
+    use PaymentsStatusHandlingTrait;
+    public const ID = 'ppcp-gateway';
+    public const INTENT_META_KEY = '_ppcp_paypal_intent';
+    public const ORDER_ID_META_KEY = '_ppcp_paypal_order_id';
+    public const ORDER_PAYMENT_MODE_META_KEY = '_ppcp_paypal_payment_mode';
+    public const ORDER_PAYMENT_SOURCE_META_KEY = '_ppcp_paypal_payment_source';
+    public const ORDER_PAYER_EMAIL_META_KEY = '_ppcp_paypal_payer_email';
+    public const FEES_META_KEY = '_ppcp_paypal_fees';
+    public const REFUND_FEES_META_KEY = '_ppcp_paypal_refund_fees';
+    public const REFUNDS_META_KEY = '_ppcp_refunds';
+    public const THREE_D_AUTH_RESULT_META_KEY = '_ppcp_paypal_3DS_auth_result';
+    public const FRAUD_RESULT_META_KEY = '_ppcp_paypal_fraud_result';
+    // Used by the Contact Module integration.
+    public const CONTACT_EMAIL_META_KEY = '_ppcp_paypal_contact_email';
+    public const CONTACT_PHONE_META_KEY = '_ppcp_paypal_contact_phone';
+    // Used by the Contact Module integration to store the original details.
+    public const ORIGINAL_EMAIL_META_KEY = '_ppcp_paypal_billing_email';
+    public const ORIGINAL_PHONE_META_KEY = '_ppcp_paypal_billing_phone';
+    public const CROSS_BROWSER_APPSWITCH_META_KEY = '_ppcp_cross_browser_appswitch';
     /**
      * List of payment sources for which we are expected to store the payer email in the WC Order metadata.
      */
@@ -183,6 +195,60 @@ class PayPalGateway extends \WC_Payment_Gateway
      */
     private $admin_settings_enabled;
     /**
+     * ID of the class extending the settings API. Used in option names.
+     *
+     * @var string
+     */
+    public $id;
+    /**
+     * Gateway title.
+     *
+     * @var string
+     */
+    public $method_title = '';
+    /**
+     * Gateway description.
+     *
+     * @var string
+     */
+    public $method_description = '';
+    /**
+     * Payment method title for the frontend.
+     *
+     * @var string
+     */
+    public $title;
+    /**
+     * Payment method description for the frontend.
+     *
+     * @var string
+     */
+    public $description;
+    /**
+     * Form option fields.
+     *
+     * @var array
+     */
+    public $form_fields = array();
+    /**
+     * Icon for the gateway.
+     *
+     * @var string
+     */
+    public $icon;
+    /**
+     * Supported features such as 'default_credit_card_form', 'refunds'.
+     *
+     * @var array
+     */
+    public $supports = array('products');
+    /**
+     * Set if the place order button should be renamed on selection.
+     *
+     * @var string
+     */
+    public $order_button_text;
+    /**
      * PayPalGateway constructor.
      *
      * @param SettingsRenderer         $settings_renderer The Settings Renderer.
@@ -274,6 +340,19 @@ class PayPalGateway extends \WC_Payment_Gateway
             }
         }
         return parent::get_title();
+    }
+    /**
+     * Return the gateway's description.
+     *
+     * @return string
+     */
+    public function get_description()
+    {
+        $gateway_settings = get_option($this->get_option_key(), array());
+        if (array_key_exists('description', $gateway_settings)) {
+            return $gateway_settings['description'];
+        }
+        return $this->description;
     }
     /**
      * Whether the Gateway needs to be setup.

@@ -21,17 +21,13 @@ use WooCommerce\PayPalCommerce\WcGateway\Gateway\CreditCardGateway;
 class PaymentMethodSettingsMapHelper
 {
     /**
-     * A map of new to old 3d secure values.
-     */
-    protected const THREE_D_SECURE_VALUES_MAP = array('no-3d-secure' => 'NO_3D_SECURE', 'only-required-3d-secure' => 'SCA_WHEN_REQUIRED', 'always-3d-secure' => 'SCA_ALWAYS');
-    /**
      * Maps old setting keys to new payment method settings names.
      *
      * @psalm-return array<oldSettingsKey, newSettingsKey>
      */
     public function map(): array
     {
-        return array('dcc_enabled' => CreditCardGateway::ID, 'axo_enabled' => AxoGateway::ID, '3d_secure_contingency' => 'three_d_secure');
+        return array('dcc_enabled' => CreditCardGateway::ID, 'axo_enabled' => AxoGateway::ID, 'axo_name_on_card' => 'cardholder_name', 'dcc_gateway_title' => '');
     }
     /**
      * Retrieves the value of a mapped key from the new settings.
@@ -42,20 +38,18 @@ class PaymentMethodSettingsMapHelper
      */
     public function mapped_value(string $old_key, ?AbstractDataModel $payment_settings)
     {
+        $new_key = $this->map()[$old_key] ?? \false;
+        if (!$payment_settings instanceof PaymentSettings) {
+            return null;
+        }
         switch ($old_key) {
-            case '3d_secure_contingency':
-                if (is_null($payment_settings)) {
-                    return null;
-                }
-                assert($payment_settings instanceof PaymentSettings);
-                $selected_three_d_secure = $payment_settings->get_three_d_secure();
-                return self::THREE_D_SECURE_VALUES_MAP[$selected_three_d_secure] ?? null;
+            case 'axo_name_on_card':
+                return $payment_settings->get_cardholder_name();
+            case 'dcc_gateway_title':
+                $axo_gateway_settings = get_option('woocommerce_ppcp-axo-gateway_settings', array());
+                return $axo_gateway_settings['title'] ?? null;
             default:
-                $payment_method = $this->map()[$old_key] ?? \false;
-                if (!$payment_method) {
-                    return null;
-                }
-                return $this->is_gateway_enabled($payment_method);
+                return $new_key ? $this->is_gateway_enabled($new_key) : null;
         }
     }
     /**

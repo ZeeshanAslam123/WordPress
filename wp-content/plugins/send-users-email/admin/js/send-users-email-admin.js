@@ -108,6 +108,7 @@
             if (res.success === true) {
                 showToast(res.message);
                 $(".sueUserCheck").removeAttr('checked');
+                $("#sue_override_user_email_subscription").removeAttr('checked');
                 if (res.warning !== '') {
                     showWarningToast(res.warning);
                 }
@@ -159,6 +160,7 @@
             if (res.success === true) {
                 showToast(res.message);
                 $(".roleCheckbox").removeAttr('checked');
+                $("#sue_override_user_email_subscription").removeAttr('checked');
                 if (res.warning !== '') {
                     showWarningToast(res.warning);
                 }
@@ -307,5 +309,7 @@
         toast.delay = 5000;
         toast.show();
     }
+
+    
 
 })(jQuery);

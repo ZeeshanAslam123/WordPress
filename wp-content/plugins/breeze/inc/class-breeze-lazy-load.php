@@ -75,7 +75,6 @@ class Breeze_Lazy_Load {
 				'data-srcset-img',
 			)
 		);
-
 	}
 
 	/**
@@ -231,50 +230,61 @@ class Breeze_Lazy_Load {
 		$apply_to_iframes = apply_filters( 'breeze_enable_lazy_load_iframes', $apply_to_iframes );
 
 		if ( true === filter_var( $apply_to_iframes, FILTER_VALIDATE_BOOLEAN ) ) {
-			$allowed_iframes_url = apply_filters(
-				'breeze_iframe_lazy_load_list',
-				array(
-					'youtube.com',
-					'dailymotion.com/embed/video',
-					'facebook.com/plugins/video.php',
-					'player.vimeo.com',
-					'fast.wistia.net/embed/',
-					'players.brightcove.net',
-					's3.amazonaws.com',
-					'cincopa.com/media',
-					'twitch.tv',
-					'bitchute.com',
-					'media.myspace.com/play/video',
-					'tiktok.com/embed',
-				)
-			);
-
-			// Match and process iframes.
-			preg_match_all( '/<iframe.*<\/iframe>/isU', $content, $iframe_matches );
-
-			foreach ( $iframe_matches[0] as $iframe_tag ) {
-				$src = preg_replace( '/^.*src=\"([^\"]+)\".*$/isU', '$1', $iframe_tag );
-
-				$allowed_url = false;
-				foreach ( $allowed_iframes_url as $iframe_url ) {
-					if ( false !== strpos( $src, $iframe_url ) ) {
-						$allowed_url = true;
-						break;
+			if ( $use_native ) {
+				preg_match_all( '/<iframe[^>]*>/', $content, $iframe_matches );
+				foreach ( $iframe_matches[0] as $iframe_tag ) {
+					if ( ! preg_match( '/loading=[\'"]\s*lazy\s*[\'"]/i', $iframe_tag ) ) {
+						$iframe_tag_new = preg_replace( '/<iframe\s/i', '<iframe loading="lazy" ', $iframe_tag );
+						$content        = str_replace( $iframe_tag, $iframe_tag_new, $content );
 					}
 				}
+				$apply_to_iframes = false;
+			} else {
+				$allowed_iframes_url = apply_filters(
+					'breeze_iframe_lazy_load_list',
+					array(
+						'youtube.com',
+						'dailymotion.com/embed/video',
+						'facebook.com/plugins/video.php',
+						'player.vimeo.com',
+						'fast.wistia.net/embed/',
+						'players.brightcove.net',
+						's3.amazonaws.com',
+						'cincopa.com/media',
+						'twitch.tv',
+						'bitchute.com',
+						'media.myspace.com/play/video',
+						'tiktok.com/embed',
+					)
+				);
 
-				if ( true === $allowed_url ) {
-					// Video Link
-					$video_link = explode( '/', $src );
-					$video_id   = end( $video_link );
+				// Match and process iframes.
+				preg_match_all( '/<iframe.*<\/iframe>/isU', $content, $iframe_matches );
 
-					// Get classes
-					$current_classes = $this->format_tag_ll_classes( $iframe_tag );
+				foreach ( $iframe_matches[0] as $iframe_tag ) {
+					$src = preg_replace( '/^.*src=\"([^\"]+)\".*$/isU', '$1', $iframe_tag );
 
-					// Forming iframe tag
-					$iframe_tag_new = preg_replace( '/<iframe/isU', '<iframe data-video-id="' . $video_id . '" class="' . $current_classes . '" data-breeze="' . $src . '"', $iframe_tag );
-					$iframe_tag_new = preg_replace( '/src=\"([^\"]+)\"/isU', '', $iframe_tag_new );
-					$content        = str_replace( $iframe_tag, $iframe_tag_new, $content );
+					$allowed_url = false;
+					foreach ( $allowed_iframes_url as $iframe_url ) {
+						if ( false !== strpos( $src, $iframe_url ) ) {
+							$allowed_url = true;
+							break;
+						}
+					}
+
+					if ( true === $allowed_url ) {
+						// Video Link
+						$video_link = explode( '/', $src );
+						$video_id   = end( $video_link );
+
+						// Get classes
+						$current_classes = $this->format_tag_ll_classes( $iframe_tag );
+
+						// Forming iframe tag
+						$iframe_tag_new = preg_replace( '/<iframe/isU', '<iframe data-video-id="' . $video_id . '" class="' . $current_classes . '" data-breeze="' . $src . '"', $iframe_tag );
+						$iframe_tag_new = preg_replace( '/src=\"([^\"]+)\"/isU', '', $iframe_tag_new );
+						$content        = str_replace( $iframe_tag, $iframe_tag_new, $content );
+					}
 				}
 			}
 		}
@@ -287,6 +297,11 @@ class Breeze_Lazy_Load {
 			preg_match_all( '/<video[^>]*>(.*?)<\/video>/is', $content, $video_matches );
 
 			foreach ( $video_matches[0] as $video_tag ) {
+
+                // Exclude the WP video shortcode due to its reliance on the MediaElementPlayer library.
+                if ( preg_match( '/class=[\'"][^\'"]*\bwp-video-shortcode\b[^\'"]*[\'"]/i', $video_tag ) ) {
+                    continue;
+                }
 
 				$video_tag_edited = false;
 
@@ -301,7 +316,7 @@ class Breeze_Lazy_Load {
 
 						// Determine the correct placeholder for the video src attribute.
 						if ( preg_match( '/src="([^"]+)"/i', $video_attrs, $src_matches ) ) {
-							$video_src = $src_matches[1];
+							$video_src   = $src_matches[1];
 							$video_attrs = str_replace( 'src="' . $video_src . '"', 'data-breeze="' . $video_src . '"', $video_attrs );
 						}
 
@@ -333,7 +348,6 @@ class Breeze_Lazy_Load {
 					);
 				}
 
-
 				if ( ! empty( $video_tag_new ) ) {
 					// Update the content.
 					$content = str_replace( $video_tag, $video_tag_new, $content );
@@ -344,7 +358,6 @@ class Breeze_Lazy_Load {
 		$content = mb_decode_numericentity( $content, array( 0x80, 0x10FFFF, 0, ~0 ), 'UTF-8' );
 
 		return $content;
-
 	}
 
 	/**

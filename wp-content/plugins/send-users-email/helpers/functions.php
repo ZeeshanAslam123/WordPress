@@ -91,8 +91,9 @@ if ( ! function_exists( 'sue_get_date_range_interval' ) ) {
 if ( ! function_exists( 'sue_get_email_theme_scheme' ) ) {
 	function sue_get_email_theme_scheme() {
 
-		return [
+		$email_templates = [
 			'default',
+			'custom',
 			'blue',
 			'green',
 			'pink',
@@ -101,6 +102,14 @@ if ( ! function_exists( 'sue_get_email_theme_scheme' ) ) {
 			'yellow',
 			'purity',
 		];
+
+		/**
+		 * Add filter for future additional of dropdown theme
+		 * @var mixed
+		 */
+		$email_templates = apply_filters('sue_get_email_theme_scheme_choices', $email_templates);
+
+		return $email_templates;
 	}
 }
 
@@ -217,5 +226,65 @@ if ( ! function_exists( 'sue_obscure_text' ) ) {
 		}
 
 		return $string;
+	}
+}
+
+/**
+ * Get the plugin text domain.
+ *
+ * @return string The text domain for the plugin.
+ */
+if ( ! function_exists( 'sue_get_plugin_text_domain' ) ) {
+	function sue_get_plugin_text_domain() {
+		return 'send-users-email';
+	}
+}
+
+/**
+ * Check if the plugin is premium and can use premium code.
+ * This function checks if the plugin is premium and if the user has the capability to use premium code.
+ * It returns true if both conditions are met, otherwise false.
+ * @return bool
+ */
+if ( ! function_exists( 'sue_is_premium_and_can_use_premium_code' ) ) {
+	function sue_is_premium_and_can_use_premium_code(): bool {
+		if ( sue_fs()->is__premium_only() 
+			&& sue_fs()->can_use_premium_code() 
+		) {
+			return true;
+		}
+
+		return false;
+	}
+}
+
+if ( ! function_exists( 'sue_is_woocommerce_active' ) ) {
+	function sue_is_woocommerce_active(): bool {
+		if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) 
+			|| ( is_multisite() && in_array( 'woocommerce/woocommerce.php', get_site_option( 'active_sitewide_plugins', array() ) ) ) 
+		) {
+			return true;
+		}
+
+		return false;
+	}
+}
+/*
+ * Check if the user is subscribed to email notifications.
+ *
+ * @param int|null $user_id The user ID to check. If null, checks the current user.
+ * @return bool True if the user is subscribed, false otherwise.
+ */
+if ( ! function_exists( 'sue_is_user_email_subscribed' ) ) {
+	function sue_is_user_email_subscribed($user_id = null) {
+		if ( ! $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		if ( ! $user_id ) {
+			return false; // No user ID provided
+		}
+
+		return SUE_Email_Subscription_User_Meta::is_email_subscribed( $user_id );
 	}
 }

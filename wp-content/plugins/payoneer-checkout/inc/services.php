@@ -285,7 +285,7 @@ return static function (string $rootPath): array {
         }),
         # core.refund
         # =================================================================
-        'core.refund.refund_finder' => new Alias('webhooks.refund_finder'),
+        'core.refund.refund_finder' => new Alias('wp.refund_finder'),
         # core.data
         # =================================================================
         'core.data.dictionary_factory' => new Constructor(DictionaryFactory::class, []),
@@ -542,9 +542,7 @@ return static function (string $rootPath): array {
             //Syria
             'YE',
         ]),
-        'core.payment_gateway.live_transaction_url_template' => new Value('https://apps.live.oscato.com/transactions/detail/%1$s'),
-        'core.payment_gateway.sandbox_transaction_url_template' => new Value('https://apps.sandbox.oscato.com/transactions/detail/%1$s'),
-        'core.payment_gateway.checkout_transaction_url_template' => new Value('https://myaccount.payoneer.com/ma/checkout/transactions'),
+        'core.payment_gateway.checkout_transaction_url_template' => new Value('https://myaccount.payoneer.com/ma/checkout/transactions/%1$s'),
         'core.payment_gateway.is_enabled' => new Factory(['inpsyde_payment_gateway.options'], static function (ContainerInterface $options): bool {
             return $options->has('enabled') && \wc_string_to_bool((string) $options->get('enabled'));
         }),
@@ -598,8 +596,6 @@ return static function (string $rootPath): array {
         'inpsyde_payment_gateway.payout_id_field_name' => new Alias('core.payout_id_field_name'),
         'inpsyde_payment_gateway.transaction_id_field_name' => new Alias('core.payment_gateway.order.transaction_id_field_name'),
         'inpsyde_payment_gateway.order.security_header_field_name' => new Alias('core.payment_gateway.order.security_header_field_name'),
-        'inpsyde_payment_gateway.order.live_transactions_url_template' => new Alias('core.payment_gateway.live_transaction_url_template'),
-        'inpsyde_payment_gateway.order.sandbox_transactions_url_template' => new Alias('core.payment_gateway.sandbox_transaction_url_template'),
         'inpsyde_payment_gateway.order.checkout_transactions_url_template' => new Alias('core.payment_gateway.checkout_transaction_url_template'),
         'inpsyde_payment_gateway.payoneer' => new Alias('core.payoneer'),
         'inpsyde_payment_gateway.payoneer.client.factory' => new Alias('core.payoneer.client.factory'),
@@ -613,7 +609,7 @@ return static function (string $rootPath): array {
         'inpsyde_payment_gateway.header_factory' => new Alias('core.header_factory'),
         'inpsyde_payment_gateway.address_factory' => new Alias('core.address_factory'),
         'inpsyde_payment_gateway.name_factory' => new Alias('core.name_factory'),
-        'inpsyde_payment_gateway.order_finder' => new Alias('webhooks.order_finder'),
+        'inpsyde_payment_gateway.order_finder' => new Alias('wp.order_finder'),
         'inpsyde_payment_gateway.product_factory' => new Alias('core.product_factory'),
         'inpsyde_payment_gateway.list_hash_container_id' => new Alias('core.list_hash_container_id'),
         'inpsyde_payment_gateway.checkout_hash_provider' => new Alias('core.checkout_hash_provider'),

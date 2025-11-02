@@ -176,7 +176,7 @@ class Updates {
 		}
 
 		if ( version_compare( $lastActiveVersion, '4.2.2', '<' ) ) {
-			aioseo()->internalOptions->database->installedTables = '';
+			aioseo()->core->cache->delete( 'db_schema' );
 
 			$this->addOptionsColumn();
 			$this->removeTabsColumn();
@@ -272,6 +272,10 @@ class Updates {
 			aioseo()->ai->updateCredits( true );
 		}
 
+		if ( version_compare( $lastActiveVersion, '4.8.7', '<' ) ) {
+			$this->addColumnIndexForCornerstoneContent();
+		}
+
 		do_action( 'aioseo_run_updates', $lastActiveVersion );
 
 		// Always clear the cache if the last active version is different from our current.
@@ -313,7 +317,7 @@ class Updates {
 		aioseo()->internalOptions->internal->lastActiveVersion = aioseo()->version;
 
 		// Bust the tableExists and columnExists cache.
-		aioseo()->internalOptions->database->installedTables = '';
+		aioseo()->core->cache->delete( 'db_schema' );
 
 		// Bust the DB cache so we can make sure that everything is fresh.
 		aioseo()->core->db->bustCache();
@@ -434,7 +438,7 @@ class Updates {
 		}
 
 		// Reset the cache for the installed tables.
-		aioseo()->internalOptions->database->installedTables = '';
+		aioseo()->core->cache->delete( 'db_schema' );
 	}
 
 	/**
@@ -472,7 +476,7 @@ class Updates {
 			);
 
 			// Reset the cache for the installed tables.
-			aioseo()->internalOptions->database->installedTables = '';
+			aioseo()->core->cache->delete( 'db_schema' );
 		}
 	}
 
@@ -492,7 +496,7 @@ class Updates {
 			);
 
 			// Reset the cache for the installed tables.
-			aioseo()->internalOptions->database->installedTables = '';
+			aioseo()->core->cache->delete( 'db_schema' );
 		}
 	}
 
@@ -616,7 +620,7 @@ class Updates {
 			);
 
 			// Reset the cache for the installed tables.
-			aioseo()->internalOptions->database->installedTables = '';
+			aioseo()->core->cache->delete( 'db_schema' );
 
 			aioseo()->core->db
 				->update( 'aioseo_notifications' )
@@ -859,7 +863,7 @@ class Updates {
 			}
 
 			// Reset the cache for the installed tables.
-			aioseo()->internalOptions->database->installedTables = '';
+			aioseo()->core->cache->delete( 'db_schema' );
 		}
 	}
 
@@ -879,7 +883,7 @@ class Updates {
 			);
 
 			// Reset the cache for the installed tables.
-			aioseo()->internalOptions->database->installedTables = '';
+			aioseo()->core->cache->delete( 'db_schema' );
 		}
 	}
 
@@ -978,7 +982,7 @@ class Updates {
 			);
 
 			// Reset the cache for the installed tables.
-			aioseo()->internalOptions->database->installedTables = '';
+			aioseo()->core->cache->delete( 'db_schema' );
 		}
 	}
 
@@ -1038,7 +1042,7 @@ class Updates {
 			);
 
 			// Reset the cache for the installed tables.
-			aioseo()->internalOptions->database->installedTables = '';
+			aioseo()->core->cache->delete( 'db_schema' );
 		}
 	}
 
@@ -1948,7 +1952,7 @@ class Updates {
 			);
 
 			// Reset the cache for the installed tables.
-			aioseo()->internalOptions->database->installedTables = '';
+			aioseo()->core->cache->delete( 'db_schema' );
 		}
 	}
 
@@ -2047,5 +2051,27 @@ class Updates {
 		}
 
 		return $internalOptions;
+	}
+
+	/**
+	 * Adds the column index for the cornerstone content table.
+	 *
+	 * @since 4.8.7
+	 *
+	 * @return void
+	 */
+	private function addColumnIndexForCornerstoneContent() {
+		if (
+			! aioseo()->core->db->columnExists( 'aioseo_posts', 'pillar_content' ) ||
+			aioseo()->core->db->indexExists( 'aioseo_posts', 'ndx_aioseo_posts_pillar_content' )
+		) {
+			return;
+		}
+
+		$tableName = aioseo()->core->db->db->prefix . 'aioseo_posts';
+		aioseo()->core->db->execute(
+			"ALTER TABLE {$tableName}
+			ADD INDEX ndx_aioseo_posts_pillar_content (pillar_content)"
+		);
 	}
 }
