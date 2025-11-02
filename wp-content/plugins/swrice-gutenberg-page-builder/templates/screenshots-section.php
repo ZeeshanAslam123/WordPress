@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <style>
-/* Professional Screenshots Slider */
+/* Clean Modern Screenshots Slider */
 .sppm-screenshots-container {
     max-width: 900px;
     margin: 0 auto;
@@ -112,18 +112,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 .sppm-screenshots-slider {
     position: relative;
-    background: var(--card-bg);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    margin-bottom: 30px;
-    border: 1px solid rgba(95,160,216,0.1);
+    background: transparent;
+    border-radius: 0;
+    overflow: visible;
+    margin-bottom: 20px;
 }
 
 .sppm-slides-wrapper {
     position: relative;
-    min-height: 450px;
-    background: var(--soft);
+    min-height: 400px;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 .sppm-screenshot-slide {
     display: none;
     text-align: center;
-    padding: 30px;
+    padding: 0;
     width: 100%;
 }
 
@@ -146,75 +144,72 @@ document.addEventListener('DOMContentLoaded', () => {
     max-height: 400px;
     object-fit: contain;
     border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(29,42,63,0.1);
-    background: white;
-    padding: 10px;
+    background: transparent;
+    padding: 0;
 }
 
-/* Professional Arrows */
+/* Large Centered Arrows */
 .sppm-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: var(--card-bg);
-    color: var(--accent);
+    background: rgba(255, 255, 255, 0.9);
+    color: #666;
     border: none;
-    width: 48px;
-    height: 48px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    font-size: 20px;
+    font-size: 24px;
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 10;
-    box-shadow: var(--shadow);
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: bold;
 }
 
 .sppm-arrow-left {
-    left: 20px;
+    left: -30px;
 }
 
 .sppm-arrow-right {
-    right: 20px;
+    right: -30px;
 }
 
 .sppm-arrow:hover {
-    background: var(--accent);
-    color: white;
-    transform: translateY(-50%) scale(1.1);
+    background: rgba(255, 255, 255, 1);
+    color: #333;
+    transform: translateY(-50%) scale(1.05);
 }
 
-/* Professional Dots */
+/* Small Clean Dots */
 .sppm-dots {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    background: var(--card-bg);
+    padding: 15px 0;
+    background: transparent;
 }
 
 .sppm-dot {
-    width: 12px;
-    height: 12px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     border: none;
-    background: rgba(107,116,123,0.3);
+    background: rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .sppm-dot.active {
-    background: var(--accent);
-    transform: scale(1.3);
-    box-shadow: 0 2px 8px rgba(95,160,216,0.4);
+    background: #5fa0d8;
+    transform: scale(1.2);
 }
 
 .sppm-dot:hover {
-    background: var(--accent-dark);
-    transform: scale(1.1);
+    background: #4a8bbd;
 }
 
 /* Responsive */
@@ -225,63 +220,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     .sppm-slides-wrapper {
-        min-height: 350px;
-    }
-    
-    .sppm-screenshot-slide {
-        padding: 20px;
+        min-height: 300px;
     }
     
     .sppm-screenshot-image {
         max-height: 300px;
-        padding: 8px;
     }
     
     .sppm-arrow {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
     }
     
     .sppm-arrow-left {
-        left: 15px;
+        left: -25px;
     }
     
     .sppm-arrow-right {
-        right: 15px;
-    }
-    
-    .sppm-dots {
-        padding: 15px;
+        right: -25px;
     }
 }
 
 @media (max-width: 480px) {
     .sppm-slides-wrapper {
-        min-height: 280px;
-    }
-    
-    .sppm-screenshot-slide {
-        padding: 15px;
+        min-height: 250px;
     }
     
     .sppm-screenshot-image {
         max-height: 250px;
-        padding: 6px;
     }
     
     .sppm-arrow {
-        width: 36px;
-        height: 36px;
-        font-size: 16px;
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
     }
     
     .sppm-arrow-left {
-        left: 10px;
+        left: -22px;
     }
     
     .sppm-arrow-right {
-        right: 10px;
+        right: -22px;
+    }
+    
+    .sppm-dot {
+        width: 7px;
+        height: 7px;
     }
 }
 </style>
