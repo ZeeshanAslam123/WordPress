@@ -722,6 +722,12 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'type' => 'text',
                             'default' => get_the_modified_date("Y-m-d")
                     ),
+                    array(
+                            'label'      => 'Date Created',
+                            'id'         => 'saswp_newsarticle_date_created_'.$schema_id,
+                            'type'       => 'text',
+                            'default'    => get_the_date("Y-m-d")
+                    ),
                      array(
                             'label' => 'Description',
                             'id' => 'saswp_newsarticle_description_'.$schema_id,
@@ -6288,6 +6294,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'type'    => 'text',                                
                         ),
                         array(
+                                'label'   => 'Offer URL',
+                                'id'      => 'saswp_product_schema_offer_url_'.$schema_id,
+                                'type'    => 'text',                                
+                        ),
+                        array(
                             'label'   => 'Price Valid Until',
                             'id'      => 'saswp_product_schema_priceValidUntil_'.$schema_id,
                             'type'    => 'text',
@@ -6472,6 +6483,17 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             )
                         ),
                         array(
+                            'label'   => 'Return Policy Refund Type',
+                            'id'      => 'saswp_product_schema_rp_refund_type_'.$schema_id,
+                            'type'    => 'select',
+                            'options' => array(
+                                    ''                                  => 'Select Refune Type',
+                                    'FullRefund'                        => 'FullRefund',
+                                    'ExchangeRefund'                    => 'ExchangeRefund',
+                                    'StoreCreditRefund'                 => 'StoreCreditRefund',
+                            )
+                        ),
+                        array(
                             'label'   => 'Shipping Rate Value',
                             'id'      => 'saswp_product_schema_sr_value_'.$schema_id,
                             'type'    => 'text',
@@ -6614,6 +6636,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id'      => 'saswp_product_schema_review_count_'.$schema_id,
                             'type'    => 'text',
                             'default' => saswp_remove_warnings($product_details, 'product_review_count', 'saswp_string')
+                        ),
+                        array(
+                            'label'   => 'Award',
+                            'id'      => 'saswp_product_schema_award_'.$schema_id,
+                            'type'    => 'text',                            
                         ),
                     );
                     
@@ -7016,9 +7043,19 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             ),                           
                     ),                        
                     array(
+                            'label'      => 'Street Address',
+                            'id'         => 'saswp_service_schema_street_address_'.$schema_id,
+                            'type'       => 'text',                           
+                    ),
+                    array(
                             'label' => 'Locality',
                             'id' => 'saswp_service_schema_locality_'.$schema_id,
                             'type' => 'text',                            
+                    ),
+                    array(
+                            'label'      => 'Region',
+                            'id'         => 'saswp_service_schema_region_'.$schema_id,
+                            'type'       => 'text',                            
                     ),
                     array(
                             'label' => 'Postal Code',
@@ -7087,7 +7124,12 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'label' => 'Rating Count',
                                 'id'    => 'saswp_service_schema_rating_count_'.$schema_id,
                                 'type'  => 'text',                            
-                        )
+                        ),
+                        array(
+                                'label' => 'Award',
+                                'id'    => 'saswp_service_schema_award_'.$schema_id,
+                                'type'  => 'text',                            
+                        ),
                             
                     );
                     break;
@@ -7205,7 +7247,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                         break;    
                 
                 case 'Review':
-                                        
+                        $review_item_type = get_post_meta($schema_id, 'saswp_review_item_reviewed_'.$schema_id, true);                
                         $meta_field[] = array(
                             'label' => 'Review Name',
                             'id'    => 'saswp_review_name_'.$schema_id,
@@ -7307,7 +7349,8 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                         'SoftwareApplication'   => 'SoftwareApplication',
                                         'MobileApplication'     => 'MobileApplication',
                                         'VideoGame'             => 'VideoGame', 
-                            )                                                        
+                            ),
+                            'default' => $review_item_type,                                                        
                          );
                                                         
                         }                                                                   
@@ -7751,6 +7794,13 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id'      => 'saswp_video_object_main_entity_id_'.$schema_id,
                             'type'    => 'text',
                             'default' => get_permalink()
+                    ),
+                    array(
+                            'label'   => 'Main Entity of page',
+                            'id'      => 'saswp_video_object_main_entity_of_page_'.$schema_id,
+                            'type'    => 'text',
+                            'default' => get_permalink(),
+                            'is_template_attr' => 'yes',
                     ),
                     array(
                         'label'   => 'Author Type',
@@ -9409,7 +9459,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                     array(
                             'label'      => 'Employment Type',
                             'id'         => 'saswp_jobposting_schema_employment_type_'.$schema_id,
-                            'type'       => 'select', 
+                            'type'       => 'multiselect', 
                             'options'    => array(
                                 'FULL_TIME'  => 'FULL_TIME',
                                 'PART_TIME'  => 'PART_TIME',
@@ -9454,6 +9504,16 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                     array(
                         'label'      => 'Applicants can apply from ( Country ) ',
                         'id'         => 'saswp_jobposting_schema_applicant_location_requirements_'.$schema_id,
+                        'type'       => 'text',                             
+                    ),
+                    array(
+                        'label'      => 'Incentive Compensation',
+                        'id'         => 'saswp_jobposting_schema_incentive_compensation_'.$schema_id,
+                        'type'       => 'text',                             
+                    ),
+                    array(
+                        'label'      => 'Job Benefits',
+                        'id'         => 'saswp_jobposting_schema_job_benefits_'.$schema_id,
                         'type'       => 'text',                             
                     ),
                     array(
@@ -10554,36 +10614,71 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                         'id'         => 'saswp_vehicle_schema_manufacturer_'.$schema_id,
                                         'type'       => 'text',                           
                                 ),
-                                   array(
-                                        'label'   => 'Price',
-                                        'id'      => 'saswp_vehicle_schema_price_'.$schema_id,
-                                        'type'    => 'text',                                        
-                                   ),
-                                    array(
-                                        'label'   => 'High Price',
-                                        'id'      => 'saswp_vehicle_schema_high_price_'.$schema_id,
-                                        'type'    => 'text'                                            
-                                    ),
-                                    array(
-                                        'label'   => 'Low Price',
-                                        'id'      => 'saswp_vehicle_schema_low_price_'.$schema_id,
-                                        'type'    => 'text'                                            
-                                    ),
-                                    array(
-                                        'label'   => 'Offer Count',
-                                        'id'      => 'saswp_vehicle_schema_offer_count_'.$schema_id,
-                                        'type'    => 'text'
-                                    ),
-                                    array(
-                                        'label'   => 'Price Valid Until',
-                                        'id'      => 'saswp_vehicle_schema_priceValidUntil_'.$schema_id,
-                                        'type'    => 'text'                                        
-                                   ),
-                                    array(
-                                        'label'   => 'Currency',
-                                        'id'      => 'saswp_vehicle_schema_currency_'.$schema_id,
-                                        'type'    => 'text'                                        
-                                   ),
+                                array(
+                                        'label'      => 'Identification Number',
+                                        'id'         => 'saswp_vehicle_schema_identification_no_'.$schema_id,
+                                        'type'       => 'text',                           
+                                ),
+                                array(
+                                        'label'      => 'Color',
+                                        'id'         => 'saswp_vehicle_schema_color_'.$schema_id,
+                                        'type'       => 'text',                           
+                                ),
+                                array(
+                                        'label'      => 'Interior Type',
+                                        'id'         => 'saswp_vehicle_schema_interior_type_'.$schema_id,
+                                        'type'       => 'text',                           
+                                ),
+                                array(
+                                        'label'      => 'Interior Color',
+                                        'id'         => 'saswp_vehicle_schema_interior_color_'.$schema_id,
+                                        'type'       => 'text',                           
+                                ),
+                                array(
+                                        'label'      => 'Transmission',
+                                        'id'         => 'saswp_vehicle_schema_transmission_'.$schema_id,
+                                        'type'       => 'text',                           
+                                ),
+                                array(
+                                        'label'      => 'Vehicle Configuration',
+                                        'id'         => 'saswp_vehicle_schema_config_'.$schema_id,
+                                        'type'       => 'text',                           
+                                ),
+                                array(
+                                        'label'      => 'Drive Wheel Configuration',
+                                        'id'         => 'saswp_vehicle_schema_wheel_config_'.$schema_id,
+                                        'type'       => 'text',                           
+                                ),
+                               array(
+                                    'label'   => 'Price',
+                                    'id'      => 'saswp_vehicle_schema_price_'.$schema_id,
+                                    'type'    => 'text',                                        
+                               ),
+                                array(
+                                    'label'   => 'High Price',
+                                    'id'      => 'saswp_vehicle_schema_high_price_'.$schema_id,
+                                    'type'    => 'text'                                            
+                                ),
+                                array(
+                                    'label'   => 'Low Price',
+                                    'id'      => 'saswp_vehicle_schema_low_price_'.$schema_id,
+                                    'type'    => 'text'                                            
+                                ),
+                                array(
+                                    'label'   => 'Offer Count',
+                                    'id'      => 'saswp_vehicle_schema_offer_count_'.$schema_id,
+                                    'type'    => 'text'
+                                ),
+                                array(
+                                    'label'   => 'Price Valid Until',
+                                    'id'      => 'saswp_vehicle_schema_priceValidUntil_'.$schema_id,
+                                    'type'    => 'text'                                        
+                               ),
+                                array(
+                                    'label'   => 'Currency',
+                                    'id'      => 'saswp_vehicle_schema_currency_'.$schema_id,
+                                    'type'    => 'text'                                        
+                               ),
                                 array(
                                         'label' => 'Aggregate Rating',
                                         'id'    => 'saswp_vehicle_schema_enable_rating_'.$schema_id,
@@ -10930,6 +11025,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'label'   => 'Rating Count',
                             'id'      => 'saswp_book_rating_count_'.$schema_id,
                             'type'    => 'text',                            
+                    ),
+                    array(
+                            'label'   => 'Award',
+                            'id'      => 'saswp_book_award_'.$schema_id,
+                            'type'    => 'text',                            
                     ),                                                                            
                    );
                     break;
@@ -11190,7 +11290,12 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'label'      => 'Mester Head',
                                 'id'         => 'saswp_organization_masthead_'.$schema_id,
                                 'type'       => 'text',
-                            ),    
+                            ), 
+                            array(
+                                'label'      => 'Award',
+                                'id'         => 'saswp_organization_award_'.$schema_id,
+                                'type'       => 'text',                            
+                            ),   
                                                                                         
                    );
                     break;
@@ -12408,7 +12513,340 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                         )                    
                    );
                     break;
-                                
+
+                case 'Place':
+                    
+                    $meta_field = array(
+                            array(
+                                    'label' => 'Name',
+                                    'id' => 'saswp_place_schema_name_'.$schema_id,
+                                    'type' => 'text',                                
+                            ),
+                            array(
+                                    'label' => 'Street Address',
+                                    'id' => 'saswp_place_schema_streetaddress_'.$schema_id,
+                                    'type' => 'text',                                
+                            ),
+                            array(
+                                    'label' => 'Locality',
+                                    'id' => 'saswp_place_schema_locality_'.$schema_id,
+                                    'type' => 'text',                                
+                            ),
+                            array(
+                                    'label' => 'Region',
+                                    'id' => 'saswp_place_schema_region_'.$schema_id,
+                                    'type' => 'text',                                
+                            ),
+                            array(
+                                    'label' => 'PostalCode',
+                                    'id' => 'saswp_place_schema_postalcode_'.$schema_id,
+                                    'type' => 'text',                                
+                            ),
+                            array(
+                                    'label' => 'Country',
+                                    'id'    => 'saswp_place_schema_country_'.$schema_id,
+                                    'type'  => 'text',                                
+                            ),
+                        );
+                break;
+
+                case 'Game':
+                    
+                    $meta_field = array(
+                        array(
+                                'label'      => 'ID',
+                                'id'         => 'saswp_game_schema_id_'.$schema_id,
+                                'type'       => 'text',
+                                'default'    => 'Game'   
+                        ),
+                    array(
+                            'label'      => 'Name',
+                            'id'         => 'saswp_game_schema_name_'.$schema_id,
+                            'type'       => 'text',
+                            'attributes' => array(
+                                'placeholder' => 'Name'
+                            ), 
+                    ),
+                    array(
+                            'label'      => 'URL',
+                            'id'         => 'saswp_game_schema_url_'.$schema_id,
+                            'type'       => 'text',
+                            
+                    ),
+                    array(
+                            'label'      => 'Image',
+                            'id'         => 'saswp_game_schema_image_'.$schema_id,
+                            'type'       => 'media',
+                            
+                    ),
+                    array(
+                            'label'      => 'Description',
+                            'id'         => 'saswp_game_schema_description_'.$schema_id,
+                            'type'       => 'textarea',
+                            
+                    ),
+                    array(
+                            'label'      => 'Game Items',
+                            'id'         => 'saswp_game_schema_game_items_'.$schema_id,
+                            'type'       => 'textarea',
+                            'attributes' => array(
+                                'placeholder' => 'Example, Example2'
+                            ),
+                            'note'       => 'Note: Separate more than one game items by comma ( , )'
+                            
+                    ),
+                    array(
+                            'label'      => 'Genre',
+                            'id'         => 'saswp_game_schema_genre_'.$schema_id,
+                            'type'       => 'textarea',
+                            'attributes' => array(
+                                'placeholder' => 'Example, Example2'
+                            ),
+                            'note'       => 'Note: Separate more than one genre by comma ( , )'
+                            
+                    ),
+                    array(
+                            'label'      => 'Min Players',
+                            'id'         => 'saswp_game_schema_min_players_'.$schema_id,
+                            'type'       => 'number',
+                            
+                    ),
+                    array(
+                            'label'      => 'Max Players',
+                            'id'         => 'saswp_game_schema_max_players_'.$schema_id,
+                            'type'       => 'number',
+                            
+                    ),
+                    array(
+                            'label'      => 'Audience Min Age',
+                            'id'         => 'saswp_game_schema_aud_min_age_'.$schema_id,
+                            'type'       => 'number',
+                            
+                    ),
+                    array(
+                            'label'      => 'Copyright Holder',
+                            'id'         => 'saswp_game_schema_copyright_'.$schema_id,
+                            'type'       => 'text',
+                            
+                    ),
+                    array(
+                        'label'      => 'Author Type',
+                        'id'         => 'saswp_game_schema_author_type_'.$schema_id,
+                        'type'    => 'select',
+                        'options' => array(
+                                'Person'           => 'Person',
+                                'Organization'     => 'Organization',                        
+                       )
+                        
+                    ),
+                    array(
+                            'label'      => 'Author Name',
+                            'id'         => 'saswp_game_schema_author_name_'.$schema_id,
+                            'type'       => 'text',
+                            
+                    ),
+                    array(
+                            'label'      => 'Price',
+                            'id'         => 'saswp_game_schema_price_'.$schema_id,
+                            'type'       => 'text',
+                            
+                    ),
+                    array(
+                            'label'      => 'Price Currency',
+                            'id'         => 'saswp_game_schema_price_currency_'.$schema_id,
+                            'type'       => 'text',
+                            
+                    ),    
+                    array(
+                            'label'   => 'Availability',
+                            'id'      => 'saswp_game_schema_price_availability_'.$schema_id,
+                            'type'    => 'select',                            
+                            'options' => array(
+                                     ''                  => 'Select',
+                                     'InStock'           => 'In Stock',
+                                     'OutOfStock'        => 'Out Of Stock',
+                                     'Discontinued'      => 'Discontinued',
+                                     'PreOrder'          => 'Pre Order', 
+                            ) 
+                       ), 
+                    array(
+                            'label'      => 'Publisher',
+                            'id'         => 'saswp_game_schema_publisher_'.$schema_id,
+                            'type'       => 'text',
+                            
+                    ),
+                    array(
+                            'label' => 'Aggregate Rating',
+                            'id' => 'saswp_game_schema_enable_rating_'.$schema_id,
+                            'type' => 'checkbox',                          
+                        ),
+                        array(
+                            'label' => 'Rating',
+                            'id' => 'saswp_game_schema_rating_'.$schema_id,
+                            'type' => 'text',                           
+                        ),
+                        array(
+                            'label' => 'Rating Count',
+                            'id' => 'saswp_game_schema_review_count_'.$schema_id,
+                            'type' => 'text',                           
+                        ),    
+                        
+                   );
+                    break;
+                    
+                case 'Certification':
+                    $meta_field = array(
+                        array(
+                            'label'     => 'Name',
+                            'id'        => 'saswp_certification_name_'.$schema_id,
+                            'type'      => 'text',
+                            'default'   => saswp_get_the_title()
+                        ),
+                        array(
+                            'label'     => 'Description',
+                            'id'        => 'saswp_certification_description_'.$schema_id,
+                            'type'      => 'textarea',
+                            'default'   => saswp_strip_all_tags(get_the_excerpt())
+                        ),
+                        array(
+                            'label'     => 'URL',
+                            'id'        => 'saswp_certification_url_'.$schema_id,
+                            'type'      => 'text',
+                            'default'   => get_permalink()
+                        ),
+                        array(
+                            'label'     => 'Issued By Name',
+                            'id'        => 'saswp_certification_issue_name_'.$schema_id,
+                            'type'      => 'textarea',
+                            'attributes'=> array(
+                                'placeholder' => 'Example, Example2'
+                            ),
+                            'note'      => 'Note: Separate more than one names by comma ( , )'
+                        ),
+                        array(
+                            'label'     => 'Issued By URL',
+                            'id'        => 'saswp_certification_issue_url_'.$schema_id,
+                            'type'      => 'text',
+                        ),
+                        array(
+                            'label'     =>  'Certification Status',
+                            'id'        => 'saswp_certification_status_'.$schema_id,
+                            'type'      => 'select',
+                            'options'   => array(
+                                'CertificationActive'   => 'CertificationActive',
+                                'CertificationInactive' => 'CertificationInactive', 
+                            ),                       
+                        ),
+                        array(
+                            'label'   => 'Date Expires',
+                            'id'      => 'saswp_certification_date_expires_'.$schema_id,
+                            'type'    => 'text',
+                            'default' => get_the_date("Y-m-d")
+                        ),    
+                        array(
+                            'label' => 'Date Published',
+                            'id' => 'saswp_certification_date_published_'.$schema_id,
+                            'type' => 'text',
+                            'default' => get_the_date("Y-m-d")
+                        ),
+                        array(
+                            'label' => 'Valid From',
+                            'id' => 'saswp_certification_date_valid_from_'.$schema_id,
+                            'type' => 'text',
+                            'default' => get_the_date("Y-m-d")
+                        ),
+                        array(
+                            'label' => 'Audit Date',
+                            'id' => 'saswp_certification_date_audit_'.$schema_id,
+                            'type' => 'text',
+                            'default' => get_the_date("Y-m-d")
+                        ),
+                        array(
+                            'label'     => 'Valid In Name',
+                            'id'        => 'saswp_certification_validin_name_'.$schema_id,
+                            'type'      => 'text',
+                        ),
+                        array(
+                            'label'     => 'Valid In Country',
+                            'id'        => 'saswp_certification_validin_country_'.$schema_id,
+                            'type'      => 'textarea',
+                            'attributes'=> array(
+                                'placeholder' => 'Country1, Country2'
+                            ),
+                            'note'      => 'Note: Separate more than one countryies by comma ( , )'
+                        ),
+                        array(
+                            'label'    => 'Logo',
+                            'id'       => 'saswp_certification_logo_'.$schema_id,
+                            'type'     => 'media'                               
+                        ),
+                        array(
+                            'label'    => 'Identification',
+                            'id'       => 'saswp_certification_identification_'.$schema_id,
+                            'type'     => 'text'                               
+                        ),
+                        array(
+                            'label'    => 'Rating Value',
+                            'id'       => 'saswp_certification_rating_value_'.$schema_id,
+                            'type'     => 'text'                               
+                        ),
+                        array(
+                            'label'    => 'Best Rating',
+                            'id'       => 'saswp_certification_best_rating_'.$schema_id,
+                            'type'     => 'text'                               
+                        ),
+                        array(
+                            'label'    => 'Worst Rating',
+                            'id'       => 'saswp_certification_worst_rating_'.$schema_id,
+                            'type'     => 'text'                               
+                        ),
+                        array(
+                            'label'    => 'Measurement Name',
+                            'id'       => 'saswp_certification_measurement_name_'.$schema_id,
+                            'type'     => 'text'                               
+                        ),
+                        array(
+                            'label'    => 'Measurement Reference',
+                            'id'       => 'saswp_certification_measurement_reference_'.$schema_id,
+                            'type'     => 'text'                               
+                        ),
+                        array(
+                            'label'    => 'Measurement Value',
+                            'id'       => 'saswp_certification_measurement_value_'.$schema_id,
+                            'type'     => 'text'                               
+                        ),
+                    );
+                    break;
+
+                    case 'Guide':
+                        $meta_field = array(
+                            array(
+                                'label'     => 'Name',
+                                'id'        => 'saswp_guide_name_'.$schema_id,
+                                'type'      => 'text',
+                                'default'   => saswp_get_the_title(),
+                            ),
+                            array(
+                                'label'     => 'About',
+                                'id'        => 'saswp_guide_about_'.$schema_id,
+                                'type'      => 'text',
+                                'default'   => '',
+                            ),
+                            array(
+                                'label'     => 'Text',
+                                'id'        => 'saswp_guide_text_'.$schema_id,
+                                'type'      => 'text',
+                                'default'   => saswp_strip_all_tags(get_the_excerpt()),
+                            ),
+                            array(
+                                'label'     => 'Review Aspect',
+                                'id'        => 'saswp_guide_review_aspect_'.$schema_id,
+                                'type'      => 'text',
+                                'note'      => 'Note: Enter all the review aspects in comma separated',
+                            ),
+                        );
+                    break;
+
                 default:
                     break;
             } 

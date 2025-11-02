@@ -175,7 +175,7 @@ function monsterinsights_get_browser_session_id( $measurement_id ) {
 	}
 
 	$cookie = sanitize_text_field( $_COOKIE[ $cookie_name ] ); // phpcs:ignore WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___COOKIE
-	
+
 	// Check if it's GS2 format
 	// New format: 'GS2.1.s1747078634$o1$g1$t1747081074$j0$l0$h0'
 	// Session Id:        ^^^^^^^^^^ (1747078634)
@@ -186,7 +186,7 @@ function monsterinsights_get_browser_session_id( $measurement_id ) {
 		}
 		return null;
 	}
-	
+
 	// Handle original GS1 format
 	// Cookie value example: 'GS1.1.1659710029.4.1.1659710504.0'.
 	// Session Id:                  ^^^^^^^^^^. (1659710029)
@@ -1340,7 +1340,17 @@ function monsterinsights_get_jed_locale_data( $domain ) {
  * @return string
  */
 function monsterinsights_get_printable_translations( $domain ) {
-	$locale = determine_locale();
+	// Validate domain parameter
+	if ( empty( $domain ) || ! is_string( $domain ) ) {
+		return '';
+	}
+
+	// Get locale with backward compatibility
+	if ( function_exists( 'determine_locale' ) ) {
+		$locale = determine_locale();
+	} else {
+		$locale = is_admin() && function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
+	}
 
 	if ( 'en_US' == $locale ) {
 		return '';
@@ -1352,19 +1362,49 @@ function monsterinsights_get_printable_translations( $domain ) {
 		return '';
 	}
 
-	$json_translations = wp_json_encode( $locale_data );
 
-	$output = <<<JS
-( function( domain, translations ) {
-	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
-	localeData[""].domain = domain;
-	wp.i18n.setLocaleData( localeData, domain );
-} )( "{$domain}", {$json_translations} );
-JS;
+	// Encode with proper handling for Spanish characters
+	$json_translations = wp_json_encode( $locale_data, JSON_UNESCAPED_UNICODE );
+	
+	// Fallback if wp_json_encode fails
+	if ( false === $json_translations ) {
+		return '';
+	}
 
-	return $output;
+	// Verify JSON is valid before outputting
+	if ( json_last_error() !== JSON_ERROR_NONE ) {
+		return '';
+	}
+
+	// Check if JSON is too large (> 100KB to prevent browser issues)
+	if ( strlen( $json_translations ) > 102400 ) {
+		// If still too large, return empty to prevent page breaking
+		return '';
+	}
+
+	// Use WordPress recommended approach for inline scripts
+	$script = sprintf(
+		'( function( domain, translations ) {
+			try {
+				if ( typeof wp !== "undefined" && wp.i18n && typeof wp.i18n.setLocaleData === "function" ) {
+					var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+					if ( localeData && localeData[""] ) {
+						localeData[""].domain = domain;
+						wp.i18n.setLocaleData( localeData, domain );
+					}
+				}
+			} catch( e ) {
+				if ( window.console && console.warn ) {
+					console.warn( "MonsterInsights: Error setting locale data for domain " + domain, e );
+				}
+			}
+		} )( %s, %s );',
+		wp_json_encode( $domain ),
+		$json_translations
+	);
+
+	return "\n<script type=\"text/javascript\">\n" . $script . "\n</script>\n";
 }
-
 function monsterinsights_get_inline_menu_icon() {
 	$scheme          = get_user_option( 'admin_color', get_current_user_id() );
 	$use_dark_scheme = $scheme === 'light';
@@ -1407,7 +1447,14 @@ function monsterinsights_get_shareasale_id() {
 	return $shareasale_id;
 }
 
-// Passed in with mandatory default redirect and shareasaleid from monsterinsights_get_upgrade_link
+/**
+ * Passed in with mandatory default redirect and shareasaleid from monsterinsights_get_upgrade_link
+ * @deprecated
+ * @param $shareasale_id
+ * @param $shareasale_redirect
+ *
+ * @return mixed|null
+ */
 function monsterinsights_get_shareasale_url( $shareasale_id, $shareasale_redirect ) {
 	// Check if there's a constant.
 	$custom = false;
@@ -1424,8 +1471,8 @@ function monsterinsights_get_shareasale_url( $shareasale_id, $shareasale_redirec
 
 	// Whether we have an ID or not, filter the ID.
 	$shareasale_redirect = apply_filters( 'monsterinsights_shareasale_redirect_url', $shareasale_redirect, $custom );
-	$shareasale_url      = sprintf( 'https://www.shareasale.com/r.cfm?B=971799&U=%s&M=69975&urllink=%s', $shareasale_id, $shareasale_redirect );
-	$shareasale_url      = apply_filters( 'monsterinsights_shareasale_redirect_entire_url', $shareasale_url, $shareasale_id, $shareasale_redirect );
+	$shareasale_url      = "https://www.monsterinsights.com/ref/590/";
+	$shareasale_url      = apply_filters( 'monsterinsights_shareasale_redirect_entire_url', $shareasale_url);
 
 	return $shareasale_url;
 }
@@ -1479,9 +1526,12 @@ function monsterinsights_get_page_title() {
 		/* translators: Post type archive title. %s: Post type name */
 		$title = sprintf( __( 'Archives: %s' ), post_type_archive_title( '', false ) );
 	} elseif ( is_tax() ) {
-		$tax = get_taxonomy( get_queried_object()->taxonomy );
-		/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
-		$title = sprintf( '%1$s: %2$s', $tax->labels->singular_name, single_term_title( '', false ) );
+		$queried_object = get_queried_object();
+		if ( $queried_object && isset( $queried_object->taxonomy ) ) {
+			$tax = get_taxonomy( $queried_object->taxonomy );
+			/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
+			$title = sprintf( '%1$s: %2$s', $tax->labels->singular_name, single_term_title( '', false ) );
+		}
 	}
 
 	return $title;
@@ -2493,4 +2543,57 @@ function monsterinsights_disable_wpconsent_onboarding_redirect() {
 	if ( is_plugin_active( 'wpconsent-cookies-banner-privacy-suite/wpconsent.php' ) ) {
 		delete_transient( 'wpconsent_onboarding_redirect' );
 	}
+}
+add_action( 'wp_ajax_monsterinsights_report_error', 'monsterinsights_report_error' );
+/**
+ * Capture the last plugin error and save it.
+ * @since 9.7.0
+ * @return string
+ */
+function monsterinsights_report_error() {
+	check_ajax_referer( 'mi-admin-nonce', 'nonce' );
+	if ( ! current_user_can( 'monsterinsights_save_settings' ) ) {
+		return;
+	}
+	if ( ! isset( $_POST['error_code'] ) || ! isset( $_POST['current_screen'] ) ) {
+		return;
+	}
+	$error_code     = sanitize_text_field( wp_unslash( $_POST['error_code'] ) );
+	$current_screen = sanitize_text_field( wp_unslash( $_POST['current_screen'] ) );
+	$last_plugin_error = array(
+		'code' => $error_code,
+		'screen' => $current_screen,
+		'date' => time()
+	);
+	update_option( 'monsterinsights_last_plugin_error', $last_plugin_error );
+	wp_send_json_success();
+}
+
+/**
+ * Check any of the following CMP plugis is active.
+ *
+ * @return bool
+ */
+function monsterinsights_wpconsent_is_cmp_plugin_active() {
+	// Complianz
+	if ( defined( 'cmplz_plugin' ) || defined( 'cmplz_premium' ) ) {
+		return true;
+	}
+
+	// CookieYes (cookie-law-info)
+	if ( defined( 'CLI_SETTINGS_FIELD' ) ) {
+		return true;
+	}
+
+	// GDPR Cookie Compliance
+	if ( defined( 'MOOVE_GDPR_VERSION' ) ) {
+		return true;
+	}
+
+	// Cookie Notice
+	if ( function_exists( 'Cookie_Notice' ) ) {
+		return true;
+	}
+
+	return false;
 }

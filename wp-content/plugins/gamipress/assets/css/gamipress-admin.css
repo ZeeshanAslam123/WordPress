@@ -2158,6 +2158,17 @@ label[for="_gamipress_sequential"] {
 	text-decoration: none;
 }
 
+/* Plugins */
+.gamipress-dashboard .our-plugins-list img {
+	height: 20px;
+	vertical-align: middle;
+}
+
+.gamipress-dashboard .our-plugins-list span {
+	vertical-align: middle;
+}
+
+/* Team */
 .gamipress-dashboard .contributors-list {
 	text-align: center;
 }
@@ -2170,6 +2181,7 @@ label[for="_gamipress_sequential"] {
 	display: block;
 }
 
+/* Social */
 .gamipress-dashboard .gamipress-dashboard-social-list li {
 	margin-bottom: 16px;
 }
@@ -2195,10 +2207,6 @@ label[for="_gamipress_sequential"] {
 }
 
 @media screen and (min-width: 1200px) {
-
-	.gamipress-dashboard .postbox .inside {
-		min-height: 226px;
-	}
 
 	.gamipress-dashboard .gamipress-dashboard-columns {
 		display: grid;
@@ -2329,19 +2337,32 @@ label[for="_gamipress_sequential"] {
     display: none;
 }
 
+.gamipress-integration-add-on .name,
+.gamipress-integration-add-on .desc {
+	display: none;
+}
+
+.gamipress-integration-add-on .plugin-card-top {
+	padding-bottom: 0;
+}
+
+.gamipress-integration-add-on .thumbnail {
+	margin-bottom: 0;
+}
+
 @media screen and (min-width: 1600px) {
 	.gamipress-plugin-card {
-		width: 25%;
-		width: -webkit-calc( 25% - 16px );
-		width: calc( 25% - 16px );
+		width: 20%;
+		width: -webkit-calc( 20% - 16px );
+		width: calc( 20% - 16px );
 	}
 }
 
 @media screen and (min-width: 1200px) and (max-width: 1600px) {
 	.gamipress-plugin-card {
-		width: 25%;
-		width: -webkit-calc( 25% - 16px );
-		width: calc( 25% - 16px );
+		width: 20%;
+		width: -webkit-calc( 20% - 16px );
+		width: calc( 20% - 16px );
 	}
 }
 

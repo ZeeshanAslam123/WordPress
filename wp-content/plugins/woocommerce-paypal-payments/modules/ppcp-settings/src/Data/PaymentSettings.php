@@ -33,7 +33,7 @@ class PaymentSettings extends \WooCommerce\PayPalCommerce\Settings\Data\Abstract
      */
     protected function get_defaults(): array
     {
-        return array('paypal_show_logo' => \false, 'three_d_secure' => 'no-3d-secure', 'fastlane_cardholder_name' => \false, 'fastlane_display_watermark' => \false, 'venmo_enabled' => \false, 'paylater_enabled' => \false);
+        return array('paypal_show_logo' => \false, 'cardholder_name' => \false, 'fastlane_display_watermark' => \false, 'venmo_enabled' => \false, 'paylater_enabled' => \false);
     }
     /**
      * Saves the model data to WordPress options.
@@ -133,22 +133,13 @@ class PaymentSettings extends \WooCommerce\PayPalCommerce\Settings\Data\Abstract
         return (bool) $this->data['paypal_show_logo'];
     }
     /**
-     * Get 3DSecure.
-     *
-     * @return string
-     */
-    public function get_three_d_secure(): string
-    {
-        return $this->data['three_d_secure'];
-    }
-    /**
-     * Get Fastlane cardholder name.
+     * Get cardholder name.
      *
      * @return bool
      */
-    public function get_fastlane_cardholder_name(): bool
+    public function get_cardholder_name(): bool
     {
-        return (bool) $this->data['fastlane_cardholder_name'];
+        return (bool) $this->data['cardholder_name'];
     }
     /**
      * Get Fastlane display watermark.
@@ -188,24 +179,14 @@ class PaymentSettings extends \WooCommerce\PayPalCommerce\Settings\Data\Abstract
         $this->data['paypal_show_logo'] = $value;
     }
     /**
-     * Set 3DSecure.
-     *
-     * @param string $value The value.
-     * @return void
-     */
-    public function set_three_d_secure(string $value): void
-    {
-        $this->data['three_d_secure'] = $value;
-    }
-    /**
-     * Set Fastlane cardholder name.
+     * Set cardholder name.
      *
      * @param bool $value The value.
      * @return void
      */
-    public function set_fastlane_cardholder_name(bool $value): void
+    public function set_cardholder_name(bool $value): void
     {
-        $this->data['fastlane_cardholder_name'] = $value;
+        $this->data['cardholder_name'] = $value;
     }
     /**
      * Set Fastlane display watermark.

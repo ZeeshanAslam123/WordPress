@@ -166,7 +166,7 @@ class IPN {
 		}
 
 		// In certain cases, we will bypass the verification process.
-		if ( edd_is_test_mode() || edd_get_option( 'disable_paypal_verification' ) || isset( $this->posted['verification_override'] ) ) {
+		if ( edd_is_test_mode() || edd_get_option( 'disable_paypal_verification', false ) ) {
 			return true;
 		}
 
@@ -619,7 +619,9 @@ class IPN {
 					'content'     => __( 'Full refund processed in PayPal (IPN).', 'easy-digital-downloads' ) . ' ' . $payment_note,
 				)
 			);
+			add_filter( 'edd_is_order_refundable_by_override', '__return_true' );
 			$refund_id = edd_refund_order( $order->id );
+			remove_filter( 'edd_is_order_refundable_by_override', '__return_true' );
 			if ( $refund_id ) {
 				edd_add_order_transaction(
 					array(

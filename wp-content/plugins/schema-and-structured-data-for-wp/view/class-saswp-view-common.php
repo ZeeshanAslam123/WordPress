@@ -579,7 +579,7 @@ class SASWP_View_Common {
                                             
                                                 $meta_field_selected = '';
                                                 
-                                                if ( isset( $meta_value) ) {
+                                                if ( ! empty( $meta_value) && is_array( $meta_value ) ) {
                                                     
                                                     if(in_array($key, $meta_value) ) {
 
@@ -816,6 +816,10 @@ class SASWP_View_Common {
 
                                 if ( ! empty( $element_val) ) {
                                     saswp_update_post_meta( $post_id, $val.'_'.intval($schema->ID), $element_val);                                                                                                              
+                                }else{
+                                    
+                                    delete_post_meta( $post_id, $val.'_'.intval($schema->ID));                             
+                                    
                                 }                            
                                 
                            }    

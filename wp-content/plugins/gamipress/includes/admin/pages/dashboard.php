@@ -71,6 +71,13 @@ function gamipress_dashboard_page() {
                 <div id="postbox-container-3" class="postbox-container">
                     <div id="normal-sortables" class="meta-box-sortables ui-sortable">
 
+                        <?php // Plugins ?>
+                        <?php gamipress_dashboard_box( array(
+                            'id' => 'plugins',
+                            'title' => __( 'Our Plugins', 'gamipress' ),
+                            'content_cb' => 'gamipress_dashboard_plugins_box',
+                        ) ); ?>
+
                         <?php // Team ?>
                         <?php gamipress_dashboard_box( array(
                             'id' => 'team',
@@ -262,6 +269,43 @@ function gamipress_dashboard_blocks_box() {
 }
 
 /**
+ * Dashboard plugins box
+ *
+ * @since  2.0.0
+ */
+function gamipress_dashboard_plugins_box() {
+    $url = GAMIPRESS_URL . 'assets/img/logos/';
+    ?>
+    <ul id="our-plugins-list" class="our-plugins-list">
+        <li>
+            <a href="https://wordpress.org/plugins/gamipress/" target="_blank">
+                <img src="<?php echo esc_attr( $url . 'gamipress.svg' ); ?>" class="our-plugins-img our-plugins-gamipress" loading="lazy">
+                <span>GamiPress</span>
+            </a>
+        </li>
+        <li>
+            <a href="https://wordpress.org/plugins/automatorwp/" target="_blank">
+                <img src="<?php echo esc_attr( $url . 'automatorwp.svg' ); ?>" class="our-plugins-img our-plugins-automatorwp" loading="lazy">
+                <span>AutomatorWP</span>
+            </a>
+        </li>
+        <li>
+            <a href="https://wordpress.org/plugins/shortlinkspro/" target="_blank">
+                <img src="<?php echo esc_attr( $url . 'shortlinkspro.svg' ); ?>" class="our-plugins-img our-plugins-shortlinkspro" loading="lazy">
+                <span>ShortLinks Pro</span>
+            </a>
+        </li>
+        <li>
+            <a href="https://wordpress.org/plugins/bbforms/" target="_blank">
+                <img src="<?php echo esc_attr( $url . 'bbforms.svg' ); ?>" class="our-plugins-img our-plugins-bbforms" loading="lazy">
+                <span>BBForms</span>
+            </a>
+        </li>
+    </ul>
+    <?php
+}
+
+/**
  * Dashboard team box
  *
  * @since  2.0.0
@@ -271,37 +315,37 @@ function gamipress_dashboard_team_box() {
     <ul id="contributors-list" class="contributors-list">
         <li>
             <a href="https://profiles.wordpress.org/rubengc/" target="_blank">
-                <img alt="" src="https://secure.gravatar.com/avatar/103d0ec19ade3804009f105974fd4d05?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
+                <img src="https://secure.gravatar.com/avatar/103d0ec19ade3804009f105974fd4d05?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
                 <span>Ruben Garcia</span>
             </a>
         </li>
         <li>
             <a href="https://profiles.wordpress.org/eneribs/" target="_blank">
-                <img alt="" src="https://secure.gravatar.com/avatar/7103ea44d40111ab67a22efe7ebd6f71?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
+                <img src="https://secure.gravatar.com/avatar/7103ea44d40111ab67a22efe7ebd6f71?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
                 <span>Irene Berna</span>
             </a>
         </li>
         <li>
             <a href="https://profiles.wordpress.org/dioni00/" target="_blank">
-                <img alt="" src="https://secure.gravatar.com/avatar/6de68ad3863fdf3c92a194ba16546571?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
+                <img src="https://secure.gravatar.com/avatar/6de68ad3863fdf3c92a194ba16546571?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
                 <span>Dionisio Sanchez</span>
             </a>
         </li>
         <li>
             <a href="https://profiles.wordpress.org/tinocalvo/" target="_blank">
-                <img alt="" src="https://secure.gravatar.com/avatar/a438aa12efcfb007f3db145d6ad37def?s=64&amp;d=retro&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
+                <img src="https://secure.gravatar.com/avatar/a438aa12efcfb007f3db145d6ad37def?s=64&amp;d=retro&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
                 <span>Tino Calvo</span>
             </a>
         </li>
         <li>
             <a href="https://profiles.wordpress.org/pacogon/" target="_blank">
-                <img alt="" src="https://secure.gravatar.com/avatar/348f374779e7433ad6bf3930cb2a492e?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
+                <img src="https://secure.gravatar.com/avatar/348f374779e7433ad6bf3930cb2a492e?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
                 <span>Paco González</span>
             </a>
         </li>
         <li>
             <a href="https://profiles.wordpress.org/flabernardez/" target="_blank">
-                <img alt="" src="https://secure.gravatar.com/avatar/fd626d9a8463260894f0f6f07a5cc71a?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
+                <img src="https://secure.gravatar.com/avatar/fd626d9a8463260894f0f6f07a5cc71a?s=64&amp;d=mm&amp;r=g" class="avatar avatar-32 photo" loading="lazy">
                 <span>Flavia Bernardez</span>
             </a>
         </li>

@@ -24,7 +24,7 @@ function gamipress_acf_user_field_update_listener( $meta_id, $object_id, $meta_k
     global $wpdb;
 
     $fields_allowed = gamipress_acf_check_acf_user_fields();
-
+    
     // Bail if not exists ACF user fields
     if ( empty ( $fields_allowed ) ) {
         return;
@@ -35,26 +35,29 @@ function gamipress_acf_user_field_update_listener( $meta_id, $object_id, $meta_k
         return;
     }
 
-    $meta_key = $wpdb->get_var( $wpdb->prepare(
-        "SELECT a.ID FROM {$wpdb->prefix}posts AS a WHERE a.post_excerpt = %s",
-         $meta_key
+    $field_key = get_user_meta( $object_id, '_' . $meta_key, true );
+
+    $post_id = $wpdb->get_var( $wpdb->prepare(
+        "SELECT a.ID FROM {$wpdb->prefix}posts AS a WHERE a.post_name = %s AND post_status = 'publish'",
+         $field_key
     ) );
 
     $user_id = $object_id;
 
     // Update any user field with any value
-    do_action( 'gamipress_acf_update_any_user_field_any_value', $user_id, $meta_id, $meta_key, $meta_value, $object_id );
+    do_action( 'gamipress_acf_update_any_user_field_any_value', $user_id, $meta_id, $post_id, $meta_value, $object_id );
 
     // Update any user field with specific value
-    do_action( 'gamipress_acf_update_any_user_field_specific_value', $user_id, $meta_id, $meta_key, $meta_value, $object_id );
+    do_action( 'gamipress_acf_update_any_user_field_specific_value', $user_id, $meta_id, $post_id, $meta_value, $object_id );
 
     // Update specific user field with any value
-    do_action( 'gamipress_acf_update_specific_user_field_any_value', $user_id, $meta_id, $meta_key, $meta_value, $object_id );
+    do_action( 'gamipress_acf_update_specific_user_field_any_value', $user_id, $meta_id, $post_id, $meta_value, $object_id );
 
     // Update specific user field with specific value
-    do_action( 'gamipress_acf_update_specific_user_field_specific_value', $user_id, $meta_id, $meta_key, $meta_value, $object_id );
+    do_action( 'gamipress_acf_update_specific_user_field_specific_value', $user_id, $meta_id, $post_id, $meta_value, $object_id );
 
 }
+add_action( 'added_user_meta', 'gamipress_acf_user_field_update_listener', 10, 4 );
 add_action( 'updated_user_meta', 'gamipress_acf_user_field_update_listener', 10, 4 );
 
 /**
@@ -88,22 +91,25 @@ function gamipress_acf_post_field_update_listener( $meta_id, $object_id, $meta_k
         return;
     }
 
-    $meta_key = $wpdb->get_var( $wpdb->prepare(
-        "SELECT a.ID FROM {$wpdb->prefix}posts AS a WHERE a.post_excerpt = %s",
-         $meta_key
+    $field_key = get_post_meta( $object_id, '_' . $meta_key, true );
+
+    $post_id = $wpdb->get_var( $wpdb->prepare(
+        "SELECT a.ID FROM {$wpdb->prefix}posts AS a WHERE a.post_name = %s AND post_status = 'publish'",
+         $field_key
     ) );
     
     // Update any post field with any value
-    do_action( 'gamipress_acf_update_any_post_field_any_value', $user_id, $meta_id, $meta_key, $meta_value, $object_id );
+    do_action( 'gamipress_acf_update_any_post_field_any_value', $user_id, $meta_id, $post_id, $meta_value, $object_id );
 
     // Update any post field with specific value
-    do_action( 'gamipress_acf_update_any_post_field_specific_value', $user_id, $meta_id, $meta_key, $meta_value, $object_id );
+    do_action( 'gamipress_acf_update_any_post_field_specific_value', $user_id, $meta_id, $post_id, $meta_value, $object_id );
 
     // Update specific post field with any value
-    do_action( 'gamipress_acf_update_specific_post_field_any_value', $user_id, $meta_id, $meta_key, $meta_value, $object_id );
+    do_action( 'gamipress_acf_update_specific_post_field_any_value', $user_id, $meta_id, $post_id, $meta_value, $object_id );
 
     // Update specific post field with specific value
-    do_action( 'gamipress_acf_update_specific_post_field_specific_value', $user_id, $meta_id, $meta_key, $meta_value, $object_id );
+    do_action( 'gamipress_acf_update_specific_post_field_specific_value', $user_id, $meta_id, $post_id, $meta_value, $object_id );
 
 }
+add_action( 'added_post_meta', 'gamipress_acf_post_field_update_listener', 10, 4 );
 add_action( 'updated_post_meta', 'gamipress_acf_post_field_update_listener', 10, 4 );

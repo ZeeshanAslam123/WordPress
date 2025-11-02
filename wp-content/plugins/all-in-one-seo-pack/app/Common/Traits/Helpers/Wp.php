@@ -766,6 +766,21 @@ trait Wp {
 	}
 
 	/**
+	 * Checks whether WordPress is currently serving a REST API request.
+	 *
+	 * @since 4.8.9
+	 *
+	 * @return bool Whether WordPress is currently serving a REST API request.
+	 */
+	public function isServingRestRequest() {
+		if ( function_exists( 'wp_is_serving_rest_request' ) ) {
+			return wp_is_serving_rest_request(); // phpcs:ignore WordPress.NamingConventions.ValidHookName, AIOSEO.WpFunctionUse.NewFunctions.wp_is_serving_rest_requestFound
+		}
+
+		return defined( 'REST_REQUEST' ) && REST_REQUEST;
+	}
+
+	/**
 	 * Returns the post title or a placeholder if there isn't one.
 	 *
 	 * @since 4.3.0
@@ -998,5 +1013,56 @@ trait Wp {
 		$slug = untrailingslashit( $slug );
 
 		return $slug;
+	}
+
+	/**
+	 * Returns the scannable post types.
+	 *
+	 * @since 4.8.6
+	 *
+	 * @return array The scannable post types.
+	 */
+	public function getScannablePostTypes() {
+		static $scannablePostTypes = null;
+		if ( null !== $scannablePostTypes ) {
+			return $scannablePostTypes;
+		}
+
+		// We exclude these post types to optimize performance.
+		$nonSupportedPostTypes = [ 'attachment' ];
+		$scannablePostTypes    = array_diff(
+			$this->getPublicPostTypes( true ),
+			$nonSupportedPostTypes
+		);
+
+		return $scannablePostTypes;
+	}
+
+	/**
+	 * Returns the user data.
+	 *
+	 * @since 4.8.7
+	 *
+	 * @param  int $userId The user ID.
+	 * @return \WP_User|null The user data.
+	 */
+	public function getUserData( $userId ) {
+		$userData = get_userdata( $userId );
+		if ( ! is_a( $userData, 'WP_User' ) ) {
+			return null;
+		}
+
+		$toUnset = [
+			'user_pass',
+			'user_activation_key'
+		];
+
+		foreach ( $toUnset as $key ) {
+			if ( isset( $userData->$key ) ) {
+				unset( $userData->$key );
+			}
+		}
+
+		return $userData;
 	}
 }

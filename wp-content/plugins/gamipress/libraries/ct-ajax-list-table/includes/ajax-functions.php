@@ -32,7 +32,7 @@ function ct_ajax_list_table_handle_request() {
     if( is_array( $_GET['query_args'] ) ) {
         $query_args = map_deep( $_GET['query_args'], 'sanitize_text_field' );
     } else {
-        $query_args = json_decode( str_replace( "\\'", "\"", $_GET['query_args'] ), true );
+        $query_args = json_decode( wp_unslash( $_GET['query_args'] ), true );
         // Sanitize
         $query_args = map_deep( $query_args, 'sanitize_text_field' );
     }

@@ -432,7 +432,7 @@ function saswp_admin_interface_render() {
                         
                             echo '<div id="saswp-review-tabs" style="margin-top: 10px;">';
 
-                            echo '<a data-id="saswp-review-reviews-container">'. esc_html__( 'Reviews Module', 'schema-and-structured-data-for-wp' ) .'</a> | <a data-id="saswp-review-rating-container">'. esc_html__( 'Rating Module', 'schema-and-structured-data-for-wp' ) .'</a>';
+                            echo '<a data-id="saswp-review-reviews-container">'. esc_html__( 'Reviews Module', 'schema-and-structured-data-for-wp' ) .'</a> | <a data-id="saswp-review-rating-container">'. esc_html__( 'Rating Module', 'schema-and-structured-data-for-wp' ) .'</a> | <a data-id="saswp-review-comment-container">'. esc_html__( 'Comment Reviews Module', 'schema-and-structured-data-for-wp' ) .'</a>';
 
                             echo'</div> ';
                         
@@ -1150,23 +1150,25 @@ function saswp_general_page_callback() {
         
             if($nav_menu){
                 
-             $options = array();
-             
-             foreach( $nav_menu as $menu){
+                 $options = array();
                  
-                 $options[$menu->term_id] = $menu->name;
-             }
+                 foreach( $nav_menu as $menu){
+                     
+                     $options[$menu->term_id] = $menu->name;
+                 }
+                 
+                 $options = array('' => 'Select A Menu') + $options;
              
-             $options = array('' => 'Select A Menu') + $options;
-             
-             $meta_fields_default[] =   array(
-			'label'  => 'Site Navigation Menu',
-			'id'     => 'saswp_site_navigation_menu', 
-                        'name'   => 'sd_data[saswp_site_navigation_menu]',
-			'type'   => 'select',                        
-                        'options'=> $options
-                        
-		); 
+                $meta_fields_default[] =   array(
+        			'label'  => 'Site Navigation Menu',
+        			'id'     => 'saswp_site_navigation_menu', 
+                                'name'   => 'sd_data[saswp_site_navigation_menu]',
+        			'type'   => 'select',                        
+                                'options'=> $options
+                                
+        		); 
+
+                $meta_fields_default = apply_filters( 'saswp_add_wpml_language_menu_navigations', $meta_fields_default, $options );
             }                    
         ?>
 
@@ -1372,7 +1374,8 @@ function saswp_general_page_callback() {
 			'type'  => 'select',
 			'options' => array(
                                 ''                    => 'Select an item',
-				'customer support'    => 'Customer Support',
+				'general'    => 'General',
+                'customer support'    => 'Customer Support',
 				'technical support'   => 'Technical Support',
                                 'billing support'     => 'Billing Support',
                                 'bill payment'        => 'Bill payment',
@@ -2472,6 +2475,7 @@ function saswp_review_page_callback() {
         
         $settings = saswp_defaultSettings();         
         $field_objs = new SASWP_Fields_Generator();
+        global $saswp_review_feature_admin_obj;
                                 
         $meta_fields = array(				                               
                 array(
@@ -2562,36 +2566,48 @@ function saswp_review_page_callback() {
                              'name' => 'sd_data[saswp-review-module]',                             
                         )
                 ),
-                array(
-                        'label'  => 'Stars Rating',
-                        'id'     => 'saswp-stars-rating-checkbox',                        
-                        'name'   => 'saswp-stars-rating-checkbox',
-                        'type'   => 'checkbox',
-                        'class'  => 'checkbox saswp-checkbox',
-                        'note'   => 'This option adds rating field in wordpress default comment box <a target="_blank" href="https://structured-data-for-wp.com/docs/article/how-to-use-rating-module-in-schema-and-structured-data/">Learn More</a>',
-                        'hidden' => array(
-                                'id'   => 'saswp-stars-rating',
-                                'name' => 'sd_data[saswp-stars-rating]',                             
-                        )
-                ),
-                array(
-                        'label'  => 'Default Rating',
-                        'id'     => 'saswp-default-rating',                        
-                        'name'   => 'sd_data[saswp-default-rating]',
-                        'type'   => 'number',
-                        'class'  => 'regular-text',
-                        'note'   => 'Option to set default rating to rating field. If user does not choose rating this value will be submited',                        
-                        'attributes' => array(
-                                'max' => '5',
-                                'min' => '1'                                
-                        )
-                )
            );  
        
        $field_objs->saswp_field_generator($meta_fields, $settings); 
        ?> 
     </div>
     
+    <div class="saswp-review-container" id="saswp-review-comment-container">
+
+    <?php
+    $meta_fields = array(
+                        array(
+                            'label'  => 'Stars Rating',
+                            'id'     => 'saswp-stars-rating-checkbox',                        
+                            'name'   => 'saswp-stars-rating-checkbox',
+                            'type'   => 'checkbox',
+                            'class'  => 'checkbox saswp-checkbox',
+                            'note'   => 'This option adds rating field in wordpress default comment box <a target="_blank" href="https://structured-data-for-wp.com/docs/article/how-to-use-rating-module-in-schema-and-structured-data/">Learn More</a>',
+                            'hidden' => array(
+                                    'id'   => 'saswp-stars-rating',
+                                    'name' => 'sd_data[saswp-stars-rating]',                             
+                            )
+                        ), 
+                        array(
+                            'label'  => 'Default Rating',
+                            'id'     => 'saswp-default-rating',                        
+                            'name'   => 'sd_data[saswp-default-rating]',
+                            'type'   => 'number',
+                            'class'  => 'regular-text',
+                            'note'   => 'Option to set default rating to rating field. If user does not choose rating this value will be submited',                        
+                            'attributes' => array(
+                                    'max' => '5',
+                                    'min' => '1'                                
+                            )
+                        ),   
+                    );
+    $field_objs->saswp_field_generator( $meta_fields, $settings );
+
+    $saswp_review_feature_admin_obj->saswp_render_review_feature_page();
+    ?>    
+
+    </div>
+
     <?php
         
         
@@ -5161,3 +5177,38 @@ function saswp_pre_update_settings($value, $old_value,  $option){
 }
 
 add_filter( 'pre_update_option_sd_data', 'saswp_pre_update_settings',10,3);
+
+/**
+ * Initialize SASWP_Review_Feature_Admin class
+ * @since   1.46
+ * */
+add_action('init', function() {
+    global $saswp_review_feature_admin_obj;
+    $saswp_review_feature_admin_obj     =   SASWP_Review_Feature_Admin::get_instance();
+});
+
+/**
+ * Empty or dequeue the select2 script of publish press permission plugin
+ * @param $scripts  WP_Scripts 
+ * @since 1.49
+ * Solution: https://github.com/ahmedkaludi/schema-and-structured-data-for-wp/issues/2327
+ * */
+add_action('wp_default_scripts', 'saswp_dequeue_publishpress_scripts');
+function saswp_dequeue_publishpress_scripts( $scripts ) {
+    
+    $post_type = null;
+
+    if ( function_exists( 'presspermit' ) &&  function_exists( 'is_admin' ) && is_admin() && ! empty( $_GET['post'] )) {
+        $post_id = absint( $_GET['post'] );
+        if ( $post_id > 0 ) {
+            $post = get_post( $post_id );
+            if ( is_object( $post ) && ! empty( $post->post_type ) ) {
+                $post_type  = $post->post_type;       
+            }
+        }
+
+        if ( $post_type == 'saswp' || $post_type == 'saswp-collections' || $post_type == 'saswp_reviews' ) {
+            $scripts->add( 'presspermit-select2-js', false );
+        }
+    }
+};

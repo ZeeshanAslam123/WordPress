@@ -14,6 +14,7 @@ use MailPoet\Entities\SubscriberEntity;
 use MailPoet\Form\AssetsController;
 use MailPoet\Newsletter\Scheduler\WelcomeScheduler;
 use MailPoet\Newsletter\Sending\SendingQueuesRepository;
+use MailPoet\Settings\Pages as SettingsPages;
 use MailPoet\Settings\TrackingConfig;
 use MailPoet\Statistics\StatisticsClicksRepository;
 use MailPoet\Statistics\Track\SubscriberHandler;
@@ -280,7 +281,7 @@ class Pages {
     if (
       (!isset($post))
       ||
-      ($post->post_title !== __('MailPoet Page', 'mailpoet')) // phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
+      ($post->post_title !== SettingsPages::PAGE_TITLE && $post->post_title !== __('MailPoet Page', 'mailpoet')) // phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
       ||
       ($pageTitle !== $this->wp->singlePostTitle('', false))
     ) {
@@ -465,7 +466,7 @@ class Pages {
     return $this->wp->applyFilters(
       'mailpoet_unsubscribe_confirmation_page',
       $this->templateRenderer->render('subscription/confirm_unsubscribe.html', $templateData),
-      $unsubscribeUrl
+      $this->addTypeParamToUnsubscribeUrl($unsubscribeUrl)
     );
   }
 
@@ -505,5 +506,13 @@ class Pages {
       );
       $this->statisticsClicksRepository->flush();
     }
+  }
+
+  private function addTypeParamToUnsubscribeUrl(string $unsubscribeUrl): string {
+    if (empty($unsubscribeUrl)) {
+        return $unsubscribeUrl;
+    }
+    // using the same value as mailpoet/views/subscription/confirm_unsubscribe.html#4
+    return $this->wp->addQueryArg('type', 'confirmation', $unsubscribeUrl);
   }
 }

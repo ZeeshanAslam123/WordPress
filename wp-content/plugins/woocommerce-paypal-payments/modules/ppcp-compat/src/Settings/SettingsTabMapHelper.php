@@ -8,9 +8,8 @@
 declare (strict_types=1);
 namespace WooCommerce\PayPalCommerce\Compat\Settings;
 
-use WooCommerce\PayPalCommerce\ApiClient\Entity\ApplicationContext;
+use WooCommerce\PayPalCommerce\ApiClient\Entity\ExperienceContext;
 use WooCommerce\PayPalCommerce\ApiClient\Helper\PurchaseUnitSanitizer;
-use WooCommerce\PayPalCommerce\Button\Helper\ContextTrait;
 /**
  * A map of old to new styling settings.
  *
@@ -19,7 +18,12 @@ use WooCommerce\PayPalCommerce\Button\Helper\ContextTrait;
  */
 class SettingsTabMapHelper
 {
-    use ContextTrait;
+    /**
+     * A map of new to old 3d secure values.
+     *
+     * @var array<string, string>
+     */
+    public const THREE_D_SECURE_VALUES_MAP = array('no-3d-secure' => 'NO_3D_SECURE', 'only-required-3d-secure' => 'SCA_WHEN_REQUIRED', 'always-3d-secure' => 'SCA_ALWAYS');
     /**
      * Maps old setting keys to new setting keys.
      *
@@ -27,7 +31,7 @@ class SettingsTabMapHelper
      */
     public function map(): array
     {
-        return array('disable_cards' => 'disabled_cards', 'brand_name' => 'brand_name', 'soft_descriptor' => 'soft_descriptor', 'payee_preferred' => 'instant_payments_only', 'subtotal_mismatch_behavior' => 'subtotal_adjustment', 'landing_page' => 'landing_page', 'smart_button_language' => 'button_language', 'prefix' => 'invoice_prefix', 'intent' => '', 'vault_enabled_dcc' => 'save_card_details', 'blocks_final_review_enabled' => 'enable_pay_now', 'logging_enabled' => 'enable_logging', 'vault_enabled' => 'save_paypal_and_venmo');
+        return array('disable_cards' => 'disabled_cards', 'brand_name' => 'brand_name', 'soft_descriptor' => 'soft_descriptor', 'payee_preferred' => 'instant_payments_only', 'subtotal_mismatch_behavior' => 'subtotal_adjustment', 'landing_page' => 'landing_page', 'smart_button_language' => 'button_language', 'prefix' => 'invoice_prefix', 'intent' => '', 'vault_enabled_dcc' => 'save_card_details', 'blocks_final_review_enabled' => 'enable_pay_now', 'logging_enabled' => 'enable_logging', 'vault_enabled' => 'save_paypal_and_venmo', '3d_secure_contingency' => 'three_d_secure', 'stay_updated' => 'stay_updated');
     }
     /**
      * Retrieves the value of a mapped key from the new settings.
@@ -49,9 +53,25 @@ class SettingsTabMapHelper
                 return $this->mapped_intent_value($settings_model);
             case 'blocks_final_review_enabled':
                 return $this->mapped_pay_now_value($settings_model);
+            case '3d_secure_contingency':
+                return $this->mapped_3d_secure_value($settings_model);
             default:
                 return $settings_model[$new_key] ?? null;
         }
+    }
+    /**
+     * Retrieves the mapped value for the '3d_secure_contingency' from the new settings.
+     *
+     * @param array $settings_model The new settings model data.
+     * @return string|null The mapped '3d_secure_contingency' setting value.
+     */
+    protected function mapped_3d_secure_value(array $settings_model): ?string
+    {
+        $three_d_secure = $settings_model['three_d_secure'] ?? null;
+        if (!is_string($three_d_secure)) {
+            return null;
+        }
+        return self::THREE_D_SECURE_VALUES_MAP[$three_d_secure] ?? null;
     }
     /**
      * Retrieves the mapped value for the 'mismatch_behavior' from the new settings.
@@ -71,7 +91,7 @@ class SettingsTabMapHelper
      * Retrieves the mapped value for the 'landing_page' from the new settings.
      *
      * @param array<string, scalar|array> $settings_model The new settings model data as an array.
-     * @return 'LOGIN'|'BILLING'|'NO_PREFERENCE'|null The mapped 'landing_page' setting value.
+     * @return 'LOGIN'|'GUEST_CHECKOUT'|'NO_PREFERENCE'|null The mapped 'landing_page' setting value.
      */
     protected function mapped_landing_page_value(array $settings_model): ?string
     {
@@ -79,7 +99,7 @@ class SettingsTabMapHelper
         if (!$landing_page) {
             return null;
         }
-        return $landing_page === 'login' ? ApplicationContext::LANDING_PAGE_LOGIN : ($landing_page === 'guest_checkout' ? ApplicationContext::LANDING_PAGE_BILLING : ApplicationContext::LANDING_PAGE_NO_PREFERENCE);
+        return $landing_page === 'login' ? ExperienceContext::LANDING_PAGE_LOGIN : ($landing_page === 'guest_checkout' ? ExperienceContext::LANDING_PAGE_GUEST_CHECKOUT : ExperienceContext::LANDING_PAGE_NO_PREFERENCE);
     }
     /**
      * Retrieves the mapped value for the order intent from the new settings.

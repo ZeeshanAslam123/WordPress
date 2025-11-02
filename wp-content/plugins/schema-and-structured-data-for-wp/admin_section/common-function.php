@@ -5251,10 +5251,9 @@ function saswp_get_image_details($url)
     if (!function_exists( 'wp_getimagesize' ) ){
         require_once( ABSPATH . '/wp-admin/includes/media.php' );
     }
-    if ( function_exists( 'wp_getimagesize') ) {
-        $image = wp_getimagesize($url);
-    }else{
-        $image = getimagesize($url);
+    $img_details = apply_filters( 'saswp_get_image_details', false, $url );
+    if ( false === $img_details ) {
+        $image = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( $url ) : getimagesize( $url );
     }
     return $image;
 }
@@ -5452,5 +5451,50 @@ function saswp_get_the_product_title( $title = '' ) {
     }
 
     return $title;
+
+}
+
+/**
+ * Check is current theme is a block based theme
+ * @since   1.46
+ * */
+function saswp_is_block_theme() {
+    
+    if ( ! function_exists( 'wp_is_block_theme' ) ) {
+        require_once ABSPATH . 'wp-includes/theme.php';
+    }
+    if ( function_exists('wp_is_block_theme') && wp_is_block_theme() ) {
+        return true;
+    }
+    return false;
+
+}   
+
+/**
+ * Get yuoutube video meta data
+ * @param   $url    param
+ * @return  $data   array
+ * @since   1.50
+ * */
+function saswp_get_youtube_video_metadata( $url ) {
+    global $sd_data;
+    $data   =   array();
+
+    if ( isset( $sd_data['saswp-youtube-api']) && $sd_data['saswp-youtube-api'] != '' ) {
+        $vid            =   saswp_get_youtube_vid( $url );
+        $video_meta     =   SASWP_Youtube::getVideoInfo( $vid, $sd_data['saswp-youtube-api'] );
+
+        if ( ! empty( $video_meta) ) {
+            $data['title']          =   isset( $video_meta['title'] ) ? $video_meta['title'] : '';
+            $data['description']    =   isset( $video_meta['description'] ) ? $video_meta['description'] : '' ;
+            $data['viewCount']      =   isset( $video_meta['viewCount'] ) ? $video_meta['viewCount'] : '';
+            $data['duration']       =   isset( $video_meta['duration'] ) ? $video_meta['duration'] : '';
+            $data['uploadDate']     =   isset( $video_meta['uploadDate'] ) ? $video_meta['uploadDate'] : '';
+            $data['thumbnailUrl']   =   isset( $video_meta['thumbnail']['sdDefault'] ) ? $video_meta['thumbnail']['sdDefault'] : '';
+            $data['contentUrl']     =   $url;
+        }
+    }                    
+
+    return $data;
 
 }

@@ -108,13 +108,13 @@ class Address {
 	 * @return array
 	 */
 	protected function set_up_customer() {
-		$customer = EDD()->session->get( 'customer' );
+		$customer = \EDD\Sessions\Customer::get();
 		$customer = wp_parse_args(
 			$customer,
 			$this->customer
 		);
 
-		$customer['address'] = array_map( 'sanitize_text_field', $customer['address'] );
+		$customer['address'] = array_map( 'sanitize_text_field', wp_parse_args( $customer['address'], $this->customer['address'] ) );
 
 		if ( ! is_user_logged_in() ) {
 			return $customer;

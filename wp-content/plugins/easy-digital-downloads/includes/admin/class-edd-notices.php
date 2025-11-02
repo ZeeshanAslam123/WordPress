@@ -136,7 +136,6 @@ class EDD_Notices {
 	 * @since 3.0
 	 */
 	public function add_notices() {
-
 		// User can view shop reports.
 		if ( current_user_can( 'view_shop_reports' ) ) {
 			$this->add_reports_notices();
@@ -144,6 +143,7 @@ class EDD_Notices {
 
 		// User can manage the entire shop.
 		if ( current_user_can( 'manage_shop_settings' ) ) {
+			$this->add_settings_errors();
 			$this->add_data_notices();
 			$this->add_settings_notices();
 			$this->add_order_upgrade_notice();
@@ -266,6 +266,32 @@ class EDD_Notices {
 	}
 
 	/** Private Methods *******************************************************/
+
+	/**
+	 * Add settings errors to the notices array.
+	 *
+	 * These are errors that we've added to the WP Core settings errors array.
+	 *
+	 * @since 3.5.0
+	 * @return void
+	 */
+	private function add_settings_errors() {
+		$errors = get_settings_errors();
+		foreach ( $errors as $error ) {
+			if ( 'edd-notices' !== $error['setting'] ) {
+				continue;
+			}
+
+			$this->add_notice(
+				array(
+					'id'             => $error['code'],
+					'message'        => $error['message'],
+					'class'          => 'error',
+					'is_dismissible' => false,
+				)
+			);
+		}
+	}
 
 	/**
 	 * Notices about missing pages
@@ -1021,6 +1047,23 @@ class EDD_Notices {
 						array(
 							'id'      => 'edd-user-verified',
 							'message' => __( 'User successfully verified.', 'easy-digital-downloads' ),
+						)
+					);
+					break;
+				case 'user-already-verified':
+					$this->add_notice(
+						array(
+							'id'          => 'edd-user-already-verified',
+							'message'     => __( 'This user is already verified.', 'easy-digital-downloads' ),
+							'dismissible' => true,
+						)
+					);
+					break;
+				case 'verification-email-sent':
+					$this->add_notice(
+						array(
+							'id'      => 'edd-verification-email-sent',
+							'message' => __( 'Verification email sent successfully.', 'easy-digital-downloads' ),
 						)
 					);
 					break;

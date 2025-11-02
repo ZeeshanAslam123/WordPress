@@ -49,7 +49,7 @@ function register() {
  * Renders the order history block.
  *
  * @since 2.0
- * @param array  $block_attributes The block attributes.
+ * @param array $block_attributes The block attributes.
  * @return string
  */
 function orders( $block_attributes = array() ) {
@@ -113,7 +113,7 @@ function confirmation( $block_attributes = array(), $content = '' ) {
 		$order = edd_get_order_by( 'payment_key', $session['purchase_key'] );
 	}
 	if ( ! $order ) {
-		if ( Helpers\is_block_editor() ) {
+		if ( \EDD\Blocks\Utility::is_block_editor() ) {
 			return '<p class="edd-alert edd-alert-info">' . esc_html( __( 'To view a sample confirmation screen, you need to have at least one order in your store.', 'easy-digital-downloads' ) ) . '</p>';
 		}
 
@@ -160,10 +160,10 @@ function confirmation( $block_attributes = array(), $content = '' ) {
  *
  * @since 2.0
  * @param array  $block_attributes The block attributes.
- * @param string $content          The content of the block.
+ * @param string $block_content    The content of the block.
  * @return string
  */
-function receipt( $block_attributes = array(), $content = '' ) {
+function receipt( $block_attributes = array(), $block_content = '' ) {
 	global $edd_receipt_args;
 
 	$edd_receipt_args = wp_parse_args(
@@ -179,7 +179,7 @@ function receipt( $block_attributes = array(), $content = '' ) {
 
 	// No order found.
 	if ( ! $order ) {
-		if ( Helpers\is_block_editor() ) {
+		if ( \EDD\Blocks\Utility::is_block_editor() ) {
 			return '<p class="edd-alert edd-alert-info">' . esc_html( __( 'To view a sample receipt, you need to have at least one order in your store.', 'easy-digital-downloads' ) ) . '</p>';
 		}
 
@@ -205,7 +205,7 @@ function receipt( $block_attributes = array(), $content = '' ) {
 		<?php
 		include EDD_BLOCKS_DIR . 'views/orders/totals.php';
 		maybe_show_receipt( $order );
-		echo wp_kses_post( $content );
+		echo wp_kses_post( $block_content );
 		?>
 	</div>
 	<?php
@@ -402,7 +402,7 @@ function get_purchased_products( $block_attributes ) {
 		'number'     => 9999,
 		'type'       => 'sale',
 	);
-	if ( Helpers\is_block_editor() ) {
+	if ( \EDD\Blocks\Utility::is_block_editor() ) {
 		$args['number'] = 50;
 		unset( $args['user_id'] );
 	}

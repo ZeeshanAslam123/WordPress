@@ -4,7 +4,7 @@ Tags: woocommerce, paypal, payments, ecommerce, credit card
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.0.5
+Stable tag: 3.2.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -155,6 +155,134 @@ If you encounter issues with the PayPal buttons not appearing after an update, p
 6. Main settings screen.
 
 == Changelog ==
+
+= 3.2.1 - 2025-10-20 =
+* Enhancement - Make plugin upgrade hooks safer #3789
+* Enhancement - Webhook transient lock #3790
+
+= 3.2.0 - 2025-10-15 =
+* Enhancement - Enable AppSwitch and SSSC feature flags by default #3724
+* Enhancement - Remove temporary Pay Later messaging auto-enablement logic #3680
+* Enhancement - Align Fastlane currency support with ACDC matrix #3697
+* Enhancement - Add hooks at the start of Create/Approve Order requests #3717
+* Enhancement - Don't filter tokens on changing payment method of a subscription (author @gedex) #3617
+* Enhancement - Reorganize ACDC and Fastlane gateway settings modals #3652
+* Enhancement - Update PayPal Package Tracking Carriers List #3630
+* Enhancement - Display help center section #3587
+* Enhancement - Update Fastlane card placeholder design #3625
+* Enhancement - Add Fastlane session restoration post payment failure #3598
+* Fix - Check for messages visibility setting before rendering #3686
+* Fix - Fatal error where a callback expects \WC_Payment_Gateway but got RequestHandler (author @gedex) #3660
+* Fix - Continuation with PayPal subscriptions #3656
+* Fix - Add fallback for getting subscription order address in classic contexts #3657
+* Fix - Fastlane - UK and Australia - Add Fastlane to onboarding screen and four step #3635
+* Fix - Check variation stock for all variable products #3605
+* Fix - Google Pay button enabled state on variable product pages #3602
+* Fix - Pay by link with PayPal error on front end when no shipping address #3627
+* Fix - Sync checkout fields and headers in Fastlane flow #3628
+* Fix - Classic checkout - Guest user - Trial vaulting subscription validation does not work #3663
+* Fix - Prevent redirect on checkout failure for trial vaulting subscriptions #3644
+* Fix - Contacts race condition in block #3518
+* Fix - Add shipping-related filters to avoid MISSING_%field_name% errors #3586
+* Fix - Continuation mode in Elementor checkout #3612
+
+= 3.1.2 - 2025-09-30 =
+* Change - Make migration available again #3710
+* Fix - Override flag to keep BCDC for ACDC merchants during migration #3712
+* Fix - Prevent rare fatal error when shipping address is missing #3655
+* In branded-only mode, every merchant has BCDC #3713
+
+= 3.1.1 - 2025-09-27 =
+* Fix - Fix BCDC in branded-only mode #3699
+* Fix - Restore BCDC button for ACDC merchants in legacy UI #3703
+* Change - Remove all migration UX/notifications #3705
+
+= 3.1.0 - 2025-09-02 =
+* Enhancement - Fastlane now available for British & Australian merchants #3589
+* Enhancement - Pay Later messaging now auto-enabled for eligible merchants based on the STAY UPDATED preference. Review the Pay Later settings to customize or disable. #3600
+* Enhancement - Add buttons to copy merchant credentials in the Settings tab #3561
+* Enhancement - Skip "Payment Methods" step for branded-only + BCDC and casual sellers #3547
+* Enhancement - Add "Things to do next" item after settings migration #3536
+* Enhancement - Phase 2: Settings Migration - Add Woo Inbox item #3599
+* Enhancement - Create an API function for adding tracking info #3588
+* Enhancement - Add polling mechanism for renderer wrapper to prevent race condition for Pay Later messaging #3577
+* Enhancement - Status report entry for "New UI active" and "Branded only" #3539
+* Fix - Apple Pay does not update shipping method or address changes on Classic Checkout #3524
+* Fix - Prevent early is_enabled() check for Google Pay button in new UI #3566
+* Fix - Subscriptions migrated from PPEC plugin to PayPal Payments fails on renewal #3549
+* Fix - Google Pay transaction from block pages #3542
+* Fix - Remove redundant authorize call in subscription renewal handler #3543
+* Fix - Empty description handling and logo display for PayPal gateway not working as expected #3527
+* Fix - When Apple Pay is enabled, empty space for Apple Pay button is showing on all pages if buyer is not eligible #3550
+* Fix - Undefined properties error in checkout block #3551
+* Fix - Make the state address data optional to fix non US-CA compatibility for Fastlane #3535
+* Fix - Disable the card button if BCDC is disabled #3532
+* Fix - Remove data-sdk-client-token field when not needed #3540
+* Fix - "No PayPal order ID found in order meta" logged after using "Proceed to PayPal" on block checkout #3189
+* Fix - Use is_acdc_enabled() to prevent ACDC interference with BCDC in non-ACDC countries #3594
+* Fix - Remove the specified gateway when the button is disabled #3556
+
+= 3.0.9 - 2025-07-31 =
+* Fix - Payment via "Proceed to PayPal" may result in a redirect loop #3570
+
+= 3.0.8 - 2025-07-28 =
+* Enhancement - Migration from Legacy Settings to New Settings as opt-in via banner & button #3491
+* Enhancement - Replace call to `billing-agreements/agreement-tokens` with checking the capabilities for Reference Transactions #3495
+* Enhancement - Add Fastlane 3D Secure support #3493
+* Enhancement - Improved PHP 8.4 compatibility #3534
+* Fix - `INVALID_REQUEST` error due to wrong `landing_page` value after upgrade to 3.0.7 #3521
+* Fix - Incorrect Amount via Express Payment for WooCommerce Product Bundles #3516
+* Fix - Onboarding failed via "Connect to PayPal" in new UI due to race condition #3385
+* Fix - Fatal error when PayPal Payments is active without WooCommerce #3502
+* Fix - PayPal Subscription transaction failed in various scenarios #3515
+* Fix - Rounding differences potentially lead to order failure (author @luzat) #3373
+* Fix - Google Pay payment on block checkout may fail when ACDC is default payment selection #3506
+* Fix - Product Prices Disappear in some cases when WooCommerce Subscriptions is active #3519
+
+= 3.0.7 - 2025-07-01 =
+* Enhancement - Remove `application_context` in favor of `experience_context` object #3431
+ **NOTE**: If you were modifying the `application_context` object programmatically, you may need to update your code to utilize `experience_context` for your customizations.
+* Enhancement - Add Contact Module feature
+* Enhancement - Add WooCommerce Tracks integration
+* Enhancement - Onboarding notification for Firefox browser #3433
+* Enhancement - Reset BN code on plugin uninstall #3471
+* Enhancement - Add "Stay updated with PayPal" option in the old and new settings UI #3430
+* Enhancement - Add French Territories to the supported ACDC countries list #3438
+* Enhancement - Auto-enable logging during onboarding #3369
+* Fix - DUPLICATE_INVOICE_ID in Sandbox due to missing invoice prefix #3435
+* Fix - Subscription product could not be unlinked from PayPal Subscription #3429
+* Fix - PayPal button greyed out on single product page for variable products with >2 attributes #3395
+* Fix - APMs automatically enabled despite selecting "No, ..." during onboarding #3362
+* Fix - Ditch items logic does not work when using saved card payment #3476
+* Fix - billing-agreements endpoint called too frequently when not enabled for Reference Transactions #3459
+
+= 3.0.6 - 2025-05-27 =
+* Enhancement - Implement 3D secure check for Google Pay #3163
+* Enhancement - Add options for "Disable Credit Cards" and "Language" #3226
+* Enhancement - Improve the loading experience for the new UI #3269
+* Enhancement - Enhance the accessibility of the new Settings UI #3294
+* Enhancement - Add capture pre-conditions for card payment source #3300
+* Enhancement - Enable all/Disable all toggle next to Alternative Payment methods on Payment Methods tab #3321
+* Enhancement - Add installment notifications for Mexico store locations #3404, #3405
+* Fix - Various issues for Mexico store locations during onboarding & plugin configuration #3403
+* Fix - APFS plugin triggers incorrect renewal date for simple products as subscriptions #3272
+* Fix - PayPal Smart Button incompatible with WooCommerce Subscription Switching #3291
+* Fix - Fastlane gateway visible on Pay for Order page #3293
+* Fix - Pay Later Messaging configurator preview alignment #3305
+* Fix - Product editing screen for variable products unresponsive (PayPal Subscriptions API error) #3311
+* Fix - Update selector for hiding express checkout #3318
+* Fix - 'Ignoring unknown key' console warnings when modifying payment gateway state #3322
+* Fix - Ratepay Payment Option Not Available for Unassembled Product Bundles #3325
+* Fix - "Disable Specific credit cards" shows "Select" as a possible value #3342
+* Fix - Stripe not visible at checkout when PayPal Subscriptions API is enabled #3343
+* Fix - Ensure correct ACDC behavior for non-ACDC countries (e.g., Vietnam) #3351
+* Fix - ACDC payments for Subscriptions failing at checkout for new users #3355
+* Fix - BCDC not enabled by default when cards selected during onboarding #3366
+* Fix - Block checkout - Address form missing after payment on Product and Cart pages #3371
+* Fix - Payments with Debit & Credit Cards failing #3376
+* Fix - PayPalGateway::process_payment on completed order leads to order failure #3374
+* Fix - New settings UI background color impacted by WooCommerce 9.9+ #3407
+* Fix - Can not save payments if subscriptions is not selected when onboarding #3408
 
 = 3.0.5 - 2025-04-23 =
 * Fix - Onboarding screen blank when WooPayments plugin is active #3312

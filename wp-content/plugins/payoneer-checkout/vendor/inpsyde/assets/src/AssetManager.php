@@ -1,22 +1,14 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets;
 
 use Syde\Vendor\Inpsyde\Assets\Handler\AssetHandler;
 use Syde\Vendor\Inpsyde\Assets\Handler\OutputFilterAwareAssetHandler;
 use Syde\Vendor\Inpsyde\Assets\Handler\ScriptHandler;
+use Syde\Vendor\Inpsyde\Assets\Handler\ScriptModuleHandler;
 use Syde\Vendor\Inpsyde\Assets\Handler\StyleHandler;
 use Syde\Vendor\Inpsyde\Assets\Util\AssetHookResolver;
-use Syde\Vendor\Inpsyde\Assets\Asset;
 final class AssetManager
 {
     public const ACTION_SETUP = 'payoneer.inpsyde.assets.setup';
@@ -26,27 +18,21 @@ final class AssetManager
      *
      * @var array<string, bool>
      */
-    private $hooksAdded = [];
+    private array $hooksAdded = [];
     /**
      * @var \SplObjectStorage<Asset, array{string, string}>
      */
-    private $assets;
+    private \SplObjectStorage $assets;
     /**
      * @var array<AssetHandler>
      */
-    private $handlers = [];
-    /**
-     * @var AssetHookResolver
-     */
-    private $hookResolver;
-    /**
-     * @var bool
-     */
-    private $setupDone = \false;
+    private array $handlers = [];
+    private AssetHookResolver $hookResolver;
+    private bool $setupDone = \false;
     /**
      * @param AssetHookResolver|null $hookResolver
      */
-    public function __construct(AssetHookResolver $hookResolver = null)
+    public function __construct(?AssetHookResolver $hookResolver = null)
     {
         $this->hookResolver = $hookResolver ?? new AssetHookResolver();
         $this->assets = new \SplObjectStorage();
@@ -56,8 +42,9 @@ final class AssetManager
      */
     public function useDefaultHandlers(): AssetManager
     {
-        empty($this->handlers[StyleHandler::class]) and $this->handlers[StyleHandler::class] = new StyleHandler(wp_styles());
-        empty($this->handlers[ScriptHandler::class]) and $this->handlers[ScriptHandler::class] = new ScriptHandler(wp_scripts());
+        $this->handlers[StyleHandler::class] ??= new StyleHandler(wp_styles());
+        $this->handlers[ScriptHandler::class] ??= new ScriptHandler(wp_scripts());
+        $this->handlers[ScriptModuleHandler::class] ??= new ScriptModuleHandler();
         return $this;
     }
     /**
@@ -106,7 +93,9 @@ final class AssetManager
         while ($this->assets->valid()) {
             $asset = $this->assets->current();
             [$handle, $class] = $this->assets->getInfo();
-            isset($found[$class]) or $found[$class] = [];
+            if (!isset($found[$class])) {
+                $found[$class] = [];
+            }
             $found[$class][$handle] = $asset;
             $this->assets->next();
         }

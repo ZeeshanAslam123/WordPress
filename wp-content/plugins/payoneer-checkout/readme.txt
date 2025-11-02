@@ -2,9 +2,9 @@
 Contributors: payoneercheckout, inpsyde
 Tags: payment, woocommerce, checkout
 Requires at least: 5.3
-Tested up to: 6.7.2
+Tested up to: 6.8.3
 Requires PHP: 7.4
-Stable tag: 3.3.1
+Stable tag: 3.5.4
 License: MPL-2.0
 License URI: https://www.mozilla.org/en-US/MPL/2.0/
 
@@ -58,6 +58,60 @@ Our global banking and payment networks stretch around the world so we can suppo
 == Screenshots ==
 
 == Changelog ==
+
+= [3.5.4] - 2025-10-30 =
+* Fixed:
+    * Issue with refunds for orders paid through other payment providers
+
+= [3.5.3] - 2025-10-27 =
+* Fixed
+    * Error messages visibility to buyers in case of payment failures . Error messages are moved to standard WooCommerce location
+    * In case of 3DS failures, failure messages are now properly shown to buyer and retry process has been corrected
+    * In case the Klarna payment method is selected but not eligible to the buyer, fixed an issue where the checkout process was blocked for further attempts
+    * Added a List Validation URL fix on the order payment page, one of the causes of the order staying “On Hold” with the ‘Order not found by transaction ID’ error
+
+= [3.5.2] - 2025-10-13 =
+* Fixed:
+    * Transaction ID link on order page no longer leading to 404 page
+    * Stop LIST creation attempts on ABORT response
+    * Order not found by transaction issue leading to orders being stuck On Hold
+
+= [3.5.1] - 2025-09-25 =
+* Fixed
+    * Fatal error on plugin activation
+
+= [3.5.0] - 2025-09-24 =
+* Added
+    * Plugin compatibility with Checkout WebSDK and Stripe Connect.
+    * Handling of asynchronous refund flow.
+    * Admin view UX updates in order to handle async refund flow and notifications.
+    * Extended support for additional payment methods for updated Checkout solution: Apple Pay, Google Pay, Afterpay, Klarna, Affirm, P24, EPS, Bancontact, iDEAL & Multibanco.
+
+* Fixed
+    * Security vulnerability (CVE-2025-58795)
+
+= [3.4.0] - 2025-07-02 =
+* Added:
+  * Automated generation of System Status Reports and Logfiles to assist support processes.
+
+* Fixed:
+  * Resolved payment rejection issue caused by an incorrect Security header.
+  * Fixed compatibility issue with WordPress Multisite.
+  * Addressed an incompatibility with WooCommerce Multilingual & Multicurrency that caused the _Pay for Order_ page to break.
+  * Ensured available payment methods in the LIST are correctly updated after changes to the total amount.
+
+* Changed:
+  * Adjusted value handling to not include customer.number as a required value in SDK.
+  * Removed the ProcessingModel entity for MoR from the SDK.
+
+= [3.3.2] - 2025-06-02 =
+* Fixed:
+  * Issue allowing checkout form to be submitted with invalid cards fields
+  * Issue with additional payment method icons being displayed on Payoneer Checkout at checkout and block cart page
+  * PHP 8+ errors caused during API calls after 3.3.0 release
+  * PHP 7.4 errors caused during API calls after 3.3.0 release
+* Changed:
+  * Repeated payment attempts no longer generate new orders. The original order is now reused, with its status set to On hold after checkout and updated to Failed if the payment is declined.
 
 = [3.3.1] - 2025-04-02 =
 * Added

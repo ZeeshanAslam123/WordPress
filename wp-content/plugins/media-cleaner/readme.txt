@@ -5,7 +5,7 @@ Donate link: https://www.patreon.com/meowapps
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 6.8.9
+Stable tag: 6.9.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,49 @@ This plugin is compatible with all media types, including retina and WebP versio
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 6.9.7 (2025/09/30) =
+* Add: Timeout mechanism to avoid a stalled scan.
+* Add: New Duplicates scan type (beta).
+* Update: Confirmation before restarting a scan to prevent accidental restarts.
+* Update: Better support for Kadence Theme.
+* Add: "Deleted At" column and filters.
+* Update: Optimized the WooCommerce parser for better performance.
+* Fix: Remove a few minor bugs.
+
+= 6.9.5 (2025/08/27) =
+* Add: A clear message guiding users on how to disable the pop-up.
+
+= 6.9.4 (2025/08/16) =
+* Fix: Added check for WP_Error in ACF after database calls to improve stability.
+* Fix: Resuming process now properly continues from step 3.
+* Add: Support for Meow Gallery.
+* Add: Warning modal; Sorry guys, but it looks like we need to warn you better about the risks.
+* Update: Header included for Filesystem + Content-Type for better handling.
+* Comments: Clarified handling of WebP images for improved compatibility.
+
+= 6.9.3 (2025/07/23) =
+* Add: Enhanced the resume functionality.  
+* Fix: Hotfix for errorCounts modal display to ensure proper visibility.  
+* Update: Show incompatible plugins message only in the free version for clarity.  
+* Update: Improved memory management by replacing in-memory references with direct processing and transients.  
+* Update: Refreshed common libraries for better performance and stability.
+
+= 6.9.2 (2025/07/01) =
+* Add: Added support for Fluent Forms.
+* Fix: Fixed NekoTable display issues.
+* Update: Streamlined Divi parser for better image URL extraction and improved filesystem handling.
+* Update: Enhanced thumbnail URL extraction and added new function to retrieve attachment sizes.
+
+= 6.9.1 (2025/06/29) =
+* Add: Support for Kadence Blocks.
+* Add: Support for Salient Theme Elements.
+* Add: Support for Houzez Theme.
+* Add: Support for WooCommerce variation galleries.
+* Update: Improved Enfold parser with better handling of nested shortcodes and enhanced ID/URL extraction.
+
+= 6.9.0 (2025/05/11) =
+* Update: Removed unused code for live content checks in CLI commands to improve plugin performance and maintainability.
 
 = 6.8.9 (2025/05/04) =
 * Fix: Ensure the "Disable Shortcode Analysis" setting is now respected in all content parsers.

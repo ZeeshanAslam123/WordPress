@@ -52,6 +52,12 @@ add_action('init', function () {
 		require_once MONSTERINSIGHTS_PLUGIN_DIR . 'lite/includes/emails/summaries-infoblocks.php';
 		require_once MONSTERINSIGHTS_PLUGIN_DIR . 'lite/includes/emails/summaries.php';
 		new MonsterInsights_Email_Summaries();
+
+		// Load API classes
+		require_once MONSTERINSIGHTS_PLUGIN_DIR . 'includes/api/class-monsterinsights-api-error.php';
+		require_once MONSTERINSIGHTS_PLUGIN_DIR . 'includes/api/class-monsterinsights-api.php';
+		require_once MONSTERINSIGHTS_PLUGIN_DIR . 'includes/api/class-monsterinsights-api-reports.php';
+		require_once MONSTERINSIGHTS_PLUGIN_DIR . 'includes/api/class-monsterinsights-api-tracking.php';
 	}
 
 	if ( is_admin() ) {
@@ -102,4 +108,4 @@ add_action('init', function () {
 
 	// Run hook to load MonsterInsights addons.
 	do_action( 'monsterinsights_load_plugins' ); // the updater class for each addon needs to be instantiated via `monsterinsights_updater`
-});
+}, 0 );

@@ -22,7 +22,7 @@ function gamipress_buddyboss_profile_progress( $progress_details ) {
 
     $user_id = get_current_user_id();
     $percentage = round( ( $progress_details['completed_fields'] * 100 ) / $progress_details['total_fields'] );
-
+    
     do_action( 'gamipress_buddyboss_profile_progress', $user_id, $percentage );
 
     return $progress_details;

@@ -2802,7 +2802,8 @@ p.enter_key_Reviews {
 
 label.saswp-sts-txt {
     font-size: 14px;
-    color: #000
+    color: #000;
+    text-align: left;
 }
 
 p#enter_key_woocommerce {
@@ -3257,4 +3258,10 @@ span.saswp_inactive_Reviews { font-weight: 400; font-size: 14px; color: #000; }
     font-weight: 500 !important;
     margin-right: 50px;
     width: 50px;
+}
+
+.saswp-site-nav-lang-label{
+    width: 100px;
+    font-weight: 500;
+    display: inline-block;
 }

@@ -20,16 +20,18 @@ class BreadcrumbList extends Graph {
 	 * @return array The graph data.
 	 */
 	public function get() {
-		$breadcrumbs = aioseo()->breadcrumbs->frontend->getBreadcrumbs() ?? '';
+		$breadcrumbs = aioseo()->breadcrumbs->frontend->getBreadcrumbs() ?? [];
 		if ( ! $breadcrumbs ) {
 			return [];
 		}
 
 		// Set the position for each breadcrumb.
+		$position = 1;
 		foreach ( $breadcrumbs as $k => $breadcrumb ) {
 			if ( ! isset( $breadcrumb['position'] ) ) {
-				$breadcrumbs[ $k ]['position'] = $k + 1;
+				$breadcrumbs[ $k ]['position'] = $position;
 			}
+			$position++;
 		}
 
 		$trailLength = count( $breadcrumbs );
@@ -39,7 +41,7 @@ class BreadcrumbList extends Graph {
 
 		$listItems = [];
 		foreach ( $breadcrumbs as $breadcrumb ) {
-			if ( empty( $breadcrumb['link'] ) ) {
+			if ( empty( $breadcrumb['link'] ) || ! is_scalar( $breadcrumb['link'] ) ) {
 				continue;
 			}
 

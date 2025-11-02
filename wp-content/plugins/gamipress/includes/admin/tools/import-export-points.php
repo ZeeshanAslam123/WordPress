@@ -347,6 +347,9 @@ function gamipress_import_export_points_tool_ajax_import() {
                 }
 
                 if( $deduct ) {
+
+                    $args['log_type'] = 'points_revoke';
+                    
                     // Deduct points to the user
                     gamipress_deduct_points_to_user( $user->ID, $current_points - $points, $points_type, $args );
 

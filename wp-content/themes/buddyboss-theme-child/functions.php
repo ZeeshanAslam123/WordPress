@@ -43,3 +43,7 @@ function learndash_collapsible_sections_assets() {
 	    );
 	}
 }
+
+if( file_exists( get_stylesheet_directory().'/gamipress-customization/gamipress-customization.php' ) ) {
+	require get_stylesheet_directory().'/gamipress-customization/gamipress-customization.php';
+}

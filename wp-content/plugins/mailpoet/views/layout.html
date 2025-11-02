@@ -1,6 +1,4 @@
 <!-- pre connect to 3d party to speed up page loading -->
-<link rel="preconnect" href="https://widget.docsbot.ai/">
-<link rel="dns-prefetch" href="https://widget.docsbot.ai/">
 <link rel="preconnect" href="http://cdn.mxpnl.com">
 <link rel="dns-prefetch" href="http://cdn.mxpnl.com">
 
@@ -52,6 +50,7 @@
   var mailpoet_free_domains = <%= json_encode(mailpoet_free_domains()) %>;
   var mailpoet_woocommerce_active = <%= json_encode(is_woocommerce_active()) %>;
   var mailpoet_woocommerce_email_improvements_enabled = <%= json_encode(is_woocommerce_email_improvements_enabled()) %>;
+  var mailpoet_woocommerce_bookings_active = <%= json_encode(is_woocommerce_bookings_active) %>;
   var mailpoet_woocommerce_subscriptions_active = <%= json_encode(is_woocommerce_subscriptions_active) %>;
   var mailpoet_woocommerce_store_config = <%= json_encode(woocommerce_store_config) %>;
   // RFC 5322 standard; http://emailregex.com/ combined with https://google.github.io/closure-library/api/goog.format.EmailAddress.html#isValid
@@ -73,6 +72,7 @@
   var mailpoet_admin_plugins_url = '<%= admin_plugins_url %>';
   var mailpoet_is_dotcom = <%= json_encode(is_dotcom()) %>;
   var mailpoet_cron_trigger_method = <%= json_encode(cron_trigger_method) %>;
+  var mailpoet_use_block_email_editor_for_automation_emails = <%= json_encode(use_block_email_editor_for_automation_emails) %>;
 
   var mailpoet_site_name = '<%= site_name %>';
   var mailpoet_site_url = "<%= site_url %>";
@@ -170,28 +170,57 @@
   <% include 'analytics.html' %>
 <% endif %>
 
-<% if display_docsbot_widget and not is_dotcom_ecommerce_plan() %>
-  <script type="text/javascript">window.DocsBotAI=window.DocsBotAI||{},DocsBotAI.init=function(c){return new Promise(function(e,o){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://widget.docsbot.ai/chat.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n),t.addEventListener("load",function(){window.DocsBotAI.mount({id:c.id,supportCallback:c.supportCallback,identify:c.identify,options:c.options});var t;t=function(n){return new Promise(function(e){if(document.querySelector(n))return e(document.querySelector(n));var o=new MutationObserver(function(t){document.querySelector(n)&&(e(document.querySelector(n)),o.disconnect())});o.observe(document.body,{childList:!0,subtree:!0})})},t&&t("#docsbotai-root").then(e).catch(o)}),t.addEventListener("error",function(t){o(t.message)})})};</script>
-  <script type="text/javascript">
-    DocsBotAI.init({
-      id: "TqTdebbGjJeUjrmBIFjh/kzFE5FBebBJiSJ2Tm0nR",
-      options: {
+<% if display_chatbot_widget and not is_dotcom_ecommerce_plan() %>
+  <script type="text/javascript" src="<%= getJavascriptScriptUrl('haw.js') %>"></script>
+  <chat-widget
+    id="chat"
+    bot="mailpoet-chat-support"
+    avatar="<%= cdn_url('chat-avatar.png') %>"
+    title="<%= __('MailPoet support', 'mailpoet') %>"
+    subtitle="<%= __('Chat with our AI assistant', 'mailpoet') %>"
+    first-message="<%= __('How can I help you today?', 'mailpoet') %>"
+  >
+    <% set support_form_url = has_premium_support ? 'https://www.mailpoet.com/support/support-form/' : 'https://wordpress.org/support/plugin/mailpoet/' %>
+    <a slot="support-link"
+        href="<%= support_form_url %>"
+        id="mailpoet-support-link"
+        style="display:none"
+        target="_blank"
+    >
+      <%= __('Contact support', 'mailpoet') %>
+    </a>
+  </chat-widget>
+  <script>
+    const getChatId = () => localStorage.getItem('ai-widget-mailpoet-chat-support-chat-id');
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const supportLink = document.getElementById('mailpoet-support-link');
+      if (supportLink) {
         <% if has_premium_support %>
-          supportLink: 'https://www.mailpoet.com/support/premium/',
-        <% else %>
-          supportLink: 'https://wordpress.org/support/plugin/mailpoet/',
-          labels: {
-            getSupport: "<%= __('Get help in the forum', 'mailpoet' )|escape('js') %>"
-          }
+          supportLink.addEventListener('click', function(e) {
+            const chatId = getChatId();
+            if (chatId) {
+              e.preventDefault();
+              window.open(`<%= support_form_url %>?chatId=${chatId}`, '_blank');
+            }
+          });
         <% endif %>
-      },
-    }).then(() => {
-        // stopping propagation to avoid conflicts with other keydown events form WP.com
-      function writingFixer (e) {
-        e.stopPropagation();
+
+        // Only show the support link once the chat has begun
+        const checkChatId = setInterval(function() {
+          const chatId = getChatId();
+          if (chatId) {
+            supportLink.style.display = 'block';
+            clearInterval(checkChatId);
+          }
+        }, 2000);
       }
-      document.getElementById('docsbotai-root').addEventListener("keydown", writingFixer);
-    })
+      // Prevent conflicts with other keydown events on Dotcom
+      function writingFixer (e) {
+          e.stopPropagation();
+      }
+      document.getElementById('chat').addEventListener('keydown', writingFixer);
+    });
   </script>
 <% endif %>
 

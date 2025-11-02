@@ -320,6 +320,7 @@ add_shortcode( 'purchase_collection', 'edd_purchase_collection_shortcode' );
  * parameters and display the downloads queried in a valid HTML <div> tags.
  *
  * @since 1.0.6
+ * @since 3.5.1 Updated to use the EDD\Downloads\Query class.
  * @internal Incomplete shortcode
  * @param array  $atts Shortcode attributes.
  * @param string $content Optional content.
@@ -346,258 +347,41 @@ function edd_downloads_query( $atts, $content = null ) {
 			'ids'              => '',
 			'class'            => '',
 			'pagination'       => 'true',
+			'featured'         => '',
 		),
 		$atts,
 		'downloads'
 	);
 
-	$query = array(
-		'post_type' => 'download',
-		'orderby'   => $atts['orderby'],
-		'order'     => $atts['order'],
+	// Start with all original shortcode attributes.
+	$query_atts = $atts;
+
+	// Map shortcode attributes to Query class attributes.
+	$query_atts['tag'] = $atts['tags']; // Map 'tags' to 'tag'.
+
+	// Convert pagination string to boolean.
+	$query_atts['pagination'] = filter_var( $atts['pagination'], FILTER_VALIDATE_BOOLEAN );
+
+	// Remove attributes that aren't needed for the query.
+	unset(
+		$query_atts['tags'], // Remove the original 'tags' key.
+		$query_atts['price'],
+		$query_atts['excerpt'],
+		$query_atts['full_content'],
+		$query_atts['buy_button'],
+		$query_atts['columns'],
+		$query_atts['thumbnails'],
+		$query_atts['class']
 	);
 
-	if ( filter_var( $atts['pagination'], FILTER_VALIDATE_BOOLEAN ) || ( ! filter_var( $atts['pagination'], FILTER_VALIDATE_BOOLEAN ) && $atts['number'] ) ) {
-
-		$query['posts_per_page'] = (int) $atts['number'];
-
-		if ( $query['posts_per_page'] < 0 ) {
-			$query['posts_per_page'] = abs( $query['posts_per_page'] );
-		}
-	} else {
-		$query['nopaging'] = true;
-	}
-
+	// Handle special case for random orderby.
 	if ( 'random' === $atts['orderby'] ) {
-		$atts['pagination'] = false;
+		$query_atts['orderby']    = 'rand';
+		$query_atts['pagination'] = false;
 	}
 
-	switch ( $atts['orderby'] ) {
-		case 'price':
-			$atts['orderby']   = 'meta_value';
-			$query['meta_key'] = 'edd_price';
-			$query['orderby']  = 'meta_value_num';
-			break;
-
-		case 'sales':
-			$atts['orderby']   = 'meta_value';
-			$query['meta_key'] = '_edd_download_sales';
-			$query['orderby']  = 'meta_value_num';
-			break;
-
-		case 'earnings':
-			$atts['orderby']   = 'meta_value';
-			$query['meta_key'] = '_edd_download_earnings';
-			$query['orderby']  = 'meta_value_num';
-			break;
-
-		case 'title':
-			$query['orderby'] = 'title';
-			break;
-
-		case 'id':
-			$query['orderby'] = 'ID';
-			break;
-
-		case 'random':
-			$query['orderby'] = 'rand';
-			break;
-
-		case 'post__in':
-			$query['orderby'] = 'post__in';
-			break;
-
-		default:
-			$query['orderby'] = 'post_date';
-			break;
-	}
-
-	if ( $atts['tags'] || $atts['category'] || $atts['exclude_category'] || $atts['exclude_tags'] ) {
-
-		$query['tax_query'] = array(
-			'relation' => $atts['relation']
-		);
-
-		if ( $atts['tags'] ) {
-
-			$tag_list = explode( ',', $atts['tags'] );
-
-			foreach ( $tag_list as $tag ) {
-
-				$t_id  = (int) $tag;
-				$is_id = is_int( $t_id ) && ! empty( $t_id );
-
-				if ( $is_id ) {
-
-					$term_id = $tag;
-
-				} else {
-
-					$term = get_term_by( 'slug', $tag, 'download_tag' );
-
-					if ( ! $term ) {
-						continue;
-					}
-
-					$term_id = $term->term_id;
-				}
-
-				$query['tax_query'][] = array(
-					'taxonomy' => 'download_tag',
-					'field'    => 'term_id',
-					'terms'    => $term_id
-				);
-			}
-
-		}
-
-		if ( $atts['category'] ) {
-
-			$categories = explode( ',', $atts['category'] );
-
-			foreach ( $categories as $category ) {
-
-				$t_id  = (int) $category;
-				$is_id = is_int( $t_id ) && ! empty( $t_id );
-
-				if ( $is_id ) {
-
-					$term_id = $category;
-
-				} else {
-
-					$term = get_term_by( 'slug', $category, 'download_category' );
-
-					if ( ! $term ) {
-						continue;
-					}
-
-					$term_id = $term->term_id;
-
-				}
-
-				$query['tax_query'][] = array(
-					'taxonomy' => 'download_category',
-					'field'    => 'term_id',
-					'terms'    => $term_id,
-				);
-
-			}
-
-		}
-
-		if ( $atts['exclude_category'] ) {
-
-			$categories = explode( ',', $atts['exclude_category'] );
-
-			foreach ( $categories as $category ) {
-
-				$t_id  = (int) $category;
-				$is_id = is_int( $t_id ) && ! empty( $t_id );
-
-				if ( $is_id ) {
-
-					$term_id = $category;
-
-				} else {
-
-					$term = get_term_by( 'slug', $category, 'download_category' );
-
-					if ( ! $term ) {
-						continue;
-					}
-
-					$term_id = $term->term_id;
-				}
-
-				$query['tax_query'][] = array(
-					'taxonomy' => 'download_category',
-					'field'    => 'term_id',
-					'terms'    => $term_id,
-					'operator' => 'NOT IN'
-				);
-			}
-
-		}
-
-		if ( $atts['exclude_tags'] ) {
-
-			$tag_list = explode( ',', $atts['exclude_tags'] );
-
-			foreach ( $tag_list as $tag ) {
-
-				$t_id  = (int) $tag;
-				$is_id = is_int( $t_id ) && ! empty( $t_id );
-
-				if ( $is_id ) {
-
-					$term_id = $tag;
-
-				} else {
-
-					$term = get_term_by( 'slug', $tag, 'download_tag' );
-
-					if( ! $term ) {
-						continue;
-					}
-
-					$term_id = $term->term_id;
-				}
-
-				$query['tax_query'][] = array(
-					'taxonomy' => 'download_tag',
-					'field'    => 'term_id',
-					'terms'    => $term_id,
-					'operator' => 'NOT IN'
-				);
-
-			}
-
-		}
-	}
-
-	if ( $atts['exclude_tags'] || $atts['exclude_category'] ) {
-		$query['tax_query']['relation'] = 'AND';
-	}
-
-	if ( $atts['author'] ) {
-		$authors = explode( ',', $atts['author'] );
-		if ( ! empty( $authors ) ) {
-			$author_ids   = array();
-			$author_names = array();
-
-			foreach ( $authors as $author ) {
-				if ( is_numeric( $author ) ) {
-					$author_ids[] = $author;
-				} else {
-					$user = get_user_by( 'login', $author );
-					if ( $user ) {
-						$author_ids[] = $user->ID;
-					}
-				}
-			}
-
-			if ( ! empty( $author_ids ) ) {
-				$author_ids      = array_unique( array_map( 'absint', $author_ids ) );
-				$query['author'] = implode( ',', $author_ids );
-			}
-		}
-	}
-
-	if ( ! empty( $atts['ids'] ) ) {
-		$query['post__in'] = explode( ',', $atts['ids'] );
-	}
-
-	if ( get_query_var( 'paged' ) ) {
-		$query['paged'] = get_query_var( 'paged' );
-	} elseif ( get_query_var( 'page' ) ) {
-		$query['paged'] = get_query_var( 'page' );
-	} else {
-		$query['paged'] = 1;
-	}
-
-	// Allow the query to be manipulated by other plugins.
-	$query = apply_filters( 'edd_downloads_query', $query, $atts );
+	$query_handler = new \EDD\Downloads\Query( $query_atts );
+	$query         = $query_handler->get_query();
 
 	$downloads = new WP_Query( $query );
 
@@ -608,7 +392,7 @@ function edd_downloads_query( $atts, $content = null ) {
 
 	ob_start();
 	if ( $downloads->have_posts() ) :
-		$i = 1;
+		$i               = 1;
 		$columns_class   = array( 'edd_download_columns_' . $atts['columns'] );
 		$custom_classes  = array_map( 'sanitize_html_class', explode( ',', $atts['class'] ) );
 		$wrapper_classes = array_unique( array_merge( $columns_class, $custom_classes ) );
@@ -623,7 +407,7 @@ function edd_downloads_query( $atts, $content = null ) {
 			while ( $downloads->have_posts() ) :
 				$downloads->the_post();
 				do_action( 'edd_download_shortcode_item', $atts, $i );
-				$i++;
+				++$i;
 			endwhile;
 			?>
 

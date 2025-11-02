@@ -50,7 +50,14 @@ use WooCommerce\PayPalCommerce\Settings\Service\BrandedExperience\PathRepository
 use WooCommerce\PayPalCommerce\Settings\Service\ConnectionUrlGenerator;
 use WooCommerce\PayPalCommerce\Settings\Service\FeaturesEligibilityService;
 use WooCommerce\PayPalCommerce\Settings\Service\GatewayRedirectService;
+use WooCommerce\PayPalCommerce\Settings\Service\LoadingScreenService;
+use WooCommerce\PayPalCommerce\Settings\Service\Migration\SettingsMigration;
+use WooCommerce\PayPalCommerce\Settings\Service\Migration\MigrationManager;
+use WooCommerce\PayPalCommerce\Settings\Service\Migration\PaymentSettingsMigration;
+use WooCommerce\PayPalCommerce\Settings\Service\Migration\SettingsTabMigration;
+use WooCommerce\PayPalCommerce\Settings\Service\Migration\StylingSettingsMigration;
 use WooCommerce\PayPalCommerce\Settings\Service\OnboardingUrlManager;
+use WooCommerce\PayPalCommerce\Settings\Service\ScriptDataHandler;
 use WooCommerce\PayPalCommerce\Settings\Service\TodosEligibilityService;
 use WooCommerce\PayPalCommerce\Settings\Service\TodosSortingAndFilteringService;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
@@ -68,14 +75,10 @@ use WooCommerce\PayPalCommerce\PayLaterConfigurator\Endpoint\SaveConfig;
 use WooCommerce\PayPalCommerce\WcGateway\Helper\Environment;
 use WooCommerce\PayPalCommerce\WcGateway\Helper\ConnectionState;
 use WooCommerce\PayPalCommerce\Settings\Service\InternalRestService;
-return array(
+use WooCommerce\PayPalCommerce\WcGateway\Helper\MerchantDetails;
+$services = array(
     'settings.url' => static function (ContainerInterface $container): string {
-        /**
-         * The path cannot be false.
-         *
-         * @psalm-suppress PossiblyFalseArgument
-         */
-        return plugins_url('/modules/ppcp-settings/', dirname(realpath(__FILE__), 3) . '/woocommerce-paypal-payments.php');
+        return plugins_url('/modules/ppcp-settings/', $container->get('ppcp.path-to-plugin-main-file'));
     },
     'settings.data.onboarding' => static function (ContainerInterface $container): OnboardingProfile {
         $can_use_casual_selling = $container->get('settings.casual-selling.eligible');
@@ -97,7 +100,9 @@ return array(
         return new PaymentSettings();
     },
     'settings.data.settings' => static function (ContainerInterface $container): SettingsModel {
-        return new SettingsModel($container->get('settings.service.sanitizer'));
+        $environment = $container->get('settings.environment');
+        assert($environment instanceof Environment);
+        return new SettingsModel($container->get('settings.service.sanitizer'), $environment->is_sandbox() ? $container->get('wcgateway.settings.invoice-prefix-random') : $container->get('wcgateway.settings.invoice-prefix'));
     },
     'settings.data.paylater-messaging' => static function (ContainerInterface $container): array {
         // TODO: Create an AbstractDataModel wrapper for this configuration!
@@ -109,18 +114,6 @@ return array(
         assert($settings instanceof Settings);
         $pay_later_config = $config_factors->from_settings($settings);
         return array('read' => $pay_later_config, 'save' => $save_config);
-    },
-    /**
-     * Merchant connection details, which includes the connection status
-     * (onboarding/connected) and connection-aware environment checks.
-     * This is the preferred solution to check environment and connection state.
-     */
-    'settings.connection-state' => static function (ContainerInterface $container): ConnectionState {
-        $data = $container->get('settings.data.general');
-        assert($data instanceof GeneralSettings);
-        $is_connected = $data->is_merchant_connected();
-        $environment = new Environment($data->is_sandbox_merchant());
-        return new ConnectionState($is_connected, $environment);
     },
     /**
      * Returns details about the connected environment (production/sandbox).
@@ -217,9 +210,23 @@ return array(
     'settings.service.data-manager' => static function (ContainerInterface $container): SettingsDataManager {
         return new SettingsDataManager($container->get('settings.data.definition.methods'), $container->get('settings.data.onboarding'), $container->get('settings.data.general'), $container->get('settings.data.settings'), $container->get('settings.data.styling'), $container->get('settings.data.payment'), $container->get('settings.data.paylater-messaging'), $container->get('settings.data.todos'));
     },
-    'settings.ajax.switch_ui' => static function (ContainerInterface $container): SwitchSettingsUiEndpoint {
-        return new SwitchSettingsUiEndpoint($container->get('woocommerce.logger.woocommerce'), $container->get('button.request-data'), $container->get('settings.data.onboarding'), $container->get('api.merchant_id') !== '');
+    'settings.service.script-data-handler' => static function (ContainerInterface $container): ScriptDataHandler {
+        $settings = $container->get('wcgateway.settings');
+        $settings_url = $container->get('settings.url');
+        $paylater_is_available = $container->get('paylater-configurator.is-available');
+        $store_country = $container->get('wcgateway.store-country');
+        $merchant_id = $container->get('api.partner_merchant_id');
+        $button_language_choices = $container->get('wcgateway.wp-paypal-locales-map');
+        $partner_attribution = $container->get('api.helper.partner-attribution');
+        $path_to_module_assets_folder = $container->get('ppcp.path-to-plugin-folder') . 'modules/ppcp-settings/assets';
+        return new ScriptDataHandler($settings, $settings_url, $paylater_is_available, $store_country, $merchant_id, $button_language_choices, $partner_attribution, $path_to_module_assets_folder);
     },
+    'settings.service.data-migration' => static fn(ContainerInterface $c): MigrationManager => new MigrationManager($c->get('settings.service.data-migration.general-settings'), $c->get('settings.service.data-migration.settings-tab'), $c->get('settings.service.data-migration.styling'), $c->get('settings.service.data-migration.payment-settings')),
+    'settings.service.data-migration.settings-tab' => static fn(ContainerInterface $c): SettingsTabMigration => new SettingsTabMigration($c->get('wcgateway.settings'), $c->get('settings.data.settings'), $c->get('compat.settings.settings_tab_map_helper')),
+    'settings.service.data-migration.styling' => static fn(ContainerInterface $c): StylingSettingsMigration => new StylingSettingsMigration($c->get('wcgateway.settings'), $c->get('settings.data.styling')),
+    'settings.service.data-migration.payment-settings' => static fn(ContainerInterface $c): PaymentSettingsMigration => new PaymentSettingsMigration($c->get('wcgateway.settings'), $c->get('settings.data.payment'), $c->get('api.helpers.dccapplies'), $c->get('wcgateway.helper.dcc-product-status'), $c->get('wcgateway.configuration.card-configuration'), $c->get('ppcp-local-apms.payment-methods')),
+    'settings.service.data-migration.general-settings' => static fn(ContainerInterface $c): SettingsMigration => new SettingsMigration($c->get('wcgateway.settings'), $c->get('settings.data.general'), $c->get('api.endpoint.partners')),
+    'settings.ajax.switch_ui' => static fn(ContainerInterface $c): SwitchSettingsUiEndpoint => new SwitchSettingsUiEndpoint($c->get('woocommerce.logger.woocommerce'), $c->get('button.request-data'), $c->get('settings.data.onboarding'), $c->get('settings.service.data-migration'), $c->get('api.merchant_id') !== ''),
     'settings.rest.todos' => static function (ContainerInterface $container): TodosRestEndpoint {
         return new TodosRestEndpoint($container->get('settings.data.todos'), $container->get('settings.data.definition.todos'), $container->get('settings.rest.settings'), $container->get('settings.service.todos_sorting'));
     },
@@ -227,7 +234,7 @@ return array(
         return new TodosModel();
     },
     'settings.data.definition.todos' => static function (ContainerInterface $container): TodosDefinition {
-        return new TodosDefinition($container->get('settings.service.todos_eligibilities'), $container->get('settings.data.general'));
+        return new TodosDefinition($container->get('settings.service.todos_eligibilities'), $container->get('settings.data.general'), $container->get('settings.data.todos'));
     },
     'settings.data.definition.methods' => static function (ContainerInterface $container): PaymentMethodsDefinition {
         $axo_checkout_config_notice = $container->get('axo.checkout-config-notice.raw');
@@ -268,7 +275,7 @@ return array(
         // TODO: This condition included in the `*.eligibility.check` services; it can be removed when we switch to those services.
         $general_settings = $container->get('settings.data.general');
         assert($general_settings instanceof GeneralSettings);
-        return array('apple_pay' => ($features['apple_pay']['enabled'] ?? \false) && !$general_settings->own_brand_only(), 'google_pay' => ($features['google_pay']['enabled'] ?? \false) && !$general_settings->own_brand_only(), 'acdc' => ($features['advanced_credit_and_debit_cards']['enabled'] ?? \false) && !$general_settings->own_brand_only(), 'save_paypal' => $features['save_paypal_and_venmo']['enabled'] ?? \false, 'apm' => $features['alternative_payment_methods']['enabled'] ?? \false, 'paylater' => $features['pay_later_messaging']['enabled'] ?? \false);
+        return array('apple_pay' => ($features['apple_pay']['enabled'] ?? \false) && !$general_settings->own_brand_only(), 'google_pay' => ($features['google_pay']['enabled'] ?? \false) && !$general_settings->own_brand_only(), 'acdc' => ($features['advanced_credit_and_debit_cards']['enabled'] ?? \false) && !$general_settings->own_brand_only(), 'save_paypal' => $features['save_paypal_and_venmo']['enabled'] ?? \false, 'apm' => $features['alternative_payment_methods']['enabled'] ?? \false, 'paylater' => $features['pay_later_messaging']['enabled'] ?? \false, 'installments' => $features['installments']['enabled'] ?? \false);
     },
     'settings.service.todos_eligibilities' => static function (ContainerInterface $container): TodosEligibilityService {
         $pay_later_service = $container->get('settings.service.pay_later_status');
@@ -278,6 +285,18 @@ return array(
         $gateways = $container->get('settings.service.gateways_status');
         // TODO: This "merchant_capabilities" service is only used here. Could it be merged to make the code cleaner and less segmented?
         $capabilities = $container->get('settings.service.merchant_capabilities');
+        $settings = $container->get('wcgateway.settings');
+        assert($settings instanceof Settings);
+        $settings_model = $container->get('settings.data.settings');
+        assert($settings_model instanceof SettingsModel);
+        $messages_apply = $container->get('button.helper.messages-apply');
+        assert($messages_apply instanceof MessagesApply);
+        $is_working_capital_feature_flag_enabled = apply_filters(
+            // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores -- feature flags use this convention
+            'woocommerce.feature-flags.woocommerce_paypal_payments.working_capital_enabled',
+            getenv('PCP_WORKING_CAPITAL_ENABLED') === '1'
+        );
+        $is_working_capital_eligible = $container->get('settings.data.general')->get_merchant_country() === 'US' && $settings_model->get_stay_updated();
         /**
          * Initializes TodosEligibilityService with eligibility conditions for various PayPal features.
          * Each parameter determines whether a specific feature should be shown in the Things To Do list.
@@ -302,6 +321,8 @@ return array(
          * @param bool $is_google_pay_eligible              - Show if merchant is eligible (ACDC) but doesn't have Google Pay on PayPal.
          * @param bool $is_enable_apple_pay_eligible        - Show if merchant has Apple Pay capability but hasn't enabled the gateway.
          * @param bool $is_enable_google_pay_eligible       - Show if merchant has Google Pay capability but hasn't enabled the gateway.
+         * @param bool $is_enable_installments_eligible     - Show if merchant has installments capability and merchant country is MX.
+         * @param bool $is_working_capital_eligible         - Show if feature flag is enabled, merchant country is US and "Stay Updated" is turned On.
          */
         return new TodosEligibilityService(
             $container->get('axo.eligible') && $capabilities['acdc'] && !$gateways['axo'],
@@ -332,7 +353,10 @@ return array(
             // Add Google Pay to your account.
             $container->get('applepay.eligible') && $capabilities['apple_pay'] && !$gateways['apple_pay'],
             // Enable Apple Pay.
-            $container->get('googlepay.eligible') && $capabilities['google_pay'] && !$gateways['google_pay']
+            $container->get('googlepay.eligible') && $capabilities['google_pay'] && !$gateways['google_pay'],
+            !$capabilities['installments'] && 'MX' === $container->get('settings.data.general')->get_merchant_country(),
+            // Enable Installments for Mexico.
+            $is_working_capital_feature_flag_enabled && $is_working_capital_eligible
         );
     },
     'settings.rest.features' => static function (ContainerInterface $container): FeaturesRestEndpoint {
@@ -345,19 +369,21 @@ return array(
         // Settings status.
         $gateways = array('card-button' => $settings['data']['ppcp-card-button-gateway']['enabled'] ?? \false);
         // Merchant capabilities, serve to show active or inactive badge and buttons.
-        $capabilities = array('apple_pay' => $features['apple_pay']['enabled'] ?? \false, 'google_pay' => $features['google_pay']['enabled'] ?? \false, 'acdc' => $features['advanced_credit_and_debit_cards']['enabled'] ?? \false, 'save_paypal' => $features['save_paypal_and_venmo']['enabled'] ?? \false);
+        $capabilities = array('apple_pay' => $features['apple_pay']['enabled'] ?? \false, 'google_pay' => $features['google_pay']['enabled'] ?? \false, 'acdc' => $features['advanced_credit_and_debit_cards']['enabled'] ?? \false, 'save_paypal' => $features['save_paypal_and_venmo']['enabled'] ?? \false, 'alternative_payment_methods' => $features['alternative_payment_methods']['enabled'] ?? \false, 'installments' => $features['installments']['enabled'] ?? \false);
         $merchant_capabilities = array(
             'save_paypal' => $capabilities['save_paypal'],
             // Save PayPal and Venmo eligibility.
-            'acdc' => $capabilities['acdc'] && !$gateways['card-button'],
+            'acdc' => $capabilities['acdc'],
             // Advanced credit and debit cards eligibility.
-            'apm' => $capabilities['acdc'] && !$gateways['card-button'],
+            'apm' => $capabilities['alternative_payment_methods'],
             // Alternative payment methods eligibility.
             'google_pay' => $capabilities['acdc'] && $capabilities['google_pay'],
             // Google Pay eligibility.
             'apple_pay' => $capabilities['acdc'] && $capabilities['apple_pay'],
             // Apple Pay eligibility.
             'pay_later' => $capabilities['acdc'] && !$gateways['card-button'],
+            // Pay Later eligibility.
+            'installments' => $capabilities['installments'],
         );
         return new FeaturesDefinition($container->get('settings.service.features_eligibilities'), $container->get('settings.data.general'), $merchant_capabilities, $container->get('settings.data.settings'));
     },
@@ -365,6 +391,7 @@ return array(
         $messages_apply = $container->get('button.helper.messages-apply');
         assert($messages_apply instanceof MessagesApply);
         $pay_later_eligible = $messages_apply->for_country();
+        // TODO: Variable "merchant_country" contains "shop-country". Which is correct?
         $merchant_country = $container->get('api.shop.country');
         $ineligible_countries = array('RU', 'BR', 'JP');
         $apm_eligible = !in_array($merchant_country, $ineligible_countries, \true);
@@ -379,7 +406,9 @@ return array(
             // Google Pay eligibility.
             $container->get('applepay.eligibility.check'),
             // Apple Pay eligibility.
-            $pay_later_eligible
+            $pay_later_eligible,
+            // Pay Later eligibility.
+            'MX' === $container->get('settings.data.general')->get_merchant_country()
         );
     },
     'settings.service.todos_sorting' => static function (ContainerInterface $container): TodosSortingAndFilteringService {
@@ -387,6 +416,9 @@ return array(
     },
     'settings.service.gateway-redirect' => static function (): GatewayRedirectService {
         return new GatewayRedirectService();
+    },
+    'settings.services.loading-screen-service' => static function (ContainerInterface $container): LoadingScreenService {
+        return new LoadingScreenService();
     },
     /**
      * Returns a list of all payment gateway IDs created by this plugin.
@@ -402,4 +434,30 @@ return array(
     'settings.service.branded-experience.path-repository' => static function (ContainerInterface $container): PathRepository {
         return new PathRepository($container->get('settings.service.branded-experience.activation-detector'), $container->get('settings.data.general'));
     },
+    'settings.merchant-details' => static function (ContainerInterface $container): MerchantDetails {
+        $data = $container->get('settings.data.general');
+        assert($data instanceof GeneralSettings);
+        $merchant_country = $data->get_merchant_country();
+        $woo_data = $data->get_woo_settings();
+        $eligibility_checks = $container->get('wcgateway.feature-eligibility.list');
+        return new MerchantDetails($merchant_country, $woo_data['country'], $eligibility_checks);
+    },
+    'settings.migration.bcdc-override-check' => static function (): callable {
+        return static fn(): bool => (bool) get_option(PaymentSettingsMigration::OPTION_NAME_BCDC_MIGRATION_OVERRIDE);
+    },
 );
+if (!\WooCommerce\PayPalCommerce\Settings\SettingsModule::should_use_the_old_ui()) {
+    /**
+     * Merchant connection details, which includes the connection status
+     * (onboarding/connected) and connection-aware environment checks.
+     * This is the preferred solution to check environment and connection state.
+     */
+    $services['settings.connection-state'] = static function (ContainerInterface $container): ConnectionState {
+        $data = $container->get('settings.data.general');
+        assert($data instanceof GeneralSettings);
+        $is_connected = $data->is_merchant_connected();
+        $environment = new Environment($data->is_sandbox_merchant());
+        return new ConnectionState($is_connected, $environment);
+    };
+}
+return $services;

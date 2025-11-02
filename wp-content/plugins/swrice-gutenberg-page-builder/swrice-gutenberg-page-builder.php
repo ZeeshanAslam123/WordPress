@@ -100,6 +100,9 @@ class Swrice_Gutenberg_Page_Builder {
         $this->register_why_choose_block();
         $this->register_about_block();
         $this->register_final_cta_block();
+        $this->register_screenshots_block();
+        $this->register_video_tutorial_block();
+        $this->register_version_changelog_block();
     }
     
     /**
@@ -435,6 +438,77 @@ class Swrice_Gutenberg_Page_Builder {
         return ob_get_clean();
     }
     
+    public function render_screenshots_section($attributes) {
+        ob_start();
+        include SGPB_PLUGIN_DIR . 'templates/screenshots-section.php';
+        return ob_get_clean();
+    }
+    
+    public function render_video_tutorial_section($attributes) {
+        ob_start();
+        include SGPB_PLUGIN_DIR . 'templates/video-tutorial-section.php';
+        return ob_get_clean();
+    }
+    
+    public function render_version_changelog_section($attributes) {
+        ob_start();
+        include SGPB_PLUGIN_DIR . 'templates/version-changelog-section.php';
+        return ob_get_clean();
+    }
+    
+    /**
+     * Register Screenshots Section Block
+     */
+    public function register_screenshots_block() {
+        register_block_type('swrice/screenshots-section', array(
+            'editor_script' => 'swrice-plugin-page-builder-blocks',
+            'render_callback' => array($this, 'render_screenshots_section'),
+            'attributes' => array(
+                'screenshotsHeading' => array('type' => 'string', 'default' => 'Screenshots'),
+                'screenshotsIcon' => array('type' => 'string', 'default' => '📸'),
+                'screenshotsDescription' => array('type' => 'string', 'default' => 'Take a look at our plugin in action'),
+                'screenshotItems' => array('type' => 'array', 'default' => array())
+            )
+        ));
+    }
+    
+    /**
+     * Register Video Tutorial Section Block
+     */
+    public function register_video_tutorial_block() {
+        register_block_type('swrice/video-tutorial-section', array(
+            'editor_script' => 'swrice-plugin-page-builder-blocks',
+            'render_callback' => array($this, 'render_video_tutorial_section'),
+            'attributes' => array(
+                'videoTutorialHeading' => array('type' => 'string', 'default' => 'Video Tutorial'),
+                'videoTutorialIcon' => array('type' => 'string', 'default' => '🎥'),
+                'videoTutorialDescription' => array('type' => 'string', 'default' => 'Watch how to use our plugin step by step'),
+                'videoUrl' => array('type' => 'string', 'default' => ''),
+                'videoTitle' => array('type' => 'string', 'default' => 'Plugin Tutorial'),
+                'videoDuration' => array('type' => 'string', 'default' => ''),
+                'videoThumbnailUrl' => array('type' => 'string', 'default' => '')
+            )
+        ));
+    }
+    
+    /**
+     * Register Version & Changelog Section Block
+     */
+    public function register_version_changelog_block() {
+        register_block_type('swrice/version-changelog-section', array(
+            'editor_script' => 'swrice-plugin-page-builder-blocks',
+            'render_callback' => array($this, 'render_version_changelog_section'),
+            'attributes' => array(
+                'versionChangelogHeading' => array('type' => 'string', 'default' => 'Version & Changelog'),
+                'versionChangelogIcon' => array('type' => 'string', 'default' => '📋'),
+                'versionChangelogDescription' => array('type' => 'string', 'default' => 'Stay updated with the latest features and improvements'),
+                'currentVersion' => array('type' => 'string', 'default' => '1.0.0'),
+                'upgradeNotice' => array('type' => 'string', 'default' => ''),
+                'changelogItems' => array('type' => 'array', 'default' => array())
+            )
+        ));
+    }
+
     /**
      * Add custom block category
      */

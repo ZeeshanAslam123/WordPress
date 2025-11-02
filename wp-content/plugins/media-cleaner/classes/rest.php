@@ -130,6 +130,11 @@ class Meow_WPMC_Rest
 				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_retrieve_files' )
 			) );
+			register_rest_route( $this->namespace, '/retrieve_hash_duplicates', array(
+				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
+				'callback' => array( $this, 'rest_retrieve_hash_duplicates' )
+			) );
 			register_rest_route( $this->namespace, '/check_targets', array(
 				'methods' => 'POST',
 				'permission_callback' => array( $this->core, 'can_access_features' ),
@@ -142,6 +147,18 @@ class Meow_WPMC_Rest
 				'args' => array(
 					'force' => array( 'required' => false, 'default' => false ),
 				)
+			) );
+
+			// PROGRESS
+			register_rest_route( $this->namespace, '/get_progress', array(
+				'methods' => 'GET',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
+				'callback' => array( $this, 'rest_get_progress' )
+			) );
+			register_rest_route( $this->namespace, '/clear_progress', array(
+				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
+				'callback' => array( $this, 'rest_clear_progress' )
 			) );
 
 			// LOGS
@@ -185,11 +202,13 @@ class Meow_WPMC_Rest
 	function rest_reset_issues_and_references() {
 		$this->core->reset_issues();
 		$this->core->reset_references();
+		$this->core->reset_progress();
 		return new WP_REST_Response( [ 'success' => true, 'message' => __( 'Issues and References were reset.', 'media-cleaner' ) ], 200 );
 	}
 
 	function rest_reset_references() {
 		$this->core->reset_references();
+		$this->core->reset_progress();
 		return new WP_REST_Response( [ 'success' => true, 'message' => __( 'References were reset.', 'media-cleaner' ) ], 200 );
 	}
 
@@ -236,7 +255,35 @@ class Meow_WPMC_Rest
 		return new WP_REST_Response( [ 'success' => true, 'data' => $ids ], 200 );
 	}
 
+	function verify_token() {
+		 // Check if token needs refresh
+		$current_nonce = $this->core->get_nonce( true );
+		$request_nonce = isset( $_SERVER['HTTP_X_WP_NONCE'] ) ? $_SERVER['HTTP_X_WP_NONCE'] : null;
+		
+		$should_refresh = false;
+		if ( $request_nonce ) {
+			$verify = wp_verify_nonce( $request_nonce, 'wp_rest' );
+			if ( $verify === 2 ) {
+				// Nonce is valid but was generated 12-24 hours ago
+				$should_refresh = true;
+			}
+		}
+		
+		if ( $should_refresh || ( $request_nonce && $current_nonce !== $request_nonce ) ) {
+			return $current_nonce;
+		}
+
+		return false;
+	}
+
 	function rest_extract_references( $request ) {
+
+		//DEBUG: Simulate a service unavailable error
+		// $error_chance = rand( 0, 4 ) === 0; // 25% chance to simulate an error
+		// if ( $error_chance ) {
+	    // 	return new WP_REST_Response( [ 'success' => false, 'message' => 'Test Service Unavailable!' ], 503 );
+		// }
+
 		$params = $request->get_json_params();
 		$limit = isset( $params['limit'] ) ? $params['limit'] : 0;
 		$source = isset( $params['source'] ) ? $params['source'] : null;
@@ -263,6 +310,8 @@ class Meow_WPMC_Rest
 		}
 		else if ( $source === 'media' ) {
 			$finished = $this->engine->extractRefsFromLibrary( $limit, $limitsize, $message, $post_id );
+		}else if ( $source === 'duplicates' ) {
+			$finished = $this->engine->extractRefsFromDuplicates( $limit, $limitsize );
 		}
 		else {
 			return new WP_REST_Response( [ 
@@ -273,19 +322,59 @@ class Meow_WPMC_Rest
 
 		$this->core->clean_ob();
 
-		return new WP_REST_Response( [ 
+		$response = [ 
 			'success' => true, 
 			'message' => $message,
 			'data' => [
 				'limit' => $limit + $limitsize, 
 				'finished' => $finished,
-			]	
-		], 200 );
+			]
+		];
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		return new WP_REST_Response( $response, 200 );
+	}
+
+	function rest_retrieve_hash_duplicates() {
+
+		$hashes = $this->engine->get_hash_duplicates();
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		$response = [ 
+			'success' => true, 
+			'message' => sprintf( __( "Retrieved %d hash duplicates.", 'media-cleaner' ), count( $hashes ) ),
+			'data' => [
+				'results' => $hashes
+			],
+		];
+
+		return new WP_REST_Response( $response, 200 );
 	}
 
 	function rest_retrieve_files( $request ) {
+
+		//DEBUG: Simulate a service unavailable error
+		// $error_chance = rand( 0, 4 ) === 0; // 25% chance to simulate an error
+		// if ( $error_chance ) {
+	    // 	return new WP_REST_Response( [ 'success' => false, 'message' => 'Test Service Unavailable!' ], 503 );
+		// }
+
+
 		$params = $request->get_json_params();
 		$path = isset( $params['path'] ) ? ltrim( $params['path'], '/\\' ) : null;
+		$save = isset( $params['save'] ) ? $params['save'] : null;
+
+		$this->core->save_progress( 'retrieveFiles', array( 'targets' => $save['targets'] ?? [], 'processedDirs' => $save['processedDirs'] ?? [], 'totalDirs' => $save['totalDirs'] ?? 1, 'processedCount' => $save['processedCount'] ?? 0, 'directoriesToProcess' => $save['directoriesToProcess'] ?? [] ) );
+
+
 		$files = $this->engine->get_files( $path );
 		$files_count = count( $files );
 		$message = null;
@@ -295,27 +384,71 @@ class Meow_WPMC_Rest
 		else {
 			$message = sprintf( __( "Retrieved %d targets.", 'media-cleaner' ), $files_count );
 		}
-		return new WP_REST_Response( [ 
+
+		$response = [ 
 			'success' => true, 
 			'message' => $message,
 			'data' => [
 				'results' => $files
 			],
-		], 200 );
+		];
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		return new WP_REST_Response( $response, 200 );
 	}
 
 	function rest_retrieve_medias( $request ) {
+
+		//DEBUG: Simulate a service unavailable error
+		// $error_chance = rand( 0, 4 ) === 0; // 25% chance to simulate an error
+		// if ( $error_chance ) {
+	    // 	return new WP_REST_Response( [ 'success' => false, 'message' => 'Test Service Unavailable!' ], 503 );
+		// }
+
 		$params = $request->get_json_params();
 		$limit = isset( $params['limit'] ) ? $params['limit'] : 0;
 		$limitsize = $this->core->get_option( 'medias_buffer' );
 		$unattachedOnly = $this->core->get_option( 'attach_is_use' );
+		
+		// Save step progress at the beginning of media retrieval
+		if ( $limit === 0 ) {
+			$this->core->save_progress( 'retrieveMedia' );
+		}
+		
 		$results = $this->engine->get_media_entries( $limit, $limitsize, $unattachedOnly );
 		$finished = count( $results ) < $limitsize;
 		$message = sprintf( __( "Retrieved %d targets.", 'media-cleaner' ), count( $results ) );
 
+		// Mark as finished if this is the last batch and save targets for checkTargets step
+		if ( $finished ) {
+			// Get all targets collected so far
+			$all_targets = [];
+			$current_progress = $this->core->get_progress();
+			if ( $current_progress && isset( $current_progress['data']['targets'] ) ) {
+				$all_targets = $current_progress['data']['targets'];
+			}
+			$all_targets = array_merge( $all_targets, $results );
+			
+			$this->core->save_progress( 'retrieveMedia_finished', array( 'targets' => $all_targets, 'limit' => $limit, 'limitSize' => $limitsize ) );
+		} else {
+			// Save accumulated targets for continuation
+			$all_targets = [];
+			$current_progress = $this->core->get_progress();
+			if ( $current_progress && isset( $current_progress['data']['targets'] ) ) {
+				$all_targets = $current_progress['data']['targets'];
+			}
+			$all_targets = array_merge( $all_targets, $results );
+			
+			$this->core->save_progress( 'retrieveMedia', array( 'targets' => $all_targets, 'limit' => $limit, 'limitSize' => $limitsize ) );
+		}
+
 		$this->core->clean_ob();
 
-		return new WP_REST_Response( [ 
+		$response = [ 
 			'success' => true, 
 			'message' => $message,
 			'data' => [
@@ -323,17 +456,34 @@ class Meow_WPMC_Rest
 				'finished' => $finished,
 				'results' => $results
 			]	
-		], 200 );
+		];
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		return new WP_REST_Response( $response, 200 );
 	}
 
 	function rest_check_targets( $request ) {
+		//DEBUG: Simulate a service unavailable error
+		// $error_chance = rand( 0, 4 ) === 0; // 25% chance to simulate an error
+		// if ( $error_chance ) {
+	    // 	return new WP_REST_Response( [ 'success' => false, 'message' => 'Test Service Unavailable!' ], 503 );
+		// }
+
 		$params = $request->get_json_params();
 		// DEBUG: Simulate a timeout
-		// $this->core->deepsleep(10); header("HTTP/1.0 408 Request Timeout"); exit;
+		//$this->core->deepsleep(10); header("HTTP/1.0 408 Request Timeout by Nyao"); exit;
 
 		//ob_start();
 		$data = $params['targets'];
 		$method = $this->core->get_option( 'method' );
+
+		if ( empty( $data ) ) {
+			return new WP_REST_Response( [ 'success' => false, 'message' => 'No targets to check.' ], 400 );
+		}
 
 		$this->core->timeout_check_start( count( $data ) );
 		$success = 0;
@@ -361,6 +511,12 @@ class Meow_WPMC_Rest
 				// else {
 				// 	$this->core->log( "👻 Nothing found." );
 				// }
+			} else if( $method == 'duplicates' ) {
+				$this->core->log( "🔎 Checking Duplicate #{$piece}..." );
+				$result = ( $this->engine->check_duplicates( $piece ) ? 1 : 0 );
+				if ( $result ) {
+					$success += $result;
+				}
 			}
 			//$this->core->log();
 			$this->core->timeout_check_additem();
@@ -374,11 +530,38 @@ class Meow_WPMC_Rest
 			count( $data ), $issues_found, $elapsed
 		);
 
-		return new WP_REST_Response( [ 
+		$response = [ 
 			'success' => true, 
 			'message' => $message,
-			'results' => $success,
-		], 200 );
+			'data' => [
+				'results' => $success
+			]
+		];
+
+		$progress = $this->core->get_progress();
+		if ( $progress && $progress['step'] != 'checkTargets' ) {
+			// The step should be "retrieveMedia_finished" or "retrieveFiles_finished"
+			// So we should keep the "all targets" from the previous step
+
+			$allTargets = isset( $progress['data']['targets'] ) ? $progress['data']['targets'] : [];
+
+			$this->core->save_progress( 'checkTargets', array( 'doneTargets' => $data, 'targets' => $allTargets ) );
+		} else {
+			$alreadyDone = isset( $progress['data']['doneTargets'] ) ? $progress['data']['doneTargets'] : [];
+			$alreadyDone = array_merge( $alreadyDone, $data );
+
+			$allTargets = isset( $progress['data']['targets'] ) ? $progress['data']['targets'] : [];
+
+			$this->core->save_progress( 'checkTargets', array( 'doneTargets' => $alreadyDone, 'targets' => $allTargets ) );
+		}
+
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		return new WP_REST_Response( $response, 200 );
 	}
 
 	function rest_refresh_logs() {
@@ -393,8 +576,10 @@ class Meow_WPMC_Rest
 	function rest_all_settings() {
 		return new WP_REST_Response( [
 			'success' => true,
-			'data' => array_merge( $this->core->get_all_options(), [
-				'incompatible_plugins' => !class_exists( 'MeowPro_WPMC_Core' ) ? Meow_WPMC_Support::get_issues() : []
+			'data' => array_merge( 
+				$this->core->get_all_options(), [
+				'incompatible_plugins' => Meow_WPMC_Support::get_issues(),
+				'native_plugins'       => Meow_WPMC_Support::get_natives(),
 			])
 		], 200 );
 	}
@@ -640,6 +825,17 @@ class Meow_WPMC_Rest
 			else if ( $orderBy === 'postId' ) {
 				$orderSql = 'ORDER BY postId ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
 			}
+			else if ( $orderBy === 'time' ) {
+				$orderSql = 'ORDER BY time ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+			}
+			else if ( $orderBy === 'path' ) {
+				$orderSql = 'ORDER BY path ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+			}
+			else if ( $orderBy === 'size' ) {
+				$orderSql = 'ORDER BY size ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+			}
+
+
 			$whereSql = '';
 			if ( $filterBy == 'issues' ) {
 				$whereSql = 'WHERE ignored = 0 AND deleted = 0';
@@ -697,7 +893,7 @@ class Meow_WPMC_Rest
 
 			if ( empty( $search ) ) {
 				$entries = $wpdb->get_results( 
-					$wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue
+					$wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue, time
 						FROM $table_scan
 						$whereSql
 						$orderSql
@@ -707,7 +903,7 @@ class Meow_WPMC_Rest
 			}
 			else {
 				$entries = $wpdb->get_results( 
-					$wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue
+					$wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue, time
 						FROM $table_scan
 						$whereSql
 						AND path LIKE %s
@@ -784,7 +980,15 @@ class Meow_WPMC_Rest
 		else if ( !empty( $entryId ) ) {
 			$data = $this->core->ignore( $entryId, $ignore );
 		}
-		return new WP_REST_Response( [ 'success' => true, 'data' => $data ], 200 );
+
+		$response = [ 'success' => true, 'data' => $data ];
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		return new WP_REST_Response( $response, 200 );
 	}
 
 	function rest_delete( $request ) {
@@ -801,7 +1005,15 @@ class Meow_WPMC_Rest
 		else if ( !empty( $entryId ) ) {
 			$data = $this->core->delete( $entryId );
 		}
-		return new WP_REST_Response( [ 'success' => true, 'data' => $data ], 200 );
+
+		$response = [ 'success' => true, 'data' => $data ];
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		return new WP_REST_Response( $response, 200 );
 	}
 
 	function rest_force_trash_all( $request ) {
@@ -824,7 +1036,15 @@ class Meow_WPMC_Rest
 		else if ( !empty( $entryId ) ) {
 			$data = $this->core->recover( $entryId );
 		}
-		return new WP_REST_Response( [ 'success' => true, 'data' => $data ], 200 );
+
+		$response = [ 'success' => true, 'data' => $data ];
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		return new WP_REST_Response( $response, 200 );
 	}
 
 	function rest_repair( $request ) {
@@ -841,7 +1061,15 @@ class Meow_WPMC_Rest
 		else if ( !empty( $entryId ) ) {
 			$data = $this->core->repair( $entryId );
 		}
-		return new WP_REST_Response( [ 'success' => true, 'data' => $data ], 200 );
+
+		$response = [ 'success' => true, 'data' => $data ];
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		return new WP_REST_Response( $response, 200 );
 	}
 
 	function get_issues_ids($search) {
@@ -957,5 +1185,15 @@ class Meow_WPMC_Rest
 			'root' => $root,
 			'hierarchy' => $data,
 		] ] , 200 );
+	}
+
+	function rest_get_progress() {
+		$progress = $this->core->get_progress();
+		return new WP_REST_Response( [ 'success' => true, 'data' => $progress ], 200 );
+	}
+
+	function rest_clear_progress() {
+		$this->core->clear_step_progress();
+		return new WP_REST_Response( [ 'success' => true, 'message' => 'Progress cleared.' ], 200 );
 	}
 }

@@ -167,11 +167,35 @@ class Api extends Rest_Controller {
 		);
 		register_rest_route(
 			$this->namespace,
+			'/' . $this->rest_base . '/connect_notice',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'update_connect_notice' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
+				),
+			)
+		);
+		register_rest_route(
+			$this->namespace,
 			'/' . $this->rest_base . '/reinstall',
 			array(
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'install_missing_tables' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
+				),
+			)
+		);
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/apply_filter',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'apply_filter' ),
 					'permission_callback' => array( $this, 'create_item_permissions_check' ),
 					'args'                => $this->get_collection_params(),
 				),
@@ -224,10 +248,10 @@ class Api extends Rest_Controller {
 			array(
 				'slug'        => 'ccpa',
 				'title'       => __( 'CCPA (California Consumer Privacy Act)', 'cookie-law-info' ),
-				'description' => __( 'Choose CCPA if most of your targeted audience are from California or US. This will create a customizable banner with a “Do Not Sell My Personal Information” link that allows your visitors to refuse the use of cookies.', 'cookie-law-info' ),
+				'description' => __( 'Choose CCPA if most of your targeted audience are from California or US. This will create a customizable banner with a "Do Not Sell My Personal Information" link that allows your visitors to refuse the use of cookies.', 'cookie-law-info' ),
 				'tooltip'     => __(
 					'Choose CCPA if most of your targeted audience are from California or US.
-					It creates a customizable banner with a “Do Not Sell My Personal Information” link that allows your visitors to refuse the use of cookies.',
+					It creates a customizable banner with a "Do Not Sell My Personal Information" link that allows your visitors to refuse the use of cookies.',
 					'cookie-law-info'
 				),
 			),
@@ -313,6 +337,32 @@ class Api extends Rest_Controller {
 	}
 
 	/**
+	 * Apply WordPress filter hook
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function apply_filter( $request ) {
+		$filter_name = $request->get_param( 'filter_name' );
+		$filter_data = $request->get_param( 'filter_data' );
+
+		if ( empty( $filter_name ) ) {
+			return new WP_Error( 'missing_filter_name', __( 'Filter name is required.', 'cookie-law-info' ), array( 'status' => 400 ) );
+		}
+
+		// Apply the WordPress filter
+		$result = apply_filters( $filter_name, $filter_data );
+
+		// If filter returns false, it means navigation should be prevented
+		$response_data = array(
+			'prevent_navigation' => ( $result === false ),
+			'filter_result' => $result,
+		);
+
+		return rest_ensure_response( $response_data );
+	}
+
+	/**
 	 * Update the status of admin notices.
 	 *
 	 * @param object $request Request.
@@ -340,6 +390,21 @@ class Api extends Rest_Controller {
 		$expand   = isset( $request['expand'] ) ? boolval( $request['expand'] ) : true;
 
 		Connect_Notice::get_instance()->save_state( $expand );
+		$response['status'] = true;
+		return rest_ensure_response( $response );
+	}
+
+	/**
+	 * Update the status of connect notice.
+	 *
+	 * @param object $request Request.
+	 * @return WP_Error|WP_REST_Response
+	 */
+
+	public function update_connect_notice( $request ) {
+		$response = array( 'status' => false );
+		$connect_notice = isset( $request['connect_notice'] ) ? boolval( $request['connect_notice'] ) : true;
+		Connect_Notice::get_instance()->save_connect_notice( $connect_notice );
 		$response['status'] = true;
 		return rest_ensure_response( $response );
 	}

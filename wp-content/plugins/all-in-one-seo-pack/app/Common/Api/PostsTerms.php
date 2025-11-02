@@ -129,18 +129,33 @@ class PostsTerms {
 	 * @return \WP_REST_Response          The response.
 	 */
 	public static function getPostData( $request ) {
-		$args = $request->get_query_params();
+		$args   = $request->get_query_params();
+		$postId = $args['postId'] ?? null;
 
-		if ( empty( $args['postId'] ) ) {
+		if ( empty( $postId ) ) {
 			return new \WP_REST_Response( [
 				'success' => false,
 				'message' => 'No post ID was provided.'
 			], 400 );
 		}
 
+		if ( ! current_user_can( 'edit_post', $postId ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'You are not allowed to access the data for this post.'
+			], 403 );
+		}
+
+		$data = aioseo()->helpers->getVueData( 'post', $postId, $args['integrationSlug'] ?? null );
+
 		return new \WP_REST_Response( [
 			'success' => true,
-			'data'    => aioseo()->helpers->getVueData( 'post', $args['postId'], $args['integrationSlug'] ?? null )
+			'data'    => [
+				// We just send the minimum data that is needed for the post settings. See #7461
+				'currentPost'  => $data['currentPost'],
+				'redirects'    => ! empty( $data['redirects'] ) ? $data['redirects'] : null,
+				'seoRevisions' => ! empty( $data['seoRevisions'] ) ? $data['seoRevisions'] : null
+			]
 		], 200 );
 	}
 
@@ -160,6 +175,13 @@ class PostsTerms {
 				'success' => false,
 				'message' => 'No post ID was provided.'
 			], 400 );
+		}
+
+		if ( ! current_user_can( 'read_post', $args['postId'] ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'Unauthorized.'
+			], 401 );
 		}
 
 		// Disable the cache.
@@ -210,6 +232,13 @@ class PostsTerms {
 			], 400 );
 		}
 
+		if ( ! aioseo()->access->hasCapability( 'aioseo_page_general_settings' ) || ! current_user_can( 'edit_post', $postId ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'You are not allowed to update the post settings.'
+			], 403 );
+		}
+
 		$body['id']                  = $postId;
 		$body['title']               = ! empty( $body['title'] ) ? sanitize_text_field( $body['title'] ) : null;
 		$body['description']         = ! empty( $body['description'] ) ? sanitize_text_field( $body['description'] ) : null;
@@ -257,6 +286,17 @@ class PostsTerms {
 
 		$posts = [];
 		foreach ( $ids as $postId ) {
+			if ( ! current_user_can( 'read_post', $postId ) || post_password_required( $postId ) ) {
+				$posts[] = [
+					'id'                => $postId,
+					'titleParsed'       => '',
+					'descriptionParsed' => '',
+					'headlineScore'     => null
+				];
+
+				continue;
+			}
+
 			$postTitle      = get_the_title( $postId );
 			$headline       = ! empty( $postTitle ) ? sanitize_text_field( $postTitle ) : ''; // We need this to achieve consistency for the score when using special characters in titles
 			$headlineResult = aioseo()->standalone->headlineAnalyzer->getResult( $headline );
@@ -295,8 +335,14 @@ class PostsTerms {
 			], 400 );
 		}
 
+		if ( ! aioseo()->access->hasCapability( 'aioseo_page_general_settings' ) || ! current_user_can( 'edit_post', $postId ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'You are not allowed to update the post settings.'
+			], 403 );
+		}
+
 		$aioseoPost = Models\Post::getPost( $postId );
-		$aioseoData = json_decode( wp_json_encode( $aioseoPost ), true );
 
 		if ( $isMedia ) {
 			wp_update_post(
@@ -308,7 +354,13 @@ class PostsTerms {
 			update_post_meta( $postId, '_wp_attachment_image_alt', sanitize_text_field( $body['imageAltTag'] ) );
 		}
 
-		Models\Post::savePost( $postId, array_replace( $aioseoData, $body ) );
+		$aioseoPost->title       = $body['title'];
+		$aioseoPost->description = $body['description'];
+		$aioseoPost->updated     = gmdate( 'Y-m-d H:i:s' );
+		$aioseoPost->save();
+
+		// Trigger the action hook so we can create a revision.
+		do_action( 'aioseo_insert_post', $postId );
 
 		$lastError = aioseo()->core->db->lastError();
 		if ( ! empty( $lastError ) ) {
@@ -343,6 +395,13 @@ class PostsTerms {
 				'success' => false,
 				'message' => 'Post ID is missing.'
 			], 400 );
+		}
+
+		if ( ! aioseo()->access->hasCapability( 'aioseo_page_general_settings' ) || ! current_user_can( 'edit_post', $postId ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'You are not allowed to update the post settings.'
+			], 403 );
 		}
 
 		$thePost = Models\Post::getPost( $postId );
@@ -392,6 +451,13 @@ class PostsTerms {
 			], 400 );
 		}
 
+		if ( ! current_user_can( 'edit_post', $args['postId'] ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'Unauthorized.'
+			], 401 );
+		}
+
 		$thePost = Models\Post::getPost( $args['postId'] );
 		$thePost->options->primaryTerm->productEducationDismissed = true;
 		$thePost->save();
@@ -417,6 +483,13 @@ class PostsTerms {
 				'success' => false,
 				'message' => 'No post ID was provided.'
 			], 400 );
+		}
+
+		if ( ! current_user_can( 'edit_post', $args['postId'] ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'Unauthorized.'
+			], 401 );
 		}
 
 		$thePost = Models\Post::getPost( $args['postId'] );
@@ -448,6 +521,13 @@ class PostsTerms {
 			], 400 );
 		}
 
+		if ( ! current_user_can( 'edit_post', $args['postId'] ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'Unauthorized.'
+			], 401 );
+		}
+
 		$thePost = Models\Post::getPost( $args['postId'] );
 		$thePost->options->linkFormat->internalLinkCount = $count;
 		$thePost->save();
@@ -474,6 +554,13 @@ class PostsTerms {
 				'success' => false,
 				'message' => 'No post ID was provided.'
 			], 400 );
+		}
+
+		if ( ! current_user_can( 'read_post', $args['postId'] ) || post_password_required( $args['postId'] ) ) {
+			return new \WP_REST_Response( [
+				'success' => false,
+				'message' => 'Unauthorized.'
+			], 401 );
 		}
 
 		// Check if we can process it using a page builder integration.

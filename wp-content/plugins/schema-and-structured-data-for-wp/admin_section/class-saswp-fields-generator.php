@@ -534,7 +534,11 @@ class SASWP_Fields_Generator {
                                          $input .=$hiddenfield;
 					break;                                    
 				case 'select':
-					$input = sprintf(
+					$input     =   '';
+                    if ( ! empty( $meta_field['sub_label'] ) ) {
+                        $input  .=  sprintf( '<span class="saswp-site-nav-lang-label">%s</span>' , esc_attr( $meta_field['sub_label'] ) );   
+                    }
+                    $input .= sprintf(
 						'<select class="%s" id="%s" name="%s">',
                                                 $class,
 						esc_attr( $meta_field['id']),
@@ -669,7 +673,7 @@ class SASWP_Fields_Generator {
                                         . '<td style="width:12%;"><strong>'.esc_html__( 'Language', 'schema-and-structured-data-for-wp' ).'</strong></td>'
                                         . '<td style="width:10%;"><input class="saswp-g-language-field" name="sd_data[saswp_reviews_language_name][]" type="text" value="'. esc_attr( $rv_lang[$i]).'"></td>'
                                         . '<td style="width:10%;"><strong>'.esc_html__( 'Reviews', 'schema-and-structured-data-for-wp' ).'</strong></td>'
-                                        . '<td style="width:10%;">'.esc_html( $blocks_fields).'</td>'                                        
+                                        . '<td style="width:10%;">'.$blocks_fields.'</td>'                                        
                                         . '<td style="width:10%;"><a class="button button-default saswp-fetch-g-reviews">'.esc_html__( 'Fetch', 'schema-and-structured-data-for-wp' ).'</a></td>'
                                         . '<td style="width:10%;"><a type="button" class="saswp-remove-review-item button">x</a></td>'
                                         . '<td style="width:10%;"><p class="saswp-rv-fetched-msg"></p></td>'        
@@ -768,7 +772,8 @@ class SASWP_Fields_Generator {
                                 }
                                 
                                 foreach( $post_type as $key => $value){
-                                    $subfields .= '<tr><td><input type="checkbox" name="sd_data[saswp-stars-post-taype][]" value="'. esc_attr( $key).'" '.(in_array($key, $sel_value) ? 'checked':'' ).' /></td><td> '.esc_html( $value).' </td><tr>';
+                                    $input_id   = 'saswp_stars_post_type_' . $value;  
+                                    $subfields .= '<tr><td><input type="checkbox" name="sd_data[saswp-stars-post-taype][]" value="'. esc_attr( $key).'" '.(in_array($key, $sel_value) ? 'checked':'' ).' id="'.esc_attr( $input_id ).'"/></td><td><label class="saswp-stars-post-type-label" for="'.esc_attr( $input_id ).'"> '.esc_html( $value).' </label></td><tr>';
                                 }
 
                                 $subfields .= '</table></div>';

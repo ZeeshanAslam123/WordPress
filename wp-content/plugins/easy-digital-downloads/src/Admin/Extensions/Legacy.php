@@ -38,22 +38,41 @@ class Legacy implements \EDD\EventManagement\SubscriberInterface {
 	 */
 	public function manage_legacy_extensions() {
 		foreach ( $this->get_extensions() as $extension ) {
-			add_action( "plugin_action_links_{$extension['basename']}", array( $this, 'update_plugin_links' ), 10, 2 );
-			if ( ! is_plugin_active( $extension['basename'] ) ) {
-				continue;
-			}
-			if ( $this->should_deactivate( $extension['basename'] ) ) {
-
+			if ( empty( $extension['on_demand'] ) ) {
+				self::deactivate( $extension );
+			} elseif ( is_plugin_active( $extension['basename'] ) ) {
 				$this->maybe_do_notification( $extension );
+			}
 
-				if ( ! empty( $extension['on_deactivate'] ) && is_callable( $extension['on_deactivate'] ) ) {
-					add_action( "deactivate_{$extension['basename']}", $extension['on_deactivate'] );
-				}
-				deactivate_plugins( $extension['basename'] );
+			if ( empty( $extension['allow_reactivation'] ) ) {
+				add_action( "plugin_action_links_{$extension['basename']}", array( $this, 'update_plugin_links' ), 10, 2 );
 			}
-			if ( ! empty( $extension['option'] ) ) {
-				delete_option( $extension['option'] );
+		}
+	}
+
+	/**
+	 * Deactivates the legacy extension.
+	 *
+	 * @since 3.5.0
+	 * @return void
+	 */
+	public static function deactivate( $extension ) {
+		if ( ! is_plugin_active( $extension['basename'] ) ) {
+			return;
+		}
+
+		if ( self::should_deactivate( $extension['basename'] ) ) {
+
+			self::maybe_do_notification( $extension );
+
+			if ( ! empty( $extension['on_deactivate'] ) && is_callable( $extension['on_deactivate'] ) ) {
+				add_action( "deactivate_{$extension['basename']}", $extension['on_deactivate'] );
 			}
+			deactivate_plugins( $extension['basename'] );
+		}
+
+		if ( ! empty( $extension['option'] ) ) {
+			delete_option( $extension['option'] );
 		}
 	}
 
@@ -66,7 +85,9 @@ class Legacy implements \EDD\EventManagement\SubscriberInterface {
 	 * @return array
 	 */
 	public function update_plugin_links( $links, $plugin_file ) {
-		$links['activate'] = __( 'Inactive &mdash; Part of EDD', 'easy-digital-downloads' );
+		if ( array_key_exists( 'activate', $links ) ) {
+			$links['activate'] = __( 'Inactive &mdash; Part of EDD', 'easy-digital-downloads' );
+		}
 
 		return $links;
 	}
@@ -124,6 +145,18 @@ class Legacy implements \EDD\EventManagement\SubscriberInterface {
 					),
 				),
 			),
+			'edd-eu-vat'                   => array(
+				'basename'           => 'edd-eu-vat/edd-eu-vat.php',
+				'on_demand'          => true,
+				'allow_reactivation' => true,
+			),
+			'edd-featured-downloads'       => array(
+				'name'            => 'Featured Downloads',
+				'basename'        => 'edd-featured-downloads/edd-featured-downloads.php',
+				'on_demand'       => true,
+				'notification-id' => 'fd-legacy-notice',
+				'content'         => __( 'Featured Downloads has been merged into Easy Digital Downloads. If you are using the [edd_featured_downloads] shortcode anywhere, please update it to use the downloads block or shortcode instead and then deactivate this plugin.', 'easy-digital-downloads' ),
+			),
 		);
 	}
 
@@ -150,7 +183,7 @@ class Legacy implements \EDD\EventManagement\SubscriberInterface {
 	 * @param string $basename The plugin basename.
 	 * @return bool
 	 */
-	protected function should_deactivate( $basename ) {
+	protected static function should_deactivate( $basename ) {
 		return true;
 	}
 
@@ -161,12 +194,12 @@ class Legacy implements \EDD\EventManagement\SubscriberInterface {
 	 * @param array $extension The array of extension data.
 	 * @return void
 	 */
-	private function maybe_do_notification( $extension ) {
+	private static function maybe_do_notification( $extension ) {
 		// If a legacy extension has a notification ID, then add a local notification.
 		if ( empty( $extension['notification-id'] ) ) {
 			return;
 		}
-		EDD()->notifications->maybe_add_local_notification( $this->get_notification_args( $extension ) );
+		EDD()->notifications->maybe_add_local_notification( self::get_notification_args( $extension ) );
 	}
 
 	/**
@@ -176,7 +209,7 @@ class Legacy implements \EDD\EventManagement\SubscriberInterface {
 	 * @param array $extension The array of extension data.
 	 * @return array The notification arguments for the extension.
 	 */
-	private function get_notification_args( $extension ) {
+	private static function get_notification_args( $extension ) {
 		return wp_parse_args(
 			$extension,
 			array(
@@ -193,7 +226,7 @@ class Legacy implements \EDD\EventManagement\SubscriberInterface {
 					$extension['name'],
 					$extension['name'] // This is the same as the previous placeholder, but it's necessary because the original string has two placeholders.
 				),
-				'buttons'   => $this->get_buttons( $extension ),
+				'buttons'   => self::get_buttons( $extension ),
 			)
 		);
 	}
@@ -205,7 +238,7 @@ class Legacy implements \EDD\EventManagement\SubscriberInterface {
 	 * @param array $extension The array of extension data.
 	 * @return array The buttons for the extension.
 	 */
-	private function get_buttons( $extension ) {
+	private static function get_buttons( $extension ) {
 		$buttons = array(
 			array(
 				'text' => __( 'View Plugins', 'easy-digital-downloads' ),

@@ -47,7 +47,9 @@ class Settings {
 						$setting_id = isset( $setting['id'] ) ? $setting['id'] : sanitize_title( $setting['name'] );
 						if ( is_array( $value ) ) {
 							foreach ( $value as $v ) {
-								$data[ "{$setting_id}_{$v}" ] = 1;
+								if ( is_scalar( $v ) ) {
+									$data[ "{$setting_id}_{$v}" ] = 1;
+								}
 							}
 						} else {
 							$data[ $setting_id ] = $value;
@@ -60,6 +62,30 @@ class Settings {
 		$emails = $this->get_registered_emails();
 		if ( $emails ) {
 			$data = array_merge( $data, $emails );
+		}
+
+		$features = \EDD\Admin\Tools\Labs::get_feature_settings();
+		if ( $features ) {
+			foreach ( $features as $feature ) {
+				if ( ! empty( $feature['id'] ) ) {
+					$data[ $feature['id'] ] = (int) (bool) edd_get_option( $feature['id'] );
+				}
+			}
+		}
+
+		$profilers = \EDD\Admin\Tools\Labs::get_profilers();
+		if ( $profilers ) {
+			foreach ( $profilers as $profiler ) {
+				if ( empty( $profiler['class'] ) || ! is_subclass_of( $profiler['class'], '\\EDD\\Profiler\\Profiler' ) ) {
+					continue;
+				}
+				$settings = $profiler['class']::get_settings();
+				foreach ( (array) $settings as $setting ) {
+					if ( ! empty( $setting['id'] ) ) {
+						$data[ $setting['id'] ] = 1;
+					}
+				}
+			}
 		}
 
 		return $data;

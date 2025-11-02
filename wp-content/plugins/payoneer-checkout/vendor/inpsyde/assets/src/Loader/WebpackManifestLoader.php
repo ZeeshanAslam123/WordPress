@@ -1,13 +1,5 @@
 <?php
 
-/*
- * This file is part of the Assets package.
- *
- * (c) Inpsyde GmbH
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 declare (strict_types=1);
 namespace Syde\Vendor\Inpsyde\Assets\Loader;
 
@@ -20,9 +12,6 @@ namespace Syde\Vendor\Inpsyde\Assets\Loader;
  */
 class WebpackManifestLoader extends AbstractWebpackLoader
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function parseData(array $data, string $resource): array
     {
         $directory = trailingslashit(dirname($resource));

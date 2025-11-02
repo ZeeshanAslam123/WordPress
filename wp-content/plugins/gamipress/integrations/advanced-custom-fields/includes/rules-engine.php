@@ -36,7 +36,7 @@ function gamipress_acf_user_has_access_to_achievement( $return = false, $user_id
     if( $return && ( $trigger === 'gamipress_acf_update_any_post_field_specific_value'
             || $trigger === 'gamipress_acf_update_any_user_field_specific_value'
             || $trigger === 'gamipress_acf_update_specific_post_field_specific_value'
-            || $trigger === 'gamipress_acf_update_specific_post_field_specific_value' ) ) {
+            || $trigger === 'gamipress_acf_update_specific_user_field_specific_value' ) ) {
 
         $field_value = $args[3];
 

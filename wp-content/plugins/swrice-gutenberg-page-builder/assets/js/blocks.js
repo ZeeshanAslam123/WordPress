@@ -1461,3 +1461,660 @@ registerBlockType('swrice/final-cta-section', {
     },
     save: () => null
 });
+
+// Icon options for new sections
+const SCREENSHOTS_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '📸 Camera', value: '📸' },
+    { label: '🖼️ Picture Frame', value: '🖼️' },
+    { label: '📱 Mobile Phone', value: '📱' },
+    { label: '💻 Laptop', value: '💻' },
+    { label: '🎨 Artist Palette', value: '🎨' }
+];
+
+const VIDEO_TUTORIAL_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '🎥 Movie Camera', value: '🎥' },
+    { label: '📹 Video Camera', value: '📹' },
+    { label: '▶️ Play Button', value: '▶️' },
+    { label: '🎬 Clapper Board', value: '🎬' },
+    { label: '📺 Television', value: '📺' }
+];
+
+const VERSION_CHANGELOG_ICON_OPTIONS = [
+    { label: 'No Icon', value: '' },
+    { label: '📋 Clipboard', value: '📋' },
+    { label: '📝 Memo', value: '📝' },
+    { label: '🔄 Arrows Counterclockwise', value: '🔄' },
+    { label: '⚡ High Voltage', value: '⚡' },
+    { label: '🆕 New Button', value: '🆕' }
+];
+
+
+// Updated Screenshots Section Block with Media Library Support
+registerBlockType('swrice/screenshots-section', {
+    title: 'Screenshots Section',
+    icon: 'format-gallery',
+    category: 'swrice-blocks',
+    attributes: {
+        screenshotsHeading: { type: 'string', default: 'Screenshots' },
+        screenshotsIcon: { type: 'string', default: '📸' },
+        screenshotsDescription: { type: 'string', default: 'Take a look at our plugin in action' },
+        screenshotItems: { type: 'array', default: [] }
+    },
+    edit: (props) => {
+        const { attributes, setAttributes } = props;
+        const getAttr = (key, fallback = '') => attributes[key] || fallback;
+
+        return createElement(Fragment, null,
+            createElement(InspectorControls, null,
+                createElement(PanelBody, { title: 'Screenshots Settings', initialOpen: true },
+                    createElement(TextControl, {
+                        label: 'Section Heading',
+                        value: getAttr('screenshotsHeading'),
+                        onChange: (val) => setAttributes({ screenshotsHeading: val })
+                    }),
+                    createElement(SelectControl, {
+                        label: 'Section Icon',
+                        value: getAttr('screenshotsIcon'),
+                        options: SCREENSHOTS_ICON_OPTIONS,
+                        onChange: (val) => setAttributes({ screenshotsIcon: val }),
+                        help: 'Choose an icon for the section heading'
+                    }),
+                    createElement(TextareaControl, {
+                        label: 'Section Description',
+                        value: getAttr('screenshotsDescription'),
+                        onChange: (val) => setAttributes({ screenshotsDescription: val }),
+                        rows: 3,
+                        help: 'Brief description of the screenshots section'
+                    })
+                ),
+                createElement(PanelBody, { title: 'Screenshot Gallery', initialOpen: false },
+                    // Custom Screenshots Repeater with Media Library Support
+                    createElement('div', { className: 'screenshots-repeater' },
+                        getAttr('screenshotItems', []).map((item, index) =>
+                            createElement('div', { 
+                                key: index, 
+                                className: 'screenshot-item',
+                                style: { 
+                                    border: '1px solid #ddd', 
+                                    padding: '20px', 
+                                    marginBottom: '15px',
+                                    borderRadius: '8px',
+                                    backgroundColor: '#f9f9f9'
+                                }
+                            },
+                                createElement('div', { 
+                                    style: { 
+                                        display: 'flex', 
+                                        justifyContent: 'space-between', 
+                                        alignItems: 'center',
+                                        marginBottom: '15px'
+                                    }
+                                },
+                                    createElement('strong', null, `Screenshot ${index + 1}`),
+                                    createElement(Button, {
+                                        isDestructive: true,
+                                        isSmall: true,
+                                        onClick: () => {
+                                            const newItems = getAttr('screenshotItems', []).filter((_, i) => i !== index);
+                                            setAttributes({ screenshotItems: newItems });
+                                        }
+                                    }, 'Remove')
+                                ),
+                                
+                                // Screenshot Title
+                                createElement(TextControl, {
+                                    label: 'Screenshot Title',
+                                    value: item.title || '',
+                                    onChange: (value) => {
+                                        const newItems = [...getAttr('screenshotItems', [])];
+                                        newItems[index] = { ...newItems[index], title: value };
+                                        setAttributes({ screenshotItems: newItems });
+                                    },
+                                    placeholder: 'e.g., Dashboard Overview'
+                                }),
+                                
+                                // Screenshot Description
+                                createElement(TextareaControl, {
+                                    label: 'Screenshot Description',
+                                    value: item.description || '',
+                                    onChange: (value) => {
+                                        const newItems = [...getAttr('screenshotItems', [])];
+                                        newItems[index] = { ...newItems[index], description: value };
+                                        setAttributes({ screenshotItems: newItems });
+                                    },
+                                    rows: 3,
+                                    placeholder: 'Brief description of what this screenshot shows'
+                                }),
+                                
+                                // Image Selection - URL Input
+                                createElement(TextControl, {
+                                    label: 'Image URL (Optional)',
+                                    value: item.imageUrl || '',
+                                    onChange: (value) => {
+                                        const newItems = [...getAttr('screenshotItems', [])];
+                                        newItems[index] = { ...newItems[index], imageUrl: value };
+                                        setAttributes({ screenshotItems: newItems });
+                                    },
+                                    placeholder: 'https://example.com/screenshot.jpg',
+                                    help: 'Enter image URL directly or use Media Library button below'
+                                }),
+                                
+                                // Media Library Button
+                                createElement('div', { style: { marginTop: '10px', marginBottom: '15px' } },
+                                    createElement(Button, {
+                                        isPrimary: true,
+                                        onClick: () => {
+                                            if (typeof wp !== 'undefined' && wp.media) {
+                                                const frame = wp.media({
+                                                    title: 'Select Screenshot Image',
+                                                    button: { text: 'Use This Image' },
+                                                    multiple: false,
+                                                    library: { type: 'image' }
+                                                });
+                                                
+                                                frame.on('select', () => {
+                                                    const attachment = frame.state().get('selection').first().toJSON();
+                                                    const newItems = [...getAttr('screenshotItems', [])];
+                                                    newItems[index] = { 
+                                                        ...newItems[index], 
+                                                        imageId: attachment.id,
+                                                        imageUrl: attachment.url 
+                                                    };
+                                                    setAttributes({ screenshotItems: newItems });
+                                                });
+                                                
+                                                frame.open();
+                                            }
+                                        }
+                                    }, '📁 Select from Media Library')
+                                ),
+                                
+                                // Image Preview
+                                (item.imageUrl) && createElement('div', { 
+                                    style: { 
+                                        marginTop: '10px',
+                                        padding: '10px',
+                                        border: '1px solid #ddd',
+                                        borderRadius: '4px',
+                                        backgroundColor: '#fff'
+                                    }
+                                },
+                                    createElement('div', { style: { marginBottom: '10px', fontWeight: '500' } }, 'Preview:'),
+                                    createElement('img', { 
+                                        src: item.imageUrl, 
+                                        alt: item.title || 'Screenshot preview',
+                                        style: { 
+                                            maxWidth: '100%', 
+                                            height: 'auto', 
+                                            maxHeight: '200px',
+                                            border: '1px solid #ddd', 
+                                            borderRadius: '4px' 
+                                        }
+                                    }),
+                                    createElement('div', { style: { marginTop: '8px' } },
+                                        createElement(Button, {
+                                            isDestructive: true,
+                                            isSmall: true,
+                                            onClick: () => {
+                                                const newItems = [...getAttr('screenshotItems', [])];
+                                                newItems[index] = { 
+                                                    ...newItems[index], 
+                                                    imageId: 0, 
+                                                    imageUrl: '' 
+                                                };
+                                                setAttributes({ screenshotItems: newItems });
+                                            }
+                                        }, 'Remove Image')
+                                    )
+                                )
+                            )
+                        ),
+                        
+                        // Add New Screenshot Button
+                        createElement(Button, {
+                            isPrimary: true,
+                            onClick: () => {
+                                const newItem = {
+                                    title: '',
+                                    description: '',
+                                    imageUrl: '',
+                                    imageId: 0
+                                };
+                                const newItems = [...getAttr('screenshotItems', []), newItem];
+                                setAttributes({ screenshotItems: newItems });
+                            },
+                            style: { marginTop: '15px' }
+                        }, '➕ Add Screenshot')
+                    )
+                )
+            ),
+            
+            // Block Preview
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-screenshots' },
+                        getAttr('screenshotsHeading') ?
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('screenshotsIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('screenshotsIcon')) : null,
+                                getAttr('screenshotsHeading', 'Screenshots')
+                            ) : null,
+                        getAttr('screenshotsDescription') ?
+                            createElement('p', { className: 'sppm-section-description' },
+                                getAttr('screenshotsDescription')
+                            ) : null,
+                        createElement('div', { className: 'sppm-screenshots-gallery' },
+                            getAttr('screenshotItems', []).length > 0 ?
+                                getAttr('screenshotItems', []).map((item, index) =>
+                                    createElement('div', { 
+                                        key: index, 
+                                        className: 'sppm-screenshot-item',
+                                        style: { 
+                                            border: '2px dashed #ddd', 
+                                            padding: '20px', 
+                                            margin: '10px 0',
+                                            borderRadius: '8px',
+                                            textAlign: 'center'
+                                        }
+                                    },
+                                        createElement('h4', null, item.title || 'Screenshot ' + (index + 1)),
+                                        createElement('p', { style: { color: '#666', fontSize: '14px' } }, 
+                                            item.description || 'Screenshot description'
+                                        ),
+                                        item.imageUrl ? 
+                                            createElement('img', { 
+                                                src: item.imageUrl, 
+                                                alt: item.title,
+                                                style: { maxWidth: '200px', height: 'auto', marginTop: '10px' }
+                                            }) :
+                                            createElement('div', { 
+                                                style: { 
+                                                    background: '#f0f0f0', 
+                                                    padding: '40px', 
+                                                    color: '#999',
+                                                    marginTop: '10px'
+                                                }
+                                            }, '📸 Screenshot Preview')
+                                    )
+                                ) :
+                                createElement('div', { 
+                                    style: { 
+                                        textAlign: 'center', 
+                                        padding: '40px', 
+                                        color: '#999',
+                                        border: '2px dashed #ddd',
+                                        borderRadius: '8px'
+                                    }
+                                }, 'Add screenshots using the sidebar controls →')
+                        )
+                    )
+                )
+            )
+        );
+    },
+    save: () => null
+});
+
+
+// Video Tutorial Section Block
+registerBlockType('swrice/video-tutorial-section', {
+    title: 'Video Tutorial Section',
+    icon: 'video-alt3',
+    category: 'swrice-blocks',
+    attributes: {
+        videoTutorialHeading: { type: 'string', default: 'Video Tutorial' },
+        videoTutorialIcon: { type: 'string', default: '🎥' },
+        videoTutorialDescription: { type: 'string', default: 'Watch how to use our plugin step by step' },
+        videoUrl: { type: 'string', default: '' },
+        videoTitle: { type: 'string', default: 'Plugin Tutorial' },
+        videoDuration: { type: 'string', default: '' },
+        videoThumbnailUrl: { type: 'string', default: '' }
+    },
+    edit: (props) => {
+        const { attributes, setAttributes } = props;
+        const getAttr = (key, fallback = '') => attributes[key] || fallback;
+
+        return createElement(Fragment, null,
+            createElement(InspectorControls, null,
+                createElement(PanelBody, { title: 'Video Tutorial Settings', initialOpen: true },
+                    createElement(TextControl, {
+                        label: 'Section Heading',
+                        value: getAttr('videoTutorialHeading'),
+                        onChange: (val) => setAttributes({ videoTutorialHeading: val })
+                    }),
+                    createElement(SelectControl, {
+                        label: 'Section Icon',
+                        value: getAttr('videoTutorialIcon'),
+                        options: VIDEO_TUTORIAL_ICON_OPTIONS,
+                        onChange: (val) => setAttributes({ videoTutorialIcon: val }),
+                        help: 'Choose an icon for the section heading'
+                    }),
+                    createElement(TextareaControl, {
+                        label: 'Section Description',
+                        value: getAttr('videoTutorialDescription'),
+                        onChange: (val) => setAttributes({ videoTutorialDescription: val }),
+                        rows: 3,
+                        help: 'Brief description of the video tutorial'
+                    })
+                ),
+                createElement(PanelBody, { title: 'Video Settings', initialOpen: false },
+                    createElement(TextControl, {
+                        label: 'Video URL',
+                        value: getAttr('videoUrl'),
+                        onChange: (val) => setAttributes({ videoUrl: val }),
+                        placeholder: 'https://www.youtube.com/watch?v=... or https://vimeo.com/...',
+                        help: 'YouTube, Vimeo, or direct video URL'
+                    }),
+                    createElement(TextControl, {
+                        label: 'Video Title',
+                        value: getAttr('videoTitle'),
+                        onChange: (val) => setAttributes({ videoTitle: val }),
+                        placeholder: 'e.g., Complete Plugin Setup Guide'
+                    }),
+                    createElement(TextControl, {
+                        label: 'Video Duration',
+                        value: getAttr('videoDuration'),
+                        onChange: (val) => setAttributes({ videoDuration: val }),
+                        placeholder: 'e.g., 5:30',
+                        help: 'Optional: Display video length (e.g., 5:30)'
+                    }),
+                    createElement(TextControl, {
+                        label: 'Custom Thumbnail URL',
+                        value: getAttr('videoThumbnailUrl'),
+                        onChange: (val) => setAttributes({ videoThumbnailUrl: val }),
+                        placeholder: 'https://example.com/thumbnail.jpg',
+                        help: 'Optional: Custom video thumbnail image'
+                    })
+                )
+            ),
+            
+            // Block Preview
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-video-tutorial' },
+                        getAttr('videoTutorialHeading') ?
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('videoTutorialIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('videoTutorialIcon')) : null,
+                                getAttr('videoTutorialHeading', 'Video Tutorial')
+                            ) : null,
+                        getAttr('videoTutorialDescription') ?
+                            createElement('p', { className: 'sppm-section-description' },
+                                getAttr('videoTutorialDescription')
+                            ) : null,
+                        createElement('div', { className: 'sppm-video-container' },
+                            getAttr('videoUrl') ?
+                                createElement('div', { 
+                                    className: 'sppm-video-preview',
+                                    style: { 
+                                        background: '#000', 
+                                        padding: '60px 20px', 
+                                        textAlign: 'center',
+                                        borderRadius: '8px',
+                                        color: '#fff',
+                                        position: 'relative'
+                                    }
+                                },
+                                    createElement('div', { 
+                                        style: { 
+                                            fontSize: '48px', 
+                                            marginBottom: '20px' 
+                                        }
+                                    }, '▶️'),
+                                    createElement('h3', { style: { margin: '0 0 10px 0' } }, 
+                                        getAttr('videoTitle', 'Plugin Tutorial')
+                                    ),
+                                    getAttr('videoDuration') ?
+                                        createElement('span', { 
+                                            style: { 
+                                                background: 'rgba(0,0,0,0.7)', 
+                                                padding: '4px 8px', 
+                                                borderRadius: '4px',
+                                                fontSize: '14px'
+                                            }
+                                        }, getAttr('videoDuration')) : null,
+                                    createElement('p', { 
+                                        style: { 
+                                            fontSize: '14px', 
+                                            opacity: '0.8',
+                                            marginTop: '10px'
+                                        }
+                                    }, 'Video URL: ' + getAttr('videoUrl'))
+                                ) :
+                                createElement('div', { 
+                                    style: { 
+                                        textAlign: 'center', 
+                                        padding: '60px 20px', 
+                                        color: '#999',
+                                        border: '2px dashed #ddd',
+                                        borderRadius: '8px'
+                                    }
+                                }, 
+                                    createElement('div', { style: { fontSize: '48px', marginBottom: '20px' } }, '🎥'),
+                                    'Add video URL using the sidebar controls →'
+                                )
+                        )
+                    )
+                )
+            )
+        );
+    },
+    save: () => null
+});
+
+// Version & Changelog Section Block
+registerBlockType('swrice/version-changelog-section', {
+    title: 'Version & Changelog Section',
+    icon: 'update',
+    category: 'swrice-blocks',
+    attributes: {
+        versionChangelogHeading: { type: 'string', default: 'Version & Changelog' },
+        versionChangelogIcon: { type: 'string', default: '📋' },
+        versionChangelogDescription: { type: 'string', default: 'Stay updated with the latest features and improvements' },
+        currentVersion: { type: 'string', default: '1.0.0' },
+        upgradeNotice: { type: 'string', default: '' },
+        changelogItems: { type: 'array', default: [] }
+    },
+    edit: (props) => {
+        const { attributes, setAttributes } = props;
+        const getAttr = (key, fallback = '') => attributes[key] || fallback;
+
+        return createElement(Fragment, null,
+            createElement(InspectorControls, null,
+                createElement(PanelBody, { title: 'Version & Changelog Settings', initialOpen: true },
+                    createElement(TextControl, {
+                        label: 'Section Heading',
+                        value: getAttr('versionChangelogHeading'),
+                        onChange: (val) => setAttributes({ versionChangelogHeading: val })
+                    }),
+                    createElement(SelectControl, {
+                        label: 'Section Icon',
+                        value: getAttr('versionChangelogIcon'),
+                        options: VERSION_CHANGELOG_ICON_OPTIONS,
+                        onChange: (val) => setAttributes({ versionChangelogIcon: val }),
+                        help: 'Choose an icon for the section heading'
+                    }),
+                    createElement(TextareaControl, {
+                        label: 'Section Description',
+                        value: getAttr('versionChangelogDescription'),
+                        onChange: (val) => setAttributes({ versionChangelogDescription: val }),
+                        rows: 3,
+                        help: 'Brief description of the version/changelog section'
+                    })
+                ),
+                createElement(PanelBody, { title: 'Current Version', initialOpen: false },
+                    createElement(TextControl, {
+                        label: 'Current Version',
+                        value: getAttr('currentVersion'),
+                        onChange: (val) => setAttributes({ currentVersion: val }),
+                        placeholder: 'e.g., 2.1.0',
+                        help: 'Current plugin version number'
+                    }),
+                    createElement(TextareaControl, {
+                        label: 'Upgrade Notice',
+                        value: getAttr('upgradeNotice'),
+                        onChange: (val) => setAttributes({ upgradeNotice: val }),
+                        rows: 3,
+                        placeholder: 'Important upgrade information or notices...',
+                        help: 'Optional: Important information about the current version'
+                    })
+                ),
+                createElement(PanelBody, { title: 'Changelog Entries', initialOpen: false },
+                    createElement(RepeaterField, {
+                        items: getAttr('changelogItems', []),
+                        onChange: (items) => setAttributes({ changelogItems: items }),
+                        fields: [
+                            { key: 'version', label: 'Version Number', type: 'text', placeholder: 'e.g., 2.0.0' },
+                            { key: 'releaseDate', label: 'Release Date', type: 'text', placeholder: 'e.g., March 15, 2024' },
+                            { key: 'changes', label: 'Changes', type: 'textarea', placeholder: 'List of changes, improvements, and bug fixes...' },
+                            { key: 'type', label: 'Release Type', type: 'select', options: [
+                                { label: 'Major Release', value: 'major' },
+                                { label: 'Minor Release', value: 'minor' },
+                                { label: 'Bug Fix', value: 'patch' },
+                                { label: 'Security Update', value: 'security' }
+                            ], default: 'minor' }
+                        ],
+                        addButtonText: 'Add Changelog Entry'
+                    })
+                )
+            ),
+            
+            // Block Preview
+            createElement('div', { className: 'sgpb-plugin-page-editor' },
+                createElement('div', { className: 'sppm-plugin-page' },
+                    createElement('section', { className: 'sppm-section sppm-version-changelog' },
+                        getAttr('versionChangelogHeading') ?
+                            createElement('h2', { className: 'sppm-section-title' },
+                                getAttr('versionChangelogIcon') ? 
+                                    createElement('span', { className: 'sppm-section-icon' }, getAttr('versionChangelogIcon')) : null,
+                                getAttr('versionChangelogHeading', 'Version & Changelog')
+                            ) : null,
+                        getAttr('versionChangelogDescription') ?
+                            createElement('p', { className: 'sppm-section-description' },
+                                getAttr('versionChangelogDescription')
+                            ) : null,
+                        
+                        // Current Version Display
+                        createElement('div', { className: 'sppm-current-version' },
+                            createElement('div', { 
+                                style: { 
+                                    background: '#f8f9fa', 
+                                    padding: '20px', 
+                                    borderRadius: '8px',
+                                    border: '1px solid #e9ecef',
+                                    marginBottom: '30px'
+                                }
+                            },
+                                createElement('h3', { 
+                                    style: { 
+                                        margin: '0 0 10px 0', 
+                                        color: '#28a745',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '10px'
+                                    }
+                                }, 
+                                    createElement('span', null, '🆕'),
+                                    'Current Version: ' + getAttr('currentVersion', '1.0.0')
+                                ),
+                                getAttr('upgradeNotice') ?
+                                    createElement('p', { 
+                                        style: { 
+                                            margin: '0', 
+                                            color: '#6c757d',
+                                            fontSize: '14px'
+                                        }
+                                    }, getAttr('upgradeNotice')) : null
+                            )
+                        ),
+                        
+                        // Changelog Entries
+                        createElement('div', { className: 'sppm-changelog' },
+                            getAttr('changelogItems', []).length > 0 ?
+                                getAttr('changelogItems', []).map((item, index) => {
+                                    const typeColors = {
+                                        'major': '#dc3545',
+                                        'minor': '#007bff', 
+                                        'patch': '#28a745',
+                                        'security': '#fd7e14'
+                                    };
+                                    const typeLabels = {
+                                        'major': '🚀 Major',
+                                        'minor': '✨ Minor',
+                                        'patch': '🐛 Bug Fix',
+                                        'security': '🔒 Security'
+                                    };
+                                    
+                                    return createElement('div', { 
+                                        key: index, 
+                                        className: 'sppm-changelog-item',
+                                        style: { 
+                                            border: '1px solid #e9ecef', 
+                                            padding: '20px', 
+                                            margin: '15px 0',
+                                            borderRadius: '8px',
+                                            background: '#fff'
+                                        }
+                                    },
+                                        createElement('div', { 
+                                            style: { 
+                                                display: 'flex', 
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                marginBottom: '10px'
+                                            }
+                                        },
+                                            createElement('h4', { 
+                                                style: { 
+                                                    margin: '0',
+                                                    color: '#333'
+                                                }
+                                            }, 'Version ' + (item.version || '1.0.0')),
+                                            createElement('div', { style: { display: 'flex', gap: '10px', alignItems: 'center' } },
+                                                createElement('span', { 
+                                                    style: { 
+                                                        background: typeColors[item.type] || '#007bff',
+                                                        color: '#fff',
+                                                        padding: '4px 8px',
+                                                        borderRadius: '4px',
+                                                        fontSize: '12px',
+                                                        fontWeight: 'bold'
+                                                    }
+                                                }, typeLabels[item.type] || '✨ Minor'),
+                                                item.releaseDate ?
+                                                    createElement('span', { 
+                                                        style: { 
+                                                            color: '#6c757d',
+                                                            fontSize: '14px'
+                                                        }
+                                                    }, item.releaseDate) : null
+                                            )
+                                        ),
+                                        createElement('div', { 
+                                            style: { 
+                                                color: '#555',
+                                                lineHeight: '1.6',
+                                                whiteSpace: 'pre-line'
+                                            }
+                                        }, item.changes || 'Version changes and improvements...')
+                                    );
+                                }) :
+                                createElement('div', { 
+                                    style: { 
+                                        textAlign: 'center', 
+                                        padding: '40px', 
+                                        color: '#999',
+                                        border: '2px dashed #ddd',
+                                        borderRadius: '8px'
+                                    }
+                                }, 'Add changelog entries using the sidebar controls →')
+                        )
+                    )
+                )
+            )
+        );
+    },
+    save: () => null
+});
